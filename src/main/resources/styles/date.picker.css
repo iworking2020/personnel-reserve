@@ -1,0 +1,76 @@
+.date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 0, 0, 0, 0;
+}
+
+.date-picker > .text-field {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-width: 0;
+}
+
+.date-picker > .arrow-button {
+    -fx-background-color: white;
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+}
+
+.date-picker-popup {
+    -fx-padding: 1;
+    -fx-background-color: white;
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: rgba(0,0,0, 0.30);
+}
+
+.date-picker-popup > * > .spinner > .label {
+    -fx-text-fill: white;
+}
+
+.date-picker-popup > * > .spinner > .button:hover {
+    -fx-background-color: rgba(255,255,255, 0.10);
+}
+
+.date-picker-popup > * > .spinner > .button:focused {
+    -fx-background-color: rgba(0,0,0, 0.00);
+}
+
+.date-picker-popup > .month-year-pane > .spinner > .button > .left-arrow {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-padding: 0.333em 0.167em 0.333em 0.167em;
+    -fx-shape: "M5.997,5.072L5.995,6.501l-2.998-4l2.998-4l0.002,1.43l-1.976,2.57L5.997,5.072z";
+    -fx-scale-shape: true;
+}
+
+.date-picker-popup > .month-year-pane > .spinner > .button > .right-arrow {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-padding: 0.333em 0.167em 0.333em 0.167em;
+    -fx-shape: "M2.998-0.07L3-1.499l2.998,4L3,6.501l-0.002-1.43l1.976-2.57L2.998-0.07z";
+    -fx-scale-shape: true;
+}
+
+.date-picker-popup > * > .day-name-cell,
+.date-picker-popup > * > .week-number-cell {
+    -fx-text-fill: rgba(0,0,0, 0.30);
+}
+
+.date-picker-popup > * > .day-cell:focused {
+    -fx-background-color: rgba(0,0,0, 0.10);
+}
+
+.date-picker-popup > * > .day-cell:hover {
+    -fx-background-color: rgba(0,0,0, 0.30);
+}
+
+.date-picker-popup > * > .previous-month,
+.date-picker-popup > * > .next-month {
+    -fx-text-fill: rgba( 0, 0,0, 0.60);
+}
+
+.date-picker-popup > * > .previous-month > .secondary-text,
+.date-picker-popup > * > .next-month > .secondary-text {
+    -fx-fill: rgba(0,0,0, 0.60);
+}

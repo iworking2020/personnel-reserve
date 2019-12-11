@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane fx:id="backgroundImagePane" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.MainMenuFxmlController">
+    <children>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Локальный режим">
+               <content>
+                  <StackPane>
+                     <children>
+                        <GridPane>
+                          <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints vgrow="NEVER" />
+                            <RowConstraints vgrow="NEVER" />
+                          </rowConstraints>
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#actionButtonOpen" prefWidth="200.0" styleClass="black" text="Открыть" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#actionButtonEdit" prefWidth="200.0" styleClass="black" text="Редактировать" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#actionButtonAdd" prefWidth="200.0" styleClass="black" text="Добавить" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#actionButtonDelete" prefWidth="200.0" styleClass="black" text="Удалить" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3">
+                                 <children>
+                                    <TableView fx:id="table" prefWidth="200.0">
+                                        <placeholder>
+                                            <Label text="" />
+                                        </placeholder>
+                                      <columns>
+                                        <TableColumn fx:id="lastNameColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="150.0" text="Фамилия" />
+                                        <TableColumn fx:id="firstNameColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="150.0" text="Имя" />
+                                        <TableColumn fx:id="middleNameColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="150.0" text="Отчество" />
+                                          <TableColumn fx:id="professionColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="100.0" text="Профессия" />
+                                          <TableColumn fx:id="workTypeColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="100.0" text="График" />
+                                          <TableColumn fx:id="wageColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="100.0" text="Зарплата" />
+                                          <TableColumn fx:id="currencyColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="100.0" text="Валюта" />
+                                          <TableColumn fx:id="educationColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="100.0" text="Образование" />
+                                          <TableColumn fx:id="experienceColumn" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="100.0" text="Опыт работы" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </StackPane>
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" style="-fx-background-color: white;" GridPane.rowSpan="3">
+                                 <content>
+                                    <VBox fx:id="profFieldVBox" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </StackPane>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+    </children>
+</StackPane>

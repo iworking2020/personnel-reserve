@@ -1,0 +1,23 @@
+Configuration:
+
+  Properties:
+    Property:
+      - name: LOG_PATTERN
+        value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: DEBUG_LEVEL
+        value: ${sys:DEBUG_LEVEL:-INFO}
+
+  Appenders:
+
+    Console:
+      name: CONSOLE
+      target: SYSTEM_OUT
+      follow: true
+      PatternLayout:
+        pattern: ${LOG_PATTERN}
+
+  Loggers:
+    Root:
+      level: ${DEBUG_LEVEL}
+      AppenderRef:
+        - ref: CONSOLE

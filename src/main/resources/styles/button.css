@@ -1,0 +1,37 @@
+.button.black {
+    -fx-font-weight: bold;
+    -fx-border-radius: 0px;
+    -fx-border-width: 2px;
+    -fx-border-color: rgba(0, 0, 0, 0.40);
+    -fx-background-color: rgba(0, 0, 0, 0.40);
+    -fx-text-fill: white;
+}
+
+.button.black:hover {
+    -fx-border-color: rgba(0, 0, 0, 0.50);
+    -fx-background-color: rgba(0, 0, 0, 0.50);
+}
+
+.button.black:pressed {
+    -fx-border-color: rgba(0, 0, 0, 0.30);
+    -fx-background-color: rgba(0, 0, 0, 0.30);
+}
+
+.button.grey {
+    -fx-font-weight: normal;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(0, 0, 0, 0.20);
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-background-insets: 0 0 0 0, 0 0 0 0;
+    -fx-background-radius: 0, 0, 0, 0;
+}
+
+.button.grey:hover {
+    -fx-border-color: rgba(0, 0, 0, 0.30);
+}
+
+.button.grey:pressed {
+    -fx-border-color: rgba(0, 0, 0, 0.40);
+}
+

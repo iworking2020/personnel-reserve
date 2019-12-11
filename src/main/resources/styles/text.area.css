@@ -1,0 +1,16 @@
+.text-area {
+    -fx-background-color: white;
+    -fx-background-insets: 0 0 0 0, 0 0 0 0;
+    -fx-background-radius: 0, 0, 0, 0;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(0, 0, 0, 0.20);
+}
+
+.text-area .content {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.text-area:hover {
+    -fx-border-color: rgba(0, 0, 0, 0.30);
+}

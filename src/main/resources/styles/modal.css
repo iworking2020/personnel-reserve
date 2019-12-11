@@ -1,0 +1,10 @@
+#modalPane {
+    /*-fx-background-image: url("../images/modal/1111.jpg");
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover, auto;*/
+}
+
+#backgroundPane {
+    -fx-background-color: white;
+}
