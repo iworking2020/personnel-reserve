@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import java.math.BigDecimal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import static ru.iworking.personnel.reserve.controller.ModalAddResumeFxmlController.logger;
 
 public class ModalEditResumeFxmlController implements Initializable {
 
@@ -114,7 +116,7 @@ public class ModalEditResumeFxmlController implements Initializable {
         emailTextField.setText(resume.getEmail());
         professionTextField.setText(resume.getProfession());
         profFieldComboBox.setValue(resume.getProfField());
-        wageTextField.setText(resume.getWage());
+        wageTextField.setText(resume.getWage().toString());
         currencyComboBox.setValue(resume.getCurrency());
         workTypeComboBox.setValue(resume.getWorkType());
         educationComboBox.setValue(resume.getEducation());
@@ -169,7 +171,11 @@ public class ModalEditResumeFxmlController implements Initializable {
         resume.setEmail(emailTextField.getText());
         resume.setProfession(professionTextField.getText());
         resume.setProfField(profFieldComboBox.getValue());
-        resume.setWage(wageTextField.getText());
+        try {
+            resume.setWage(BigDecimal.valueOf(Long.valueOf(wageTextField.getText())));
+        } catch (Exception e) {
+            logger.error(e);
+        }
         resume.setCurrency(currencyComboBox.getValue());
         resume.setWorkType(workTypeComboBox.getValue());
         resume.setEducation(educationComboBox.getValue());

@@ -58,8 +58,8 @@ public class ModalOpenResumeFxmlController implements Initializable {
             profFieldLabel.setText("не указана");
         }
         String wageString = resume.getCurrency() != null ?
-                resume.getWage() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault()) :
-                resume.getWage();
+                resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault()) :
+                resume.getWage().toString();
         wageString = wageString.length() > 0 ? wageString : "не указана";
         wageLabel.setText(wageString);
         if (resume.getWorkType() != null) {

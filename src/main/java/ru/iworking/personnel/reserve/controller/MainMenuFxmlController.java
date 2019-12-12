@@ -29,9 +29,17 @@ import ru.iworking.service.api.utils.LocaleUtils;
 import ru.iworking.service.api.utils.TimeUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import ru.iworking.personnel.reserve.dao.EducationDao;
+import ru.iworking.personnel.reserve.model.EducationCellFactory;
+import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 
 public class MainMenuFxmlController implements Initializable {
 
@@ -39,6 +47,7 @@ public class MainMenuFxmlController implements Initializable {
 
     private ResumeDao resumeDao = new ResumeDao();
     private ProfFieldDao profFieldDao = new ProfFieldDao();
+    private EducationDao educationDao = new EducationDao();
 
     @FXML private TableView<Resume> table;
     @FXML private TableColumn<Resume, String> lastNameColumn;
@@ -51,13 +60,25 @@ public class MainMenuFxmlController implements Initializable {
     @FXML private TableColumn<Resume, String> educationColumn;
     @FXML private TableColumn<Resume, String> experienceColumn;
     @FXML private VBox profFieldVBox;
+    
     @FXML private StackPane backgroundImagePane;
+    @FXML private TextField lastNameTextField;
+    @FXML private TextField firstNameTextField;
+    @FXML private TextField middleNameTextField;
+    @FXML private ComboBox<Education> educationComboBox;
+    @FXML private TextField professionTextField;
+    @FXML private TextField wageTextField;
 
     private ObservableList<Resume> resumeObservableList;
     private ProfField currentProfField = null;
+    private EducationCellFactory educationCellFactory = new EducationCellFactory();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        educationComboBox.setButtonCell(educationCellFactory.call(null));
+        educationComboBox.setCellFactory(educationCellFactory);
+        educationComboBox.setItems(FXCollections.observableList(educationDao.findAll()));
+        
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         middleNameColumn.setCellValueFactory(new PropertyValueFactory<>("middleName"));
@@ -99,6 +120,7 @@ public class MainMenuFxmlController implements Initializable {
             table.setItems(resumeObservableList);
             String style = "-fx-background-image: url('images/fone/fone0.jpg');";
             backgroundImagePane.setStyle(style);
+            actionButtonClear(event);
         });
         profFieldVBox.getChildren().add(buttonFindAll);
 
@@ -111,6 +133,7 @@ public class MainMenuFxmlController implements Initializable {
                 table.setItems(resumeObservableList);
                 String style = "-fx-background-image: url('images/fone/fone"+profField.getId()+".png');";
                 backgroundImagePane.setStyle(style);
+                actionButtonClear(event);
             });
             profFieldVBox.getChildren().add(button);
         });
@@ -126,6 +149,8 @@ public class MainMenuFxmlController implements Initializable {
         scene.getStylesheets().add("/styles/main.css");
         scene.getStylesheets().add("/styles/window.css");
         scene.getStylesheets().add("/styles/button.css");
+        scene.getStylesheets().add("/styles/combo.box.css");
+        scene.getStylesheets().add("/styles/text.field.css");
         scene.getStylesheets().add("/styles/scroll.bar.css");
         scene.getStylesheets().add("/styles/scroll.pane.css");
         scene.getStylesheets().add("/styles/tab.pane.css");
@@ -232,7 +257,39 @@ public class MainMenuFxmlController implements Initializable {
     
     @FXML
     private void actionButtonFind(ActionEvent event) {
-        System.out.println("actionButtonFind!");
+        String lastName = lastNameTextField.getText();
+        String firstName = firstNameTextField.getText();
+        String middleName = middleNameTextField.getText();
+        Education education = educationComboBox.getValue();
+        String profession = professionTextField.getText();
+        String wage = wageTextField.getText();
+        
+        Map<String, Object> params = new HashMap();
+        if (lastName != null && lastName.length() > 0) params.put(ResumeRequestParam.LAST_NAME, lastName);
+        if (firstName != null && firstName.length() > 0) params.put(ResumeRequestParam.FIRST_NAME, firstName);
+        if (middleName != null && middleName.length() > 0) params.put(ResumeRequestParam.MIDDLE_NAME, middleName);
+        if (education != null) params.put(ResumeRequestParam.EDUCATION_ID, education.getId());
+        if (profession != null && profession.length() > 0) params.put(ResumeRequestParam.PROFESSION, profession);
+        try {
+            if (wage != null) params.put(ResumeRequestParam.WAGE, BigDecimal.valueOf(Long.valueOf(wage)));
+        } catch (Exception e) {
+            logger.error(e);
+        }
+        
+        if (currentProfField != null) params.put(ResumeRequestParam.PROF_FIELD_ID, currentProfField.getId());
+        
+        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll(params));
+        table.setItems(resumeObservableList);
+    }
+    
+    @FXML
+    private void actionButtonClear(ActionEvent event) {
+        lastNameTextField.setText("");
+        firstNameTextField.setText("");
+        middleNameTextField.setText("");
+        educationComboBox.setValue(null);
+        professionTextField.setText("");
+        wageTextField.setText("");
     }
     
     @FXML
