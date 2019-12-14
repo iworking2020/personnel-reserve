@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
+import java.math.BigDecimal;
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -38,7 +39,7 @@ public class Resume {
     private WorkType workType;
     
     @Column(name = "wage")
-    private String wage;
+    private BigDecimal wage;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="currency_id")
@@ -120,10 +121,10 @@ public class Resume {
         this.workType = workType;
     }
 
-    public String getWage() {
+    public BigDecimal getWage() {
         return wage;
     }
-    public void setWage(String wage) {
+    public void setWage(BigDecimal wage) {
         this.wage = wage;
     }
 

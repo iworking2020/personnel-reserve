@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import java.math.BigDecimal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -141,8 +142,12 @@ public class ModalAddResumeFxmlController implements Initializable {
         resume.setNumberPhone(numberPhoneTextField.getText());
         resume.setEmail(emailTextField.getText());
         resume.setProfession(professionTextField.getText());
-        resume.setProfField(profFieldComboBox.getValue());
-        resume.setWage(wageTextField.getText());
+        resume.setProfField(profFieldComboBox.getValue());      
+        try {
+            resume.setWage(BigDecimal.valueOf(Long.valueOf(wageTextField.getText())));
+        } catch (Exception e) {
+            logger.error(e);
+        }
         resume.setCurrency(currencyComboBox.getValue());
         resume.setWorkType(workTypeComboBox.getValue());
         resume.setEducation(educationComboBox.getValue());
