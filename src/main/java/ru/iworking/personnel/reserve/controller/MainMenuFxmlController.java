@@ -10,20 +10,24 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.dao.EducationDao;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.model.EducationCellFactory;
+import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtils;
 import ru.iworking.service.api.utils.TimeUtils;
@@ -35,11 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import ru.iworking.personnel.reserve.dao.EducationDao;
-import ru.iworking.personnel.reserve.model.EducationCellFactory;
-import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 
 public class MainMenuFxmlController implements Initializable {
 
@@ -62,6 +61,11 @@ public class MainMenuFxmlController implements Initializable {
     @FXML private VBox profFieldVBox;
     
     @FXML private StackPane backgroundImagePane;
+
+    @FXML private VBox searchPane;
+    @FXML private StackPane tablePane;
+    @FXML private GridPane buttonsPane;
+
     @FXML private TextField lastNameTextField;
     @FXML private TextField firstNameTextField;
     @FXML private TextField middleNameTextField;
@@ -138,6 +142,31 @@ public class MainMenuFxmlController implements Initializable {
             profFieldVBox.getChildren().add(button);
         });
 
+        CheckMenuItem checkMenuItem = new CheckMenuItem("Поиск");
+        checkMenuItem.setSelected(false);
+        checkMenuItem.setOnAction(event -> {
+            if (checkMenuItem.isSelected()) {
+                searchPane.setVisible(true);
+                GridPane.setColumnSpan(tablePane, 3);
+                GridPane.setColumnSpan(buttonsPane, 3);
+            } else {
+                searchPane.setVisible(false);
+                GridPane.setColumnSpan(tablePane, 4);
+                GridPane.setColumnSpan(buttonsPane, 4);
+            }
+        });
+
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.getItems().addAll(checkMenuItem);
+
+        table.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                contextMenu.show(table, event.getScreenX(), event.getScreenY());
+            } else if (event.getButton() == MouseButton.PRIMARY) {
+                if (contextMenu.isShowing()) contextMenu.hide();
+            }
+        });
+
         this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll());
         table.setItems(resumeObservableList);
     }
@@ -156,6 +185,7 @@ public class MainMenuFxmlController implements Initializable {
         scene.getStylesheets().add("/styles/tab.pane.css");
         scene.getStylesheets().add("/styles/prof.field.css");
         scene.getStylesheets().add("/styles/table.view.css");
+        scene.getStylesheets().add("/styles/context.menu.css");
 
         stage.setTitle("Personnel reserve");
         try {

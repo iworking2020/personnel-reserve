@@ -43,7 +43,7 @@ public class PdfUtil {
         document.add(new Paragraph("тел.: "+resume.getNumberPhone()).setFont(pdfFont));
         document.add(new Paragraph("емайл: "+resume.getEmail()).setFont(pdfFont));
         document.add(new Paragraph("профессия: "+resume.getProfession()).setFont(pdfFont));
-        document.add(new Paragraph("зарплата: "+resume.getWage() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
+        document.add(new Paragraph("зарплата: "+resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
         document.add(new Paragraph("профобласть: "+resume.getProfField().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
         document.add(new Paragraph("график: "+resume.getWorkType().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
         document.add(new Paragraph("образование: "+resume.getEducation().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
