@@ -32,6 +32,9 @@
         <profession-api.version>1.0.0</profession-api.version>
         <education-api.version>1.0.0</education-api.version>
         <money-api.version>1.0.0</money-api.version>
+        <itext7-core.version>7.0.4</itext7-core.version>
+        <slf4j-api.version>1.7.5</slf4j-api.version>
+        <slf4j-simple.version>1.6.4</slf4j-simple.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
     </properties>
@@ -160,6 +163,22 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>${itext7-core.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j-simple.version}</version>
         </dependency>
     </dependencies>
 

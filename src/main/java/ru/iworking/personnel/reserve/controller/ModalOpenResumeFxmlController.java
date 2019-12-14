@@ -8,16 +8,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.utils.TextUtils;
+import ru.iworking.personnel.reserve.utils.PdfUtil;
+import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtils;
 import ru.iworking.service.api.utils.TimeUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -75,7 +79,7 @@ public class ModalOpenResumeFxmlController implements Initializable {
 
         Integer age = TimeUtils.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
         
-        experienceLabel.setText(age == null || age <= 0 ? "без опыта" : age + " " + TextUtils.nameForNumbers(age));
+        experienceLabel.setText(age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age));
         addressLabel.setText(resume.getAddress());
     }
 
@@ -104,14 +108,40 @@ public class ModalOpenResumeFxmlController implements Initializable {
     }
 
     @FXML
+    private void actionButtonSavePdf(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName("Resume"+this.resume.getId()+".pdf");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("All Files", "*.*"),
+            new FileChooser.ExtensionFilter("PDF", "*.pdf")
+        );
+
+        File file = fileChooser.showSaveDialog(getStage(event));
+        if (file != null) {
+            String path = file.getAbsoluteFile().getAbsolutePath();
+            try {
+                PdfUtil.createResumePdf(path, this.resume);
+            } catch (IOException e) {
+                logger.error(e);
+            }
+        }
+
+
+    }
+
+    @FXML
     private void actionButtonCancel(ActionEvent event) {
         this.closeStage(event);
     }
 
-    private void closeStage(ActionEvent event) {
+    private Stage getStage(ActionEvent event) {
         Node source = (Node)  event.getSource();
         Stage stage  = (Stage) source.getScene().getWindow();
-        stage.close();
+        return stage;
+    }
+
+    private void closeStage(ActionEvent event) {
+        getStage(event).close();
     }
     
     

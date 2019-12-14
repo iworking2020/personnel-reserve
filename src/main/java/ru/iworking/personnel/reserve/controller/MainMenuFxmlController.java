@@ -24,7 +24,7 @@ import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.utils.TextUtils;
+import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtils;
 import ru.iworking.service.api.utils.TimeUtils;
 
@@ -83,7 +83,7 @@ public class MainMenuFxmlController implements Initializable {
             String textColumn = "";
             if (exp != null) {
                 Integer age = TimeUtils.calAge(exp.getDateStart(), exp.getDateEnd());
-                textColumn = age == null || age <= 0 ? "без опыта" : age + " " + TextUtils.nameForNumbers(age);
+                textColumn = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age);
             } else {
                 textColumn = "без опыта";
             }

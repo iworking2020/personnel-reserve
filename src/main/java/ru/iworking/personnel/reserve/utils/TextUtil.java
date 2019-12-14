@@ -9,7 +9,7 @@ package ru.iworking.personnel.reserve.utils;
  *
  * @author pi
  */
-public class TextUtils {
+public class TextUtil {
     public static String nameForNumbers(Integer count) {
         int ageLastNumber = count % 10;
         boolean isExclusion = 11 <= count % 100 && count % 100 <= 14;

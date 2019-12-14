@@ -141,21 +141,25 @@
                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
                </VBox>
-               <VBox spacing="5.0" GridPane.rowIndex="2">
+               <VBox alignment="BASELINE_LEFT" GridPane.rowIndex="2">
                   <padding>
-                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
                   <children>
                      <Separator prefWidth="200.0" />
-                     <Button fx:id="buttonCancel" styleClass="grey" mnemonicParsing="false" onAction="#actionButtonCancel" text="Назад" />
+                     <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#actionButtonCancel" styleClass="grey" text="Назад" />
                   </children>
+                  <GridPane.margin>
+                     <Insets />
+                  </GridPane.margin>
                </VBox>
-               <VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <VBox alignment="BASELINE_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2">
                   <children>
                      <Separator prefWidth="200.0" />
+                     <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#actionButtonSavePdf" styleClass="grey" text="Экспорт в PDF" />
                   </children>
                   <padding>
-                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
                </VBox>
             </children>
