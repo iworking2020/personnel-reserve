@@ -207,7 +207,7 @@ public class MainMenuFxmlController implements Initializable {
                     }
                 } else if (change.wasUpdated()) {
                     for (int i = change.getFrom(); i < change.getTo(); ++i) {
-                        resumeDao.update(resumeObservableList.get(i));
+                        logger.debug("Updated: " + i + " ");
                     }
                 } else {
                     for (Resume removedItem : change.getRemoved()) {

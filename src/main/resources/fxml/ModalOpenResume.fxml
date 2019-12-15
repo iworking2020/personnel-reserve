@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <StackPane fx:id="modalPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ModalOpenResumeFxmlController">
@@ -162,6 +163,11 @@
                      <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
                </VBox>
+               <StackPane prefHeight="150.0" prefWidth="200.0">
+                  <children>
+                     <ImageView fx:id="photoImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  </children>
+               </StackPane>
             </children>
          </GridPane>
       </children>

@@ -35,3 +35,11 @@
     -fx-border-color: rgba(0, 0, 0, 0.40);
 }
 
+.button.select-image {
+    -fx-opacity: 0;
+}
+
+.button.select-image:hover {
+    -fx-opacity: 1;
+}
+

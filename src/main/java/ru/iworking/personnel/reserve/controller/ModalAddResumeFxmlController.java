@@ -1,8 +1,8 @@
 package ru.iworking.personnel.reserve.controller;
 
-import java.math.BigDecimal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +25,12 @@ import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -44,6 +52,8 @@ public class ModalAddResumeFxmlController implements Initializable {
     @FXML private TextArea addressTextArea;
     @FXML private DatePicker experienceDateStartDatePicker;
     @FXML private DatePicker experienceDateEndDatePicker;
+
+    @FXML private ImageView photoImageView;
 
     @FXML private Button buttonCancel;
 
@@ -98,10 +108,14 @@ public class ModalAddResumeFxmlController implements Initializable {
 
     private void initStartValues() {
         if (currentProfField != null) profFieldComboBox.getSelectionModel().select(currentProfField);
+        photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg")));
     }
 
     public void showAndWait(Parent parent) {
         this.initStartValues();
+        /*photoImageView.setOnMouseClicked(event -> {
+
+        });*/
 
         Stage primaryStage = MainApp.PARENT_STAGE;
 
@@ -125,6 +139,26 @@ public class ModalAddResumeFxmlController implements Initializable {
         modal.initModality(Modality.WINDOW_MODAL);
         modal.initOwner(primaryStage);
         modal.showAndWait();
+    }
+
+    @FXML
+    private void actionButtonImageReplace(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("PNG", "*.png"),
+            new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+            new FileChooser.ExtensionFilter("GIF", "*.gif")
+        );
+
+        File file = fileChooser.showOpenDialog(getStage(event));
+        if (file != null) {
+            try {
+                Image img = new Image(file.toURI().toString());
+                photoImageView.setImage(img);
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        }
     }
 
     @FXML
@@ -159,6 +193,14 @@ public class ModalAddResumeFxmlController implements Initializable {
         resume.setExperience(exp);
         resume.setAddress(addressTextArea.getText());
 
+        try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+            BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
+            ImageIO.write(originalImage, "png", stream);
+            resume.setPhoto(stream.toByteArray());
+        } catch (IOException e) {
+            logger.error(e);
+        }
+
         if (currentProfField == null || currentProfField.equals(resume.getProfField())) {
             this.resumeObservableList.add(resume);
         } else {
@@ -168,10 +210,14 @@ public class ModalAddResumeFxmlController implements Initializable {
         this.closeStage(event);
     }
 
-    private void closeStage(ActionEvent event) {
+    private Stage getStage(ActionEvent event) {
         Node source = (Node)  event.getSource();
         Stage stage  = (Stage) source.getScene().getWindow();
-        stage.close();
+        return stage;
+    }
+
+    private void closeStage(ActionEvent event) {
+        getStage(event).close();
     }
 
 }

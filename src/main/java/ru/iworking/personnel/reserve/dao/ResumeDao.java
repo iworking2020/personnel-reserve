@@ -1,20 +1,33 @@
 package ru.iworking.personnel.reserve.dao;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.ProfField;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
-
-import javax.persistence.Query;
-import java.util.List;
-import java.util.Map;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
+import ru.iworking.personnel.reserve.utils.HibernateUtil;
 import ru.iworking.service.api.PersistenceSeparator;
 
+import javax.persistence.Query;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ResumeDao implements Dao<Resume, Long> {
+
+    public Long count(Resume resume) {
+        Long count = 0L;
+        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery("select COUNT(resume) from Resume as resume where id = :id", Long.class);
+            query.setParameter("id", resume.getId());
+            count = (Long) query.getSingleResult();
+            session.flush();
+            transaction.commit();
+        }
+        return count;
+    }
 
     public List<Resume> findAllByProfField(ProfField profField) {
         Map<String, Object> params = new HashMap();

@@ -1,7 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
-import java.math.BigDecimal;
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Entity
@@ -55,6 +56,10 @@ public class Resume {
     
     @Column(name = "address")
     private String address;
+
+    @Lob
+    @Column(name = "photo")
+    private byte[] photo;
 
     public Resume() { }
 
@@ -156,77 +161,38 @@ public class Resume {
         this.address = address;
     }
 
+    public byte[] getPhoto() {
+        return photo;
+    }
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resume resume = (Resume) o;
+        return Objects.equals(lastName, resume.lastName) &&
+                Objects.equals(firstName, resume.firstName) &&
+                Objects.equals(middleName, resume.middleName) &&
+                Objects.equals(profession, resume.profession) &&
+                Objects.equals(numberPhone, resume.numberPhone) &&
+                Objects.equals(email, resume.email) &&
+                Objects.equals(profField, resume.profField) &&
+                Objects.equals(workType, resume.workType) &&
+                Objects.equals(wage, resume.wage) &&
+                Objects.equals(currency, resume.currency) &&
+                Objects.equals(education, resume.education) &&
+                Objects.equals(experience, resume.experience) &&
+                Objects.equals(address, resume.address) &&
+                Arrays.equals(photo, resume.photo);
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.lastName);
-        hash = 71 * hash + Objects.hashCode(this.firstName);
-        hash = 71 * hash + Objects.hashCode(this.middleName);
-        hash = 71 * hash + Objects.hashCode(this.profession);
-        hash = 71 * hash + Objects.hashCode(this.numberPhone);
-        hash = 71 * hash + Objects.hashCode(this.email);
-        hash = 71 * hash + Objects.hashCode(this.profField);
-        hash = 71 * hash + Objects.hashCode(this.workType);
-        hash = 71 * hash + Objects.hashCode(this.wage);
-        hash = 71 * hash + Objects.hashCode(this.currency);
-        hash = 71 * hash + Objects.hashCode(this.education);
-        hash = 71 * hash + Objects.hashCode(this.experience);
-        hash = 71 * hash + Objects.hashCode(this.address);
-        return hash;
+        int result = Objects.hash(lastName, firstName, middleName, profession, numberPhone, email, profField, workType, wage, currency, education, experience, address);
+        result = 31 * result + Arrays.hashCode(photo);
+        return result;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Resume other = (Resume) obj;
-        if (!Objects.equals(this.lastName, other.lastName)) {
-            return false;
-        }
-        if (!Objects.equals(this.firstName, other.firstName)) {
-            return false;
-        }
-        if (!Objects.equals(this.middleName, other.middleName)) {
-            return false;
-        }
-        if (!Objects.equals(this.profession, other.profession)) {
-            return false;
-        }
-        if (!Objects.equals(this.numberPhone, other.numberPhone)) {
-            return false;
-        }
-        if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        if (!Objects.equals(this.wage, other.wage)) {
-            return false;
-        }
-        if (!Objects.equals(this.currency, other.currency)) {
-            return false;
-        }
-        if (!Objects.equals(this.address, other.address)) {
-            return false;
-        }
-        if (!Objects.equals(this.profField, other.profField)) {
-            return false;
-        }
-        if (!Objects.equals(this.workType, other.workType)) {
-            return false;
-        }
-        if (!Objects.equals(this.education, other.education)) {
-            return false;
-        }
-        if (!Objects.equals(this.experience, other.experience)) {
-            return false;
-        }
-        return true;
-    }
-
 }

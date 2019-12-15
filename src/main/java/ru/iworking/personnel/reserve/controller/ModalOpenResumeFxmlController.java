@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,8 +21,10 @@ import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtils;
 import ru.iworking.service.api.utils.TimeUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -42,6 +45,8 @@ public class ModalOpenResumeFxmlController implements Initializable {
     @FXML private Label experienceLabel;
     @FXML private Label addressLabel;
 
+    @FXML private ImageView photoImageView;
+
     private Resume resume;
 
     public void setResume(Resume resume) {
@@ -61,11 +66,16 @@ public class ModalOpenResumeFxmlController implements Initializable {
         } else {
             profFieldLabel.setText("не указана");
         }
-        String wageString = resume.getCurrency() != null ?
-                resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault()) :
-                resume.getWage().toString();
-        wageString = wageString.length() > 0 ? wageString : "не указана";
-        wageLabel.setText(wageString);
+        if (resume.getWage() != null) {
+            String wageString = resume.getCurrency() != null ?
+                    resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault()) :
+                    resume.getWage().toString();
+            wageString = wageString.length() > 0 ? wageString : "не указана";
+            wageLabel.setText(wageString);
+        } else {
+            wageLabel.setText("не указана");
+        }
+
         if (resume.getWorkType() != null) {
             workTypeLabel.setText(resume.getWorkType().getNameToView(LocaleUtils.getDefault()));
         } else {
@@ -81,10 +91,21 @@ public class ModalOpenResumeFxmlController implements Initializable {
         
         experienceLabel.setText(age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age));
         addressLabel.setText(resume.getAddress());
+
+        if (resume.getPhoto() != null) {
+            InputStream targetStream = new ByteArrayInputStream(resume.getPhoto());
+            Image img = new Image(targetStream);
+            photoImageView.setImage(img);
+        } else {
+            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
+            photoImageView.setImage(defaultImage);
+        }
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) { }
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 
     public void showAndWait(Parent parent) {
         Stage primaryStage = MainApp.PARENT_STAGE;
