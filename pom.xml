@@ -35,6 +35,8 @@
         <itext7-core.version>7.0.4</itext7-core.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.6.4</slf4j-simple.version>
+        <poi.version>3.12</poi.version>
+        <poi-ooxml.version>3.12</poi-ooxml.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
     </properties>
@@ -114,6 +116,16 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi-ooxml.version}</version>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

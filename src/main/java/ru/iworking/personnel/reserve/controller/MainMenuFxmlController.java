@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import java.io.File;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -39,6 +40,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import javafx.stage.FileChooser;
+import static ru.iworking.personnel.reserve.controller.ModalOpenResumeFxmlController.logger;
+import ru.iworking.personnel.reserve.utils.ExelUtil;
+import ru.iworking.personnel.reserve.utils.PdfUtil;
 
 public class MainMenuFxmlController implements Initializable {
 
@@ -320,6 +326,26 @@ public class MainMenuFxmlController implements Initializable {
         educationComboBox.setValue(null);
         professionTextField.setText("");
         wageTextField.setText("");
+    }
+    
+    @FXML
+    private void actionButtonExportToExel(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName("resume.xls");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("All Files", "*.*"),
+            new FileChooser.ExtensionFilter("XLS", "*.xls")
+        );
+
+        File file = fileChooser.showSaveDialog(MainApp.PARENT_STAGE);
+        if (file != null) {
+            String path = file.getAbsoluteFile().getAbsolutePath();
+            try {
+                ExelUtil.createXLSResumeList(path, resumeObservableList);
+            } catch (IOException ex) {
+                logger.error("не удалось выгрузить в exel", ex);
+            }
+        }
     }
     
     @FXML
