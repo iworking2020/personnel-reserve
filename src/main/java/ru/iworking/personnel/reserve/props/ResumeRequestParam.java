@@ -15,6 +15,7 @@ public class ResumeRequestParam {
     public static final String LAST_NAME = "last_name";
     public static final String MIDDLE_NAME = "middle_name";
     public static final String PROF_FIELD_ID = "prof_field_id";
+    public static final String WORK_TYPE_ID = "work_type_id";
     public static final String EDUCATION_ID = "education_id";
     public static final String PROFESSION = "profession";
     public static final String WAGE = "wage";

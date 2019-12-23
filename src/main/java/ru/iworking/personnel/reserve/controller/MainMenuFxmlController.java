@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.controller;
 
-import java.io.File;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -19,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,13 +26,17 @@ import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.EducationDao;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
+import ru.iworking.personnel.reserve.dao.WorkTypeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
+import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
+import ru.iworking.personnel.reserve.utils.ExelUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtils;
 import ru.iworking.service.api.utils.TimeUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -40,11 +44,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import javafx.stage.FileChooser;
-import static ru.iworking.personnel.reserve.controller.ModalOpenResumeFxmlController.logger;
-import ru.iworking.personnel.reserve.utils.ExelUtil;
-import ru.iworking.personnel.reserve.utils.PdfUtil;
 
 public class MainMenuFxmlController implements Initializable {
 
@@ -53,6 +52,7 @@ public class MainMenuFxmlController implements Initializable {
     private ResumeDao resumeDao = new ResumeDao();
     private ProfFieldDao profFieldDao = new ProfFieldDao();
     private EducationDao educationDao = new EducationDao();
+    private WorkTypeDao workTypeDao = new WorkTypeDao();
 
     @FXML private TableView<Resume> table;
     @FXML private TableColumn<Resume, String> lastNameColumn;
@@ -78,13 +78,19 @@ public class MainMenuFxmlController implements Initializable {
     @FXML private ComboBox<Education> educationComboBox;
     @FXML private TextField professionTextField;
     @FXML private TextField wageTextField;
+    @FXML private ComboBox<WorkType> workTypeComboBox;
 
     private ObservableList<Resume> resumeObservableList;
     private ProfField currentProfField = null;
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
+    private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
+        workTypeComboBox.setCellFactory(workTypeCellFactory);
+        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAll()));
+
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
         educationComboBox.setItems(FXCollections.observableList(educationDao.findAll()));
@@ -299,6 +305,7 @@ public class MainMenuFxmlController implements Initializable {
         Education education = educationComboBox.getValue();
         String profession = professionTextField.getText();
         String wage = wageTextField.getText();
+        WorkType workType = workTypeComboBox.getValue();
         
         Map<String, Object> params = new HashMap();
         if (lastName != null && lastName.length() > 0) params.put(ResumeRequestParam.LAST_NAME, lastName);
@@ -306,6 +313,7 @@ public class MainMenuFxmlController implements Initializable {
         if (middleName != null && middleName.length() > 0) params.put(ResumeRequestParam.MIDDLE_NAME, middleName);
         if (education != null) params.put(ResumeRequestParam.EDUCATION_ID, education.getId());
         if (profession != null && profession.length() > 0) params.put(ResumeRequestParam.PROFESSION, profession);
+        if (workType != null) params.put(ResumeRequestParam.WORK_TYPE_ID, workType.getId());
         try {
             if (wage != null) params.put(ResumeRequestParam.WAGE, BigDecimal.valueOf(Long.valueOf(wage)));
         } catch (Exception e) {

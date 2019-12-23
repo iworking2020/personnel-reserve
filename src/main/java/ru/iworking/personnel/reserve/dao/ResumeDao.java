@@ -59,6 +59,7 @@ public class ResumeDao implements Dao<Resume, Long> {
         BigDecimal wage = params.get(ResumeRequestParam.WAGE) != null ? (BigDecimal) params.get(ResumeRequestParam.WAGE) : null;
         Long profFieldId = params.get(ResumeRequestParam.PROF_FIELD_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.PROF_FIELD_ID).toString()) : null;
         Long educationId = params.get(ResumeRequestParam.EDUCATION_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.EDUCATION_ID).toString()) : null;
+        Long workTypeId = params.get(ResumeRequestParam.WORK_TYPE_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.WORK_TYPE_ID).toString()) : null;
         
         List<Resume> list;
         try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
@@ -70,6 +71,7 @@ public class ResumeDao implements Dao<Resume, Long> {
             if (middleName != null) sql += " "+separator.get()+" resume.middleName like :middleName";
             if (profFieldId != null) sql += " "+separator.get()+" resume.profField.id = :profFieldId";
             if (educationId != null) sql += " "+separator.get()+" resume.education.id = :educationId";
+            if (workTypeId != null) sql += " "+separator.get()+" resume.workType.id = :workTypeId";
             if (wage != null) sql += " "+separator.get()+" resume.wage = :wage";
             
             Query query = session.createQuery(sql, Resume.class);
@@ -80,6 +82,7 @@ public class ResumeDao implements Dao<Resume, Long> {
             if (middleName != null) query.setParameter("middleName", middleName);
             if (profFieldId != null) query.setParameter("profFieldId", profFieldId);
             if (educationId != null) query.setParameter("educationId", educationId);
+            if (workTypeId != null) query.setParameter("workTypeId", workTypeId);
             if (wage != null) query.setParameter("wage", wage);
             
             list = query.getResultList();

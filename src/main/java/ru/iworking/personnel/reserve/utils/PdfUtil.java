@@ -11,10 +11,17 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.UnitValue;
+import com.itextpdf.layout.property.VerticalAlignment;
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.service.api.utils.LocaleUtils;
 
@@ -22,9 +29,10 @@ import java.io.IOException;
 
 public class PdfUtil {
 
+    static final Logger logger = LogManager.getLogger(PdfUtil.class);
+
     public static void createResumePdf(String dest, Resume resume) throws IOException {
         PdfFont pdfFont = PdfUtil.getStandartPdfFont();
-
 
         //Initialize PDF writer
         PdfWriter writer = new PdfWriter(dest);
@@ -39,45 +47,71 @@ public class PdfUtil {
         //Add paragraph to the document
         document.add(new Paragraph("Резюме").setFont(pdfFont).setTextAlignment(TextAlignment.CENTER));
 
-        if (resume.getPhoto() != null) {
-            ImageData data = ImageDataFactory.create(resume.getPhoto());
-            // Creating an Image object
-            Image image = new Image(data);
-            image.scaleToFit(200F, 200F);
-            document.add(image);
-        }
+        String FIO = "Ф.И.О.: " + resume.getLastName() + " " + resume.getFirstName() + " " + resume.getMiddleName();
+        String number = "тел.: "+resume.getNumberPhone();
+        String email = "емайл: "+resume.getEmail();
+        String profession = "профессия: "+resume.getProfession();
+        String wage = resume.getWage() != null ?
+                "зарплата: "+resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault()) :
+                "зарплата: не указана";
+        String profField = resume.getProfField() != null ?
+                "профобласть: "+resume.getProfField().getNameToView(LocaleUtils.getDefault()) :
+                "профобласть: не указана";
+        String workType = resume.getWorkType() != null ?
+                "график: "+resume.getWorkType().getNameToView(LocaleUtils.getDefault()) :
+                "график: не указан";
+        String education = resume.getEducation() != null ?
+                "образование: "+resume.getEducation().getNameToView(LocaleUtils.getDefault()) :
+                "образование: не указано";
 
-        document.add(new Paragraph("Ф.И.О.: "+
-                resume.getLastName() + " " +
-                resume.getFirstName() + " " +
-                resume.getMiddleName()
-        ).setFont(pdfFont));
-        document.add(new Paragraph("тел.: "+resume.getNumberPhone()).setFont(pdfFont));
-        document.add(new Paragraph("емайл: "+resume.getEmail()).setFont(pdfFont));
-        document.add(new Paragraph("профессия: "+resume.getProfession()).setFont(pdfFont));
-        if (resume.getWage() != null) {
-            document.add(new Paragraph("зарплата: "+resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
-        } else {
-            document.add(new Paragraph("зарплата: не указана").setFont(pdfFont));
-        }
-        if (resume.getProfField() != null) {
-            document.add(new Paragraph("профобласть: "+resume.getProfField().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
-        } else {
-            document.add(new Paragraph("профобласть: не указана").setFont(pdfFont));
-        }
-        if (resume.getWorkType() != null) {
-            document.add(new Paragraph("график: "+resume.getWorkType().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
-        } else {
-            document.add(new Paragraph("график: не указан").setFont(pdfFont));
-        }
-        if (resume.getEducation() != null) {
-            document.add(new Paragraph("образование: "+resume.getEducation().getNameToView(LocaleUtils.getDefault())).setFont(pdfFont));
-        } else {
-            document.add(new Paragraph("образование: не указано").setFont(pdfFont));
-        }
+        Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));
+        rightBlockTable.setBorder(Border.NO_BORDER);
+        rightBlockTable.setMargins(0, 15, 0, 15);
+        rightBlockTable.addCell(createTextCell(FIO));
+        rightBlockTable.addCell(createTextCell(profession));
+        rightBlockTable.addCell(createTextCell(profField));
+        rightBlockTable.addCell(createTextCell(wage));
+        rightBlockTable.addCell(createTextCell(workType));
+        rightBlockTable.addCell(createTextCell(education));
+        rightBlockTable.addCell(createTextCell(number));
+        rightBlockTable.addCell(createTextCell(email));
 
-        //Close document
+        Table parentTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
+        parentTable.addCell(createImgCell(resume.getPhoto()));
+        parentTable.addCell(createTableCell(rightBlockTable));
+
+        document.add(parentTable);
+
         document.close();
+    }
+
+    private static Cell createImgCell(byte[] imgBytes) {
+        ImageData data = ImageDataFactory.create(imgBytes);
+        Image img = new Image(data);
+        img.setWidth(UnitValue.createPercentValue(100));
+        Cell cell = new Cell().add(img);
+        cell.setBorder(Border.NO_BORDER);
+        return cell;
+    }
+
+    private static Cell createTextCell(String text) {
+        Cell cell = new Cell();
+        Paragraph p = new Paragraph(text);
+        p.setTextAlignment(TextAlignment.LEFT);
+        try {
+            p.setFont(getStandartPdfFont());
+        } catch (IOException e) {
+            logger.error(e);
+        }
+        cell.add(p).setVerticalAlignment(VerticalAlignment.BOTTOM);
+        cell.setBorder(Border.NO_BORDER);
+        return cell;
+    }
+
+    private static Cell createTableCell(Table table) {
+        Cell cell = new Cell().add(table);
+        cell.setBorder(Border.NO_BORDER);
+        return cell;
     }
 
     private static PdfFont getStandartPdfFont() throws IOException {
