@@ -13,8 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -79,6 +77,8 @@ public class MainMenuFxmlController implements Initializable {
     @FXML private TextField professionTextField;
     @FXML private TextField wageTextField;
     @FXML private ComboBox<WorkType> workTypeComboBox;
+
+    @FXML private CheckMenuItem winSearchCheckItem;
 
     private ObservableList<Resume> resumeObservableList;
     private ProfField currentProfField = null;
@@ -154,10 +154,9 @@ public class MainMenuFxmlController implements Initializable {
             profFieldVBox.getChildren().add(button);
         });
 
-        CheckMenuItem checkMenuItem = new CheckMenuItem("Поиск");
-        checkMenuItem.setSelected(false);
-        checkMenuItem.setOnAction(event -> {
-            if (checkMenuItem.isSelected()) {
+        winSearchCheckItem.setSelected(false);
+        winSearchCheckItem.setOnAction(event -> {
+            if (winSearchCheckItem.isSelected()) {
                 searchPane.setVisible(true);
                 GridPane.setColumnSpan(tablePane, 3);
                 GridPane.setColumnSpan(buttonsPane, 3);
@@ -165,17 +164,6 @@ public class MainMenuFxmlController implements Initializable {
                 searchPane.setVisible(false);
                 GridPane.setColumnSpan(tablePane, 4);
                 GridPane.setColumnSpan(buttonsPane, 4);
-            }
-        });
-
-        ContextMenu contextMenu = new ContextMenu();
-        contextMenu.getItems().addAll(checkMenuItem);
-
-        table.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                contextMenu.show(table, event.getScreenX(), event.getScreenY());
-            } else if (event.getButton() == MouseButton.PRIMARY) {
-                if (contextMenu.isShowing()) contextMenu.hide();
             }
         });
 
@@ -198,6 +186,7 @@ public class MainMenuFxmlController implements Initializable {
         scene.getStylesheets().add("/styles/prof.field.css");
         scene.getStylesheets().add("/styles/table.view.css");
         scene.getStylesheets().add("/styles/context.menu.css");
+        scene.getStylesheets().add("/styles/menu.bar.css");
 
         stage.setTitle("Personnel reserve");
         try {
