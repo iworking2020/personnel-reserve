@@ -8,12 +8,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.utils.AppUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -76,11 +76,7 @@ public class ModalMessageFxmlController implements Initializable {
 
         Stage modal = new Stage();
         modal.setTitle(title);
-        try {
-            modal.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("images/icon.png")));
-        } catch (Exception ex) {
-            logger.error("Не удалось загрузить иконку приложения ...", ex);
-        }
+        AppUtil.setIcon(modal);
         modal.setScene(scene);
         modal.initModality(Modality.WINDOW_MODAL);
         modal.initOwner(primaryStage);

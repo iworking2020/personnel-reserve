@@ -24,6 +24,7 @@ import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
+import ru.iworking.personnel.reserve.utils.AppUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -130,11 +131,7 @@ public class ModalAddResumeFxmlController implements Initializable {
 
         Stage modal = new Stage();
         modal.setTitle("Добавить");
-        try {
-            modal.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("images/icon.png")));
-        } catch (Exception ex) {
-            logger.error("Не удалось загрузить иконку приложения ...", ex);
-        }
+        AppUtil.setIcon(modal);
         modal.setScene(scene);
         modal.initModality(Modality.WINDOW_MODAL);
         modal.initOwner(primaryStage);

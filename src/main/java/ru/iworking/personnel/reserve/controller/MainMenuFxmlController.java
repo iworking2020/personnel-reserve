@@ -12,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -29,6 +28,7 @@ import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
+import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.ExelUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtils;
@@ -171,10 +171,7 @@ public class MainMenuFxmlController implements Initializable {
         table.setItems(resumeObservableList);
     }
 
-    public void show(Parent root) {
-        Stage stage = MainApp.PARENT_STAGE;
-
-        Scene scene = new Scene(root);
+    private void addStylesheets(Scene scene) {
         scene.getStylesheets().add("/styles/main.css");
         scene.getStylesheets().add("/styles/window.css");
         scene.getStylesheets().add("/styles/button.css");
@@ -187,13 +184,14 @@ public class MainMenuFxmlController implements Initializable {
         scene.getStylesheets().add("/styles/table.view.css");
         scene.getStylesheets().add("/styles/context.menu.css");
         scene.getStylesheets().add("/styles/menu.bar.css");
+    }
 
+    public void show(Parent root) {
+        Stage stage = MainApp.PARENT_STAGE;
         stage.setTitle("Personnel reserve");
-        try {
-            stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("images/icon.png")));
-        } catch (Exception ex) {
-            logger.error("Не удалось загрузить иконку приложения ...", ex);
-        }
+        AppUtil.setIcon(stage);
+        Scene scene = new Scene(root);
+        addStylesheets(scene);
         stage.setScene(scene);
         stage.show();
     }
@@ -321,6 +319,7 @@ public class MainMenuFxmlController implements Initializable {
         firstNameTextField.setText("");
         middleNameTextField.setText("");
         educationComboBox.setValue(null);
+        workTypeComboBox.setValue(null);
         professionTextField.setText("");
         wageTextField.setText("");
     }

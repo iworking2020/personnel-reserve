@@ -5,24 +5,18 @@
  */
 package ru.iworking.personnel.reserve.utils;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.service.api.utils.LocaleUtils;
 
-/**
- *
- * @author pi
- */
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+
 public class ExelUtil {
     
     public static void createXLSResumeList(String fileDir, List<Resume> list) throws IOException {
@@ -80,8 +74,7 @@ public class ExelUtil {
                 Cell address = row.createCell(12);
                 address.setCellValue(resume.getAddress());
         }
-        
-        // Записываем всё в файл
+
         book.write(new FileOutputStream(fileDir));
         book.close();
     }

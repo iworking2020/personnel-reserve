@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 import ru.iworking.personnel.reserve.controller.MainMenuFxmlController;
 import ru.iworking.personnel.reserve.utils.FileUtil;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
 
 public class MainApp extends Application {
 
@@ -17,13 +16,12 @@ public class MainApp extends Application {
         MainApp.PARENT_STAGE = stage;
 
         FileUtil.createProjectDir();
-        HibernateUtil.getSessionFactory();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
         Parent parent = fxmlLoader.load();
 
-        MainMenuFxmlController dialogController = fxmlLoader.getController();
-        dialogController.show(parent);
+        MainMenuFxmlController mainMenuController = fxmlLoader.getController();
+        mainMenuController.show(parent);
 
     }
 

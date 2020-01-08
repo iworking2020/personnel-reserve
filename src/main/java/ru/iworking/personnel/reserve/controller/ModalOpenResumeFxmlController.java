@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.PdfUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtils;
@@ -117,11 +118,7 @@ public class ModalOpenResumeFxmlController implements Initializable {
 
         Stage modal = new Stage();
         modal.setTitle("Открыть");
-        try {
-            modal.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("images/icon.png")));
-        } catch (Exception ex) {
-            logger.error("Не удалось загрузить иконку приложения ...", ex);
-        }
+        AppUtil.setIcon(modal);
         modal.setScene(scene);
         modal.initModality(Modality.WINDOW_MODAL);
         modal.initOwner(primaryStage);
