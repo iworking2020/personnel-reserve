@@ -9,6 +9,8 @@ import java.util.List;
 
 public class WorkTypeDao implements Dao<WorkType, Long> {
 
+    private static volatile WorkTypeDao instance;
+
     @Override
     public List<WorkType> findAll() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -61,5 +63,18 @@ public class WorkTypeDao implements Dao<WorkType, Long> {
         session.flush();
         transaction.commit();
         session.close();
+    }
+
+    public static WorkTypeDao getInstance() {
+        WorkTypeDao localInstance = instance;
+        if (localInstance == null) {
+            synchronized (WorkTypeDao.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new WorkTypeDao();
+                }
+            }
+        }
+        return localInstance;
     }
 }

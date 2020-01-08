@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ProfFieldDao implements Dao<ProfField, Long> {
 
+    private static volatile ProfFieldDao instance;
+
     @Override
     public List<ProfField> findAll() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -61,5 +63,18 @@ public class ProfFieldDao implements Dao<ProfField, Long> {
         session.flush();
         transaction.commit();
         session.close();
+    }
+
+    public static ProfFieldDao getInstance() {
+        ProfFieldDao localInstance = instance;
+        if (localInstance == null) {
+            synchronized (ProfFieldDao.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new ProfFieldDao();
+                }
+            }
+        }
+        return localInstance;
     }
 }

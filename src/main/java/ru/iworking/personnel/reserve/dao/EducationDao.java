@@ -9,6 +9,8 @@ import java.util.List;
 
 public class EducationDao implements Dao<Education, Long> {
 
+    private static volatile EducationDao instance;
+
     @Override
     public List<Education> findAll() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -61,5 +63,18 @@ public class EducationDao implements Dao<Education, Long> {
         session.flush();
         transaction.commit();
         session.close();
+    }
+
+    public static EducationDao getInstance() {
+        EducationDao localInstance = instance;
+        if (localInstance == null) {
+            synchronized (EducationDao.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new EducationDao();
+                }
+            }
+        }
+        return localInstance;
     }
 }

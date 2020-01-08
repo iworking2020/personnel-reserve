@@ -16,6 +16,8 @@ import java.util.Map;
 
 public class ResumeDao implements Dao<Resume, Long> {
 
+    private static volatile ResumeDao instance;
+
     public Long count(Resume resume) {
         Long count = 0L;
         try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
@@ -136,6 +138,19 @@ public class ResumeDao implements Dao<Resume, Long> {
             session.flush();
             transaction.commit();
         }
+    }
+
+    public static ResumeDao getInstance() {
+        ResumeDao localInstance = instance;
+        if (localInstance == null) {
+            synchronized (ResumeDao.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new ResumeDao();
+                }
+            }
+        }
+        return localInstance;
     }
 
 }

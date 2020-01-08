@@ -9,6 +9,8 @@ import java.util.List;
 
 public class CurrencyDao implements Dao<Currency, Long> {
 
+    private static volatile CurrencyDao instance;
+
     @Override
     public List<Currency> findAll() {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -61,5 +63,18 @@ public class CurrencyDao implements Dao<Currency, Long> {
         session.flush();
         transaction.commit();
         session.close();
+    }
+
+    public static CurrencyDao getInstance() {
+        CurrencyDao localInstance = instance;
+        if (localInstance == null) {
+            synchronized (CurrencyDao.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new CurrencyDao();
+                }
+            }
+        }
+        return localInstance;
     }
 }

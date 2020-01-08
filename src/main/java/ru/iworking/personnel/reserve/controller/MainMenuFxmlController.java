@@ -47,10 +47,10 @@ public class MainMenuFxmlController implements Initializable {
 
     static final Logger logger = LogManager.getLogger(MainMenuFxmlController.class);
 
-    private ResumeDao resumeDao = new ResumeDao();
-    private ProfFieldDao profFieldDao = new ProfFieldDao();
-    private EducationDao educationDao = new EducationDao();
-    private WorkTypeDao workTypeDao = new WorkTypeDao();
+    private ResumeDao resumeDao = ResumeDao.getInstance();
+    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
 
     @FXML private TableView<Resume> table;
     @FXML private TableColumn<Resume, String> lastNameColumn;

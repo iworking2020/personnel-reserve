@@ -59,11 +59,11 @@ public class ModalEditResumeFxmlController implements Initializable {
     private ObservableList<Resume> resumeObservableList;
     private ProfField currentProfField;
     
-    private ProfFieldDao profFieldDao = new ProfFieldDao();
-    private WorkTypeDao workTypeDao = new WorkTypeDao();
-    private EducationDao educationDao = new EducationDao();
-    private ResumeDao resumeDao = new ResumeDao();
-    private CurrencyDao currencyDao = new CurrencyDao();
+    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
+    private EducationDao educationDao = EducationDao.getInstance();
+    private ResumeDao resumeDao = ResumeDao.getInstance();
+    private CurrencyDao currencyDao = CurrencyDao.getInstance();
     
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
