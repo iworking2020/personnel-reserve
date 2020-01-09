@@ -31,7 +31,7 @@
         <commons-io.version>1.3.2</commons-io.version>
         <profession-api.version>1.0.0</profession-api.version>
         <education-api.version>1.0.0</education-api.version>
-        <money-api.version>1.0.1</money-api.version>
+        <money-api.version>1.0.2</money-api.version>
         <itext7-core.version>7.0.4</itext7-core.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.6.4</slf4j-simple.version>
@@ -84,7 +84,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
                 <version>${launch4j-maven-plugin.version}</version>
@@ -111,7 +111,7 @@
                         <phase>package</phase>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
@@ -132,17 +132,17 @@
             <version>${commons-io.version}</version>
         </dependency>
         <dependency>
-            <groupId>ru-iworking</groupId>
+            <groupId>ru.iworking</groupId>
             <artifactId>profession-api</artifactId>
             <version>${profession-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>ru-iworking</groupId>
+            <groupId>ru.iworking</groupId>
             <artifactId>money-api</artifactId>
             <version>${money-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>ru-iworking</groupId>
+            <groupId>ru.iworking</groupId>
             <artifactId>education-api</artifactId>
             <version>${education-api.version}</version>
         </dependency>
