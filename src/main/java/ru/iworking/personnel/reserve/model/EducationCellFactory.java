@@ -4,7 +4,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 import ru.iworking.personnel.reserve.entity.Education;
-import ru.iworking.service.api.utils.LocaleUtils;
+import ru.iworking.service.api.utils.LocaleUtil;
 
 public class EducationCellFactory implements Callback<ListView<Education>, ListCell<Education>> {
 
@@ -17,7 +17,7 @@ public class EducationCellFactory implements Callback<ListView<Education>, ListC
                 if (item == null || empty) {
                     setGraphic(null);
                 } else {
-                    setText(item.getNameToView(LocaleUtils.getDefault()));
+                    setText(item.getNameToView(LocaleUtil.getDefault()));
                 }
             }
         };

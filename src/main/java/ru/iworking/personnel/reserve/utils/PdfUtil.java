@@ -23,7 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.service.api.utils.LocaleUtils;
+import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.io.IOException;
 
@@ -52,16 +52,16 @@ public class PdfUtil {
         String email = "емайл: "+resume.getEmail();
         String profession = "профессия: "+resume.getProfession();
         String wage = resume.getWage() != null ?
-                "зарплата: "+resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault()) :
+                "зарплата: "+resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtil.getDefault()) :
                 "зарплата: не указана";
         String profField = resume.getProfField() != null ?
-                "профобласть: "+resume.getProfField().getNameToView(LocaleUtils.getDefault()) :
+                "профобласть: "+resume.getProfField().getNameToView(LocaleUtil.getDefault()) :
                 "профобласть: не указана";
         String workType = resume.getWorkType() != null ?
-                "график: "+resume.getWorkType().getNameToView(LocaleUtils.getDefault()) :
+                "график: "+resume.getWorkType().getNameToView(LocaleUtil.getDefault()) :
                 "график: не указан";
         String education = resume.getEducation() != null ?
-                "образование: "+resume.getEducation().getNameToView(LocaleUtils.getDefault()) :
+                "образование: "+resume.getEducation().getNameToView(LocaleUtil.getDefault()) :
                 "образование: не указано";
 
         Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));

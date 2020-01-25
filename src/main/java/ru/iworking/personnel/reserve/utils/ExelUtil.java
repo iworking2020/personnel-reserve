@@ -11,7 +11,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.service.api.utils.LocaleUtils;
+import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,13 +43,13 @@ public class ExelUtil {
                 email.setCellValue(resume.getEmail());
                 Cell profField = row.createCell(7);
                 if (resume.getProfField() != null) {
-                    profField.setCellValue(resume.getProfField().getNameToView(LocaleUtils.getDefault()));
+                    profField.setCellValue(resume.getProfField().getNameToView(LocaleUtil.getDefault()));
                 } else {
                     profField.setCellValue("не указана");
                 }
                 Cell workType = row.createCell(8);
                 if (resume.getWorkType() != null) {
-                    workType.setCellValue(resume.getWorkType().getNameToView(LocaleUtils.getDefault()));
+                    workType.setCellValue(resume.getWorkType().getNameToView(LocaleUtil.getDefault()));
                 } else {
                     workType.setCellValue("не указан");
                 }
@@ -61,13 +61,13 @@ public class ExelUtil {
                 }
                 Cell currency = row.createCell(10);
                 if (resume.getCurrency()!= null) {
-                    currency.setCellValue(resume.getCurrency().getNameToView(LocaleUtils.getDefault()));
+                    currency.setCellValue(resume.getCurrency().getNameToView(LocaleUtil.getDefault()));
                 } else {
                     currency.setCellValue("не указана");
                 }
                 Cell education = row.createCell(11);
                 if (resume.getEducation() != null) {
-                    education.setCellValue(resume.getEducation().getNameToView(LocaleUtils.getDefault()));
+                    education.setCellValue(resume.getEducation().getNameToView(LocaleUtil.getDefault()));
                 } else {
                     education.setCellValue("не указано");
                 }

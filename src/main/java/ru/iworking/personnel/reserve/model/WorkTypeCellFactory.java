@@ -4,7 +4,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 import ru.iworking.personnel.reserve.entity.WorkType;
-import ru.iworking.service.api.utils.LocaleUtils;
+import ru.iworking.service.api.utils.LocaleUtil;
 
 public class WorkTypeCellFactory implements Callback<ListView<WorkType>, ListCell<WorkType>> {
 
@@ -17,7 +17,7 @@ public class WorkTypeCellFactory implements Callback<ListView<WorkType>, ListCel
                 if (item == null || empty) {
                     setGraphic(null);
                 } else {
-                    setText(item.getNameToView(LocaleUtils.getDefault()));
+                    setText(item.getNameToView(LocaleUtil.getDefault()));
                 }
             }
         };

@@ -19,8 +19,8 @@ import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.PdfUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
-import ru.iworking.service.api.utils.LocaleUtils;
-import ru.iworking.service.api.utils.TimeUtils;
+import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -63,13 +63,13 @@ public class ModalOpenResumeFxmlController implements Initializable {
         emailLabel.setText(resume.getEmail());
         professionLabel.setText(resume.getProfession());
         if (resume.getProfField() != null) {
-            profFieldLabel.setText(resume.getProfField().getNameToView(LocaleUtils.getDefault()));
+            profFieldLabel.setText(resume.getProfField().getNameToView(LocaleUtil.getDefault()));
         } else {
             profFieldLabel.setText("не указана");
         }
         if (resume.getWage() != null) {
             String wageString = resume.getCurrency() != null ?
-                    resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtils.getDefault()) :
+                    resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtil.getDefault()) :
                     resume.getWage().toString();
             wageString = wageString.length() > 0 ? wageString : "не указана";
             wageLabel.setText(wageString);
@@ -78,17 +78,17 @@ public class ModalOpenResumeFxmlController implements Initializable {
         }
 
         if (resume.getWorkType() != null) {
-            workTypeLabel.setText(resume.getWorkType().getNameToView(LocaleUtils.getDefault()));
+            workTypeLabel.setText(resume.getWorkType().getNameToView(LocaleUtil.getDefault()));
         } else {
             workTypeLabel.setText("не указан");
         }
         if (resume.getEducation() != null) {
-            educationLabel.setText(resume.getEducation().getNameToView(LocaleUtils.getDefault()));
+            educationLabel.setText(resume.getEducation().getNameToView(LocaleUtil.getDefault()));
         } else {
             educationLabel.setText("не указано");
         }
 
-        Integer age = TimeUtils.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
+        Integer age = TimeUtil.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
         
         experienceLabel.setText(age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age));
         addressLabel.setText(resume.getAddress());

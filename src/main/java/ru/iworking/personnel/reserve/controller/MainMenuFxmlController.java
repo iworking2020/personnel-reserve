@@ -31,8 +31,8 @@ import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.ExelUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
-import ru.iworking.service.api.utils.LocaleUtils;
-import ru.iworking.service.api.utils.TimeUtils;
+import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,25 +101,25 @@ public class MainMenuFxmlController implements Initializable {
         professionColumn.setCellValueFactory(new PropertyValueFactory<>("profession"));
         workTypeColumn.setCellValueFactory(cellData -> {
             WorkType workType = cellData.getValue().getWorkType();
-            String textColumn = workType != null ? workType.getNameToView(LocaleUtils.getDefault()) : "не указан";
+            String textColumn = workType != null ? workType.getNameToView(LocaleUtil.getDefault()) : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
         wageColumn.setCellValueFactory(new PropertyValueFactory<>("wage"));
         currencyColumn.setCellValueFactory(cellData -> {
             Currency currency = cellData.getValue().getCurrency();
-            String textColumn = currency != null ? currency.getNameToView(LocaleUtils.getDefault()) : "не указана";
+            String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
         educationColumn.setCellValueFactory(cellData -> {
             Education education = cellData.getValue().getEducation();
-            String textColumn = education != null ? education.getNameToView(LocaleUtils.getDefault()) : "не указано";
+            String textColumn = education != null ? education.getNameToView(LocaleUtil.getDefault()) : "не указано";
             return new ReadOnlyStringWrapper(textColumn);
         });
         experienceColumn.setCellValueFactory(cellData -> {
             Experience exp = cellData.getValue().getExperience();
             String textColumn = "";
             if (exp != null) {
-                Integer age = TimeUtils.calAge(exp.getDateStart(), exp.getDateEnd());
+                Integer age = TimeUtil.calAge(exp.getDateStart(), exp.getDateEnd());
                 textColumn = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age);
             } else {
                 textColumn = "без опыта";
@@ -142,7 +142,7 @@ public class MainMenuFxmlController implements Initializable {
 
         profFieldDao.findAll().stream().forEach(profField -> {
             Button button = new Button();
-            button.setText(profField.getNameToView(LocaleUtils.getDefault()));
+            button.setText(profField.getNameToView(LocaleUtil.getDefault()));
             button.setOnAction(event -> {
                 this.currentProfField = profField;
                 this.resumeObservableList = this.createResumeObservableList(resumeDao.findAllByProfField(profField));

@@ -4,7 +4,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 import ru.iworking.personnel.reserve.entity.Currency;
-import ru.iworking.service.api.utils.LocaleUtils;
+import ru.iworking.service.api.utils.LocaleUtil;
 
 public class CurrencyCellFactory implements Callback<ListView<Currency>, ListCell<Currency>> {
 
@@ -17,7 +17,7 @@ public class CurrencyCellFactory implements Callback<ListView<Currency>, ListCel
                 if (item == null || empty) {
                     setGraphic(null);
                 } else {
-                    setText(item.getNameToView(LocaleUtils.getDefault()));
+                    setText(item.getNameToView(LocaleUtil.getDefault()));
                 }
             }
         };

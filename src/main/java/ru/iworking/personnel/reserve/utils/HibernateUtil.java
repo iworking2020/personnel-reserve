@@ -35,7 +35,7 @@ public class HibernateUtil {
                 Properties settings = new Properties();
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
                 settings.put(Environment.DRIVER, "org.h2.Driver");
-                settings.put(Environment.URL, "jdbc:h2:" + DirProps.PROJECT_DIR + File.separator + "database");
+                settings.put(Environment.URL, "jdbc:h2:" + "." + File.separator + "database");
                 settings.put(Environment.USER, "sa");
                 settings.put(Environment.PASS, "");
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
