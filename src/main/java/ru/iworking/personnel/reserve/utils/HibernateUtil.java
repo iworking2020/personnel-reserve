@@ -57,7 +57,7 @@ public class HibernateUtil {
                             settings.getProperty("hibernate.init.file.url"),
                             settings.getProperty("hibernate.init.file.encoding"));
                 } catch (Exception ex) {
-                    logger.error("Init file not found... ", ex);
+                    logger.error("Init file not found... ");
                 }
 
             } catch (Exception e) {
