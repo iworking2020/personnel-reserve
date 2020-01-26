@@ -4,6 +4,8 @@ Configuration:
     Property:
       - name: LOG_PATTERN
         value: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+      - name: APP_LOG_ROOT
+        value: "logs"
       - name: DEBUG_LEVEL
         value: ${sys:DEBUG_LEVEL:-INFO}
 
@@ -16,8 +18,21 @@ Configuration:
       PatternLayout:
         pattern: ${LOG_PATTERN}
 
+    RollingFile:
+      name: FILE_LOGGER
+      fileName: ${APP_LOG_ROOT}/application.log
+      filePattern: "${APP_LOG_ROOT}/$${date:yyyy-MM-dd}/application-%d{yyyy-MM-dd-HH}-%i.log"
+      PatternLayout:
+        pattern: ${LOG_PATTERN}
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: 100 MB
+
   Loggers:
     Root:
       level: ${DEBUG_LEVEL}
       AppenderRef:
         - ref: CONSOLE
+        - ref: FILE_LOGGER

@@ -1,7 +1,11 @@
 HELP.md
 */target/
+/logs/
 */logs/
 !.mvn/wrapper/maven-wrapper.jar
+
+### Database ###
+*.db
 
 ### STS ###
 .apt_generated

@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.utils;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -8,23 +7,21 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import ru.iworking.personnel.reserve.converter.LocalDateAttributeConverter;
 import ru.iworking.personnel.reserve.converter.LocalDateTimeAttributeConverter;
 import ru.iworking.personnel.reserve.entity.*;
 
 import javax.persistence.Query;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
 public class HibernateUtil {
 
     static final Logger logger = LogManager.getLogger(HibernateUtil.class);
 
+    private static String urlHibernateProperties = "./data/hibernate.properties";
     private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
@@ -33,18 +30,11 @@ public class HibernateUtil {
                 Configuration configuration = new Configuration();
 
                 Properties settings = new Properties();
-                settings.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
-                settings.put(Environment.DRIVER, "org.h2.Driver");
-                settings.put(Environment.URL, "jdbc:h2:" + "." + File.separator + "database");
-                settings.put(Environment.USER, "sa");
-                settings.put(Environment.PASS, "");
-                settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-                settings.put(Environment.ENABLE_LAZY_LOAD_NO_TRANS, "true");
-                settings.put(Environment.SHOW_SQL, "true");
-                settings.put(Environment.FORMAT_SQL, "true");
-                settings.put(Environment.POOL_SIZE, 1);
-                settings.put(Environment.HBM2DDL_AUTO, "update");
-
+                try {
+                    settings.load(new FileInputStream(urlHibernateProperties));
+                } catch (FileNotFoundException ex) {
+                    logger.error("hibernate.properties not found...", ex);
+                }
                 configuration.setProperties(settings);
 
                 configuration.addAttributeConverter(LocalDateAttributeConverter.class);
@@ -62,7 +52,14 @@ public class HibernateUtil {
 
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-                HibernateUtil.initData(sessionFactory);
+                try {
+                    HibernateUtil.initData(sessionFactory,
+                            settings.getProperty("hibernate.init.file.url"),
+                            settings.getProperty("hibernate.init.file.encoding"));
+                } catch (Exception ex) {
+                    logger.error("Init file not found... ", ex);
+                }
+
             } catch (Exception e) {
                 logger.error(e);
             }
@@ -70,20 +67,17 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    private static void initData(SessionFactory sessionFactory) throws IOException, URISyntaxException {
-        InputStream inputData = HibernateUtil.class.getClassLoader().getResourceAsStream("data-h2.sql");
-        if (inputData != null) {
-            String sql = IOUtils.toString(inputData, "UTF-8");
+    private static void initData(SessionFactory sessionFactory, String url, String encoding) throws Exception {
+        String sql = FileUtil.readFileAsString(url, encoding);
 
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createNativeQuery(sql);
-            query.executeUpdate();
-            session.flush();
-            transaction.commit();
-        } else {
-            logger.warn("File for data install not found...");
-        }
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createNativeQuery(sql);
+        query.executeUpdate();
+        session.flush();
+        transaction.commit();
     }
+
+
 
 }

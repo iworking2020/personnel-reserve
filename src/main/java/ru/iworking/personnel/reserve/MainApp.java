@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import ru.iworking.personnel.reserve.controller.MainMenuFxmlController;
-import ru.iworking.personnel.reserve.utils.FileUtil;
 
 public class MainApp extends Application {
 
@@ -14,8 +13,6 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         MainApp.PARENT_STAGE = stage;
-
-        FileUtil.createProjectDir();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
         Parent parent = fxmlLoader.load();
