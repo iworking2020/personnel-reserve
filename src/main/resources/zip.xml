@@ -21,12 +21,5 @@
                 <include>*.*</include>
             </includes>
         </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/data</directory>
-            <outputDirectory>data</outputDirectory>
-            <excludes>
-                <exclude>*.db</exclude>
-            </excludes>
-        </fileSet>
     </fileSets>
 </assembly>
