@@ -17,6 +17,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
@@ -30,11 +32,13 @@ import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.ExelUtil;
+import ru.iworking.personnel.reserve.utils.HibernateUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.service.api.utils.LocaleUtil;
 import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -130,27 +134,13 @@ public class MainMenuFxmlController implements Initializable {
 
         Button buttonFindAll = new Button();
         buttonFindAll.setText("все категории");
-        buttonFindAll.setOnAction(event -> {
-            this.currentProfField = null;
-            this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll());
-            table.setItems(resumeObservableList);
-            String style = "-fx-background-image: url('images/fone/fone0.jpg');";
-            backgroundImagePane.setStyle(style);
-            actionButtonClear(event);
-        });
+        buttonFindAll.setOnAction(event -> selectCategory(event, null));
         profFieldVBox.getChildren().add(buttonFindAll);
 
         profFieldDao.findAll().stream().forEach(profField -> {
             Button button = new Button();
             button.setText(profField.getNameToView(LocaleUtil.getDefault()));
-            button.setOnAction(event -> {
-                this.currentProfField = profField;
-                this.resumeObservableList = this.createResumeObservableList(resumeDao.findAllByProfField(profField));
-                table.setItems(resumeObservableList);
-                String style = "-fx-background-image: url('images/fone/fone"+profField.getId()+".png');";
-                backgroundImagePane.setStyle(style);
-                actionButtonClear(event);
-            });
+            button.setOnAction(event -> selectCategory(event, profField));
             profFieldVBox.getChildren().add(button);
         });
 
@@ -169,6 +159,19 @@ public class MainMenuFxmlController implements Initializable {
 
         this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll());
         table.setItems(resumeObservableList);
+    }
+
+    private void selectCategory(ActionEvent event, ProfField profField) {
+        this.currentProfField = profField;
+        List<Resume> list = profField != null ?
+                resumeDao.findAllByProfField(profField) :
+                resumeDao.findAll();
+        this.resumeObservableList = this.createResumeObservableList(list);
+        table.setItems(resumeObservableList);
+        Long profFieldId = profField != null ? profField.getId() : 0;
+        String style = "-fx-background-image: url('images/fone/fone"+profFieldId+".png');";
+        backgroundImagePane.setStyle(style);
+        actionButtonClear(event);
     }
 
     private void addStylesheets(Scene scene) {
@@ -362,6 +365,60 @@ public class MainMenuFxmlController implements Initializable {
             dialogController.showAndWait(parent);
         }
 
+    }
+
+    @FXML
+    private void actionLoadData(ActionEvent event) {
+        File currentDatabase = getCurrentDataBase();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName(currentDatabase.getName());
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        File newDatabase = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
+
+        try {
+            HibernateUtil.shutDown();
+            FileUtils.copyFile(newDatabase, currentDatabase);
+            selectCategory(event, null);
+        } catch (IOException e) {
+            logger.error(e);
+        }
+    }
+
+    @FXML
+    private void actionUploadData(ActionEvent event) {
+        File currentDatabase = getCurrentDataBase();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName(currentDatabase.getName());
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        File copiedDatabase = fileChooser.showSaveDialog(MainApp.PARENT_STAGE);
+
+        try {
+            HibernateUtil.shutDown();
+            FileUtils.copyFile(currentDatabase, copiedDatabase);
+        } catch (IOException e) {
+            logger.error(e);
+        }
+    }
+
+    private File getCurrentDataBase() {
+        String urlForDatabase = HibernateUtil.getProperties().getProperty("hibernate.connection.url");
+        String pathToDatabaseFile = urlForDatabase.substring(urlForDatabase.lastIndexOf(":")+1);
+        String pathToDatabaseDir = pathToDatabaseFile.substring(0, pathToDatabaseFile.lastIndexOf("/"));
+        String fileNameDataBase = pathToDatabaseFile.substring(pathToDatabaseFile.lastIndexOf("/")+1);
+
+        File dir = new File(pathToDatabaseDir);
+        FileFilter fileFilter = new WildcardFileFilter(fileNameDataBase+"*");
+        File[] files = dir.listFiles(fileFilter);
+
+        return files[0];
     }
 
 }

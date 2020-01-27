@@ -14,6 +14,12 @@
                         <CheckMenuItem fx:id="winSearchCheckItem" mnemonicParsing="false" text="Окно поиска" />
                      </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Данные">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#actionLoadData" text="Загрузить" />
+                      <MenuItem mnemonicParsing="false" onAction="#actionUploadData" text="Выгрузить" />
+                    </items>
+                  </Menu>
               </menus>
             </MenuBar>
             <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">

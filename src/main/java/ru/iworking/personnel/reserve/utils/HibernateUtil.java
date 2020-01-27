@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.utils;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -13,25 +14,30 @@ import ru.iworking.personnel.reserve.converter.LocalDateTimeAttributeConverter;
 import ru.iworking.personnel.reserve.entity.*;
 
 import javax.persistence.Query;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class HibernateUtil {
 
     static final Logger logger = LogManager.getLogger(HibernateUtil.class);
 
-    private static String urlHibernateProperties = "./data/hibernate.properties";
     private static SessionFactory sessionFactory;
+    private static Properties settings;
+
+    public static Properties getProperties() {
+        if (settings == null) HibernateUtil.getSessionFactory();
+        return settings;
+    }
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration();
 
-                Properties settings = new Properties();
+                settings = new Properties();
                 try {
-                    settings.load(new FileInputStream(urlHibernateProperties));
+                    settings.load(HibernateUtil.class.getClassLoader().getResourceAsStream("hibernate.properties"));
                 } catch (FileNotFoundException ex) {
                     logger.error("hibernate.properties not found...", ex);
                 }
@@ -53,9 +59,7 @@ public class HibernateUtil {
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
                 try {
-                    HibernateUtil.initData(sessionFactory,
-                            settings.getProperty("hibernate.init.file.url"),
-                            settings.getProperty("hibernate.init.file.encoding"));
+                    HibernateUtil.initData(sessionFactory);
                 } catch (Exception ex) {
                     logger.error("Init file not found... ");
                 }
@@ -67,15 +71,30 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    private static void initData(SessionFactory sessionFactory, String url, String encoding) throws Exception {
-        String sql = FileUtil.readFileAsString(url, encoding);
+    public static void shutDown(){
+        getSessionFactory().close();
+        sessionFactory = null;
+    }
 
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createNativeQuery(sql);
-        query.executeUpdate();
-        session.flush();
-        transaction.commit();
+    private static void initData(SessionFactory sessionFactory) throws Exception {
+        String encoding = settings.getProperty("hibernate.init.file.encoding");
+        String platform = settings.getProperty("hibernate.database.platform");
+
+        String nameSqlFile = platform != null ? "data-"+platform+".sql" : "data.sql";
+
+        InputStream inputData = HibernateUtil.class.getClassLoader().getResourceAsStream(nameSqlFile);
+        if (inputData != null) {
+            String sql = IOUtils.toString(inputData, encoding);
+
+            Session session = sessionFactory.getCurrentSession();
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createNativeQuery(sql);
+            query.executeUpdate();
+            session.flush();
+            transaction.commit();
+        } else {
+            logger.warn("File for data install not found...");
+        }
     }
 
 
