@@ -27,6 +27,7 @@ import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.dao.WorkTypeDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
@@ -49,7 +50,9 @@ import java.util.ResourceBundle;
 
 public class MainMenuFxmlController implements Initializable {
 
-    static final Logger logger = LogManager.getLogger(MainMenuFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(MainMenuFxmlController.class);
+
+    private static final BigDecimalFormatter BIG_DECIMAL_FORMATTER = new BigDecimalFormatter();
 
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
@@ -91,6 +94,8 @@ public class MainMenuFxmlController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        wageTextField.setTextFormatter(BIG_DECIMAL_FORMATTER);
+
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
         workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAll()));

@@ -20,10 +20,7 @@ import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
-import ru.iworking.personnel.reserve.model.EducationCellFactory;
-import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
-import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
+import ru.iworking.personnel.reserve.model.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 
 import javax.imageio.ImageIO;
@@ -35,7 +32,9 @@ import java.util.ResourceBundle;
 
 public class ModalEditResumeFxmlController implements Initializable {
 
-    static final Logger logger = LogManager.getLogger(ModalEditResumeFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(ModalEditResumeFxmlController.class);
+
+    private static final BigDecimalFormatter BIG_DECIMAL_FORMATTER = new BigDecimalFormatter();
 
     @FXML private TextField lastNameTextField;
     @FXML private TextField firstNameTextField;
@@ -99,6 +98,8 @@ public class ModalEditResumeFxmlController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        wageTextField.setTextFormatter(BIG_DECIMAL_FORMATTER);
+
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
         profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAll()));
