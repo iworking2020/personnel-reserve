@@ -27,11 +27,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class ModalOpenResumeFxmlController implements Initializable {
 
-    static final Logger logger = LogManager.getLogger(ModalOpenResumeFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(ModalOpenResumeFxmlController.class);
+
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @FXML private Label lastNameLabel;
     @FXML private Label firstNameLabel;
@@ -69,8 +72,8 @@ public class ModalOpenResumeFxmlController implements Initializable {
         }
         if (resume.getWage() != null) {
             String wageString = resume.getCurrency() != null ?
-                    resume.getWage().toString() + " " + resume.getCurrency().getNameToView(LocaleUtil.getDefault()) :
-                    resume.getWage().toString();
+                    decimalFormat.format(resume.getWage()) + " " + resume.getCurrency().getNameToView(LocaleUtil.getDefault()) :
+                    decimalFormat.format(resume.getWage());
             wageString = wageString.length() > 0 ? wageString : "не указана";
             wageLabel.setText(wageString);
         } else {

@@ -28,13 +28,15 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class ModalEditResumeFxmlController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ModalEditResumeFxmlController.class);
 
-    private static final BigDecimalFormatter BIG_DECIMAL_FORMATTER = new BigDecimalFormatter();
+    private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @FXML private TextField lastNameTextField;
     @FXML private TextField firstNameTextField;
@@ -98,7 +100,7 @@ public class ModalEditResumeFxmlController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        wageTextField.setTextFormatter(BIG_DECIMAL_FORMATTER);
+        wageTextField.setTextFormatter(bigDecimalFormatter);
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
@@ -125,7 +127,7 @@ public class ModalEditResumeFxmlController implements Initializable {
         emailTextField.setText(resume.getEmail());
         professionTextField.setText(resume.getProfession());
         profFieldComboBox.setValue(resume.getProfField());
-        if (resume.getWage() != null) wageTextField.setText(resume.getWage().toString());
+        if (resume.getWage() != null) wageTextField.setText(decimalFormat.format(resume.getWage()));
         currencyComboBox.setValue(resume.getCurrency());
         workTypeComboBox.setValue(resume.getWorkType());
         educationComboBox.setValue(resume.getEducation());
@@ -207,7 +209,7 @@ public class ModalEditResumeFxmlController implements Initializable {
         resume.setProfField(profFieldComboBox.getValue());
         if (!wageTextField.getText().isEmpty()) {
             try {
-                resume.setWage(BigDecimal.valueOf(Long.valueOf(wageTextField.getText())));
+                resume.setWage(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
             } catch (Exception e) {
                 logger.error(e);
             }

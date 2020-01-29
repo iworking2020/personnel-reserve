@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class BigDecimalFormatter extends TextFormatter {
 
-    private static final Pattern pattern = Pattern.compile("\\d*|\\d+\\,\\d{2}");
+    private static final Pattern pattern = Pattern.compile("\\d*(\\.|\\,)?\\d*");
 
     public BigDecimalFormatter() {
         super( (UnaryOperator<TextFormatter.Change>) change -> {

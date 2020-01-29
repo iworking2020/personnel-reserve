@@ -36,7 +36,7 @@ public class ModalAddResumeFxmlController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ModalAddResumeFxmlController.class);
 
-    private static final BigDecimalFormatter BIG_DECIMAL_FORMATTER = new BigDecimalFormatter();
+    private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
 
     @FXML private TextField lastNameTextField;
     @FXML private TextField firstNameTextField;
@@ -89,7 +89,7 @@ public class ModalAddResumeFxmlController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        wageTextField.setTextFormatter(BIG_DECIMAL_FORMATTER);
+        wageTextField.setTextFormatter(bigDecimalFormatter);
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
@@ -173,7 +173,7 @@ public class ModalAddResumeFxmlController implements Initializable {
         resume.setProfession(professionTextField.getText());
         resume.setProfField(profFieldComboBox.getValue());      
         try {
-            resume.setWage(BigDecimal.valueOf(Long.valueOf(wageTextField.getText())));
+            resume.setWage(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
         } catch (Exception e) {
             logger.error(e);
         }

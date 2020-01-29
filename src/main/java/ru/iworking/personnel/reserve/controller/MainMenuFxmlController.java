@@ -43,6 +43,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,8 @@ public class MainMenuFxmlController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(MainMenuFxmlController.class);
 
-    private static final BigDecimalFormatter BIG_DECIMAL_FORMATTER = new BigDecimalFormatter();
+    private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
@@ -94,7 +96,7 @@ public class MainMenuFxmlController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        wageTextField.setTextFormatter(BIG_DECIMAL_FORMATTER);
+        wageTextField.setTextFormatter(bigDecimalFormatter);
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
@@ -113,7 +115,11 @@ public class MainMenuFxmlController implements Initializable {
             String textColumn = workType != null ? workType.getNameToView(LocaleUtil.getDefault()) : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
-        wageColumn.setCellValueFactory(new PropertyValueFactory<>("wage"));
+        wageColumn.setCellValueFactory(cellData -> {
+            BigDecimal wage = cellData.getValue().getWage();
+            String textColumn = wage != null ? decimalFormat.format(wage) : "договорная";
+            return new ReadOnlyStringWrapper(textColumn);
+        });
         currencyColumn.setCellValueFactory(cellData -> {
             Currency currency = cellData.getValue().getCurrency();
             String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
@@ -310,7 +316,7 @@ public class MainMenuFxmlController implements Initializable {
         if (profession != null && profession.length() > 0) params.put(ResumeRequestParam.PROFESSION, profession);
         if (workType != null) params.put(ResumeRequestParam.WORK_TYPE_ID, workType.getId());
         try {
-            if (wage != null) params.put(ResumeRequestParam.WAGE, BigDecimal.valueOf(Long.valueOf(wage)));
+            if (wage != null) params.put(ResumeRequestParam.WAGE, new BigDecimal(wage.replaceAll(",", ".")));
         } catch (Exception e) {
             logger.error(e);
         }
