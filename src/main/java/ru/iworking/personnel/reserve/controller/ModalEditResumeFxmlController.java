@@ -195,15 +195,9 @@ public class ModalEditResumeFxmlController implements Initializable {
     }
 
     @FXML
-    private void actionButtonEdit(ActionEvent event) {
+    private void actionButtonEdit(ActionEvent event) throws CloneNotSupportedException {
 
-        Resume newResume = null;
-
-        try {
-            newResume = (Resume) resume.clone();
-        } catch (CloneNotSupportedException e) {
-            logger.error(e);
-        }
+        Resume newResume = (Resume) resume.clone();
 
         newResume.setLastName(lastNameTextField.getText());
         newResume.setFirstName(firstNameTextField.getText());
