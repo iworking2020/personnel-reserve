@@ -10,3 +10,11 @@
 .text-field:hover {
     -fx-border-color: rgba(0, 0, 0, 0.30);
 }
+
+.text-field.has-error {
+    -fx-border-color: rgba(255, 0, 0, 0.20);
+}
+
+.text-field.has-error:hover {
+    -fx-border-color: rgba(255, 0, 0, 0.30);
+}

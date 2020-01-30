@@ -173,11 +173,13 @@ public class ModalAddResumeFxmlController implements Initializable {
         resume.setNumberPhone(numberPhoneTextField.getText());
         resume.setEmail(emailTextField.getText());
         resume.setProfession(professionTextField.getText());
-        resume.setProfField(profFieldComboBox.getValue());      
-        try {
-            resume.setWage(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
-        } catch (Exception e) {
-            logger.error(e);
+        resume.setProfField(profFieldComboBox.getValue());
+        if (!wageTextField.getText().isEmpty()) {
+            try {
+                resume.setWage(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
+            } catch (Exception e) {
+                logger.error(e);
+            }
         }
         resume.setCurrency(currencyComboBox.getValue());
         resume.setWorkType(workTypeComboBox.getValue());
@@ -198,13 +200,32 @@ public class ModalAddResumeFxmlController implements Initializable {
             logger.error(e);
         }
 
-        if (currentProfField == null || currentProfField.equals(resume.getProfField())) {
-            this.resumeObservableList.add(resume);
-        } else {
-            resumeDao.create(resume);
-        }
+        if (isValidFields(resume)) {
+            if (currentProfField == null || currentProfField.equals(resume.getProfField())) {
+                this.resumeObservableList.add(resume);
+            } else {
+                resumeDao.create(resume);
+            }
 
-        this.closeStage(event);
+            this.closeStage(event);
+        }
+    }
+
+    private Boolean isValidFields(Resume resume) {
+        Boolean isValid = true;
+        if (resume.getFirstName() != null && resume.getFirstName().length() <= 0) {
+            firstNameTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        if (resume.getLastName() != null && resume.getLastName().length() <= 0) {
+            lastNameTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        if (resume.getMiddleName() != null && resume.getMiddleName().length() <= 0) {
+            middleNameTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        return isValid;
     }
 
     private Stage getStage(ActionEvent event) {
