@@ -37,6 +37,7 @@ public class ModalAddResumeFxmlController implements Initializable {
     private static final Logger logger = LogManager.getLogger(ModalAddResumeFxmlController.class);
 
     private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
+    private NumberPhoneFormatter numberPhoneFormatter = new NumberPhoneFormatter();
 
     @FXML private TextField lastNameTextField;
     @FXML private TextField firstNameTextField;
@@ -89,6 +90,7 @@ public class ModalAddResumeFxmlController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        numberPhoneTextField.setTextFormatter(numberPhoneFormatter);
         wageTextField.setTextFormatter(bigDecimalFormatter);
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
