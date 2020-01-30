@@ -196,52 +196,81 @@ public class ModalEditResumeFxmlController implements Initializable {
 
     @FXML
     private void actionButtonEdit(ActionEvent event) {
-        if (currentProfField == null || currentProfField.equals(resume.getProfField())) {
-            this.resumeObservableList.remove(resume);
-        } else {
-            resumeDao.delete(resume);
+
+        Resume newResume = null;
+
+        try {
+            newResume = (Resume) resume.clone();
+        } catch (CloneNotSupportedException e) {
+            logger.error(e);
         }
 
-        resume.setLastName(lastNameTextField.getText());
-        resume.setFirstName(firstNameTextField.getText());
-        resume.setMiddleName(middleNameTextField.getText());
-        resume.setNumberPhone(numberPhoneTextField.getText());
-        resume.setEmail(emailTextField.getText());
-        resume.setProfession(professionTextField.getText());
-        resume.setProfField(profFieldComboBox.getValue());
+        newResume.setLastName(lastNameTextField.getText());
+        newResume.setFirstName(firstNameTextField.getText());
+        newResume.setMiddleName(middleNameTextField.getText());
+        newResume.setNumberPhone(numberPhoneTextField.getText());
+        newResume.setEmail(emailTextField.getText());
+        newResume.setProfession(professionTextField.getText());
+        newResume.setProfField(profFieldComboBox.getValue());
         if (!wageTextField.getText().isEmpty()) {
             try {
-                resume.setWage(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
+                newResume.setWage(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
             } catch (Exception e) {
                 logger.error(e);
             }
         }
-        resume.setCurrency(currencyComboBox.getValue());
-        resume.setWorkType(workTypeComboBox.getValue());
-        resume.setEducation(educationComboBox.getValue());
-        
-        
+        newResume.setCurrency(currencyComboBox.getValue());
+        newResume.setWorkType(workTypeComboBox.getValue());
+        newResume.setEducation(educationComboBox.getValue());
+
+
         Experience exp = new Experience();
         exp.setDateStart(experienceDateStartDatePicker.getValue());
         exp.setDateEnd(experienceDateEndDatePicker.getValue());
-        
-        resume.setExperience(exp);
-        resume.setAddress(addressTextArea.getText());
+
+        newResume.setExperience(exp);
+        newResume.setAddress(addressTextArea.getText());
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
-            resume.setPhoto(stream.toByteArray());
+            newResume.setPhoto(stream.toByteArray());
         } catch (IOException e) {
             logger.error(e);
         }
 
-        if (currentProfField == null || currentProfField.equals(resume.getProfField())) {
-            this.resumeObservableList.add(resume);
-        } else {
-            resumeDao.create(resume);
+        if (isValidFields(newResume)) {
+            if (currentProfField == null || currentProfField.equals(newResume.getProfField())) {
+                this.resumeObservableList.remove(resume);
+                this.resumeObservableList.add(newResume);
+            } else {
+                resumeDao.delete(resume);
+                resumeDao.create(newResume);
+            }
+            this.closeStage(event);
         }
-        this.closeStage(event);
+
+    }
+
+    private Boolean isValidFields(Resume resume) {
+        Boolean isValid = true;
+        if (resume.getFirstName() != null && resume.getFirstName().length() <= 0) {
+            firstNameTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        if (resume.getLastName() != null && resume.getLastName().length() <= 0) {
+            lastNameTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        if (resume.getMiddleName() != null && resume.getMiddleName().length() <= 0) {
+            middleNameTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        if (resume.getProfession() != null && resume.getProfession().length() <= 0) {
+            professionTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        return isValid;
     }
 
     private Stage getStage(ActionEvent event) {

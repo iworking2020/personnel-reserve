@@ -225,6 +225,10 @@ public class ModalAddResumeFxmlController implements Initializable {
             middleNameTextField.getStyleClass().add("has-error");
             isValid = false;
         }
+        if (resume.getProfession() != null && resume.getProfession().length() <= 0) {
+            professionTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
         return isValid;
     }
 

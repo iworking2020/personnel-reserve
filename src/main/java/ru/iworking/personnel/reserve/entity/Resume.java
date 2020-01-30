@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "resume")
-public class Resume {
+public class Resume implements Cloneable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -166,6 +166,11 @@ public class Resume {
     }
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
