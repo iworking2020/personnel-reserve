@@ -2,7 +2,6 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -145,13 +144,19 @@ public class MainMenuFxmlController implements Initializable {
 
         Button buttonFindAll = new Button();
         buttonFindAll.setText("все категории");
-        buttonFindAll.setOnAction(event -> selectCategory(event, null));
+        buttonFindAll.setOnAction(event -> {
+            selectCategory(event, null);
+            actionButtonClear(event);
+        });
         profFieldVBox.getChildren().add(buttonFindAll);
 
         profFieldDao.findAll().stream().forEach(profField -> {
             Button button = new Button();
             button.setText(profField.getNameToView(LocaleUtil.getDefault()));
-            button.setOnAction(event -> selectCategory(event, profField));
+            button.setOnAction(event -> {
+                selectCategory(event, profField);
+                actionButtonClear(event);
+            });
             profFieldVBox.getChildren().add(button);
         });
 
@@ -182,7 +187,6 @@ public class MainMenuFxmlController implements Initializable {
         Long profFieldId = profField != null ? profField.getId() : 0;
         String style = "-fx-background-image: url('images/fone/fone"+profFieldId+".png');";
         backgroundImagePane.setStyle(style);
-        actionButtonClear(event);
     }
 
     private void addStylesheets(Scene scene) {
@@ -212,7 +216,7 @@ public class MainMenuFxmlController implements Initializable {
 
     public ObservableList<Resume> createResumeObservableList(List<Resume> list) {
         ObservableList<Resume> resumeObservableList = FXCollections.observableList(list);
-        resumeObservableList.addListener((ListChangeListener<Resume>) change -> {
+        /*resumeObservableList.addListener((ListChangeListener<Resume>) change -> {
             while (change.next()) {
                 if (change.wasPermutated()) {
                     for (int i = change.getFrom(); i < change.getTo(); ++i) {
@@ -231,7 +235,7 @@ public class MainMenuFxmlController implements Initializable {
                     }
                 }
             }
-        });
+        });*/
         return resumeObservableList;
     }
   
@@ -241,11 +245,9 @@ public class MainMenuFxmlController implements Initializable {
         Parent parent = fxmlLoader.load();
 
         ModalAddResumeFxmlController dialogController = fxmlLoader.getController();
-        dialogController.setResumeObservableList(resumeObservableList);
         dialogController.setCurrentProfField(currentProfField);
         dialogController.showAndWait(parent);
-
-        table.refresh();
+        selectCategory(event, currentProfField);
     }
     
     @FXML
@@ -257,12 +259,10 @@ public class MainMenuFxmlController implements Initializable {
             Parent parent = fxmlLoader.load();
 
             ModalEditResumeFxmlController dialogController = fxmlLoader.getController();
-            dialogController.setResumeObservableList(resumeObservableList);
             dialogController.setResume(resume);
             dialogController.setCurrentProfField(currentProfField);
             dialogController.showAndWait(parent);
-
-            table.refresh();
+            selectCategory(event, currentProfField);
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalMessage.fxml"));
             Parent parent = fxmlLoader.load();
@@ -394,6 +394,7 @@ public class MainMenuFxmlController implements Initializable {
             HibernateUtil.shutDown();
             FileUtils.copyFile(newDatabase, currentDatabase);
             selectCategory(event, null);
+            actionButtonClear(event);
         } catch (IOException e) {
             logger.error(e);
         }
@@ -410,13 +411,18 @@ public class MainMenuFxmlController implements Initializable {
         );
 
         File copiedDatabase = fileChooser.showSaveDialog(MainApp.PARENT_STAGE);
-
-        try {
+        if (copiedDatabase != null) {
+            if (currentDatabase == null) throw new NullPointerException("currentDatabase is null");
             HibernateUtil.shutDown();
-            FileUtils.copyFile(currentDatabase, copiedDatabase);
-        } catch (IOException e) {
-            logger.error(e);
+            try {
+                FileUtils.copyFile(currentDatabase, copiedDatabase);
+            } catch (IOException e) {
+                logger.error(e);
+            }
+        } else {
+            logger.info("user not select database for copy");
         }
+
     }
 
     private File getCurrentDataBase() {

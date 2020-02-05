@@ -1,7 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -58,7 +57,6 @@ public class ModalAddResumeFxmlController implements Initializable {
 
     @FXML private Button buttonCancel;
 
-    private ObservableList<Resume> resumeObservableList;
     private ProfField currentProfField;
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
@@ -71,14 +69,6 @@ public class ModalAddResumeFxmlController implements Initializable {
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
-
-    public ObservableList<Resume> getResumeObservableList() {
-        return resumeObservableList;
-    }
-
-    public void setResumeObservableList(ObservableList<Resume> resumeObservableList) {
-        this.resumeObservableList = resumeObservableList;
-    }
 
     public ProfField getCurrentProfField() {
         return currentProfField;
@@ -201,12 +191,7 @@ public class ModalAddResumeFxmlController implements Initializable {
         }
 
         if (isValidFields(resume)) {
-            if (currentProfField == null || currentProfField.equals(resume.getProfField())) {
-                this.resumeObservableList.add(resume);
-            } else {
-                resumeDao.create(resume);
-            }
-
+            resumeDao.create(resume);
             this.closeStage(event);
         }
     }
