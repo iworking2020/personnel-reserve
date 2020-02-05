@@ -389,15 +389,18 @@ public class MainMenuFxmlController implements Initializable {
         );
 
         File newDatabase = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
-
-        try {
+        if (newDatabase != null) {
             HibernateUtil.shutDown();
-            FileUtils.copyFile(newDatabase, currentDatabase);
+            try {
+                FileUtils.copyFile(newDatabase, currentDatabase);
+            } catch (IOException e) {
+                logger.error(e);
+            }
             selectCategory(event, null);
             actionButtonClear(event);
-        } catch (IOException e) {
-            logger.error(e);
         }
+
+
     }
 
     @FXML
