@@ -1,6 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.profession.api.model.IWorkType;
+import ru.iworking.auth.api.model.IGender;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-@Table(name = "work_type")
-public class WorkType implements IWorkType {
+@Table(name = "gender")
+public class Gender implements IGender {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -20,12 +20,12 @@ public class WorkType implements IWorkType {
     private String nameToSystem;
 
     @ElementCollection
-    @CollectionTable(name="work_type_names_to_view", joinColumns = @JoinColumn(name="work_type_id"))
+    @CollectionTable(name="gender_names_to_view", joinColumns = @JoinColumn(name="gender_id"))
     @Column(name="names_to_view")
     @MapKeyColumn(name="names_to_view_key")
     private Map<Locale, String> namesToView = new HashMap<>();
 
-    public WorkType() { }
+    public Gender() { }
 
     @Override
     public Long getId() {
@@ -55,9 +55,9 @@ public class WorkType implements IWorkType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WorkType workType = (WorkType) o;
-        return Objects.equals(nameToSystem, workType.nameToSystem) &&
-                Objects.equals(namesToView, workType.namesToView);
+        Gender gender = (Gender) o;
+        return Objects.equals(nameToSystem, gender.nameToSystem) &&
+                Objects.equals(namesToView, gender.namesToView);
     }
 
     @Override

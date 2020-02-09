@@ -46,6 +46,13 @@ public class HibernateUtil {
                 configuration.addAttributeConverter(LocalDateAttributeConverter.class);
                 configuration.addAttributeConverter(LocalDateTimeAttributeConverter.class);
 
+                configuration.addAnnotatedClass(Address.class);
+                configuration.addAnnotatedClass(NumberPhone.class);
+                configuration.addAnnotatedClass(Gender.class);
+                configuration.addAnnotatedClass(Period.class);
+                configuration.addAnnotatedClass(Photo.class);
+                configuration.addAnnotatedClass(Wage.class);
+                configuration.addAnnotatedClass(Profile.class);
                 configuration.addAnnotatedClass(Resume.class);
                 configuration.addAnnotatedClass(ProfField.class);
                 configuration.addAnnotatedClass(WorkType.class);

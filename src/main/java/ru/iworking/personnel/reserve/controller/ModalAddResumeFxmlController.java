@@ -64,6 +64,7 @@ public class ModalAddResumeFxmlController implements Initializable {
     private EducationDao educationDao = EducationDao.getInstance();
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private PhotoDao photoDao = PhotoDao.getInstance();
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -157,40 +158,58 @@ public class ModalAddResumeFxmlController implements Initializable {
     @FXML
     private void actionButtonInsert(ActionEvent event) {
         Resume resume = new Resume();
-        resume.setLastName(lastNameTextField.getText());
-        resume.setFirstName(firstNameTextField.getText());
-        resume.setMiddleName(middleNameTextField.getText());
-        resume.setNumberPhone(numberPhoneTextField.getText());
+
+        Profile profile = new Profile();
+        profile.setLastName(lastNameTextField.getText());
+        profile.setFirstName(firstNameTextField.getText());
+        profile.setMiddleName(middleNameTextField.getText());
+        resume.setProfile(profile);
+
+        NumberPhone numberPhone = new NumberPhone();
+        numberPhone.setNumber(numberPhoneTextField.getText());
+        resume.setNumberPhone(numberPhone);
+
         resume.setEmail(emailTextField.getText());
         resume.setProfession(professionTextField.getText());
-        resume.setProfField(profFieldComboBox.getValue());
+        resume.setProfFieldId(profFieldComboBox.getValue().getId());
         if (!wageTextField.getText().isEmpty()) {
             try {
-                resume.setWage(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
+                Wage wage = new Wage();
+                wage.setCount(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
+                wage.setCurrencyId(currencyComboBox.getValue().getId());
+                resume.setWage(wage);
             } catch (Exception e) {
                 logger.error(e);
             }
         }
-        resume.setCurrency(currencyComboBox.getValue());
-        resume.setWorkType(workTypeComboBox.getValue());
-        resume.setEducation(educationComboBox.getValue());
+        resume.setWorkTypeId(workTypeComboBox.getValue().getId());
+        resume.setEducationId(educationComboBox.getValue().getId());
         
         Experience exp = new Experience();
         exp.setDateStart(experienceDateStartDatePicker.getValue());
         exp.setDateEnd(experienceDateEndDatePicker.getValue());
-        
         resume.setExperience(exp);
-        resume.setAddress(addressTextArea.getText());
+
+        Address address = new Address();
+        address.setHouse(addressTextArea.getText());
+        resume.setAddress(address);
+
+        Photo photo = null;
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
-            resume.setPhoto(stream.toByteArray());
+
+            photo = new Photo(stream.toByteArray());
         } catch (IOException e) {
             logger.error(e);
         }
 
         if (isValidFields(resume)) {
+            if (photo != null) {
+                Long photoId = photoDao.create(photo).getId();
+                resume.setPhotoId(photoId);
+            }
             resumeDao.create(resume);
             this.closeStage(event);
         }
@@ -198,15 +217,15 @@ public class ModalAddResumeFxmlController implements Initializable {
 
     private Boolean isValidFields(Resume resume) {
         Boolean isValid = true;
-        if (resume.getFirstName() != null && resume.getFirstName().length() <= 0) {
+        if (resume.getProfile().getFirstName() != null && resume.getProfile().getFirstName().length() <= 0) {
             firstNameTextField.getStyleClass().add("has-error");
             isValid = false;
         }
-        if (resume.getLastName() != null && resume.getLastName().length() <= 0) {
+        if (resume.getProfile().getLastName() != null && resume.getProfile().getLastName().length() <= 0) {
             lastNameTextField.getStyleClass().add("has-error");
             isValid = false;
         }
-        if (resume.getMiddleName() != null && resume.getMiddleName().length() <= 0) {
+        if (resume.getProfile().getMiddleName() != null && resume.getProfile().getMiddleName().length() <= 0) {
             middleNameTextField.getStyleClass().add("has-error");
             isValid = false;
         }

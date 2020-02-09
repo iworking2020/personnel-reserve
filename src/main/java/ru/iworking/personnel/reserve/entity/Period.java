@@ -1,6 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.profession.api.model.IWorkType;
+import ru.iworking.money.api.model.IPeriod;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-@Table(name = "work_type")
-public class WorkType implements IWorkType {
+@Table(name = "period")
+public class Period implements IPeriod {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -20,12 +21,12 @@ public class WorkType implements IWorkType {
     private String nameToSystem;
 
     @ElementCollection
-    @CollectionTable(name="work_type_names_to_view", joinColumns = @JoinColumn(name="work_type_id"))
+    @CollectionTable(name="period_names_to_view", joinColumns = @JoinColumn(name="period_id"))
     @Column(name="names_to_view")
     @MapKeyColumn(name="names_to_view_key")
     private Map<Locale, String> namesToView = new HashMap<>();
 
-    public WorkType() { }
+    public Period() { }
 
     @Override
     public Long getId() {
@@ -55,9 +56,9 @@ public class WorkType implements IWorkType {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WorkType workType = (WorkType) o;
-        return Objects.equals(nameToSystem, workType.nameToSystem) &&
-                Objects.equals(namesToView, workType.namesToView);
+        Period period = (Period) o;
+        return Objects.equals(nameToSystem, period.nameToSystem) &&
+                Objects.equals(namesToView, period.namesToView);
     }
 
     @Override

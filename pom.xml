@@ -34,6 +34,8 @@
         <education-api.version>1.0.1</education-api.version>
         <money-api.version>1.0.2</money-api.version>
         <service-api.version>1.0.9</service-api.version>
+        <auth-api.version>1.0.1</auth-api.version>
+        <resume-api.version>1.0.2</resume-api.version>
         <itext7-core.version>7.0.4</itext7-core.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.6.4</slf4j-simple.version>
@@ -145,21 +147,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>${poi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>${poi-ooxml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-        <dependency>
             <groupId>ru.iworking</groupId>
             <artifactId>service-api</artifactId>
             <version>${service-api.version}</version>
@@ -178,6 +165,16 @@
             <groupId>ru.iworking</groupId>
             <artifactId>education-api</artifactId>
             <version>${education-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>auth-api</artifactId>
+            <version>${auth-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>resume-api</artifactId>
+            <version>${resume-api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -224,6 +221,21 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j-simple.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi-ooxml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
     </dependencies>
 

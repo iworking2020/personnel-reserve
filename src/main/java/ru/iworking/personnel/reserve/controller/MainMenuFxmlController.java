@@ -21,10 +21,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.EducationDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
-import ru.iworking.personnel.reserve.dao.ResumeDao;
-import ru.iworking.personnel.reserve.dao.WorkTypeDao;
+import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
@@ -57,6 +54,7 @@ public class MainMenuFxmlController implements Initializable {
 
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private CurrencyDao currencyDao = CurrencyDao.getInstance();
     private EducationDao educationDao = EducationDao.getInstance();
     private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
 
@@ -105,27 +103,36 @@ public class MainMenuFxmlController implements Initializable {
         educationComboBox.setCellFactory(educationCellFactory);
         educationComboBox.setItems(FXCollections.observableList(educationDao.findAll()));
         
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        middleNameColumn.setCellValueFactory(new PropertyValueFactory<>("middleName"));
+        lastNameColumn.setCellValueFactory(cellData -> {
+            Profile profile = cellData.getValue().getProfile();
+            return new ReadOnlyStringWrapper(profile.getLastName());
+        });
+        firstNameColumn.setCellValueFactory(cellData -> {
+            Profile profile = cellData.getValue().getProfile();
+            return new ReadOnlyStringWrapper(profile.getFirstName());
+        });
+        middleNameColumn.setCellValueFactory(cellData -> {
+            Profile profile = cellData.getValue().getProfile();
+            return new ReadOnlyStringWrapper(profile.getMiddleName());
+        });
         professionColumn.setCellValueFactory(new PropertyValueFactory<>("profession"));
         workTypeColumn.setCellValueFactory(cellData -> {
-            WorkType workType = cellData.getValue().getWorkType();
+            WorkType workType = workTypeDao.find(cellData.getValue().getWorkTypeId());
             String textColumn = workType != null ? workType.getNameToView(LocaleUtil.getDefault()) : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
         wageColumn.setCellValueFactory(cellData -> {
-            BigDecimal wage = cellData.getValue().getWage();
+            BigDecimal wage = cellData.getValue().getWage().getCountBigDecimal();
             String textColumn = wage != null ? decimalFormat.format(wage) : "договорная";
             return new ReadOnlyStringWrapper(textColumn);
         });
         currencyColumn.setCellValueFactory(cellData -> {
-            Currency currency = cellData.getValue().getCurrency();
+            Currency currency = currencyDao.find(cellData.getValue().getWage().getCurrencyId());
             String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
         educationColumn.setCellValueFactory(cellData -> {
-            Education education = cellData.getValue().getEducation();
+            Education education = educationDao.find(cellData.getValue().getEducationId());
             String textColumn = education != null ? education.getNameToView(LocaleUtil.getDefault()) : "не указано";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -351,7 +358,7 @@ public class MainMenuFxmlController implements Initializable {
         if (file != null) {
             String path = file.getAbsoluteFile().getAbsolutePath();
             try {
-                ExelUtil.createXLSResumeList(path, resumeObservableList);
+                ExelUtil.getInstance().createXLSResumeList(path, resumeObservableList);
             } catch (IOException ex) {
                 logger.error("не удалось выгрузить в exel", ex);
             }

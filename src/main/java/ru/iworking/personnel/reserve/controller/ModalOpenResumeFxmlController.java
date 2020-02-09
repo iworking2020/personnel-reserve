@@ -15,7 +15,8 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.PdfUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
@@ -51,6 +52,12 @@ public class ModalOpenResumeFxmlController implements Initializable {
 
     @FXML private ImageView photoImageView;
 
+    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
+    private EducationDao educationDao = EducationDao.getInstance();
+    private PhotoDao photoDao = PhotoDao.getInstance();
+
     private Resume resume;
 
     public void setResume(Resume resume) {
@@ -59,34 +66,41 @@ public class ModalOpenResumeFxmlController implements Initializable {
     }
 
     public void setValues(Resume resume) {
-        lastNameLabel.setText(resume.getLastName());
-        firstNameLabel.setText(resume.getFirstName());
-        middleNameLabel.setText(resume.getMiddleName());
-        numberPhoneLabel.setText(resume.getNumberPhone());
+        lastNameLabel.setText(resume.getProfile().getLastName());
+        firstNameLabel.setText(resume.getProfile().getFirstName());
+        middleNameLabel.setText(resume.getProfile().getMiddleName());
+        numberPhoneLabel.setText(resume.getNumberPhone().getNumber());
         emailLabel.setText(resume.getEmail());
         professionLabel.setText(resume.getProfession());
-        if (resume.getProfField() != null) {
-            profFieldLabel.setText(resume.getProfField().getNameToView(LocaleUtil.getDefault()));
+        if (resume.getProfFieldId() != null) {
+            Long profFieldId = resume.getProfFieldId();
+            profFieldLabel.setText(profFieldDao.find(profFieldId).getNameToView(LocaleUtil.getDefault()));
         } else {
             profFieldLabel.setText("не указана");
         }
         if (resume.getWage() != null) {
-            String wageString = resume.getCurrency() != null ?
-                    decimalFormat.format(resume.getWage()) + " " + resume.getCurrency().getNameToView(LocaleUtil.getDefault()) :
-                    decimalFormat.format(resume.getWage());
+            String wageString;
+            if(resume.getWage().getCurrencyId() != null) {
+                Currency currency = currencyDao.find(resume.getWage().getCurrencyId());
+                wageString = decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameToView(LocaleUtil.getDefault());
+            } else {
+                wageString = decimalFormat.format(resume.getWage().getCountBigDecimal());
+            }
             wageString = wageString.length() > 0 ? wageString : "не указана";
             wageLabel.setText(wageString);
         } else {
             wageLabel.setText("не указана");
         }
 
-        if (resume.getWorkType() != null) {
-            workTypeLabel.setText(resume.getWorkType().getNameToView(LocaleUtil.getDefault()));
+        if (resume.getWorkTypeId() != null) {
+            WorkType workType = workTypeDao.find(resume.getWorkTypeId());
+            workTypeLabel.setText(workType.getNameToView(LocaleUtil.getDefault()));
         } else {
             workTypeLabel.setText("не указан");
         }
-        if (resume.getEducation() != null) {
-            educationLabel.setText(resume.getEducation().getNameToView(LocaleUtil.getDefault()));
+        if (resume.getEducationId() != null) {
+            Education education = educationDao.find(resume.getEducationId());
+            educationLabel.setText(education.getNameToView(LocaleUtil.getDefault()));
         } else {
             educationLabel.setText("не указано");
         }
@@ -94,10 +108,11 @@ public class ModalOpenResumeFxmlController implements Initializable {
         Integer age = TimeUtil.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
         
         experienceLabel.setText(age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age));
-        addressLabel.setText(resume.getAddress());
+        addressLabel.setText(resume.getAddress().getHouse());
 
-        if (resume.getPhoto() != null) {
-            InputStream targetStream = new ByteArrayInputStream(resume.getPhoto());
+        if (resume.getPhotoId() != null) {
+            Photo photo = photoDao.find(resume.getPhotoId());
+            InputStream targetStream = new ByteArrayInputStream(photo.getImage());
             Image img = new Image(targetStream);
             photoImageView.setImage(img);
         } else {
@@ -141,7 +156,7 @@ public class ModalOpenResumeFxmlController implements Initializable {
         if (file != null) {
             String path = file.getAbsoluteFile().getAbsolutePath();
             try {
-                PdfUtil.createResumePdf(path, this.resume);
+                PdfUtil.getInstance().createResumePdf(path, this.resume);
             } catch (IOException e) {
                 logger.error(e);
             }

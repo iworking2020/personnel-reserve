@@ -1,68 +1,67 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.resume.api.model.IResume;
+import ru.iworking.service.api.model.IDescription;
+
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "resume")
-public class Resume implements Cloneable {
+public class Resume implements IResume, Cloneable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    
-    @Column(name = "last_name")
-    private String lastName;
-    
-    @Column(name = "first_name")
-    private String firstName;
-    
-    @Column(name = "middle_name")
-    private String middleName;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "datecreate")
+    private LocalDateTime datecreate = LocalDateTime.now();
+
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="profile_id")
+    private Profile profile;
     
     @Column(name = "profession")
     private String profession;
-    
-    @Column(name = "number_phone")
-    private String numberPhone;
+
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="number_phone_id")
+    private NumberPhone numberPhone;
     
     @Column(name = "email")
     private String email;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="prof_field_id")
-    private ProfField profField;
+    @Column(name="prof_field_id")
+    private Long profFieldId;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="work_type_id")
-    private WorkType workType;
-    
-    @Column(name = "wage")
-    private BigDecimal wage;
+    @Column(name="work_type_id")
+    private Long workTypeId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="currency_id")
-    private Currency currency;
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="wage_id")
+    private Wage wage;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="education_id")
-    private Education education;
-    
+    @Column(name="education_id")
+    private Long educationId;
+
     @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name="experience_id")
     private Experience experience;
-    
-    @Column(name = "address")
-    private String address;
 
-    @Lob
-    @Column(name = "photo")
-    private byte[] photo;
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="address_id")
+    private Address address;
+
+    @Column(name = "photo_id")
+    private Long photoId;
 
     public Resume() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -70,27 +69,30 @@ public class Resume implements Cloneable {
         this.id = id;
     }
 
-    public String getLastName() {
-        return lastName;
+    @Override
+    public Long getUserId() {
+        return userId;
     }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getMiddleName() {
-        return middleName;
+    @Override
+    public LocalDateTime getDatecreate() {
+        return datecreate;
     }
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setDatecreate(LocalDateTime datecreate) {
+        this.datecreate = datecreate;
     }
 
+    public Profile getProfile() {
+        return profile;
+    }
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    @Override
     public String getProfession() {
         return profession;
     }
@@ -98,13 +100,15 @@ public class Resume implements Cloneable {
         this.profession = profession;
     }
 
-    public String getNumberPhone() {
+    @Override
+    public NumberPhone getNumberPhone() {
         return numberPhone;
     }
-    public void setNumberPhone(String numberPhone) {
+    public void setNumberPhone(NumberPhone numberPhone) {
         this.numberPhone = numberPhone;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -112,41 +116,39 @@ public class Resume implements Cloneable {
         this.email = email;
     }
 
-    public ProfField getProfField() {
-        return profField;
+    @Override
+    public Long getProfFieldId() {
+        return profFieldId;
     }
-    public void setProfField(ProfField profField) {
-        this.profField = profField;
-    }
-
-    public WorkType getWorkType() {
-        return workType;
-    }
-    public void setWorkType(WorkType workType) {
-        this.workType = workType;
+    public void setProfFieldId(Long profFieldId) {
+        this.profFieldId = profFieldId;
     }
 
-    public BigDecimal getWage() {
+    @Override
+    public Long getWorkTypeId() {
+        return workTypeId;
+    }
+    public void setWorkTypeId(Long workTypeId) {
+        this.workTypeId = workTypeId;
+    }
+
+    @Override
+    public Wage getWage() {
         return wage;
     }
-    public void setWage(BigDecimal wage) {
+    public void setWage(Wage wage) {
         this.wage = wage;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    @Override
+    public Long getEducationId() {
+        return educationId;
     }
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public Education getEducation() {
-        return education;
-    }
-    public void setEducation(Education education) {
-        this.education = education;
+    public void setEducationId(Long educationId) {
+        this.educationId = educationId;
     }
 
+    @Override
     public Experience getExperience() {
         return experience;
     }
@@ -154,18 +156,25 @@ public class Resume implements Cloneable {
         this.experience = experience;
     }
 
-    public String getAddress() {
+    @Override
+    public Address getAddress() {
         return address;
     }
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    @Override
+    public Long getPhotoId() {
+        return photoId;
     }
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    public void setPhotoId(Long photoId) {
+        this.photoId = photoId;
+    }
+
+    @Override
+    public IDescription getDescription() {
+        return null;
     }
 
     @Override
@@ -178,26 +187,23 @@ public class Resume implements Cloneable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(lastName, resume.lastName) &&
-                Objects.equals(firstName, resume.firstName) &&
-                Objects.equals(middleName, resume.middleName) &&
+        return Objects.equals(userId, resume.userId) &&
+                Objects.equals(datecreate, resume.datecreate) &&
+                Objects.equals(profile, resume.profile) &&
                 Objects.equals(profession, resume.profession) &&
                 Objects.equals(numberPhone, resume.numberPhone) &&
                 Objects.equals(email, resume.email) &&
-                Objects.equals(profField, resume.profField) &&
-                Objects.equals(workType, resume.workType) &&
+                Objects.equals(profFieldId, resume.profFieldId) &&
+                Objects.equals(workTypeId, resume.workTypeId) &&
                 Objects.equals(wage, resume.wage) &&
-                Objects.equals(currency, resume.currency) &&
-                Objects.equals(education, resume.education) &&
+                Objects.equals(educationId, resume.educationId) &&
                 Objects.equals(experience, resume.experience) &&
                 Objects.equals(address, resume.address) &&
-                Arrays.equals(photo, resume.photo);
+                Objects.equals(photoId, resume.photoId);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(lastName, firstName, middleName, profession, numberPhone, email, profField, workType, wage, currency, education, experience, address);
-        result = 31 * result + Arrays.hashCode(photo);
-        return result;
+        return Objects.hash(userId, datecreate, profile, profession, numberPhone, email, profFieldId, workTypeId, wage, educationId, experience, address, photoId);
     }
 }

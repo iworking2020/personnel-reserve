@@ -67,14 +67,14 @@ public class ResumeDao implements Dao<Resume, Long> {
         try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
             Transaction transaction = session.beginTransaction();
             
-            if (lastName != null) sql += " "+separator.get()+" resume.lastName like :lastName";
-            if (firstName != null) sql += " "+separator.get()+" resume.firstName like :firstName";
+            if (lastName != null) sql += " "+separator.get()+" resume.profile.lastName like :lastName";
+            if (firstName != null) sql += " "+separator.get()+" resume.profile.firstName like :firstName";
+            if (middleName != null) sql += " "+separator.get()+" resume.profile.middleName like :middleName";
             if (profession != null) sql += " "+separator.get()+" resume.profession like :profession";
-            if (middleName != null) sql += " "+separator.get()+" resume.middleName like :middleName";
-            if (profFieldId != null) sql += " "+separator.get()+" resume.profField.id = :profFieldId";
-            if (educationId != null) sql += " "+separator.get()+" resume.education.id = :educationId";
-            if (workTypeId != null) sql += " "+separator.get()+" resume.workType.id = :workTypeId";
-            if (wage != null) sql += " "+separator.get()+" resume.wage = :wage";
+            if (profFieldId != null) sql += " "+separator.get()+" resume.profFieldId = :profFieldId";
+            if (educationId != null) sql += " "+separator.get()+" resume.educationId = :educationId";
+            if (workTypeId != null) sql += " "+separator.get()+" resume.workTypeId = :workTypeId";
+            if (wage != null) sql += " "+separator.get()+" resume.wage.count = :wage";
             
             Query query = session.createQuery(sql, Resume.class);
             

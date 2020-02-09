@@ -138,3 +138,24 @@ MERGE INTO currency_names_to_view (currency_id, names_to_view, names_to_view_key
 MERGE INTO currency_names_to_view (currency_id, names_to_view, names_to_view_key) VALUES (1, 'rub', 'en');
 MERGE INTO currency_names_to_view (currency_id, names_to_view, names_to_view_key) VALUES (2, 'euro', 'en');
 MERGE INTO currency_names_to_view (currency_id, names_to_view, names_to_view_key) VALUES (3, 'usd', 'en');
+
+MERGE INTO period (id, name_to_system) VALUES (1, 'MONTH');
+MERGE INTO period (id, name_to_system) VALUES (2, 'DAY');
+MERGE INTO period (id, name_to_system) VALUES (3, 'HOUR');
+
+MERGE INTO period_names_to_view (period_id, names_to_view, names_to_view_key) VALUES (1, 'в месяц', 'ru_RU');
+MERGE INTO period_names_to_view (period_id, names_to_view, names_to_view_key) VALUES (2, 'в день', 'ru_RU');
+MERGE INTO period_names_to_view (period_id, names_to_view, names_to_view_key) VALUES (3, 'в час', 'ru_RU');
+
+MERGE INTO period_names_to_view (period_id, names_to_view, names_to_view_key) VALUES (1, 'in month', 'en');
+MERGE INTO period_names_to_view (period_id, names_to_view, names_to_view_key) VALUES (2, 'in day', 'en');
+MERGE INTO period_names_to_view (period_id, names_to_view, names_to_view_key) VALUES (3, 'in hour', 'en');
+
+MERGE INTO gender (id, name_to_system) VALUES (1, 'MALE');
+MERGE INTO gender (id, name_to_system) VALUES (2, 'FEMALE');
+
+MERGE INTO gender_names_to_view (gender_id, names_to_view, names_to_view_key) VALUES (1, 'мужской', 'ru_RU');
+MERGE INTO gender_names_to_view (gender_id, names_to_view, names_to_view_key) VALUES (2, 'женский', 'ru_RU');
+
+MERGE INTO gender_names_to_view (gender_id, names_to_view, names_to_view_key) VALUES (1, 'male', 'en');
+MERGE INTO gender_names_to_view (gender_id, names_to_view, names_to_view_key) VALUES (2, 'female', 'en');
