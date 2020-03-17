@@ -1,10 +1,15 @@
 .tab {
     -fx-background-radius: 0, 0, 0, 0;
+    -fx-background-color: transparent, white;
+    -fx-background-insets: 1 1 0 1, 2 2 1 2;
+}
+
+.tab:selected {
     -fx-background-color: rgba(0, 0, 0, 0.20), white;
     -fx-background-insets: 1 1 0 1, 2 2 0 2;
 }
 
-.tab:hover {
+.tab:selected:hover {
     -fx-background-color: rgba(0, 0, 0, 0.30), white;
 }
 
