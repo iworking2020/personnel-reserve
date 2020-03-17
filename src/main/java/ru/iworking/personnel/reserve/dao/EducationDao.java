@@ -5,32 +5,44 @@ import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Education;
 import ru.iworking.personnel.reserve.utils.HibernateUtil;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class EducationDao implements Dao<Education, Long> {
 
     private static volatile EducationDao instance;
 
+    private Map<Long, Education> cashMap = null;
+
     @Override
     public List<Education> findAll() {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        List<Education> list = session.createQuery("FROM Education", Education.class).list();
-        session.flush();
-        transaction.commit();
-        session.close();
-        return list;
+        if (cashMap == null || cashMap.isEmpty()) {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Transaction transaction = session.beginTransaction();
+            cashMap = session.createQuery("FROM Education", Education.class).list()
+                    .stream().collect(Collectors.toMap(Education::getId, Function.identity()));
+            session.flush();
+            transaction.commit();
+            session.close();
+        }
+        return cashMap.values().stream().collect(Collectors.toList());
     }
 
     @Override
     public Education find(Long id) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        Education profField = session.get(Education.class, id);
-        session.flush();
-        transaction.commit();
-        session.close();
-        return profField;
+        if (cashMap == null) cashMap = new LinkedHashMap<>();
+        if (!cashMap.containsKey(id)) {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Transaction transaction = session.beginTransaction();
+            cashMap.put(id, session.get(Education.class, id));
+            session.flush();
+            transaction.commit();
+            session.close();
+        }
+        return cashMap.get(id);
     }
 
     @Override

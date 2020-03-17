@@ -5,32 +5,44 @@ import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.utils.HibernateUtil;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CurrencyDao implements Dao<Currency, Long> {
 
     private static volatile CurrencyDao instance;
 
+    private Map<Long, Currency> cashMap = null;
+
     @Override
     public List<Currency> findAll() {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        List<Currency> list = session.createQuery("FROM Currency", Currency.class).list();
-        session.flush();
-        transaction.commit();
-        session.close();
-        return list;
+        if (cashMap == null || cashMap.isEmpty()) {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Transaction transaction = session.beginTransaction();
+            cashMap = session.createQuery("FROM Currency", Currency.class).list()
+                    .stream().collect(Collectors.toMap(Currency::getId, Function.identity()));
+            session.flush();
+            transaction.commit();
+            session.close();
+        }
+        return cashMap.values().stream().collect(Collectors.toList());
     }
 
     @Override
     public Currency find(Long id) {
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        Currency obj = session.get(Currency.class, id);
-        session.flush();
-        transaction.commit();
-        session.close();
-        return obj;
+        if (cashMap == null) cashMap = new LinkedHashMap<>();
+        if (!cashMap.containsKey(id)) {
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            Transaction transaction = session.beginTransaction();
+            cashMap.put(id, session.get(Currency.class, id));
+            session.flush();
+            transaction.commit();
+            session.close();
+        }
+        return cashMap.get(id);
     }
 
     @Override
