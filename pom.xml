@@ -36,6 +36,7 @@
         <service-api.version>1.0.9</service-api.version>
         <auth-api.version>1.0.1</auth-api.version>
         <resume-api.version>1.0.2</resume-api.version>
+        <vacancy-api.version>1.0.1</vacancy-api.version>
         <itext7-core.version>7.0.4</itext7-core.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.6.4</slf4j-simple.version>
@@ -175,6 +176,11 @@
             <groupId>ru.iworking</groupId>
             <artifactId>resume-api</artifactId>
             <version>${resume-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>vacancy-api</artifactId>
+            <version>${vacancy-api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
