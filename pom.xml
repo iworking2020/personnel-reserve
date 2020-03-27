@@ -37,6 +37,7 @@
         <auth-api.version>1.0.1</auth-api.version>
         <resume-api.version>1.0.2</resume-api.version>
         <vacancy-api.version>1.0.1</vacancy-api.version>
+        <company-api.version>1.0.1</company-api.version>
         <itext7-core.version>7.0.4</itext7-core.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <slf4j-simple.version>1.6.4</slf4j-simple.version>
@@ -45,6 +46,110 @@
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>service-api</artifactId>
+            <version>${service-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>profession-api</artifactId>
+            <version>${profession-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>money-api</artifactId>
+            <version>${money-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>education-api</artifactId>
+            <version>${education-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>auth-api</artifactId>
+            <version>${auth-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>resume-api</artifactId>
+            <version>${resume-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>vacancy-api</artifactId>
+            <version>${vacancy-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.iworking</groupId>
+            <artifactId>company-api</artifactId>
+            <version>${company-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>${itext7-core.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j-simple.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi-ooxml.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -145,104 +250,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>ru.iworking</groupId>
-            <artifactId>service-api</artifactId>
-            <version>${service-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.iworking</groupId>
-            <artifactId>profession-api</artifactId>
-            <version>${profession-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.iworking</groupId>
-            <artifactId>money-api</artifactId>
-            <version>${money-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.iworking</groupId>
-            <artifactId>education-api</artifactId>
-            <version>${education-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.iworking</groupId>
-            <artifactId>auth-api</artifactId>
-            <version>${auth-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.iworking</groupId>
-            <artifactId>resume-api</artifactId>
-            <version>${resume-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.iworking</groupId>
-            <artifactId>vacancy-api</artifactId>
-            <version>${vacancy-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext7-core</artifactId>
-            <version>${itext7-core.version}</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j-simple.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>${poi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>${poi-ooxml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-    </dependencies>
 
 </project>
