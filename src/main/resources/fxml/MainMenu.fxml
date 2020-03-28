@@ -26,12 +26,12 @@
               <tabs>
                 <Tab text="Резюме">
                      <content>
-                         <fx:include id="resumesPane" source="ResumesPane.fxml" />
+                         <fx:include fx:id="resumesPane" source="ResumesPane.fxml" />
                      </content>
                 </Tab>
                 <Tab text="Вакансии">
                   <content>
-                      <fx:include id="vacanciesPane" source="VacanciesPane.fxml" />
+                      <fx:include fx:id="vacanciesPane" source="VacanciesPane.fxml" />
                   </content>
                 </Tab>
               </tabs>

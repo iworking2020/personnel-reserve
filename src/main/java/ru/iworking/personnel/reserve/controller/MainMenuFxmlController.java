@@ -27,14 +27,12 @@ public class MainMenuFxmlController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(MainMenuFxmlController.class);
 
-    private ControllersPool controllersPool = ControllersPool.getInstance();
-    private ResumesPaneFxmlController resumesPaneController;
+    @FXML private ResumesPaneFxmlController resumesPaneController;
 
     @FXML private CheckMenuItem winSearchCheckItem;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        resumesPaneController = (ResumesPaneFxmlController) controllersPool.get(ResumesPaneFxmlController.class);
 
         winSearchCheckItem.setSelected(false);
         winSearchCheckItem.setOnAction(event -> {

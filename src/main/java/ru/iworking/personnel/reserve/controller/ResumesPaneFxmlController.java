@@ -45,8 +45,6 @@ public class ResumesPaneFxmlController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ResumesPaneFxmlController.class);
 
-    private ControllersPool controllersPool = ControllersPool.getInstance();
-
     private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -100,8 +98,6 @@ public class ResumesPaneFxmlController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        controllersPool.put(ResumesPaneFxmlController.class, this);
-
         wageTextField.setTextFormatter(bigDecimalFormatter);
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
