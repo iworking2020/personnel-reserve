@@ -4,11 +4,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import ru.iworking.personnel.reserve.controller.ControllersPool;
 import ru.iworking.personnel.reserve.controller.MainMenuFxmlController;
 
 public class MainApp extends Application {
 
     public static Stage PARENT_STAGE;
+
+    private ControllersPool controllersPool = ControllersPool.getInstance();
 
     @Override
     public void start(Stage stage) throws Exception {
