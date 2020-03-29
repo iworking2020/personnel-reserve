@@ -90,16 +90,4 @@ public class Address implements IAddress {
     public int hashCode() {
         return Objects.hash(countryId, regionId, cityId, street, house);
     }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", countryId=" + countryId +
-                ", regionId=" + regionId +
-                ", cityId=" + cityId +
-                ", street='" + street + '\'' +
-                ", house='" + house + '\'' +
-                '}';
-    }
 }

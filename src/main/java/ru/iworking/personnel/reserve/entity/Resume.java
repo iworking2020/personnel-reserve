@@ -52,7 +52,7 @@ public class Resume implements IResume, Cloneable {
     @JoinColumn(name="experience_id")
     private Experience experience;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name="address_id")
     private Address address;
 

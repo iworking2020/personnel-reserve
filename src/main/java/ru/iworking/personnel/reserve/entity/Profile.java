@@ -26,7 +26,7 @@ public class Profile implements IProfile {
     @Column(name = "gender_id")
     private Long genderId;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, targetEntity = NumberPhone.class)
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL, targetEntity = NumberPhone.class)
     @JoinColumn(name = "number_phone_id")
     private NumberPhone numberPhone;
 

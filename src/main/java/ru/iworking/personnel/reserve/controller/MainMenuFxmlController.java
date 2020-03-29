@@ -28,6 +28,7 @@ public class MainMenuFxmlController implements Initializable {
     private static final Logger logger = LogManager.getLogger(MainMenuFxmlController.class);
 
     @FXML private ResumesPaneFxmlController resumesPaneController;
+    @FXML private VacanciesPaneFxmlController vacanciesPaneController;
 
     @FXML private CheckMenuItem winSearchCheckItem;
 
@@ -93,8 +94,8 @@ public class MainMenuFxmlController implements Initializable {
             } catch (IOException e) {
                 logger.error(e);
             }
-            resumesPaneController.selectCategory(event, null);
-            resumesPaneController.actionButtonClear(event);
+            resumesPaneController.reload(event);
+            vacanciesPaneController.reload(event);
         }
 
 

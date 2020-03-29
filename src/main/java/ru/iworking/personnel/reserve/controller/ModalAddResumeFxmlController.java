@@ -171,7 +171,8 @@ public class ModalAddResumeFxmlController implements Initializable {
 
         resume.setEmail(emailTextField.getText());
         resume.setProfession(professionTextField.getText());
-        resume.setProfFieldId(profFieldComboBox.getValue().getId());
+        ProfField profField = profFieldComboBox.getValue();
+        if (profField != null) resume.setProfFieldId(profField.getId());
         if (!wageTextField.getText().isEmpty()) {
             try {
                 Wage wage = new Wage();
@@ -182,8 +183,11 @@ public class ModalAddResumeFxmlController implements Initializable {
                 logger.error(e);
             }
         }
-        resume.setWorkTypeId(workTypeComboBox.getValue().getId());
-        resume.setEducationId(educationComboBox.getValue().getId());
+        WorkType workType = workTypeComboBox.getValue();
+        if (workType != null) resume.setWorkTypeId(workType.getId());
+
+        Education education = educationComboBox.getValue();
+        if (education != null) resume.setEducationId(education.getId());
         
         Experience exp = new Experience();
         exp.setDateStart(experienceDateStartDatePicker.getValue());
