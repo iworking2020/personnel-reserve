@@ -122,22 +122,26 @@ public class ResumesPaneFxmlController implements Initializable {
         });
         professionColumn.setCellValueFactory(new PropertyValueFactory<>("profession"));
         workTypeColumn.setCellValueFactory(cellData -> {
-            WorkType workType = workTypeDao.find(cellData.getValue().getWorkTypeId());
+            WorkType workType = null;
+            if (cellData.getValue().getWorkTypeId() != null)  workType = workTypeDao.find(cellData.getValue().getWorkTypeId());
             String textColumn = workType != null ? workType.getNameToView(LocaleUtil.getDefault()) : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
         wageColumn.setCellValueFactory(cellData -> {
-            BigDecimal wage = cellData.getValue().getWage().getCountBigDecimal();
+            BigDecimal wage = null;
+            if (cellData.getValue().getWage() != null) wage = cellData.getValue().getWage().getCountBigDecimal();
             String textColumn = wage != null ? decimalFormat.format(wage) : "договорная";
             return new ReadOnlyStringWrapper(textColumn);
         });
         currencyColumn.setCellValueFactory(cellData -> {
-            Currency currency = currencyDao.find(cellData.getValue().getWage().getCurrencyId());
+            Wage wage = cellData.getValue().getWage();
+            Currency currency = wage != null ? currencyDao.find(wage.getCurrencyId()) : null;
             String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
         educationColumn.setCellValueFactory(cellData -> {
-            Education education = educationDao.find(cellData.getValue().getEducationId());
+            Education education = null;
+            if (cellData.getValue().getEducationId() != null) education = educationDao.find(cellData.getValue().getEducationId());
             String textColumn = education != null ? education.getNameToView(LocaleUtil.getDefault()) : "не указано";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -359,6 +363,11 @@ public class ResumesPaneFxmlController implements Initializable {
             dialogController.showAndWait(parent);
         }
 
+    }
+
+    public void reload(ActionEvent event) {
+        selectCategory(event, null);
+        actionButtonClear(event);
     }
 
 }

@@ -1,12 +1,12 @@
 package ru.iworking.personnel.reserve.controller;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +18,7 @@ import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
+import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,6 +31,13 @@ public class VacanciesPaneFxmlController implements Initializable {
 
     private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
     private CompanyDao companyDao = CompanyDao.getInstance();
+
+    @FXML private Button editCompanyButton;
+    @FXML private Button deleteCompanyButton;
+
+    @FXML private TableView<Company> tableCompanies;
+    @FXML private TableColumn<Company, String> companyTypeColumn;
+    @FXML private TableColumn<Company, String> companyNameColumn;
 
     @FXML private VBox companyEditBlock;
     @FXML private ComboBox<CompanyType> companyTypeComboBox;
@@ -48,11 +56,30 @@ public class VacanciesPaneFxmlController implements Initializable {
         companyTypeComboBox.setButtonCell(companyTypeCellFactory.call(null));
         companyTypeComboBox.setCellFactory(companyTypeCellFactory);
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAll()));
+
+        companyTypeColumn.setCellValueFactory(cellData -> {
+            CompanyType companyType = companyTypeDao.find(cellData.getValue().getCompanyTypeId());
+            String textColumn = companyType != null ? companyType.getAbbreviatedNameToView(LocaleUtil.getDefault()) : "не указан";
+            return new ReadOnlyStringWrapper(textColumn);
+        });
+        companyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
+        tableCompanies.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            editCompanyButton.setDisable(false);
+            deleteCompanyButton.setDisable(false);
+        });
     }
 
     @FXML
-    public void actionButtonCreateCompany(ActionEvent event) {
+    private void actionButtonCreateCompany(ActionEvent event) {
         companyEditBlock.setVisible(true);
+    }
+
+    @FXML
+    private void actionButtonUpdateCompaniesTable(ActionEvent event) {
+        clearSelectionModelCompaniesTable();
+        tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
+        logger.debug("Companies table has been updated...");
     }
 
     @FXML
@@ -89,9 +116,25 @@ public class VacanciesPaneFxmlController implements Initializable {
             logger.debug("Created new company: " + company.toString());
             companyEditBlock.setVisible(false);
             clearCompanyEditBlock();
+            actionButtonUpdateCompaniesTable(event);
         } else {
             logger.debug("Fields company edit block is not valid...");
         }
+    }
+
+    public void updateCompanyTable(ActionEvent event) {
+        actionButtonUpdateCompaniesTable(event);
+    }
+
+    public void updateCompanyEditBlock(ActionEvent event) {
+        actionButtonCancelCreateCompany(event);
+        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAll()));
+    }
+
+    private void clearSelectionModelCompaniesTable() {
+        tableCompanies.getSelectionModel().clearSelection();
+        editCompanyButton.setDisable(true);
+        deleteCompanyButton.setDisable(true);
     }
 
     private Boolean isValidFieldsCompanyEditBlock() {
@@ -116,6 +159,11 @@ public class VacanciesPaneFxmlController implements Initializable {
         webPageTextField.setText("");
         emailTextField.setText("");
         addressTextArea.setText("");
+    }
+
+    public void reload(ActionEvent event) {
+        updateCompanyTable(event);
+        updateCompanyEditBlock(event);
     }
 
 }

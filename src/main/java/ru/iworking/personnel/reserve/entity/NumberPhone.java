@@ -58,13 +58,4 @@ public class NumberPhone implements INumberPhone {
     public int hashCode() {
         return Objects.hash(code, number);
     }
-
-    @Override
-    public String toString() {
-        return "NumberPhone{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", number='" + number + '\'' +
-                '}';
-    }
 }
