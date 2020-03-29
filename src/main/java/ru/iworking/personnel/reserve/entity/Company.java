@@ -145,4 +145,20 @@ public class Company implements ICompany {
     public int hashCode() {
         return Objects.hash(datecreate, companyTypeId, name, numberPhone, email, webPage, address, createrId, logoId);
     }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", datecreate=" + datecreate +
+                ", companyTypeId=" + companyTypeId +
+                ", name='" + name + '\'' +
+                ", numberPhone=" + numberPhone +
+                ", email='" + email + '\'' +
+                ", webPage='" + webPage + '\'' +
+                ", address=" + address +
+                ", createrId=" + createrId +
+                ", logoId=" + logoId +
+                '}';
+    }
 }

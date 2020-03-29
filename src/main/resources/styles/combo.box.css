@@ -31,3 +31,11 @@
 .combo-box-base:hover {
     -fx-border-color: rgba(0, 0, 0, 0.30);
 }
+
+.combo-box-base.has-error {
+    -fx-border-color: rgba(255, 0, 0, 0.20);
+}
+
+.combo-box-base.has-error:hover {
+    -fx-border-color: rgba(255, 0, 0, 0.30);
+}

@@ -159,3 +159,73 @@ MERGE INTO gender_names_to_view (gender_id, names_to_view, names_to_view_key) VA
 
 MERGE INTO gender_names_to_view (gender_id, names_to_view, names_to_view_key) VALUES (1, 'male', 'en');
 MERGE INTO gender_names_to_view (gender_id, names_to_view, names_to_view_key) VALUES (2, 'female', 'en');
+
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (1, 'FULL_PARTNERSHIP', '0');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (2, 'FAITH_PARTNERSHIP', '0');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (3, 'LIMITED_LIABILITY_COMPANY', '0');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (4, 'PUBLIC_JOINT_STOCK_COMPANY', '0');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (5, 'NON_PUBLIC_JOINT_STOCK_COMPANY', '0');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (6, 'PRODUCTION_COOPERATIVE', '0');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (7, 'UNITARY_ENTERPRISE', '0');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (8, 'CONSUMER_COOPERATIVE', '1');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (9, 'PUBLIC_AND_RELIGIOUS_ASSOCIATIONS', '1');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (10, 'FUNDS', '1');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (11, 'INSTITUTIONS', '1');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (12, 'ASSOCIATIONS', '1');
+MERGE INTO company_type (id, name_to_system, financial_type) VALUES (13, 'UNIONS', '1');
+
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (1, 'Полное товарищество', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (2, 'Товарищество на вере', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (3, 'Общество с ограниченной ответственностью', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (4, 'Публичное акционерное общество', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (5, 'Непубличное акционерное общество', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (6, 'Производственный кооператив', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (7, 'Унитарное предприятие', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (8, 'Потребительский кооператив', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (9, 'Общественные и религиозные объединения', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (10, 'Фонды', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (11, 'Учреждения', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (12, 'Ассоциации', 'ru_RU');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (13, 'Союзы', 'ru_RU');
+
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (1, 'Full partnership', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (2, 'Faith partnership', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (3, 'Limited liability company', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (4, 'Public joint stock company', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (5, 'Non public joint stock company', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (6, 'Production cooperative', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (7, 'Unitary enterprise', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (8, 'Consumer cooperative', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (9, 'Public and religious associations', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (10, 'Funds', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (11, 'Institutions', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (12, 'Associations', 'en');
+MERGE INTO company_type_names_to_view (company_type_id, names_to_view, names_to_view_key) VALUES (13, 'Unions', 'en');
+
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (1, 'ПТ', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (2, 'ТВ', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (3, 'ООО', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (4, 'ПАО', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (5, 'НАО', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (6, 'ПРК', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (7, 'УП', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (8, 'ПТК', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (9, 'О', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (10, 'Ф', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (11, 'У', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (12, 'А', 'ru_RU');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (13, 'С', 'ru_RU');
+
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (1, 'FullP', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (2, 'FaithP', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (3, 'LLC', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (4, 'PJSC', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (5, 'NPJSC', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (6, 'PC', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (7, 'UE', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (8, 'CC', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (9, 'PRA', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (10, 'F', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (11, 'I', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (12, 'A', 'en');
+MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (13, 'U', 'en');

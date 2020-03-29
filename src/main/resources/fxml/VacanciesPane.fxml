@@ -3,26 +3,27 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           style="-fx-background-color: white;">
+<StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacanciesPaneFxmlController">
     <children>
-        <VBox prefHeight="200.0" prefWidth="100.0">
+        <VBox>
             <children>
                 <FlowPane prefWidth="200.0">
                     <children>
-                        <Button mnemonicParsing="false" styleClass="grey" text="Добавить">
+                        <Button mnemonicParsing="false" onAction="#actionButtonCreateCompany" styleClass="grey" text="Добавить">
                             <FlowPane.margin>
-                                <Insets right="5.0" />
+                                <Insets bottom="5.0" right="5.0" />
                             </FlowPane.margin></Button>
                         <Button mnemonicParsing="false" styleClass="grey" text="Редактировать">
                             <FlowPane.margin>
-                                <Insets right="5.0" />
+                                <Insets bottom="5.0" right="5.0" />
                             </FlowPane.margin></Button>
-                        <Button mnemonicParsing="false" styleClass="grey" text="Удалить" />
+                        <Button mnemonicParsing="false" styleClass="grey" text="Удалить">
+                     <FlowPane.margin>
+                        <Insets bottom="5.0" />
+                     </FlowPane.margin></Button>
                     </children>
                     <VBox.margin>
-                        <Insets bottom="10.0" />
+                        <Insets bottom="5.0" />
                     </VBox.margin>
                 </FlowPane>
                 <TableView fx:id="tableCompanies" prefHeight="200.0" prefWidth="200.0">
@@ -57,19 +58,46 @@
                                 <Insets bottom="10.0" top="10.0" />
                             </GridPane.margin>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                            <children>
-                                <ComboBox maxWidth="1.7976931348623157E308" promptText="Тип компании" />
-                                <TextField promptText="Наименование" />
-                                <TextField promptText="Номер тел." />
-                                <TextField promptText="Эл. почта" />
-                                <TextField promptText="Сайт" />
-                                <TextArea prefWidth="200.0" promptText="Адрес" />
-                            </children>
-                            <GridPane.margin>
-                                <Insets bottom="10.0" top="10.0" />
-                            </GridPane.margin>
-                        </VBox>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                              <VBox fx:id="companyEditBlock" prefHeight="200.0" prefWidth="100.0" spacing="5.0" visible="false">
+                                  <children>
+                                      <ComboBox fx:id="companyTypeComboBox" maxWidth="1.7976931348623157E308" promptText="Тип компании" />
+                                      <TextField fx:id="nameCompanyTextField" promptText="Наименование" />
+                                      <TextField fx:id="numberPhoneTextField" promptText="Номер тел." />
+                                      <TextField fx:id="emailTextField" promptText="Эл. почта" />
+                                      <TextField fx:id="webPageTextField" promptText="Сайт" />
+                                      <TextArea fx:id="addressTextArea" prefWidth="200.0" promptText="Адрес" />
+                              <FlowPane>
+                                 <padding>
+                                    <Insets top="5.0" />
+                                 </padding>
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#actionButtonCancelCreateCompany" styleClass="grey" text="Отмена">
+                                       <FlowPane.margin>
+                                          <Insets bottom="5.0" right="5.0" />
+                                       </FlowPane.margin>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#actionButtonSaveCompany" styleClass="grey" text="Сохранить">
+                                       <FlowPane.margin>
+                                          <Insets bottom="5.0" right="5.0" />
+                                       </FlowPane.margin>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </Button>
+                                 </children>
+                              </FlowPane>
+                                  </children>
+                              </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </StackPane>
                     </children>
                 </GridPane>
             </children>
