@@ -1,48 +1,69 @@
 package ru.iworking.personnel.reserve.dao;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.utils.HibernateUtil;
 
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CompanyTypeDao implements Dao<CompanyType, Long> {
+public class CompanyTypeDao extends CashedDao<CompanyType, Long> {
+
+    private static final Logger logger = LogManager.getLogger(CompanyTypeDao.class);
 
     private static volatile CompanyTypeDao instance;
 
-    private Map<Long, CompanyType> cashMap = null;
+    @Override
+    public LoadingCache<Long, CompanyType> initLoadingCache() {
+        return CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .build(new CacheLoader<Long, CompanyType>() {
+                    @Override
+                    public CompanyType load(Long key) throws Exception {
+                        return CompanyTypeDao.getInstance().find(key);
+                    }
+                });
+    }
+
+    @Override
+    public void initCashData(LoadingCache<Long, CompanyType> cash) {
+        cash.putAll(findAll().stream()
+                .collect(Collectors.toMap(CompanyType::getId, Function.identity()))
+        );
+    }
 
     @Override
     public List<CompanyType> findAll() {
-        if (cashMap == null || cashMap.isEmpty()) {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-            cashMap = session.createQuery("FROM CompanyType", CompanyType.class).list()
-                    .stream().collect(Collectors.toMap(CompanyType::getId, Function.identity()));
-            session.flush();
-            transaction.commit();
-            session.close();
-        }
-        return cashMap.values().stream().collect(Collectors.toList());
+        List<CompanyType> list = new LinkedList<>();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        list = session.createQuery("FROM CompanyType", CompanyType.class).getResultList();
+        session.flush();
+        transaction.commit();
+        session.close();
+        return list;
     }
 
     @Override
     public CompanyType find(Long id) {
-        if (cashMap == null) cashMap = new LinkedHashMap<>();
-        if (!cashMap.containsKey(id)) {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-            cashMap.put(id, session.get(CompanyType.class, id));
-            session.flush();
-            transaction.commit();
-            session.close();
-        }
-        return cashMap.get(id);
+        CompanyType companyType;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        companyType = session.get(CompanyType.class, id);
+        session.flush();
+        transaction.commit();
+        session.close();
+        return companyType;
     }
 
     @Override

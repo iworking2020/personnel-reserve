@@ -366,6 +366,10 @@ public class ResumesPaneFxmlController implements Initializable {
     }
 
     public void reload(ActionEvent event) {
+        profFieldDao.clearCash();
+        currencyDao.clearCash();
+        educationDao.clearCash();
+        workTypeDao.clearCash();
         selectCategory(event, null);
         actionButtonClear(event);
     }

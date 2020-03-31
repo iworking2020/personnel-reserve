@@ -77,6 +77,10 @@ public class EducationDao implements Dao<Education, Long> {
         session.close();
     }
 
+    public void clearCash() {
+        cashMap = null;
+    }
+
     public static EducationDao getInstance() {
         EducationDao localInstance = instance;
         if (localInstance == null) {

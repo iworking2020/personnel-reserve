@@ -77,6 +77,10 @@ public class ProfFieldDao implements Dao<ProfField, Long> {
         session.close();
     }
 
+    public void clearCash() {
+        cashMap = null;
+    }
+
     public static ProfFieldDao getInstance() {
         ProfFieldDao localInstance = instance;
         if (localInstance == null) {

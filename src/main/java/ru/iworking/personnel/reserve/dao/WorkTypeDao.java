@@ -77,6 +77,10 @@ public class WorkTypeDao implements Dao<WorkType, Long> {
         session.close();
     }
 
+    public void clearCash() {
+        cashMap = null;
+    }
+
     public static WorkTypeDao getInstance() {
         WorkTypeDao localInstance = instance;
         if (localInstance == null) {

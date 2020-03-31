@@ -55,10 +55,10 @@ public class VacanciesPaneFxmlController implements Initializable {
 
         companyTypeComboBox.setButtonCell(companyTypeCellFactory.call(null));
         companyTypeComboBox.setCellFactory(companyTypeCellFactory);
-        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAll()));
+        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
 
         companyTypeColumn.setCellValueFactory(cellData -> {
-            CompanyType companyType = companyTypeDao.find(cellData.getValue().getCompanyTypeId());
+            CompanyType companyType = companyTypeDao.findFromCash(cellData.getValue().getCompanyTypeId());
             String textColumn = companyType != null ? companyType.getAbbreviatedNameToView(LocaleUtil.getDefault()) : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -128,7 +128,7 @@ public class VacanciesPaneFxmlController implements Initializable {
 
     public void updateCompanyEditBlock(ActionEvent event) {
         actionButtonCancelCreateCompany(event);
-        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAll()));
+        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
     }
 
     private void clearSelectionModelCompaniesTable() {
@@ -162,6 +162,7 @@ public class VacanciesPaneFxmlController implements Initializable {
     }
 
     public void reload(ActionEvent event) {
+        companyTypeDao.clearCash();
         updateCompanyTable(event);
         updateCompanyEditBlock(event);
     }

@@ -77,6 +77,10 @@ public class CurrencyDao implements Dao<Currency, Long> {
         session.close();
     }
 
+    public void clearCash() {
+        cashMap = null;
+    }
+
     public static CurrencyDao getInstance() {
         CurrencyDao localInstance = instance;
         if (localInstance == null) {
