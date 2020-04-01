@@ -68,7 +68,17 @@
                         </VBox>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <children>
-                              <VBox fx:id="companyEditBlock" prefHeight="200.0" prefWidth="100.0" spacing="5.0" visible="false">
+                        <VBox fx:id="companyViewBlock" spacing="8.0" visible="false">
+                           <children>
+                              <Label fx:id="companyTypeLabel" text="Тип компании" />
+                              <Label fx:id="companyNameLabel" text="Наименование" />
+                              <Label fx:id="companyNumberPhoneLabel" text="Номер тел." />
+                              <Label fx:id="companyEmailLabel" text="Эл. почта" />
+                              <Label fx:id="companyWebPageLabel" text="Сайт" />
+                              <Label fx:id="companyAddressLabel" text="Адрес" />
+                           </children>
+                        </VBox>
+                              <VBox fx:id="companyEditBlock" spacing="5.0" visible="false">
                                   <children>
                                       <ComboBox fx:id="companyTypeComboBox" maxWidth="1.7976931348623157E308" promptText="Тип компании" />
                                       <TextField fx:id="nameCompanyTextField" promptText="Наименование" />

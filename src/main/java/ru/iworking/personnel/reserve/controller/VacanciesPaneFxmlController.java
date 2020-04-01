@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.company.api.model.ICompany;
 import ru.iworking.personnel.reserve.dao.CompanyDao;
 import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.entity.Address;
@@ -18,6 +19,8 @@ import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
+import ru.iworking.service.api.model.IAddress;
+import ru.iworking.service.api.model.INumberPhone;
 import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.net.URL;
@@ -47,6 +50,14 @@ public class VacanciesPaneFxmlController implements Initializable {
     @FXML private TextField emailTextField;
     @FXML private TextArea addressTextArea;
 
+    @FXML private VBox companyViewBlock;
+    @FXML private Label companyTypeLabel;
+    @FXML private Label companyNameLabel;
+    @FXML private Label companyNumberPhoneLabel;
+    @FXML private Label companyEmailLabel;
+    @FXML private Label companyWebPageLabel;
+    @FXML private Label companyAddressLabel;
+
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
 
     @Override
@@ -67,18 +78,68 @@ public class VacanciesPaneFxmlController implements Initializable {
         tableCompanies.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             editCompanyButton.setDisable(false);
             deleteCompanyButton.setDisable(false);
+            viewCompany(newSelection);
         });
+    }
+
+    private void viewCompany(ICompany company) {
+        companyEditBlock.setVisible(false);
+        companyViewBlock.setVisible(true);
+
+        String companyTypePrefix = "Тип компании: ";
+        Long companyTypeId = company.getCompanyTypeId();
+        if (companyTypeId != null) {
+            companyTypeLabel.setText(companyTypePrefix + companyTypeDao.findFromCash(companyTypeId).getNameToView(LocaleUtil.getDefault()));
+        } else {
+            companyTypeLabel.setText(companyTypePrefix + "не указан");
+        }
+
+        String companyNamePrefix = "Наименование: ";
+        companyNameLabel.setText(companyNamePrefix + company.getName());
+        String companyNumberPhonePrefix = "Номер тел.: ";
+        INumberPhone numberPhone = company.getNumberPhone();
+        if (numberPhone != null && !numberPhone.getNumber().isEmpty()) {
+            companyNumberPhoneLabel.setText(companyNumberPhonePrefix + numberPhone.getNumber());
+        } else {
+            companyNumberPhoneLabel.setText(companyNumberPhonePrefix + "не указан");
+        }
+
+        String companyEmailPrefix = "Эл. почта: ";
+        String email = company.getEmail();
+        if (email != null && !email.isEmpty()) {
+            companyEmailLabel.setText(companyEmailPrefix + email);
+        } else {
+            companyEmailLabel.setText(companyEmailPrefix + "не указан");
+        }
+
+        String companyWebPagePrefix = "Эл. адрес: ";
+        String webPage = company.getWebPage();
+        if (webPage != null && !webPage.isEmpty()) {
+            companyWebPageLabel.setText(companyWebPagePrefix + company.getWebPage());
+        } else {
+            companyWebPageLabel.setText(companyWebPagePrefix + "не указан");
+        }
+
+        String companyAddresPrefix = "Адрес: ";
+        IAddress address = company.getAddress();
+        if (address != null && !address.getStreet().isEmpty()) {
+            companyAddressLabel.setText(companyAddresPrefix + address.getStreet());
+        } else {
+            companyAddressLabel.setText(companyAddresPrefix + "не указан");
+        }
     }
 
     @FXML
     private void actionButtonCreateCompany(ActionEvent event) {
         companyEditBlock.setVisible(true);
+        companyViewBlock.setVisible(false);
     }
 
     @FXML
     private void actionButtonUpdateCompaniesTable(ActionEvent event) {
         clearSelectionModelCompaniesTable();
         tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
+        companyViewBlock.setVisible(false);
         logger.debug("Companies table has been updated...");
     }
 
