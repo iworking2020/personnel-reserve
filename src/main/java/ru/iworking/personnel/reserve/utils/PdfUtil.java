@@ -63,19 +63,19 @@ public class PdfUtil {
         String profession = "профессия: "+resume.getProfession();
         String wage = resume.getWage() != null ?
                 "зарплата: "+resume.getWage().getCountBigDecimal().toString() + " " +
-                        currencyDao.find(resume.getWage().getCurrencyId()).getNameToView(LocaleUtil.getDefault()) :
+                        currencyDao.findFromCash(resume.getWage().getCurrencyId()).getNameToView(LocaleUtil.getDefault()) :
                 "зарплата: не указана";
         String profField = resume.getProfFieldId() != null ?
                 "профобласть: "+
-                        profFieldDao.find(resume.getProfFieldId()).getNameToView(LocaleUtil.getDefault()) :
+                        profFieldDao.findFromCash(resume.getProfFieldId()).getNameToView(LocaleUtil.getDefault()) :
                 "профобласть: не указана";
         String workType = resume.getWorkTypeId() != null ?
                 "график: "+
-                        workTypeDao.find(resume.getWorkTypeId()).getNameToView(LocaleUtil.getDefault()) :
+                        workTypeDao.findFromCash(resume.getWorkTypeId()).getNameToView(LocaleUtil.getDefault()) :
                 "график: не указан";
         String education = resume.getEducationId() != null ?
                 "образование: "+
-                        educationDao.find(resume.getEducationId()).getNameToView(LocaleUtil.getDefault()) :
+                        educationDao.findFromCash(resume.getEducationId()).getNameToView(LocaleUtil.getDefault()) :
                 "образование: не указано";
 
         Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));

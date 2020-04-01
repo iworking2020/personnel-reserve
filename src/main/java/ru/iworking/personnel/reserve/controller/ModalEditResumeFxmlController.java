@@ -97,19 +97,19 @@ public class ModalEditResumeFxmlController implements Initializable {
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
-        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAll()));
+        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCash()));
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
-        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAll()));
+        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
 
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(educationDao.findAll()));
+        educationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
 
         currencyComboBox.setButtonCell(currencyCellFactory.call(null));
         currencyComboBox.setCellFactory(currencyCellFactory);
-        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAll()));
+        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
     }
 
     public void setValues(Resume resume) {
@@ -119,13 +119,13 @@ public class ModalEditResumeFxmlController implements Initializable {
         numberPhoneTextField.setText(resume.getNumberPhone().getNumber());
         emailTextField.setText(resume.getEmail());
         professionTextField.setText(resume.getProfession());
-        profFieldComboBox.setValue(profFieldDao.find(resume.getProfFieldId()));
+        profFieldComboBox.setValue(profFieldDao.findFromCash(resume.getProfFieldId()));
         if (resume.getWage() != null) {
             wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
-            currencyComboBox.setValue(currencyDao.find(resume.getWage().getCurrencyId()));
+            currencyComboBox.setValue(currencyDao.findFromCash(resume.getWage().getCurrencyId()));
         }
-        workTypeComboBox.setValue(workTypeDao.find(resume.getWorkTypeId()));
-        educationComboBox.setValue(educationDao.find(resume.getEducationId()));
+        workTypeComboBox.setValue(workTypeDao.findFromCash(resume.getWorkTypeId()));
+        educationComboBox.setValue(educationDao.findFromCash(resume.getEducationId()));
         experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
         experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
         

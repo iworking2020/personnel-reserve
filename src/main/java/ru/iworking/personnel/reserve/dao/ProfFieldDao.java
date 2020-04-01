@@ -1,48 +1,62 @@
 package ru.iworking.personnel.reserve.dao;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.ProfField;
 import ru.iworking.personnel.reserve.utils.HibernateUtil;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ProfFieldDao implements Dao<ProfField, Long> {
+public class ProfFieldDao extends CashedDao<ProfField, Long> {
 
     private static volatile ProfFieldDao instance;
 
-    private Map<Long, ProfField> cashMap = null;
+    @Override
+    public LoadingCache<Long, ProfField> initLoadingCache() {
+        return CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .build(new CacheLoader<Long, ProfField>() {
+                    @Override
+                    public ProfField load(Long key) throws Exception {
+                        return ProfFieldDao.getInstance().find(key);
+                    }
+                });
+    }
+
+    @Override
+    public void initCashData(LoadingCache<Long, ProfField> cash) {
+        cash.putAll(findAll().stream().collect(Collectors.toMap(ProfField::getId, Function.identity())));
+    }
 
     @Override
     public List<ProfField> findAll() {
-        if (cashMap == null || cashMap.isEmpty()) {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-            cashMap = session.createQuery("FROM ProfField", ProfField.class).list()
-                    .stream().collect(Collectors.toMap(ProfField::getId, Function.identity()));
-            session.flush();
-            transaction.commit();
-            session.close();
-        }
-        return cashMap.values().stream().collect(Collectors.toList());
+        List<ProfField> list;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        list = session.createQuery("FROM ProfField", ProfField.class).getResultList();
+        session.flush();
+        transaction.commit();
+        session.close();
+        return list;
     }
 
     @Override
     public ProfField find(Long id) {
-        if (cashMap == null) cashMap = new LinkedHashMap<>();
-        if (!cashMap.containsKey(id)) {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-            cashMap.put(id, session.get(ProfField.class, id));
-            session.flush();
-            transaction.commit();
-            session.close();
-        }
-        return cashMap.get(id);
+        ProfField profField = null;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        profField = session.get(ProfField.class, id);
+        session.flush();
+        transaction.commit();
+        session.close();
+        return profField;
     }
 
     @Override
@@ -75,10 +89,6 @@ public class ProfFieldDao implements Dao<ProfField, Long> {
         session.flush();
         transaction.commit();
         session.close();
-    }
-
-    public void clearCash() {
-        cashMap = null;
     }
 
     public static ProfFieldDao getInstance() {

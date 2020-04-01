@@ -102,11 +102,11 @@ public class ResumesPaneFxmlController implements Initializable {
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
-        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAll()));
+        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
 
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(educationDao.findAll()));
+        educationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
 
         lastNameColumn.setCellValueFactory(cellData -> {
             Profile profile = cellData.getValue().getProfile();
@@ -123,7 +123,7 @@ public class ResumesPaneFxmlController implements Initializable {
         professionColumn.setCellValueFactory(new PropertyValueFactory<>("profession"));
         workTypeColumn.setCellValueFactory(cellData -> {
             WorkType workType = null;
-            if (cellData.getValue().getWorkTypeId() != null)  workType = workTypeDao.find(cellData.getValue().getWorkTypeId());
+            if (cellData.getValue().getWorkTypeId() != null)  workType = workTypeDao.findFromCash(cellData.getValue().getWorkTypeId());
             String textColumn = workType != null ? workType.getNameToView(LocaleUtil.getDefault()) : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -135,13 +135,13 @@ public class ResumesPaneFxmlController implements Initializable {
         });
         currencyColumn.setCellValueFactory(cellData -> {
             Wage wage = cellData.getValue().getWage();
-            Currency currency = wage != null ? currencyDao.find(wage.getCurrencyId()) : null;
+            Currency currency = wage != null ? currencyDao.findFromCash(wage.getCurrencyId()) : null;
             String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
         educationColumn.setCellValueFactory(cellData -> {
             Education education = null;
-            if (cellData.getValue().getEducationId() != null) education = educationDao.find(cellData.getValue().getEducationId());
+            if (cellData.getValue().getEducationId() != null) education = educationDao.findFromCash(cellData.getValue().getEducationId());
             String textColumn = education != null ? education.getNameToView(LocaleUtil.getDefault()) : "не указано";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -166,7 +166,7 @@ public class ResumesPaneFxmlController implements Initializable {
         });
         profFieldVBox.getChildren().add(buttonFindAll);
 
-        profFieldDao.findAll().stream().forEach(profField -> {
+        profFieldDao.findAllFromCash().stream().forEach(profField -> {
             Button button = new Button();
             button.setText(profField.getNameToView(LocaleUtil.getDefault()));
             button.setOnAction(event -> {

@@ -86,19 +86,19 @@ public class ModalAddResumeFxmlController implements Initializable {
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
-        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAll()));
+        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCash()));
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
-        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAll()));
+        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
 
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(educationDao.findAll()));
+        educationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
 
         currencyComboBox.setButtonCell(currencyCellFactory.call(null));
         currencyComboBox.setCellFactory(currencyCellFactory);
-        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAll()));
+        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
     }
 
     private void initStartValues() {

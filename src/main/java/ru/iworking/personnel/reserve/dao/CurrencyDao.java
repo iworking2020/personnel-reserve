@@ -1,48 +1,62 @@
 package ru.iworking.personnel.reserve.dao;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.utils.HibernateUtil;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CurrencyDao implements Dao<Currency, Long> {
+public class CurrencyDao extends CashedDao<Currency, Long> {
 
     private static volatile CurrencyDao instance;
 
-    private Map<Long, Currency> cashMap = null;
+    @Override
+    public LoadingCache<Long, Currency> initLoadingCache() {
+        return CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .build(new CacheLoader<Long, Currency>() {
+                    @Override
+                    public Currency load(Long key) throws Exception {
+                        return CurrencyDao.getInstance().find(key);
+                    }
+                });
+    }
+
+    @Override
+    public void initCashData(LoadingCache<Long, Currency> cash) {
+        cash.putAll(findAll().stream().collect(Collectors.toMap(Currency::getId, Function.identity())));
+    }
 
     @Override
     public List<Currency> findAll() {
-        if (cashMap == null || cashMap.isEmpty()) {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-            cashMap = session.createQuery("FROM Currency", Currency.class).list()
-                    .stream().collect(Collectors.toMap(Currency::getId, Function.identity()));
-            session.flush();
-            transaction.commit();
-            session.close();
-        }
-        return cashMap.values().stream().collect(Collectors.toList());
+        List<Currency> list;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        list = session.createQuery("FROM Currency", Currency.class).getResultList();
+        session.flush();
+        transaction.commit();
+        session.close();
+        return list;
     }
 
     @Override
     public Currency find(Long id) {
-        if (cashMap == null) cashMap = new LinkedHashMap<>();
-        if (!cashMap.containsKey(id)) {
-            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-            Transaction transaction = session.beginTransaction();
-            cashMap.put(id, session.get(Currency.class, id));
-            session.flush();
-            transaction.commit();
-            session.close();
-        }
-        return cashMap.get(id);
+        Currency currency = null;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        currency = session.get(Currency.class, id);
+        session.flush();
+        transaction.commit();
+        session.close();
+        return currency;
     }
 
     @Override
@@ -75,10 +89,6 @@ public class CurrencyDao implements Dao<Currency, Long> {
         session.flush();
         transaction.commit();
         session.close();
-    }
-
-    public void clearCash() {
-        cashMap = null;
     }
 
     public static CurrencyDao getInstance() {

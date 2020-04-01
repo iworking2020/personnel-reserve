@@ -74,14 +74,14 @@ public class ModalOpenResumeFxmlController implements Initializable {
         professionLabel.setText(resume.getProfession());
         if (resume.getProfFieldId() != null) {
             Long profFieldId = resume.getProfFieldId();
-            profFieldLabel.setText(profFieldDao.find(profFieldId).getNameToView(LocaleUtil.getDefault()));
+            profFieldLabel.setText(profFieldDao.findFromCash(profFieldId).getNameToView(LocaleUtil.getDefault()));
         } else {
             profFieldLabel.setText("не указана");
         }
         if (resume.getWage() != null) {
             String wageString;
             if(resume.getWage().getCurrencyId() != null) {
-                Currency currency = currencyDao.find(resume.getWage().getCurrencyId());
+                Currency currency = currencyDao.findFromCash(resume.getWage().getCurrencyId());
                 wageString = decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameToView(LocaleUtil.getDefault());
             } else {
                 wageString = decimalFormat.format(resume.getWage().getCountBigDecimal());
@@ -93,13 +93,13 @@ public class ModalOpenResumeFxmlController implements Initializable {
         }
 
         if (resume.getWorkTypeId() != null) {
-            WorkType workType = workTypeDao.find(resume.getWorkTypeId());
+            WorkType workType = workTypeDao.findFromCash(resume.getWorkTypeId());
             workTypeLabel.setText(workType.getNameToView(LocaleUtil.getDefault()));
         } else {
             workTypeLabel.setText("не указан");
         }
         if (resume.getEducationId() != null) {
-            Education education = educationDao.find(resume.getEducationId());
+            Education education = educationDao.findFromCash(resume.getEducationId());
             educationLabel.setText(education.getNameToView(LocaleUtil.getDefault()));
         } else {
             educationLabel.setText("не указано");

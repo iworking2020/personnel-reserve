@@ -55,14 +55,14 @@ public class ExelUtil {
                 email.setCellValue(resume.getEmail());
                 Cell profField = row.createCell(7);
                 if (resume.getProfFieldId() != null) {
-                    ProfField profField1 = profFieldDao.find(resume.getProfFieldId());
+                    ProfField profField1 = profFieldDao.findFromCash(resume.getProfFieldId());
                     profField.setCellValue(profField1.getNameToView(LocaleUtil.getDefault()));
                 } else {
                     profField.setCellValue("не указана");
                 }
                 Cell workType = row.createCell(8);
                 if (resume.getWorkTypeId() != null) {
-                    WorkType workType1 = workTypeDao.find(resume.getWorkTypeId());
+                    WorkType workType1 = workTypeDao.findFromCash(resume.getWorkTypeId());
                     workType.setCellValue(workType1.getNameToView(LocaleUtil.getDefault()));
                 } else {
                     workType.setCellValue("не указан");
@@ -75,14 +75,14 @@ public class ExelUtil {
                 }
                 Cell currency = row.createCell(10);
                 if (resume.getWage().getCurrencyId()!= null) {
-                    Currency currency1 = currencyDao.find(resume.getWage().getCurrencyId());
+                    Currency currency1 = currencyDao.findFromCash(resume.getWage().getCurrencyId());
                     currency.setCellValue(currency1.getNameToView(LocaleUtil.getDefault()));
                 } else {
                     currency.setCellValue("не указана");
                 }
                 Cell education = row.createCell(11);
                 if (resume.getEducationId() != null) {
-                    Education education1 = educationDao.find(resume.getEducationId());
+                    Education education1 = educationDao.findFromCash(resume.getEducationId());
                     education.setCellValue(education1.getNameToView(LocaleUtil.getDefault()));
                 } else {
                     education.setCellValue("не указано");

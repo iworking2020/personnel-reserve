@@ -37,9 +37,7 @@ public class CompanyTypeDao extends CashedDao<CompanyType, Long> {
 
     @Override
     public void initCashData(LoadingCache<Long, CompanyType> cash) {
-        cash.putAll(findAll().stream()
-                .collect(Collectors.toMap(CompanyType::getId, Function.identity()))
-        );
+        cash.putAll(findAll().stream().collect(Collectors.toMap(CompanyType::getId, Function.identity())));
     }
 
     @Override
