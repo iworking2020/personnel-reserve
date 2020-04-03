@@ -50,6 +50,9 @@ public class VacanciesPaneFxmlController implements Initializable {
     @FXML private TextField emailTextField;
     @FXML private TextArea addressTextArea;
 
+    @FXML private Button saveCompanyButton;
+    @FXML private Button updateCompanyButton;
+
     @FXML private VBox companyViewBlock;
     @FXML private Label companyTypeLabel;
     @FXML private Label companyNameLabel;
@@ -129,14 +132,29 @@ public class VacanciesPaneFxmlController implements Initializable {
         }
     }
 
-    @FXML
-    private void actionButtonCreateCompany(ActionEvent event) {
-        companyEditBlock.setVisible(true);
-        companyViewBlock.setVisible(false);
+    private void setDataForCompanyEditBlock(Company company) {
+        Long companyTypeId = company.getCompanyTypeId();
+        if (companyTypeId != null) companyTypeComboBox.setValue(companyTypeDao.findFromCash(companyTypeId));
+        nameCompanyTextField.setText(company.getName());
+        NumberPhone numberPhone = company.getNumberPhone();
+        if (numberPhone != null) numberPhoneTextField.setText(numberPhone.getNumber());
+        webPageTextField.setText(company.getWebPage());
+        emailTextField.setText(company.getEmail());
+        Address address = company.getAddress();
+        if (address != null) addressTextArea.setText(address.getStreet());
     }
 
     @FXML
-    private void actionButtonUpdateCompaniesTable(ActionEvent event) {
+    public void actionButtonCreateCompany(ActionEvent event) {
+        clearCompanyEditBlock();
+        companyEditBlock.setVisible(true);
+        companyViewBlock.setVisible(false);
+        saveCompanyButton.setVisible(true);
+        updateCompanyButton.setVisible(false);
+    }
+
+    @FXML
+    public void actionButtonUpdateCompaniesTable(ActionEvent event) {
         clearSelectionModelCompaniesTable();
         tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
         companyViewBlock.setVisible(false);
@@ -144,13 +162,63 @@ public class VacanciesPaneFxmlController implements Initializable {
     }
 
     @FXML
-    private void actionButtonCancelCreateCompany(ActionEvent event) {
+    public void actionButtonEditCompany(ActionEvent event) {
+        Company company = tableCompanies.getSelectionModel().getSelectedItem();
+        if (company != null) {
+            setDataForCompanyEditBlock(company);
+            saveCompanyButton.setVisible(false);
+            updateCompanyButton.setVisible(true);
+            companyEditBlock.setVisible(true);
+            companyViewBlock.setVisible(false);
+        } else actionButtonSaveCompany(event);
+    }
+
+    @FXML
+    public void actionButtonDeleteCompany(ActionEvent event) {
+        Company company = tableCompanies.getSelectionModel().getSelectedItem();
+        if (company != null) companyDao.delete(company);
+        actionButtonUpdateCompaniesTable(event);
+    }
+
+    @FXML
+    public void actionButtonCancelCreateCompany(ActionEvent event) {
         companyEditBlock.setVisible(false);
         clearCompanyEditBlock();
     }
 
     @FXML
-    private void  actionButtonSaveCompany(ActionEvent event) {
+    public void actionButtonUpdateCompany(ActionEvent event) {
+        Company company = tableCompanies.getSelectionModel().getSelectedItem();
+        if (company == null) actionButtonSaveCompany(event); else {
+            if (isValidFieldsCompanyEditBlock()) {
+                CompanyType companyType = companyTypeComboBox.getValue();
+                String nameCompanyStr = nameCompanyTextField.getText();
+                String numberPhoneStr = numberPhoneTextField.getText();
+                String webPageStr = webPageTextField.getText();
+                String emailStr = emailTextField.getText();
+                String addressStr = addressTextArea.getText();
+
+                company.getNumberPhone().setNumber(numberPhoneStr);
+                company.getAddress().setStreet(addressStr);
+
+                if (companyType != null) company.setCompanyTypeId(companyType.getId());
+                company.setName(nameCompanyStr);
+                company.setWebPage(webPageStr);
+                company.setEmail(emailStr);
+
+                companyDao.update(company);
+                logger.debug("Updated company: " + company.toString());
+                companyEditBlock.setVisible(false);
+                clearCompanyEditBlock();
+                actionButtonUpdateCompaniesTable(event);
+            } else {
+                logger.debug("Fields company edit block is not valid...");
+            }
+        }
+    }
+
+    @FXML
+    public void actionButtonSaveCompany(ActionEvent event) {
         if (isValidFieldsCompanyEditBlock()) {
             CompanyType companyType = companyTypeComboBox.getValue();
             String nameCompanyStr = nameCompanyTextField.getText();
