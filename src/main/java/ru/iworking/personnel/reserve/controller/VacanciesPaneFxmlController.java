@@ -11,32 +11,40 @@ import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.company.api.model.ICompany;
-import ru.iworking.personnel.reserve.dao.CompanyDao;
-import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
-import ru.iworking.personnel.reserve.entity.Address;
-import ru.iworking.personnel.reserve.entity.Company;
-import ru.iworking.personnel.reserve.entity.CompanyType;
-import ru.iworking.personnel.reserve.entity.NumberPhone;
+import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
 import ru.iworking.service.api.model.IAddress;
 import ru.iworking.service.api.model.INumberPhone;
 import ru.iworking.service.api.utils.LocaleUtil;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class VacanciesPaneFxmlController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(VacanciesPaneFxmlController.class);
 
+    private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
+    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
     private NumberPhoneFormatter numberPhoneFormatter = new NumberPhoneFormatter();
 
     private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
     private CompanyDao companyDao = CompanyDao.getInstance();
+    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
+    private EducationDao educationDao = EducationDao.getInstance();
+    private CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     @FXML private Button editCompanyButton;
     @FXML private Button deleteCompanyButton;
+    @FXML private Button saveCompanyButton;
+    @FXML private Button updateCompanyButton;
 
     @FXML private TableView<Company> tableCompanies;
     @FXML private TableColumn<Company, String> companyTypeColumn;
@@ -50,9 +58,6 @@ public class VacanciesPaneFxmlController implements Initializable {
     @FXML private TextField emailTextField;
     @FXML private TextArea addressTextArea;
 
-    @FXML private Button saveCompanyButton;
-    @FXML private Button updateCompanyButton;
-
     @FXML private VBox companyViewBlock;
     @FXML private Label companyTypeLabel;
     @FXML private Label companyNameLabel;
@@ -60,6 +65,21 @@ public class VacanciesPaneFxmlController implements Initializable {
     @FXML private Label companyEmailLabel;
     @FXML private Label companyWebPageLabel;
     @FXML private Label companyAddressLabel;
+
+    @FXML private Button addVacancyButton;
+    @FXML private Button updateVacanciesButton;
+    @FXML private Button editVacancyButton;
+    @FXML private Button deleteVacancyButton;
+
+    @FXML private TableView<Vacancy> tableVacancies;
+    @FXML private TableColumn<Vacancy, String> professionCol;
+    @FXML private TableColumn<Vacancy, String> profFieldCol;
+    @FXML private TableColumn<Vacancy, String> workTypeCol;
+    @FXML private TableColumn<Vacancy, String> educationCol;
+    @FXML private TableColumn<Vacancy, String> wageCol;
+    @FXML private TableColumn<Vacancy, String> currencyCol;
+
+    @FXML private VBox vacancyEditBlock;
 
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
 
@@ -82,53 +102,97 @@ public class VacanciesPaneFxmlController implements Initializable {
             editCompanyButton.setDisable(false);
             deleteCompanyButton.setDisable(false);
             viewCompany(newSelection);
+            addVacancyButton.setDisable(false);
+            updateVacanciesButton.setDisable(false);
+        });
+
+        professionCol.setCellValueFactory(new PropertyValueFactory<>("profession"));
+        profFieldCol.setCellValueFactory(cellData -> {
+            String textColumn = "не указана";
+            if (cellData.getValue() != null && cellData.getValue().getProfFieldId() != null) {
+                ProfField profField = profFieldDao.findFromCash(cellData.getValue().getProfFieldId());
+                textColumn = profField.getNameToView(LocaleUtil.getDefault());
+            }
+            return new ReadOnlyStringWrapper(textColumn);
+        });
+        workTypeCol.setCellValueFactory(cellData -> {
+            String textColumn = "не указан";
+            if (cellData.getValue() != null && cellData.getValue().getWorkTypeId()!= null) {
+                WorkType workType = workTypeDao.findFromCash(cellData.getValue().getWorkTypeId());
+                textColumn = workType.getNameToView(LocaleUtil.getDefault());
+            }
+            return new ReadOnlyStringWrapper(textColumn);
+        });
+        educationCol.setCellValueFactory(cellData -> {
+            String textColumn = "не указано";
+            if (cellData.getValue() != null && cellData.getValue().getEducationId() != null) {
+                Education education = educationDao.findFromCash(cellData.getValue().getEducationId());
+                textColumn = education.getNameToView(LocaleUtil.getDefault());
+            }
+            return new ReadOnlyStringWrapper(textColumn);
+        });
+        wageCol.setCellValueFactory(cellData -> {
+            BigDecimal wage = null;
+            if (cellData.getValue().getWage() != null) wage = cellData.getValue().getWage().getCountBigDecimal();
+            String textColumn = wage != null ? decimalFormat.format(wage) : "договорная";
+            return new ReadOnlyStringWrapper(textColumn);
+        });
+        currencyCol.setCellValueFactory(cellData -> {
+            Wage wage = cellData.getValue().getWage();
+            Currency currency = wage != null ? currencyDao.findFromCash(wage.getCurrencyId()) : null;
+            String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
+            return new ReadOnlyStringWrapper(textColumn);
         });
     }
 
     private void viewCompany(ICompany company) {
-        companyEditBlock.setVisible(false);
-        companyViewBlock.setVisible(true);
+        if (company != null) {
+            companyEditBlock.setVisible(false);
+            companyViewBlock.setVisible(true);
 
-        String companyTypePrefix = "Тип компании: ";
-        Long companyTypeId = company.getCompanyTypeId();
-        if (companyTypeId != null) {
-            companyTypeLabel.setText(companyTypePrefix + companyTypeDao.findFromCash(companyTypeId).getNameToView(LocaleUtil.getDefault()));
-        } else {
-            companyTypeLabel.setText(companyTypePrefix + "не указан");
-        }
+            String companyTypePrefix = "Тип компании: ";
+            Long companyTypeId = company.getCompanyTypeId();
+            if (companyTypeId != null) {
+                companyTypeLabel.setText(companyTypePrefix + companyTypeDao.findFromCash(companyTypeId).getNameToView(LocaleUtil.getDefault()));
+            } else {
+                companyTypeLabel.setText(companyTypePrefix + "не указан");
+            }
 
-        String companyNamePrefix = "Наименование: ";
-        companyNameLabel.setText(companyNamePrefix + company.getName());
-        String companyNumberPhonePrefix = "Номер тел.: ";
-        INumberPhone numberPhone = company.getNumberPhone();
-        if (numberPhone != null && !numberPhone.getNumber().isEmpty()) {
-            companyNumberPhoneLabel.setText(companyNumberPhonePrefix + numberPhone.getNumber());
-        } else {
-            companyNumberPhoneLabel.setText(companyNumberPhonePrefix + "не указан");
-        }
+            String companyNamePrefix = "Наименование: ";
+            companyNameLabel.setText(companyNamePrefix + company.getName());
+            String companyNumberPhonePrefix = "Номер тел.: ";
+            INumberPhone numberPhone = company.getNumberPhone();
+            if (numberPhone != null && !numberPhone.getNumber().isEmpty()) {
+                companyNumberPhoneLabel.setText(companyNumberPhonePrefix + numberPhone.getNumber());
+            } else {
+                companyNumberPhoneLabel.setText(companyNumberPhonePrefix + "не указан");
+            }
 
-        String companyEmailPrefix = "Эл. почта: ";
-        String email = company.getEmail();
-        if (email != null && !email.isEmpty()) {
-            companyEmailLabel.setText(companyEmailPrefix + email);
-        } else {
-            companyEmailLabel.setText(companyEmailPrefix + "не указан");
-        }
+            String companyEmailPrefix = "Эл. почта: ";
+            String email = company.getEmail();
+            if (email != null && !email.isEmpty()) {
+                companyEmailLabel.setText(companyEmailPrefix + email);
+            } else {
+                companyEmailLabel.setText(companyEmailPrefix + "не указан");
+            }
 
-        String companyWebPagePrefix = "Эл. адрес: ";
-        String webPage = company.getWebPage();
-        if (webPage != null && !webPage.isEmpty()) {
-            companyWebPageLabel.setText(companyWebPagePrefix + company.getWebPage());
-        } else {
-            companyWebPageLabel.setText(companyWebPagePrefix + "не указан");
-        }
+            String companyWebPagePrefix = "Эл. адрес: ";
+            String webPage = company.getWebPage();
+            if (webPage != null && !webPage.isEmpty()) {
+                companyWebPageLabel.setText(companyWebPagePrefix + company.getWebPage());
+            } else {
+                companyWebPageLabel.setText(companyWebPagePrefix + "не указан");
+            }
 
-        String companyAddresPrefix = "Адрес: ";
-        IAddress address = company.getAddress();
-        if (address != null && !address.getStreet().isEmpty()) {
-            companyAddressLabel.setText(companyAddresPrefix + address.getStreet());
+            String companyAddresPrefix = "Адрес: ";
+            IAddress address = company.getAddress();
+            if (address != null && !address.getStreet().isEmpty()) {
+                companyAddressLabel.setText(companyAddresPrefix + address.getStreet());
+            } else {
+                companyAddressLabel.setText(companyAddresPrefix + "не указан");
+            }
         } else {
-            companyAddressLabel.setText(companyAddresPrefix + "не указан");
+            logger.debug("Company is null. We can't view company...");
         }
     }
 
@@ -251,6 +315,11 @@ public class VacanciesPaneFxmlController implements Initializable {
         }
     }
 
+    @FXML
+    public void actionButtonCreateVacancy(ActionEvent event) {
+        vacancyEditBlock.setVisible(true);
+    }
+
     public void updateCompanyTable(ActionEvent event) {
         actionButtonUpdateCompaniesTable(event);
     }
@@ -264,6 +333,15 @@ public class VacanciesPaneFxmlController implements Initializable {
         tableCompanies.getSelectionModel().clearSelection();
         editCompanyButton.setDisable(true);
         deleteCompanyButton.setDisable(true);
+        addVacancyButton.setDisable(true);
+        updateVacanciesButton.setDisable(true);
+        clearSelectionModelVacanciesTable();
+    }
+
+    private void clearSelectionModelVacanciesTable() {
+        tableVacancies.getSelectionModel().clearSelection();
+        editVacancyButton.setDisable(true);
+        deleteVacancyButton.setDisable(true);
     }
 
     private Boolean isValidFieldsCompanyEditBlock() {

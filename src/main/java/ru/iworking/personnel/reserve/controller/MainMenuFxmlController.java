@@ -64,6 +64,7 @@ public class MainMenuFxmlController implements Initializable {
         scene.getStylesheets().add("/styles/table.view.css");
         scene.getStylesheets().add("/styles/context.menu.css");
         scene.getStylesheets().add("/styles/menu.bar.css");
+        scene.getStylesheets().add("/styles/vacancies.pane.css");
     }
 
     public void show(Parent root) {
