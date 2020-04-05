@@ -83,13 +83,11 @@ public class CompanyType implements ICompanyType {
         if (o == null || getClass() != o.getClass()) return false;
         CompanyType that = (CompanyType) o;
         return Objects.equals(nameToSystem, that.nameToSystem) &&
-                financialType == that.financialType &&
-                Objects.equals(abbreviatedNamesToView, that.abbreviatedNamesToView) &&
-                Objects.equals(namesToView, that.namesToView);
+                financialType == that.financialType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameToSystem, financialType, abbreviatedNamesToView, namesToView);
+        return Objects.hash(nameToSystem, financialType);
     }
 }
