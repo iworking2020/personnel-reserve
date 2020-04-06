@@ -1,93 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacanciesPaneFxmlController">
     <children>
         <VBox>
             <children>
-                <FlowPane>
-                    <children>
-                        <Button mnemonicParsing="false" onAction="#actionButtonCreateCompany" styleClass="grey" text="Добавить">
-                            <FlowPane.margin>
-                                <Insets bottom="5.0" right="5.0" />
-                            </FlowPane.margin></Button>
-                  <Button fx:id="updateCompaniesTableButton" mnemonicParsing="false" onAction="#actionButtonUpdateCompaniesTable" styleClass="grey" text="Обновить">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <FlowPane.margin>
-                        <Insets bottom="5.0" right="5.0" />
-                     </FlowPane.margin>
-                  </Button>
-                        <Button fx:id="editCompanyButton" disable="true" mnemonicParsing="false" onAction="#actionButtonEditCompany" styleClass="grey" text="Редактировать">
-                            <FlowPane.margin>
-                                <Insets bottom="5.0" right="5.0" />
-                            </FlowPane.margin></Button>
-                        <Button fx:id="deleteCompanyButton" disable="true" mnemonicParsing="false" onAction="#actionButtonDeleteCompany" styleClass="grey" text="Удалить">
-                     <FlowPane.margin>
-                        <Insets bottom="5.0" />
-                     </FlowPane.margin></Button>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="5.0" />
-                    </VBox.margin>
-                </FlowPane>
-            <StackPane fx:id="wrapperCompaniesTable">
-               <children>
-                      <TableView fx:id="tableCompanies" prefHeight="200.0">
-                          <columns>
-                              <TableColumn fx:id="companyTypeColumn" prefWidth="92.0" text="Тип" />
-                              <TableColumn fx:id="companyNameColumn" prefWidth="153.0" text="Наименование" />
-                          </columns>
-                      </TableView>
-               </children>
-            </StackPane>
-            <FlowPane>
-               <children>
-                  <Button fx:id="addVacancyButton" disable="true" mnemonicParsing="false" onAction="#actionButtonCreateVacancy" styleClass="grey" text="Добавить">
-                     <FlowPane.margin>
-                        <Insets bottom="5.0" right="5.0" top="5.0" />
-                     </FlowPane.margin>
-                  </Button>
-                  <Button fx:id="updateVacanciesButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Обновить">
-                     <FlowPane.margin>
-                        <Insets bottom="5.0" right="5.0" top="5.0" />
-                     </FlowPane.margin>
-                  </Button>
-                  <Button fx:id="editVacancyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Редактировать">
-                     <FlowPane.margin>
-                        <Insets bottom="5.0" right="5.0" top="5.0" />
-                     </FlowPane.margin>
-                  </Button>
-                  <Button fx:id="deleteVacancyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Удалить">
-                     <FlowPane.margin>
-                        <Insets bottom="5.0" right="5.0" top="5.0" />
-                     </FlowPane.margin>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </FlowPane>
-            <StackPane fx:id="wrapperVacanciesTable">
-               <children>
-                  <TableView fx:id="tableVacancies" prefHeight="200.0">
-                    <columns>
-                      <TableColumn fx:id="professionCol" prefWidth="150.0" text="Профессия" />
-                      <TableColumn fx:id="profFieldCol" prefWidth="150.0" text="Проф. область" />
-                        <TableColumn fx:id="workTypeCol" prefWidth="150.0" text="График работы" />
-                        <TableColumn fx:id="educationCol" prefWidth="150.0" text="Образование" />
-                        <TableColumn fx:id="wageCol" prefWidth="150.0" text="Зарплата" />
-                        <TableColumn fx:id="currencyCol" prefWidth="150.0" text="Валюта" />
-                    </columns>
-                  </TableView>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </StackPane>
+                <fx:include fx:id="companiesTable" source="CompaniesTable.fxml" />
+                <fx:include fx:id="vacanciesTable" source="VacamciesTable.fxml" />
                 <GridPane>
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

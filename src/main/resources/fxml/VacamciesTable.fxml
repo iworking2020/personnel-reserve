@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox fx:id="vacanciesTable" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="ru.iworking.personnel.reserve.controller.VacanciesTableController">
+<children>
+    <FlowPane>
+        <children>
+            <Button fx:id="addVacancyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Добавить">
+                <FlowPane.margin>
+                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                </FlowPane.margin>
+            </Button>
+            <Button fx:id="updateVacanciesButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Обновить">
+                <FlowPane.margin>
+                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                </FlowPane.margin>
+            </Button>
+            <Button fx:id="editVacancyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Редактировать">
+                <FlowPane.margin>
+                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                </FlowPane.margin>
+            </Button>
+            <Button fx:id="deleteVacancyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Удалить">
+                <FlowPane.margin>
+                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                </FlowPane.margin>
+            </Button>
+        </children>
+        <VBox.margin>
+            <Insets top="10.0" />
+        </VBox.margin>
+    </FlowPane>
+    <StackPane fx:id="wrapperVacanciesTable">
+        <children>
+            <TableView fx:id="tableVacancies" prefHeight="200.0">
+                <columns>
+                    <TableColumn fx:id="professionCol" prefWidth="150.0" text="Профессия" />
+                    <TableColumn fx:id="profFieldCol" prefWidth="150.0" text="Проф. область" />
+                    <TableColumn fx:id="workTypeCol" prefWidth="150.0" text="График работы" />
+                    <TableColumn fx:id="educationCol" prefWidth="150.0" text="Образование" />
+                    <TableColumn fx:id="wageCol" prefWidth="150.0" text="Зарплата" />
+                    <TableColumn fx:id="currencyCol" prefWidth="150.0" text="Валюта" />
+                </columns>
+            </TableView>
+        </children>
+        <VBox.margin>
+            <Insets bottom="5.0" top="5.0" />
+        </VBox.margin>
+    </StackPane>
+</children>
+</VBox>
