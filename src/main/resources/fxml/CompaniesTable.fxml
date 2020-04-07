@@ -3,7 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="companiesTable" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="ru.iworking.personnel.reserve.controller.CompaniesTableController">
+<VBox fx:id="companiesTable" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.CompaniesTableController">
     <children>
         <FlowPane>
             <children>
@@ -37,7 +37,7 @@
         </FlowPane>
         <StackPane fx:id="wrapperCompaniesTable">
             <children>
-                <TableView fx:id="tableCompanies" prefHeight="200.0">
+                <TableView fx:id="tableCompanies" prefHeight="150.0">
                     <columns>
                         <TableColumn fx:id="companyTypeColumn" prefWidth="92.0" text="Тип" />
                         <TableColumn fx:id="companyNameColumn" prefWidth="153.0" text="Наименование" />

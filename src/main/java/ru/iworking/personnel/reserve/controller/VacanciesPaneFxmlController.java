@@ -24,6 +24,7 @@ public class VacanciesPaneFxmlController implements Initializable {
     @FXML private VacanciesTableController vacanciesTableController;
     @FXML private CompanyViewController companyViewController;
     @FXML private CompanyEditController companyEditController;
+    @FXML private VacancyEditController vacancyEditController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -40,6 +41,8 @@ public class VacanciesPaneFxmlController implements Initializable {
         companiesTableController.getDeleteCompanyButton().setOnAction(event -> actionButtonDeleteCompany(event));
 
         companyEditController.getSaveCompanyButton().setOnAction(event -> actionButtonSaveCompany(event));
+
+        vacanciesTableController.getAddVacancyButton().setOnAction(event -> actionButtonCreateVacancy(event));
     }
 
     public void actionButtonCreateCompany(ActionEvent event) {
@@ -81,8 +84,8 @@ public class VacanciesPaneFxmlController implements Initializable {
     }
 
     public void actionButtonCreateVacancy(ActionEvent event) {
-        //clearVacancyEditBlock();
-        //vacancyEditBlock.setVisible(true);
+        vacancyEditController.clear();
+        vacancyEditController.view();
     }
 
     public void reloadCompanyTable(ActionEvent event) {

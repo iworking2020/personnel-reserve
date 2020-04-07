@@ -10,7 +10,7 @@
         <TextField fx:id="numberPhoneTextField" promptText="Номер тел." />
         <TextField fx:id="emailTextField" promptText="Эл. почта" />
         <TextField fx:id="webPageTextField" promptText="Сайт" />
-        <TextArea fx:id="addressTextArea" prefWidth="200.0" promptText="Адрес" />
+        <TextArea fx:id="addressTextArea" maxHeight="-Infinity" prefHeight="25.0" promptText="Адрес" />
         <AnchorPane>
             <children>
                 <Button mnemonicParsing="false" onAction="#actionCancel" styleClass="grey" text="Отмена" AnchorPane.leftAnchor="0.0">

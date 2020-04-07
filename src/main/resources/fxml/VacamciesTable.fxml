@@ -3,7 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="vacanciesTable" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="ru.iworking.personnel.reserve.controller.VacanciesTableController">
+<VBox fx:id="vacanciesTable" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacanciesTableController">
 <children>
     <FlowPane>
         <children>
@@ -34,7 +34,7 @@
     </FlowPane>
     <StackPane fx:id="wrapperVacanciesTable">
         <children>
-            <TableView fx:id="tableVacancies" prefHeight="200.0">
+            <TableView fx:id="tableVacancies" prefHeight="150.0">
                 <columns>
                     <TableColumn fx:id="professionCol" prefWidth="150.0" text="Профессия" />
                     <TableColumn fx:id="profFieldCol" prefWidth="150.0" text="Проф. область" />

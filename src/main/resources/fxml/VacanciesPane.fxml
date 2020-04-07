@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.*?>
 <StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacanciesPaneFxmlController">
     <children>
-        <VBox>
-            <children>
-                <fx:include fx:id="companiesTable" source="CompaniesTable.fxml" />
-                <fx:include fx:id="vacanciesTable" source="VacamciesTable.fxml" />
-                <GridPane>
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="20.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                    <children>
-                        <StackPane prefHeight="150.0" prefWidth="200.0">
-                            <children>
-                                <fx:include fx:id="companyView" source="CompanyView.fxml" />
-                                <fx:include fx:id="companyEdit" source="CompanyEdit.fxml" />
-                            </children>
-                            <padding>
-                                <Insets bottom="10.0" top="10.0" />
-                            </padding>
-                        </StackPane>
-                        <StackPane GridPane.columnIndex="2">
-                            <children>
-                                <fx:include fx:id="vacancyEdit" source="VacancyEdit.fxml" />
-                            </children>
-                        </StackPane>
-                    </children>
-                </GridPane>
-            </children>
-            <StackPane.margin>
-                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-            </StackPane.margin>
-        </VBox>
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+         <content>
+              <VBox>
+                  <children>
+                      <fx:include fx:id="companiesTable" source="CompaniesTable.fxml" />
+                      <fx:include fx:id="vacanciesTable" source="VacamciesTable.fxml" />
+                      <GridPane>
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="20.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                          <children>
+                              <StackPane>
+                                  <children>
+                                      <fx:include fx:id="companyView" source="CompanyView.fxml" />
+                                      <fx:include fx:id="companyEdit" source="CompanyEdit.fxml" />
+                                  </children>
+                                  <padding>
+                                      <Insets bottom="10.0" top="10.0" />
+                                  </padding>
+                              </StackPane>
+                              <StackPane GridPane.columnIndex="2">
+                                  <children>
+                                      <fx:include fx:id="vacancyEdit" source="VacancyEdit.fxml" />
+                                  </children>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                              </StackPane>
+                          </children>
+                      </GridPane>
+                  </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+              </VBox>
+         </content>
+      </ScrollPane>
     </children>
 </StackPane>

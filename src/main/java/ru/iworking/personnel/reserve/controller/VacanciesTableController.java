@@ -24,6 +24,10 @@ public class VacanciesTableController implements Initializable {
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @FXML private Button addVacancyButton;
+    public Button getAddVacancyButton() {
+        return addVacancyButton;
+    }
+
     @FXML private Button updateVacanciesButton;
     @FXML private Button editVacancyButton;
     @FXML private Button deleteVacancyButton;
