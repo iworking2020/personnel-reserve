@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.CompanyDao;
 import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
+import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Company;
 
 import java.net.URL;
@@ -19,6 +20,7 @@ public class VacanciesPaneFxmlController implements Initializable {
 
     private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
     private CompanyDao companyDao = CompanyDao.getInstance();
+    private VacancyDao vacancyDao = VacancyDao.getInstance();
 
     @FXML private CompaniesTableController companiesTableController;
     @FXML private VacanciesTableController vacanciesTableController;
@@ -33,6 +35,7 @@ public class VacanciesPaneFxmlController implements Initializable {
             companyViewController.setData(newSelection);
             companyViewController.view();
             vacanciesTableController.enableNoTargetButtons();
+            if (newSelection != null) actionButtonUpdateVacanciesTable(null);
         });
 
         companiesTableController.getCreateCompanyButton().setOnAction(event -> actionButtonCreateCompany(event));
@@ -43,6 +46,9 @@ public class VacanciesPaneFxmlController implements Initializable {
         companyEditController.getSaveCompanyButton().setOnAction(event -> actionButtonSaveCompany(event));
 
         vacanciesTableController.getAddVacancyButton().setOnAction(event -> actionButtonCreateVacancy(event));
+        vacanciesTableController.getUpdateVacanciesButton().setOnAction(event -> actionButtonUpdateVacanciesTable(event));
+
+        vacancyEditController.getSaveVacancyButton().setOnAction(event -> actionButtonSaveVacancy(event));
     }
 
     public void actionButtonCreateCompany(ActionEvent event) {
@@ -54,6 +60,7 @@ public class VacanciesPaneFxmlController implements Initializable {
         companiesTableController.clear();
         vacanciesTableController.disableNoTargetItemButtons();
         vacanciesTableController.clear();
+        actionButtonUpdateVacanciesTable(event);
         companiesTableController.getTableCompanies().setItems(FXCollections.observableList(companyDao.findAll()));
         companyEditController.hide();
         companyViewController.hide();
@@ -88,14 +95,41 @@ public class VacanciesPaneFxmlController implements Initializable {
         vacancyEditController.view();
     }
 
+    public void actionButtonSaveVacancy(ActionEvent event) {
+        Long companyId = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem().getId();
+        Boolean isSaved = vacancyEditController.save(companyId);
+        if (isSaved) {
+            vacancyEditController.hide();
+            vacancyEditController.clear();
+            actionButtonUpdateVacanciesTable(event);
+        }
+    }
+
+    public void actionButtonUpdateVacanciesTable(ActionEvent event) {
+        vacanciesTableController.clear();
+        vacanciesTableController.disableTargetItemButtons();
+        if (companiesTableController.getTableCompanies().getSelectionModel() != null) {
+            Company company = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem();
+            if (company != null) vacanciesTableController.setData(vacancyDao.findAllByCompanyId(company.getId()));
+        }
+        vacancyEditController.hide();
+        //companyViewController.hide();
+        logger.debug("Vacancies table has been updated...");
+    }
+
+    public void reloadVacancyTable(ActionEvent event) {
+        actionButtonUpdateVacanciesTable(event);
+    }
+
     public void reloadCompanyTable(ActionEvent event) {
         actionButtonUpdateCompaniesTable(event);
     }
 
     public void reload(ActionEvent event) {
-        companyTypeDao.clearCash();
         reloadCompanyTable(event);
         companyEditController.reload(event);
+        reloadVacancyTable(event);
+        vacancyEditController.reload(event);
     }
 
 }

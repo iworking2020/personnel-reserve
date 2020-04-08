@@ -170,6 +170,7 @@ public class CompanyEditController implements Initializable {
 
     public void reload(ActionEvent event) {
         actionCancel(event);
+        companyTypeDao.clearCash();
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
     }
 }

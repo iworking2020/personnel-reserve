@@ -4,27 +4,20 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.EducationDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
-import ru.iworking.personnel.reserve.dao.WorkTypeDao;
-import ru.iworking.personnel.reserve.entity.Currency;
-import ru.iworking.personnel.reserve.entity.Education;
-import ru.iworking.personnel.reserve.entity.ProfField;
-import ru.iworking.personnel.reserve.entity.WorkType;
+import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class VacancyEditController implements Initializable {
@@ -32,6 +25,7 @@ public class VacancyEditController implements Initializable {
     private static final Logger logger = LogManager.getLogger(VacancyEditController.class);
 
     @FXML private VBox vacancyEdit;
+    @FXML private TextField vacancyIdTextField;
     @FXML private TextField vacancyProfessionTextField;
     @FXML private ComboBox<ProfField> vacancyProfFieldComboBox;
     @FXML private ComboBox<WorkType> vacancyWorkTypeComboBox;
@@ -41,11 +35,16 @@ public class VacancyEditController implements Initializable {
     @FXML private DatePicker vacancyExpDateStartDatePicker;
     @FXML private DatePicker vacancyExpDateEndDatePicker;
     @FXML private TextArea vacancyAddressTextArea;
+    @FXML private Button saveVacancyButton;
+    public Button getSaveVacancyButton() {
+        return saveVacancyButton;
+    }
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
     private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
     private EducationDao educationDao = EducationDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private VacancyDao vacancyDao = VacancyDao.getInstance();
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -73,6 +72,73 @@ public class VacancyEditController implements Initializable {
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
     }
 
+    public Boolean save(Long companyId) {
+        if (isValid()) {
+            Long vacancyId = null;
+            String vacancyIdStr = vacancyIdTextField.getText();
+            if (vacancyIdStr != null && !vacancyIdStr.isEmpty()) {
+                vacancyId = Long.valueOf(vacancyIdStr);
+            }
+
+            String professionStr = vacancyProfessionTextField.getText();
+            ProfField profField = vacancyProfFieldComboBox.getValue();
+            WorkType workType = vacancyWorkTypeComboBox.getValue();
+            Education education = vacancyEducationComboBox.getValue();
+            String wageStr = vacancyWageTextField.getText();
+            Currency currency = vacancyCurrencyComboBox.getValue();
+            LocalDate startDateExperience = vacancyExpDateStartDatePicker.getValue();
+            LocalDate endDateExperience = vacancyExpDateEndDatePicker.getValue();
+            String addressStr = vacancyAddressTextArea.getText();
+
+            Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyDao.find(vacancyId);
+            vacancy.setCompanyId(companyId);
+            vacancy.setProfession(professionStr);
+            if (profField != null) vacancy.setProfFieldId(profField.getId());
+            if (workType != null) vacancy.setWorkTypeId(workType.getId());
+            if (education != null) vacancy.setEducationId(education.getId());
+            if (!wageStr.isEmpty()) {
+                try {
+                    Wage wage = new Wage();
+                    wage.setCount(new BigDecimal(wageStr.replaceAll(",",".")));
+                    if (currency != null) wage.setCurrencyId(currency.getId());
+                    vacancy.setWage(wage);
+                } catch (Exception e) {
+                    logger.error(e);
+                }
+            }
+            if (startDateExperience != null) {
+                Experience experience = new Experience();
+                experience.setDateStart(startDateExperience);
+                if (endDateExperience != null) experience.setDateEnd(endDateExperience);
+            }
+
+            Address address = new Address();
+            address.setStreet(addressStr);
+
+            vacancy.setAddress(address);
+
+            if (vacancyId == null) {
+                vacancyDao.create(vacancy);
+            } else {
+                vacancyDao.update(vacancy);
+            }
+            logger.debug("Created new vacancy: " + vacancy.toString());
+            return true;
+        } else {
+            logger.debug("Fields vacancy edit block is not valid...");
+            return false;
+        }
+    }
+
+    private Boolean isValid() {
+        Boolean isValid = true;
+        if (vacancyProfessionTextField.getText() == null || vacancyProfessionTextField.getText().length() <= 0) {
+            vacancyProfessionTextField.getStyleClass().add("has-error");
+            isValid = false;
+        }
+        return isValid;
+    }
+
     @FXML
     public void actionCancel(ActionEvent event) {
         hide();
@@ -89,6 +155,7 @@ public class VacancyEditController implements Initializable {
 
     public void clear() {
         vacancyProfessionTextField.setText("");
+        vacancyProfessionTextField.getStyleClass().remove("has-error");
         vacancyProfFieldComboBox.setValue(null);
         vacancyWorkTypeComboBox.setValue(null);
         vacancyEducationComboBox.setValue(null);
@@ -97,5 +164,19 @@ public class VacancyEditController implements Initializable {
         vacancyExpDateStartDatePicker.setValue(null);
         vacancyExpDateEndDatePicker.setValue(null);
         vacancyAddressTextArea.setText("");
+    }
+
+    public void reload(ActionEvent event) {
+        actionCancel(event);
+
+        profFieldDao.clearCash();
+        workTypeDao.clearCash();
+        educationDao.clearCash();
+        currencyDao.clearCash();
+
+        vacancyProfFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCash()));
+        vacancyWorkTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
+        vacancyEducationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
+        vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
     }
 }

@@ -77,7 +77,7 @@ public class CompaniesTableController implements Initializable {
     }
 
     public void clear() {
-        tableCompanies.getSelectionModel().clearSelection();
+        if (tableCompanies.getSelectionModel() != null) tableCompanies.getSelectionModel().clearSelection();
         editCompanyButton.setDisable(true);
         deleteCompanyButton.setDisable(true);
     }

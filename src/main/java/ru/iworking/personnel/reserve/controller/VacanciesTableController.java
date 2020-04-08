@@ -1,22 +1,21 @@
 package ru.iworking.personnel.reserve.controller;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.EducationDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
-import ru.iworking.personnel.reserve.dao.WorkTypeDao;
+import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class VacanciesTableController implements Initializable {
@@ -29,6 +28,10 @@ public class VacanciesTableController implements Initializable {
     }
 
     @FXML private Button updateVacanciesButton;
+    public Button getUpdateVacanciesButton() {
+        return updateVacanciesButton;
+    }
+
     @FXML private Button editVacancyButton;
     @FXML private Button deleteVacancyButton;
 
@@ -44,6 +47,7 @@ public class VacanciesTableController implements Initializable {
     private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
     private EducationDao educationDao = EducationDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private VacancyDao vacancyDao = VacancyDao.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -86,6 +90,10 @@ public class VacanciesTableController implements Initializable {
         });
     }
 
+    public void setData(List<Vacancy> data) {
+        tableVacancies.setItems(FXCollections.observableList(data));
+    }
+
     public void enableTargetItemButtons() {
         editVacancyButton.setDisable(false);
         deleteVacancyButton.setDisable(false);
@@ -107,7 +115,8 @@ public class VacanciesTableController implements Initializable {
     }
 
     public void clear() {
-        tableVacancies.getSelectionModel().clearSelection();
+        if (tableVacancies.getSelectionModel()!=null) tableVacancies.getSelectionModel().clearSelection();
+        tableVacancies.setItems(null);
         disableTargetItemButtons();
     }
 
