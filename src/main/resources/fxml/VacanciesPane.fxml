@@ -32,6 +32,7 @@
                               </StackPane>
                               <StackPane GridPane.columnIndex="2">
                                   <children>
+                                      <fx:include fx:id="vacancyView" source="VacancyView.fxml" />
                                       <fx:include fx:id="vacancyEdit" source="VacancyEdit.fxml" />
                                   </children>
                            <padding>

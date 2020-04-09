@@ -108,6 +108,19 @@ public class VacancyDao implements Dao<Vacancy, Long> {
         }
     }
 
+    public void deleteByCompanyId(Long companyId) {
+        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            session.createQuery("delete Vacancy as v where v.companyId = :companyId")
+                    .setParameter("companyId", companyId)
+                    .executeUpdate();
+
+            session.flush();
+            transaction.commit();
+        }
+    }
+
     public static VacancyDao getInstance() {
         VacancyDao localInstance = instance;
         if (localInstance == null) {

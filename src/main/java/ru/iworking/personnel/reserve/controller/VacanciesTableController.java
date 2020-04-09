@@ -33,9 +33,20 @@ public class VacanciesTableController implements Initializable {
     }
 
     @FXML private Button editVacancyButton;
+    public Button getEditVacancyButton() {
+        return editVacancyButton;
+    }
+
     @FXML private Button deleteVacancyButton;
+    public Button getDeleteVacancyButton() {
+        return deleteVacancyButton;
+    }
 
     @FXML private TableView<Vacancy> tableVacancies;
+    public TableView<Vacancy> getTableVacancies() {
+        return tableVacancies;
+    }
+
     @FXML private TableColumn<Vacancy, String> professionCol;
     @FXML private TableColumn<Vacancy, String> profFieldCol;
     @FXML private TableColumn<Vacancy, String> workTypeCol;

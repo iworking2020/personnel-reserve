@@ -35,7 +35,7 @@ public class Wage implements IWage {
 
     @Override
     public Integer getCount() {
-        return Integer.valueOf(count.toString());
+        return Integer.valueOf(Double.valueOf(count.toString()).intValue());
     }
     public BigDecimal getCountBigDecimal() {
         return count;

@@ -10,6 +10,7 @@ import ru.iworking.personnel.reserve.dao.CompanyDao;
 import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Company;
+import ru.iworking.personnel.reserve.entity.Vacancy;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +27,7 @@ public class VacanciesPaneFxmlController implements Initializable {
     @FXML private VacanciesTableController vacanciesTableController;
     @FXML private CompanyViewController companyViewController;
     @FXML private CompanyEditController companyEditController;
+    @FXML private VacancyViewController vacancyViewController;
     @FXML private VacancyEditController vacancyEditController;
 
     @Override
@@ -45,8 +47,16 @@ public class VacanciesPaneFxmlController implements Initializable {
 
         companyEditController.getSaveCompanyButton().setOnAction(event -> actionButtonSaveCompany(event));
 
+        vacanciesTableController.getTableVacancies().getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            vacanciesTableController.enableTargetItemButtons();
+            vacancyViewController.setData(newSelection);
+            vacancyViewController.view();
+        });
+
         vacanciesTableController.getAddVacancyButton().setOnAction(event -> actionButtonCreateVacancy(event));
         vacanciesTableController.getUpdateVacanciesButton().setOnAction(event -> actionButtonUpdateVacanciesTable(event));
+        vacanciesTableController.getEditVacancyButton().setOnAction(event -> actionButtonEditVacancy(event));
+        vacanciesTableController.getDeleteVacancyButton().setOnAction(event -> actionButtonDeleteVacancy(event));
 
         vacancyEditController.getSaveVacancyButton().setOnAction(event -> actionButtonSaveVacancy(event));
     }
@@ -77,7 +87,11 @@ public class VacanciesPaneFxmlController implements Initializable {
 
     public void actionButtonDeleteCompany(ActionEvent event) {
         Company company = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem();
-        if (company != null) companyDao.delete(company);
+        if (company != null) {
+            Long companyId = company.getId();
+            companyDao.delete(company);
+            vacancyDao.deleteByCompanyId(companyId);
+        }
         actionButtonUpdateCompaniesTable(event);
     }
 
@@ -95,16 +109,6 @@ public class VacanciesPaneFxmlController implements Initializable {
         vacancyEditController.view();
     }
 
-    public void actionButtonSaveVacancy(ActionEvent event) {
-        Long companyId = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem().getId();
-        Boolean isSaved = vacancyEditController.save(companyId);
-        if (isSaved) {
-            vacancyEditController.hide();
-            vacancyEditController.clear();
-            actionButtonUpdateVacanciesTable(event);
-        }
-    }
-
     public void actionButtonUpdateVacanciesTable(ActionEvent event) {
         vacanciesTableController.clear();
         vacanciesTableController.disableTargetItemButtons();
@@ -113,8 +117,32 @@ public class VacanciesPaneFxmlController implements Initializable {
             if (company != null) vacanciesTableController.setData(vacancyDao.findAllByCompanyId(company.getId()));
         }
         vacancyEditController.hide();
-        //companyViewController.hide();
+        vacancyViewController.hide();
         logger.debug("Vacancies table has been updated...");
+    }
+
+    public void actionButtonEditVacancy(ActionEvent event) {
+        Vacancy vacancy = vacanciesTableController.getTableVacancies().getSelectionModel().getSelectedItem();
+        if (vacancy != null) {
+            vacancyEditController.setData(vacancy);
+            vacancyEditController.view();
+        } else actionButtonSaveVacancy(event);
+    }
+
+    public void actionButtonDeleteVacancy(ActionEvent event) {
+        Vacancy vacancy = vacanciesTableController.getTableVacancies().getSelectionModel().getSelectedItem();
+        if (vacancy != null) vacancyDao.delete(vacancy);
+        actionButtonUpdateVacanciesTable(event);
+    }
+
+    public void actionButtonSaveVacancy(ActionEvent event) {
+        Long companyId = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem().getId();
+        Boolean isSaved = vacancyEditController.save(companyId);
+        if (isSaved) {
+            vacancyEditController.hide();
+            vacancyEditController.clear();
+            actionButtonUpdateVacanciesTable(event);
+        }
     }
 
     public void reloadVacancyTable(ActionEvent event) {

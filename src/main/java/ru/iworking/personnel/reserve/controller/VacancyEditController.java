@@ -14,6 +14,7 @@ import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
+import ru.iworking.vacancy.api.model.IVacancy;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -35,6 +36,7 @@ public class VacancyEditController implements Initializable {
     @FXML private DatePicker vacancyExpDateStartDatePicker;
     @FXML private DatePicker vacancyExpDateEndDatePicker;
     @FXML private TextArea vacancyAddressTextArea;
+
     @FXML private Button saveVacancyButton;
     public Button getSaveVacancyButton() {
         return saveVacancyButton;
@@ -70,6 +72,25 @@ public class VacancyEditController implements Initializable {
         vacancyCurrencyComboBox.setButtonCell(currencyCellFactory.call(null));
         vacancyCurrencyComboBox.setCellFactory(currencyCellFactory);
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
+    }
+
+    public void setData(IVacancy vacancy) {
+        if (vacancy != null) {
+            if (vacancy.getId() != null) vacancyIdTextField.setText(vacancy.getId().toString());
+            vacancyProfessionTextField.setText(vacancy.getProfession());
+            if (vacancy.getProfFieldId() != null) vacancyProfFieldComboBox.setValue(profFieldDao.findFromCash(vacancy.getProfFieldId()));
+            if (vacancy.getWorkTypeId() != null) vacancyWorkTypeComboBox.setValue(workTypeDao.findFromCash(vacancy.getWorkTypeId()));
+            if (vacancy.getEducationId() != null) vacancyEducationComboBox.setValue(educationDao.findFromCash(vacancy.getEducationId()));
+            if (vacancy.getWage() != null) vacancyWageTextField.setText(vacancy.getWage().getCount().toString());
+            if (vacancy.getWage() != null && vacancy.getWage().getCurrencyId() != null) vacancyCurrencyComboBox.setValue(currencyDao.findFromCash(vacancy.getWage().getCurrencyId()));
+            if (vacancy.getExperience() != null) {
+                vacancyExpDateStartDatePicker.setValue(vacancy.getExperience().getDateStart());
+                vacancyExpDateEndDatePicker.setValue(vacancy.getExperience().getDateEnd());
+            }
+            if (vacancy.getAddress() != null) vacancyAddressTextArea.setText(vacancy.getAddress().getStreet());
+        } else {
+            logger.debug("vacancy is null..");
+        }
     }
 
     public Boolean save(Long companyId) {
