@@ -203,26 +203,6 @@ public class ResumesPaneFxmlController implements Initializable {
 
     public ObservableList<Resume> createResumeObservableList(List<Resume> list) {
         ObservableList<Resume> resumeObservableList = FXCollections.observableList(list);
-        /*resumeObservableList.addListener((ListChangeListener<Resume>) change -> {
-            while (change.next()) {
-                if (change.wasPermutated()) {
-                    for (int i = change.getFrom(); i < change.getTo(); ++i) {
-                        logger.debug("Permuted: " + i + " ");
-                    }
-                } else if (change.wasUpdated()) {
-                    for (int i = change.getFrom(); i < change.getTo(); ++i) {
-                        logger.debug("Updated: " + i + " ");
-                    }
-                } else {
-                    for (Resume removedItem : change.getRemoved()) {
-                        resumeDao.delete(removedItem);
-                    }
-                    for (Resume addedItem : change.getAddedSubList()) {
-                        resumeDao.create(addedItem);
-                    }
-                }
-            }
-        });*/
         return resumeObservableList;
     }
 

@@ -34,19 +34,24 @@ public class MainMenuFxmlController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        winSearchCheckItem.setSelected(false);
+        viewSearchBlock();
         winSearchCheckItem.setOnAction(event -> {
-            if (winSearchCheckItem.isSelected()) {
-                resumesPaneController.getSearchPane().setVisible(true);
-                GridPane.setColumnSpan(resumesPaneController.getTablePane(), 3);
-                GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 3);
-            } else {
-                resumesPaneController.getSearchPane().setVisible(false);
-                GridPane.setColumnSpan(resumesPaneController.getTablePane(), 4);
-                GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 4);
-            }
+            if (winSearchCheckItem.isSelected()) {viewSearchBlock();} else {hideSearchBlock();}
         });
+    }
+
+    private void viewSearchBlock() {
+        winSearchCheckItem.setSelected(true);
+        resumesPaneController.getSearchPane().setVisible(true);
+        GridPane.setColumnSpan(resumesPaneController.getTablePane(), 3);
+        GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 3);
+    }
+
+    private void hideSearchBlock() {
+        winSearchCheckItem.setSelected(false);
+        resumesPaneController.getSearchPane().setVisible(false);
+        GridPane.setColumnSpan(resumesPaneController.getTablePane(), 4);
+        GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 4);
     }
 
     private void addStylesheets(Scene scene) {
