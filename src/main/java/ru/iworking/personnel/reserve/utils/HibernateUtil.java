@@ -63,6 +63,7 @@ public class HibernateUtil {
                 configuration.addAnnotatedClass(CompanyType.class);
                 configuration.addAnnotatedClass(Vacancy.class);
                 configuration.addAnnotatedClass(DescriptionVacancy.class);
+                configuration.addAnnotatedClass(ResumeState.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();

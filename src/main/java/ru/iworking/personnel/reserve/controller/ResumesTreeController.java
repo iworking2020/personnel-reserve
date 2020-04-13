@@ -4,34 +4,30 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import ru.iworking.personnel.reserve.dao.ResumeStateDao;
+import ru.iworking.personnel.reserve.model.TreeCategory;
+import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
+
+import static ru.iworking.personnel.reserve.model.TreeCategory.Type.CATEGORY;
 
 public class ResumesTreeController implements Initializable {
 
-    @FXML private TreeView resumesTreeView;
+    @FXML private TreeView<TreeCategory> resumesTreeView;
+
+    private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        String[] categories = {
-                "Отправлено приглашение",
-                "Тех. интервью",
-                "Интервью",
-                "Резюме у заказчика",
-                "Интервью с заказчиком",
-                "Предложение кандидату",
-                "Испытательный срок",
-                "Принят на работу",
-                "Отклонен рекрутером",
-                "Отклонен заказчиком",
-                "Резерв"
-        };
 
-        TreeItem rootTreeNode = new TreeItem<>("Этапы обработки");
-        Arrays.asList(categories).forEach(category -> rootTreeNode.getChildren().add(new TreeItem<>(category)));
-
+        TreeItem<TreeCategory> rootTreeNode = new TreeItem<>(new TreeCategory(null, "Этапы обработки", CATEGORY));
+        resumeStateDao.findAllFromCash().forEach(resumeState -> rootTreeNode.getChildren().add(
+                new TreeItem<TreeCategory>(
+                        new TreeCategory(resumeState.getId(), resumeState.getNameToView(LocaleUtil.getDefault()), CATEGORY)
+                )
+        ));
         resumesTreeView.setRoot(rootTreeNode);
         resumesTreeView.setShowRoot(false);
 

@@ -229,3 +229,27 @@ MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_
 MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (11, 'I', 'en');
 MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (12, 'A', 'en');
 MERGE INTO company_type_abbreviated_names_to_view (company_type_id, abbreviated_names_to_view, abbreviated_names_to_view_key) VALUES (13, 'U', 'en');
+
+MERGE INTO resume_state (id, name_to_system) VALUES (1, 'INVITATION_SENT');
+MERGE INTO resume_state (id, name_to_system) VALUES (2, 'TECHNICAL_INTERVIEW');
+MERGE INTO resume_state (id, name_to_system) VALUES (3, 'INTERVIEW');
+MERGE INTO resume_state (id, name_to_system) VALUES (4, 'CUSTOMER_RESUME');
+MERGE INTO resume_state (id, name_to_system) VALUES (5, 'CUSTOMER_INTERVIEW');
+MERGE INTO resume_state (id, name_to_system) VALUES (6, 'OFFER_TO_CANDIDATE');
+MERGE INTO resume_state (id, name_to_system) VALUES (7, 'PROBATION');
+MERGE INTO resume_state (id, name_to_system) VALUES (8, 'HIRED');
+MERGE INTO resume_state (id, name_to_system) VALUES (9, 'REJECTED_BY_RECRUITER');
+MERGE INTO resume_state (id, name_to_system) VALUES (10, 'REJECTED_BY_CUSTOMER');
+MERGE INTO resume_state (id, name_to_system) VALUES (11, 'RESERVE');
+
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (1, 'Отправлено приглашение', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (2, 'Тех. интервью', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (3, 'Интервью', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (4, 'Резюме у заказчика', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (5, 'Интервью с заказчиком', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (6, 'Предложение кандидату', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (7, 'Испытательный срок', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (8, 'Принят на работу', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (9, 'Отклонен рекрутером', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (10, 'Отклонен заказчиком', 'ru_RU');
+MERGE INTO resume_state_names_to_view (resume_state_id, names_to_view, names_to_view_key) VALUES (11, 'Резерв', 'ru_RU');
