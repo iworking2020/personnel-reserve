@@ -1,6 +1,6 @@
 package ru.iworking.personnel.reserve.model;
 
-public class TreeCategory {
+public class TreeStep {
 
     public enum Type { CATEGORY, VALUE }
 
@@ -8,9 +8,9 @@ public class TreeCategory {
     private String name;
     private Type type;
 
-    public TreeCategory() { }
+    public TreeStep() { }
 
-    public TreeCategory(Long code, String name, Type type) {
+    public TreeStep(Long code, String name, Type type) {
         this.code = code;
         this.name = name;
         this.type = type;

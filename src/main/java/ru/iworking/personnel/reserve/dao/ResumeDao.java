@@ -37,6 +37,12 @@ public class ResumeDao implements Dao<Resume, Long> {
         return findAll(params);
     }
 
+    public List<Resume> findAllByResumeStateId(Long resumeStateId) {
+        Map<String, Object> params = new HashMap();
+        params.put(ResumeRequestParam.RESUME_STATE_ID, resumeStateId);
+        return findAll(params);
+    }
+
     @Override
     public List<Resume> findAll() {
         List<Resume> list;
@@ -62,6 +68,7 @@ public class ResumeDao implements Dao<Resume, Long> {
         Long profFieldId = params.get(ResumeRequestParam.PROF_FIELD_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.PROF_FIELD_ID).toString()) : null;
         Long educationId = params.get(ResumeRequestParam.EDUCATION_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.EDUCATION_ID).toString()) : null;
         Long workTypeId = params.get(ResumeRequestParam.WORK_TYPE_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.WORK_TYPE_ID).toString()) : null;
+        Long resumeStateId = params.get(ResumeRequestParam.RESUME_STATE_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.RESUME_STATE_ID).toString()) : null;
         
         List<Resume> list;
         try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
@@ -75,6 +82,7 @@ public class ResumeDao implements Dao<Resume, Long> {
             if (educationId != null) sql += " "+separator.get()+" resume.educationId = :educationId";
             if (workTypeId != null) sql += " "+separator.get()+" resume.workTypeId = :workTypeId";
             if (wage != null) sql += " "+separator.get()+" resume.wage.count = :wage";
+            if (resumeStateId != null) sql += " "+separator.get()+" resume.state.id = :resumeStateId";
             
             Query query = session.createQuery(sql, Resume.class);
             
@@ -86,6 +94,7 @@ public class ResumeDao implements Dao<Resume, Long> {
             if (educationId != null) query.setParameter("educationId", educationId);
             if (workTypeId != null) query.setParameter("workTypeId", workTypeId);
             if (wage != null) query.setParameter("wage", wage);
+            if (resumeStateId != null) query.setParameter("resumeStateId", resumeStateId);
             
             list = query.getResultList();
             

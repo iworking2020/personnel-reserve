@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.personnel.reserve.model.State;
+import ru.iworking.personnel.reserve.model.StateProvider;
 import ru.iworking.resume.api.model.IResume;
 import ru.iworking.service.api.model.IDescription;
 
@@ -9,7 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "resume")
-public class Resume implements IResume, Cloneable {
+public class Resume implements IResume, Cloneable, StateProvider {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -58,6 +60,10 @@ public class Resume implements IResume, Cloneable {
 
     @Column(name = "photo_id")
     private Long photoId;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="resume_state_id")
+    private ResumeState state;
 
     public Resume() { }
 
@@ -175,6 +181,14 @@ public class Resume implements IResume, Cloneable {
     @Override
     public IDescription getDescription() {
         return null;
+    }
+
+    public void setState(ResumeState state) {
+        this.state = state;
+    }
+    @Override
+    public State getState() {
+        return state;
     }
 
     @Override

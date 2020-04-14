@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.personnel.reserve.model.State;
 import ru.iworking.service.api.model.NameToSystem;
 import ru.iworking.service.api.model.NameToView;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "resume_state")
-public class ResumeState implements NameToSystem, NameToView {
+public class ResumeState implements NameToSystem, NameToView, State {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

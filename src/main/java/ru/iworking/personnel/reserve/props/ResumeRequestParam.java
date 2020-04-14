@@ -18,6 +18,7 @@ public class ResumeRequestParam {
     public static final String WORK_TYPE_ID = "work_type_id";
     public static final String EDUCATION_ID = "education_id";
     public static final String PROFESSION = "profession";
+    public static final String RESUME_STATE_ID = "resume_state_id";
     public static final String WAGE = "wage";
     
 }

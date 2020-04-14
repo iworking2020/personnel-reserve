@@ -114,10 +114,10 @@ public class ModalAddResumeFxmlController implements Initializable {
         Scene scene = new Scene(parent);
         scene.getStylesheets().add("/styles/main.css");
         scene.getStylesheets().add("/styles/button.css");
-        scene.getStylesheets().add("/styles/text.field.css");
-        scene.getStylesheets().add("/styles/combo.box.css");
-        scene.getStylesheets().add("/styles/date.picker.css");
-        scene.getStylesheets().add("/styles/text.area.css");
+        scene.getStylesheets().add("/styles/text-field.css");
+        scene.getStylesheets().add("/styles/combo-box.css");
+        scene.getStylesheets().add("/styles/date-picker.css");
+        scene.getStylesheets().add("/styles/text-area.css");
         scene.getStylesheets().add("/styles/modal.css");
 
         Stage modal = new Stage();

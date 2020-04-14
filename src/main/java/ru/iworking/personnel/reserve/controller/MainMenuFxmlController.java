@@ -58,18 +58,19 @@ public class MainMenuFxmlController implements Initializable {
         scene.getStylesheets().add("/styles/main.css");
         scene.getStylesheets().add("/styles/window.css");
         scene.getStylesheets().add("/styles/button.css");
-        scene.getStylesheets().add("/styles/combo.box.css");
-        scene.getStylesheets().add("/styles/date.picker.css");
-        scene.getStylesheets().add("/styles/text.area.css");
-        scene.getStylesheets().add("/styles/text.field.css");
-        scene.getStylesheets().add("/styles/scroll.bar.css");
-        scene.getStylesheets().add("/styles/scroll.pane.css");
-        scene.getStylesheets().add("/styles/tab.pane.css");
-        scene.getStylesheets().add("/styles/prof.field.css");
-        scene.getStylesheets().add("/styles/table.view.css");
-        scene.getStylesheets().add("/styles/context.menu.css");
-        scene.getStylesheets().add("/styles/menu.bar.css");
-        scene.getStylesheets().add("/styles/vacancies.pane.css");
+        scene.getStylesheets().add("/styles/combo-box.css");
+        scene.getStylesheets().add("/styles/date-picker.css");
+        scene.getStylesheets().add("/styles/text-area.css");
+        scene.getStylesheets().add("/styles/text-field.css");
+        scene.getStylesheets().add("/styles/scroll-bar.css");
+        scene.getStylesheets().add("/styles/scroll-pane.css");
+        scene.getStylesheets().add("/styles/tab-pane.css");
+        scene.getStylesheets().add("/styles/prof-field.css");
+        scene.getStylesheets().add("/styles/table-view.css");
+        scene.getStylesheets().add("/styles/context-menu.css");
+        scene.getStylesheets().add("/styles/menu-bar.css");
+        scene.getStylesheets().add("/styles/vacancies-pane.css");
+        scene.getStylesheets().add("/styles/tree-view.css");
     }
 
     public void show(Parent root) {
