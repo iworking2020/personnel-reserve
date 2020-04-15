@@ -1,9 +1,13 @@
-.table-view{
+.table-view {
     -fx-background-color: rgba(0, 0, 0, 0.40);
     -fx-table-cell-border-color: transparent;
     -fx-border-radius: 0px;
     -fx-border-width: 2px;
     -fx-border-color: rgba(0, 0, 0, 0.40);
+}
+
+.table-view:focused {
+    -fx-background-insets: 0 0 0 0;
 }
 
 .table-view .column-header {
