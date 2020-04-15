@@ -123,7 +123,7 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
             <version>${itext7-core.version}</version>
-            <stepType>pom</stepType>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -154,6 +154,26 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.2.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>5.2.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.2.5.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>2.2.6.RELEASE</version>
         </dependency>
     </dependencies>
 
