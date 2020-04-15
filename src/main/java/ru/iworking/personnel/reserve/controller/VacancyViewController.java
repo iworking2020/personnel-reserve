@@ -41,7 +41,7 @@ public class VacancyViewController implements Initializable {
         hide();
     }
 
-    public void view() {
+    public void show() {
         vacancyView.setVisible(true);
     }
 

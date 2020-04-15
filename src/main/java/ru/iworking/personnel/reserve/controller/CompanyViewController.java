@@ -34,7 +34,7 @@ public class CompanyViewController implements Initializable {
         hide();
     }
 
-    public void view() {
+    public void show() {
         companyView.setVisible(true);
     }
 

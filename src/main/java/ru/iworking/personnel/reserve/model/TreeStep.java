@@ -2,18 +2,18 @@ package ru.iworking.personnel.reserve.model;
 
 public class TreeStep {
 
-    public enum Type { CATEGORY, VALUE }
+    public enum StepType { CATEGORY, VALUE }
 
     private Long code;
     private String name;
-    private Type type;
+    private StepType stepType;
 
     public TreeStep() { }
 
-    public TreeStep(Long code, String name, Type type) {
+    public TreeStep(Long code, String name, StepType stepType) {
         this.code = code;
         this.name = name;
-        this.type = type;
+        this.stepType = stepType;
     }
 
     public Long getCode() {
@@ -30,11 +30,11 @@ public class TreeStep {
         this.name = name;
     }
 
-    public Type getType() {
-        return type;
+    public StepType getType() {
+        return stepType;
     }
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(StepType stepType) {
+        this.stepType = stepType;
     }
 
     @Override

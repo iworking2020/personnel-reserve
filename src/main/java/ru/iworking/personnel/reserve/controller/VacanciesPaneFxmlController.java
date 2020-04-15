@@ -8,12 +8,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.CompanyDao;
 import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
+import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Company;
+import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.entity.Vacancy;
+import ru.iworking.personnel.reserve.model.TreeStep;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static ru.iworking.personnel.reserve.model.TreeStep.StepType;
 
 public class VacanciesPaneFxmlController implements Initializable {
 
@@ -22,20 +27,25 @@ public class VacanciesPaneFxmlController implements Initializable {
     private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
     private CompanyDao companyDao = CompanyDao.getInstance();
     private VacancyDao vacancyDao = VacancyDao.getInstance();
+    private ResumeDao resumeDao = ResumeDao.getInstance();
 
     @FXML private CompaniesTableController companiesTableController;
     @FXML private VacanciesTableController vacanciesTableController;
+
+    @FXML private ResumesTreeController resumesTreeController;
+
     @FXML private CompanyViewController companyViewController;
     @FXML private CompanyEditController companyEditController;
     @FXML private VacancyViewController vacancyViewController;
     @FXML private VacancyEditController vacancyEditController;
+    @FXML private ResumeViewController resumeViewController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         companiesTableController.getTableCompanies().getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             companiesTableController.enableTargetItemButtons();
             companyViewController.setData(newSelection);
-            companyViewController.view();
+            companyViewController.show();
             vacanciesTableController.enableNoTargetButtons();
             if (newSelection != null) actionButtonUpdateVacanciesTable(null);
         });
@@ -50,7 +60,7 @@ public class VacanciesPaneFxmlController implements Initializable {
         vacanciesTableController.getTableVacancies().getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             vacanciesTableController.enableTargetItemButtons();
             vacancyViewController.setData(newSelection);
-            vacancyViewController.view();
+            vacancyViewController.show();
         });
 
         vacanciesTableController.getAddVacancyButton().setOnAction(event -> actionButtonCreateVacancy(event));
@@ -59,11 +69,27 @@ public class VacanciesPaneFxmlController implements Initializable {
         vacanciesTableController.getDeleteVacancyButton().setOnAction(event -> actionButtonDeleteVacancy(event));
 
         vacancyEditController.getSaveVacancyButton().setOnAction(event -> actionButtonSaveVacancy(event));
+
+        resumesTreeController.getTreeView().getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+            TreeStep treeStep = newValue.getValue();
+            if (treeStep.getType() == StepType.VALUE) {
+                Long id = treeStep.getCode();
+                if (id != null) {
+                    Resume resume = resumeDao.find(id);
+                    resumeViewController.setData(resume);
+                    resumeViewController.show();
+                } else {
+                    logger.debug("treeStep.getCode() is null..., skip");
+                }
+            } else {
+                resumeViewController.hide();
+            }
+        });
     }
 
     public void actionButtonCreateCompany(ActionEvent event) {
         companyEditController.clear();
-        companyEditController.view();
+        companyEditController.show();
     }
 
     public void actionButtonUpdateCompaniesTable(ActionEvent event) {
@@ -81,7 +107,7 @@ public class VacanciesPaneFxmlController implements Initializable {
         Company company = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem();
         if (company != null) {
             companyEditController.setData(company);
-            companyEditController.view();
+            companyEditController.show();
         } else actionButtonSaveCompany(event);
     }
 
@@ -106,7 +132,7 @@ public class VacanciesPaneFxmlController implements Initializable {
 
     public void actionButtonCreateVacancy(ActionEvent event) {
         vacancyEditController.clear();
-        vacancyEditController.view();
+        vacancyEditController.show();
     }
 
     public void actionButtonUpdateVacanciesTable(ActionEvent event) {
@@ -125,7 +151,7 @@ public class VacanciesPaneFxmlController implements Initializable {
         Vacancy vacancy = vacanciesTableController.getTableVacancies().getSelectionModel().getSelectedItem();
         if (vacancy != null) {
             vacancyEditController.setData(vacancy);
-            vacancyEditController.view();
+            vacancyEditController.show();
         } else actionButtonSaveVacancy(event);
     }
 

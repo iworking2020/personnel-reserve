@@ -64,7 +64,7 @@ public class CompanyEditController implements Initializable {
 
     }
 
-    public void view() {
+    public void show() {
         companyEdit.setVisible(true);
     }
 

@@ -12,12 +12,15 @@ import ru.iworking.service.api.utils.LocaleUtil;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static ru.iworking.personnel.reserve.model.TreeStep.Type.CATEGORY;
-import static ru.iworking.personnel.reserve.model.TreeStep.Type.VALUE;
+import static ru.iworking.personnel.reserve.model.TreeStep.StepType.CATEGORY;
+import static ru.iworking.personnel.reserve.model.TreeStep.StepType.VALUE;
 
 public class ResumesTreeController implements Initializable {
 
     @FXML private TreeView<TreeStep> resumesTreeView;
+    public TreeView<TreeStep> getTreeView() {
+        return resumesTreeView;
+    }
 
     private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
     private ResumeDao resumeDao = ResumeDao.getInstance();

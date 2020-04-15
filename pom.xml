@@ -123,7 +123,7 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
             <version>${itext7-core.version}</version>
-            <type>pom</type>
+            <stepType>pom</stepType>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

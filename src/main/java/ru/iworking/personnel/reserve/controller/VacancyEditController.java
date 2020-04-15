@@ -166,7 +166,7 @@ public class VacancyEditController implements Initializable {
         clear();
     }
 
-    public void view() {
+    public void show() {
         vacancyEdit.setVisible(true);
     }
 
