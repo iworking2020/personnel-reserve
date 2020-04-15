@@ -6,19 +6,19 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.dao.ResumeStateDao;
-import ru.iworking.personnel.reserve.model.TreeStep;
+import ru.iworking.personnel.reserve.model.TreeViewStep;
 import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static ru.iworking.personnel.reserve.model.TreeStep.StepType.CATEGORY;
-import static ru.iworking.personnel.reserve.model.TreeStep.StepType.VALUE;
+import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.CATEGORY;
+import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.VALUE;
 
 public class ResumesTreeController implements Initializable {
 
-    @FXML private TreeView<TreeStep> resumesTreeView;
-    public TreeView<TreeStep> getTreeView() {
+    @FXML private TreeView<TreeViewStep> resumesTreeView;
+    public TreeView<TreeViewStep> getTreeView() {
         return resumesTreeView;
     }
 
@@ -28,16 +28,16 @@ public class ResumesTreeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        TreeItem<TreeStep> rootTreeNode = new TreeItem<>(new TreeStep(null, "Этапы обработки", CATEGORY));
+        TreeItem<TreeViewStep> rootTreeNode = new TreeItem<>(new TreeViewStep(null, "Этапы обработки", CATEGORY));
         resumeStateDao.findAllFromCash().forEach(resumeState -> {
 
-                TreeStep stepCategory = new TreeStep(resumeState.getId(), resumeState.getNameToView(LocaleUtil.getDefault()), CATEGORY);
-                TreeItem<TreeStep> itemCategory = new TreeItem<>(stepCategory);
+                TreeViewStep stepCategory = new TreeViewStep(resumeState.getId(), resumeState.getNameToView(LocaleUtil.getDefault()), CATEGORY);
+                TreeItem<TreeViewStep> itemCategory = new TreeItem<>(stepCategory);
 
-                resumeDao.findAllByResumeStateId(resumeState.getId()).forEach(resume -> {
+                resumeDao.findAllByResumeStateIdFromCash(resumeState.getId()).forEach(resume -> {
 
-                    TreeStep stepResume = new TreeStep(resume.getId(), resume.getProfile().getFullName(), VALUE);
-                    TreeItem<TreeStep> itemValue = new TreeItem<>(stepResume);
+                    TreeViewStep stepResume = new TreeViewStep(resume.getId(), resume.getProfile().getFullName(), VALUE);
+                    TreeItem<TreeViewStep> itemValue = new TreeItem<>(stepResume);
 
                     itemCategory.getChildren().add(itemValue);
                 });

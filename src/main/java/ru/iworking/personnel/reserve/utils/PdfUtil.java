@@ -91,7 +91,7 @@ public class PdfUtil {
         rightBlockTable.addCell(createTextCell(email));
 
         Table parentTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
-        Photo photo = photoDao.find(resume.getPhotoId());
+        Photo photo = photoDao.findFromCash(resume.getPhotoId());
         parentTable.addCell(createImgCell(photo.getImage()));
         parentTable.addCell(createTableCell(rightBlockTable));
 

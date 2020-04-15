@@ -1,6 +1,6 @@
 package ru.iworking.personnel.reserve.model;
 
-public class TreeStep {
+public class TreeViewStep {
 
     public enum StepType { CATEGORY, VALUE }
 
@@ -8,9 +8,9 @@ public class TreeStep {
     private String name;
     private StepType stepType;
 
-    public TreeStep() { }
+    public TreeViewStep() { }
 
-    public TreeStep(Long code, String name, StepType stepType) {
+    public TreeViewStep(Long code, String name, StepType stepType) {
         this.code = code;
         this.name = name;
         this.stepType = stepType;

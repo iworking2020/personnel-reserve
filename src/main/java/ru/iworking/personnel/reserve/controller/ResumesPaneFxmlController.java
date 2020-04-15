@@ -176,15 +176,15 @@ public class ResumesPaneFxmlController implements Initializable {
             profFieldVBox.getChildren().add(button);
         });
 
-        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll());
+        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAllFromCash());
         table.setItems(resumeObservableList);
     }
 
     public void selectCategory(ActionEvent event, ProfField profField) {
         this.currentProfField = profField;
         List<Resume> list = profField != null ?
-                resumeDao.findAllByProfField(profField) :
-                resumeDao.findAll();
+                resumeDao.findAllByProfFieldFromCash(profField) :
+                resumeDao.findAllFromCash();
         this.resumeObservableList = this.createResumeObservableList(list);
         table.setItems(resumeObservableList);
         Long profFieldId = profField != null ? profField.getId() : 0;
@@ -290,7 +290,7 @@ public class ResumesPaneFxmlController implements Initializable {
 
         if (currentProfField != null) params.put(ResumeRequestParam.PROF_FIELD_ID, currentProfField.getId());
 
-        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll(params));
+        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAllFromCash(params));
         table.setItems(resumeObservableList);
     }
 
@@ -331,6 +331,7 @@ public class ResumesPaneFxmlController implements Initializable {
 
         if (resume != null) {
             resumeObservableList.remove(resume);
+            resumeDao.deleteAndRemoveFromCash(resume);
             table.refresh();
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalMessage.fxml"));
@@ -350,6 +351,8 @@ public class ResumesPaneFxmlController implements Initializable {
         currencyDao.clearCash();
         educationDao.clearCash();
         workTypeDao.clearCash();
+        resumeDao.clearCash();
+        PhotoDao.getInstance().clearCash();
         selectCategory(event, null);
         actionButtonClear(event);
     }

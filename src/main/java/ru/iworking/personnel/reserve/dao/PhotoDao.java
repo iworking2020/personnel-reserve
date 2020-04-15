@@ -1,15 +1,54 @@
 package ru.iworking.personnel.reserve.dao;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.utils.HibernateUtil;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class PhotoDao implements Dao<Photo, Long> {
+public class PhotoDao extends CashedDao<Photo, Long> {
 
     private static volatile PhotoDao instance;
+
+    @Override
+    public LoadingCache<Long, Photo> initLoadingCache() {
+        return CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(60, TimeUnit.MINUTES)
+                .build(new CacheLoader<Long, Photo>() {
+                    @Override
+                    public Photo load(Long key) throws Exception {
+                        return PhotoDao.getInstance().find(key);
+                    }
+                });
+    }
+
+    @Override
+    public void initCashData(LoadingCache<Long, Photo> cash) {
+        //cash.putAll(findAll().stream().collect(Collectors.toMap(Photo::getId, Function.identity())));
+    }
+
+    public Photo createAndUpdateInCash(Photo photo) {
+        Photo photo1 = create(photo);
+        updateInCash(photo1.getId());
+        return photo1;
+    }
+
+    public Photo updateAndUpdateInCash(Photo photo) {
+        Photo photo1 = update(photo);
+        updateInCash(photo1.getId());
+        return photo1;
+    }
+
+    public void deleteAndRemoveFromCash(Photo photo) {
+        delete(photo);
+        removeFromCash(photo.getId());
+    }
 
     @Override
     public List<Photo> findAll() {

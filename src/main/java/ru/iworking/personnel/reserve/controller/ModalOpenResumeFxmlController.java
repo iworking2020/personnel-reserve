@@ -111,7 +111,7 @@ public class ModalOpenResumeFxmlController implements Initializable {
         addressLabel.setText(resume.getAddress().getHouse());
 
         if (resume.getPhotoId() != null) {
-            Photo photo = photoDao.find(resume.getPhotoId());
+            Photo photo = photoDao.findFromCash(resume.getPhotoId());
             InputStream targetStream = new ByteArrayInputStream(photo.getImage());
             Image img = new Image(targetStream);
             photoImageView.setImage(img);

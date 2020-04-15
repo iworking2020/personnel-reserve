@@ -28,7 +28,7 @@
     -fx-background-color: transparent;
 }
 
-.table-view .table-cell{
+.table-view .table-cell {
     -fx-text-fill: white;
     -fx-alignment: center;
     -fx-effect: dropshadow( gaussian , black , 0,0,0,1 );

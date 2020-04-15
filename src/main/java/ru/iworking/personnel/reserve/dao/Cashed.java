@@ -48,6 +48,14 @@ public abstract class Cashed<O, I> {
         return cash.asMap().values().stream().collect(Collectors.toList());
     }
 
+    public void updateInCash(I id) {
+        cash.refresh(id);
+    }
+
+    public void removeFromCash(I id) {
+        cash.invalidate(id);
+    }
+
     public void clearCash() {
         cash.invalidateAll();
         initCashData(cash);

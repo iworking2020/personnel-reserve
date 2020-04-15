@@ -119,20 +119,20 @@ public class ModalEditResumeFxmlController implements Initializable {
         numberPhoneTextField.setText(resume.getNumberPhone().getNumber());
         emailTextField.setText(resume.getEmail());
         professionTextField.setText(resume.getProfession());
-        profFieldComboBox.setValue(profFieldDao.findFromCash(resume.getProfFieldId()));
+        if (resume.getProfFieldId() != null) profFieldComboBox.setValue(profFieldDao.findFromCash(resume.getProfFieldId()));
         if (resume.getWage() != null) {
             wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
             currencyComboBox.setValue(currencyDao.findFromCash(resume.getWage().getCurrencyId()));
         }
-        workTypeComboBox.setValue(workTypeDao.findFromCash(resume.getWorkTypeId()));
-        educationComboBox.setValue(educationDao.findFromCash(resume.getEducationId()));
+        if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeDao.findFromCash(resume.getWorkTypeId()));
+        if (resume.getEducationId() != null) educationComboBox.setValue(educationDao.findFromCash(resume.getEducationId()));
         experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
         experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
         
         addressTextArea.setText(resume.getAddress().getHouse());
 
         if (resume.getPhotoId() != null) {
-            Photo photo = photoDao.find(resume.getPhotoId());
+            Photo photo = photoDao.findFromCash(resume.getPhotoId());
             InputStream targetStream = new ByteArrayInputStream(photo.getImage());
             Image img = new Image(targetStream);
             photoImageView.setImage(img);
@@ -202,7 +202,7 @@ public class ModalEditResumeFxmlController implements Initializable {
         newResume.setEmail(emailTextField.getText());
         newResume.setProfession(professionTextField.getText());
 
-        newResume.setProfFieldId(profFieldComboBox.getValue().getId());
+        if (profFieldComboBox.getValue() != null) newResume.setProfFieldId(profFieldComboBox.getValue().getId());
 
         if (!wageTextField.getText().isEmpty()) {
             try {
@@ -212,8 +212,8 @@ public class ModalEditResumeFxmlController implements Initializable {
                 logger.error(e);
             }
         }
-        newResume.setWorkTypeId(workTypeComboBox.getValue().getId());
-        newResume.setEducationId(educationComboBox.getValue().getId());
+        if (workTypeComboBox.getValue() != null) newResume.setWorkTypeId(workTypeComboBox.getValue().getId());
+        if (educationComboBox.getValue() != null) newResume.setEducationId(educationComboBox.getValue().getId());
 
         newResume.getExperience().setDateStart(experienceDateStartDatePicker.getValue());
         newResume.getExperience().setDateEnd(experienceDateEndDatePicker.getValue());
@@ -233,10 +233,14 @@ public class ModalEditResumeFxmlController implements Initializable {
 
         if (isValidFields(newResume)) {
             if (photo != null) {
-                Long photoId = photoDao.create(photo).getId();
-                newResume.setPhotoId(photoId);
+                try {
+                    Long photoId = photoDao.createAndUpdateInCash(photo).getId();
+                    newResume.setPhotoId(photoId);
+                } catch (OutOfMemoryError ex) {
+                    logger.error(ex);
+                }
             }
-            resumeDao.update(newResume);
+            resumeDao.updateAndUpdateInCash(newResume);
             this.closeStage(event);
         }
 

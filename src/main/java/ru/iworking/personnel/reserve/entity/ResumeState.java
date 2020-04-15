@@ -27,6 +27,7 @@ public class ResumeState implements NameToSystem, NameToView, State {
     @MapKeyColumn(name="names_to_view_key")
     private Map<Locale, String> namesToView = new HashMap<>();
 
+    @Override
     public Long getId() {
         return id;
     }

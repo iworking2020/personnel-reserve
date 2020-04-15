@@ -211,10 +211,10 @@ public class ModalAddResumeFxmlController implements Initializable {
 
         if (isValidFields(resume)) {
             if (photo != null) {
-                Long photoId = photoDao.create(photo).getId();
+                Long photoId = photoDao.createAndUpdateInCash(photo).getId();
                 resume.setPhotoId(photoId);
             }
-            resumeDao.create(resume);
+            resumeDao.createAndUpdateInCash(resume);
             this.closeStage(event);
         }
     }

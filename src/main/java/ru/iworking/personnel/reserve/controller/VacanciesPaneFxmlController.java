@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.CompanyDao;
@@ -13,12 +14,12 @@ import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.entity.Vacancy;
-import ru.iworking.personnel.reserve.model.TreeStep;
+import ru.iworking.personnel.reserve.model.TreeViewStep;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static ru.iworking.personnel.reserve.model.TreeStep.StepType;
+import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType;
 
 public class VacanciesPaneFxmlController implements Initializable {
 
@@ -71,13 +72,23 @@ public class VacanciesPaneFxmlController implements Initializable {
         vacancyEditController.getSaveVacancyButton().setOnAction(event -> actionButtonSaveVacancy(event));
 
         resumesTreeController.getTreeView().getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
-            TreeStep treeStep = newValue.getValue();
+            TreeViewStep treeStep = newValue.getValue();
             if (treeStep.getType() == StepType.VALUE) {
                 Long id = treeStep.getCode();
                 if (id != null) {
-                    Resume resume = resumeDao.find(id);
-                    resumeViewController.setData(resume);
-                    resumeViewController.show();
+                    try {
+                        Resume resume = resumeDao.findFromCash(id);
+                        if (resume == null) {
+                            throw new NotFoundException("resume not found");
+                        } else {
+                            resumeViewController.setData(resume);
+                            resumeViewController.show();
+                        }
+                    } catch (Exception ex) {
+                        logger.error(ex);
+                        newValue.getParent().getChildren().remove(newValue);
+                        logger.debug("resume is null..., remove from treeView");
+                    }
                 } else {
                     logger.debug("treeStep.getCode() is null..., skip");
                 }
