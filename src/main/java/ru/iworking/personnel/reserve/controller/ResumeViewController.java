@@ -12,6 +12,7 @@ import ru.iworking.auth.api.model.IProfile;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.model.AppFunctionalInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -41,8 +42,18 @@ public class ResumeViewController implements Initializable {
         resumePaneView.setVisible(true);
     }
 
+    public void show(AppFunctionalInterface function) {
+        function.execute();
+        this.show();
+    }
+
     public void hide() {
         resumePaneView.setVisible(false);
+    }
+
+    public void hide(AppFunctionalInterface function) {
+        function.execute();
+        this.hide();
     }
 
     public void setData(Resume resume) {

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
-<VBox fx:id="vacancyView" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacancyViewController">
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="vacancyView" spacing="8.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacancyViewController">
     <children>
         <Label fx:id="professionLabel" text="Профессия" />
         <Label fx:id="profFieldLabel" text="Проф. область" />

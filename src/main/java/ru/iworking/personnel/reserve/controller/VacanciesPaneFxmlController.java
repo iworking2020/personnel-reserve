@@ -4,6 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +31,11 @@ public class VacanciesPaneFxmlController implements Initializable {
     private CompanyDao companyDao = CompanyDao.getInstance();
     private VacancyDao vacancyDao = VacancyDao.getInstance();
     private ResumeDao resumeDao = ResumeDao.getInstance();
+
+    @FXML private Pane bottomPane;
+
+    @FXML private Pane wrapperResume;
+    @FXML private Pane wrapperClient;
 
     @FXML private CompaniesTableController companiesTableController;
     @FXML private VacanciesTableController vacanciesTableController;
@@ -62,6 +69,7 @@ public class VacanciesPaneFxmlController implements Initializable {
             vacanciesTableController.enableTargetItemButtons();
             vacancyViewController.setData(newSelection);
             vacancyViewController.show();
+            //wrapperVacancy.setMaxHeight(500);
         });
 
         vacanciesTableController.getAddVacancyButton().setOnAction(event -> actionButtonCreateVacancy(event));
@@ -82,7 +90,7 @@ public class VacanciesPaneFxmlController implements Initializable {
                             throw new NotFoundException("resume not found");
                         } else {
                             resumeViewController.setData(resume);
-                            resumeViewController.show();
+                            resumeViewController.show(() -> wrapperResume.toFront());
                         }
                     } catch (Exception ex) {
                         logger.error(ex);
@@ -93,7 +101,7 @@ public class VacanciesPaneFxmlController implements Initializable {
                     logger.debug("treeStep.getCode() is null..., skip");
                 }
             } else {
-                resumeViewController.hide();
+                resumeViewController.hide(() -> wrapperResume.toBack());
             }
         });
     }
