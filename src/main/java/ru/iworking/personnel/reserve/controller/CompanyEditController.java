@@ -66,10 +66,12 @@ public class CompanyEditController implements Initializable {
 
     public void show() {
         companyEdit.setVisible(true);
+        companyEdit.setManaged(true);
     }
 
     public void hide() {
         companyEdit.setVisible(false);
+        companyEdit.setManaged(false);
     }
 
     public void setData(ICompany company) {

@@ -43,10 +43,12 @@ public class VacancyViewController implements Initializable {
 
     public void show() {
         vacancyView.setVisible(true);
+        vacancyView.setManaged(true);
     }
 
     public void hide() {
         vacancyView.setVisible(false);
+        vacancyView.setManaged(false);
     }
 
     public void setData(IVacancy vacancy) {

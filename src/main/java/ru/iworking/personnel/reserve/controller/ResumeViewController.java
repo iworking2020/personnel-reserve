@@ -2,6 +2,7 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +32,11 @@ public class ResumeViewController implements Initializable {
 
     @FXML private ImageView photoImageView;
 
+    @FXML private Button buttonCancel;
+    public Button getButtonCancel() {
+        return buttonCancel;
+    }
+
     private PhotoDao photoDao = PhotoDao.getInstance();
 
     @Override
@@ -40,6 +46,7 @@ public class ResumeViewController implements Initializable {
 
     public void show() {
         resumePaneView.setVisible(true);
+        resumePaneView.setManaged(true);
     }
 
     public void show(AppFunctionalInterface function) {
@@ -49,6 +56,7 @@ public class ResumeViewController implements Initializable {
 
     public void hide() {
         resumePaneView.setVisible(false);
+        resumePaneView.setManaged(false);
     }
 
     public void hide(AppFunctionalInterface function) {

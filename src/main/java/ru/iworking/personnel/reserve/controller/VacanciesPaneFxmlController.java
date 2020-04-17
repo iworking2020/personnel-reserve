@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,7 +89,10 @@ public class VacanciesPaneFxmlController implements Initializable {
                             throw new NotFoundException("resume not found");
                         } else {
                             resumeViewController.setData(resume);
-                            resumeViewController.show(() -> wrapperResume.toFront());
+                            resumeViewController.show(() -> {
+                                wrapperClient.setVisible(false);
+                                wrapperClient.setManaged(false);
+                            });
                         }
                     } catch (Exception ex) {
                         logger.error(ex);
@@ -101,9 +103,17 @@ public class VacanciesPaneFxmlController implements Initializable {
                     logger.debug("treeStep.getCode() is null..., skip");
                 }
             } else {
-                resumeViewController.hide(() -> wrapperResume.toBack());
+                resumeViewController.hide(() -> {
+                    wrapperClient.setVisible(true);
+                    wrapperClient.setManaged(true);
+                });
             }
         });
+
+        resumeViewController.getButtonCancel().setOnAction(event -> resumeViewController.hide(() -> {
+            wrapperClient.setVisible(true);
+            wrapperClient.setManaged(true);
+        }));
     }
 
     public void actionButtonCreateCompany(ActionEvent event) {

@@ -36,10 +36,12 @@ public class CompanyViewController implements Initializable {
 
     public void show() {
         companyView.setVisible(true);
+        companyView.setManaged(true);
     }
 
     public void hide() {
         companyView.setVisible(false);
+        companyView.setManaged(false);
     }
 
     public void setData(ICompany company) {

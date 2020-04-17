@@ -168,10 +168,12 @@ public class VacancyEditController implements Initializable {
 
     public void show() {
         vacancyEdit.setVisible(true);
+        vacancyEdit.setManaged(true);
     }
 
     public void hide() {
         vacancyEdit.setVisible(false);
+        vacancyEdit.setManaged(false);
     }
 
     public void clear() {
