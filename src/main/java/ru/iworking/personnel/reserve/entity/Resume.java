@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.personnel.reserve.model.State;
 import ru.iworking.personnel.reserve.model.StateProvider;
 import ru.iworking.resume.api.model.IResume;
 import ru.iworking.service.api.model.IDescription;
@@ -187,7 +186,7 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.state = state;
     }
     @Override
-    public State getState() {
+    public ResumeState getState() {
         return state;
     }
 

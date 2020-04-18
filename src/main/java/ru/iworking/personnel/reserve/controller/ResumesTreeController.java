@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
@@ -27,30 +28,35 @@ public class ResumesTreeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        TreeItem<TreeViewStep> rootTreeNode = new TreeItem<>(new TreeViewStep(null, "Этапы обработки", CATEGORY));
-        resumeStateDao.findAllFromCash().forEach(resumeState -> {
-
-                TreeViewStep stepCategory = new TreeViewStep(resumeState.getId(), resumeState.getNameToView(LocaleUtil.getDefault()), CATEGORY);
-                TreeItem<TreeViewStep> itemCategory = new TreeItem<>(stepCategory);
-
-                resumeDao.findAllByResumeStateIdFromCash(resumeState.getId()).forEach(resume -> {
-
-                    TreeViewStep stepResume = new TreeViewStep(resume.getId(), resume.getProfile().getFullName(), VALUE);
-                    TreeItem<TreeViewStep> itemValue = new TreeItem<>(stepResume);
-
-                    itemCategory.getChildren().add(itemValue);
-                });
-
-                rootTreeNode.getChildren().add(itemCategory);
-            }
-        );
-        resumesTreeView.setRoot(rootTreeNode);
-        resumesTreeView.setShowRoot(false);
-
+        initData();
         /*Object object = resumesTreeView.getSelectionModel().getSelectedItem();*/
-
     }
 
+    public void initData() {
+        TreeItem<TreeViewStep> rootTreeNode = new TreeItem<>(new TreeViewStep(null, "Этапы обработки", CATEGORY));
+        resumeStateDao.findAllFromCash().forEach(resumeState -> {
+            TreeViewStep stepCategory = new TreeViewStep(resumeState.getId(), resumeState.getNameToView(LocaleUtil.getDefault()), CATEGORY);
+            TreeItem<TreeViewStep> itemCategory = new TreeItem<>(stepCategory);
+            resumeDao.findAllByResumeStateIdFromCash(resumeState.getId()).forEach(resume -> {
+                TreeViewStep stepResume = new TreeViewStep(resume.getId(), resume.getProfile().getFullName(), VALUE);
+                TreeItem<TreeViewStep> itemValue = new TreeItem<>(stepResume);
+                itemCategory.getChildren().add(itemValue);
+            });
+            rootTreeNode.getChildren().add(itemCategory);
+        });
+        resumesTreeView.setRoot(rootTreeNode);
+        resumesTreeView.setShowRoot(false);
+    }
+
+    @FXML
+    public void actionTreeUpdate(ActionEvent event) {
+        this.reload();
+    }
+
+    public void reload() {
+        resumeStateDao.clearCash();
+        resumeDao.clearCash();
+        initData();
+    }
 
 }

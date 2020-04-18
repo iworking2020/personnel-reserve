@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import ru.iworking.personnel.reserve.controller.MainMenuFxmlController;
+import ru.iworking.personnel.reserve.controller.MainMenuController;
 
 public class MainApp extends Application {
 
@@ -17,7 +17,7 @@ public class MainApp extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
         Parent parent = fxmlLoader.load();
 
-        MainMenuFxmlController mainMenuController = fxmlLoader.getController();
+        MainMenuController mainMenuController = fxmlLoader.getController();
         mainMenuController.show(parent);
 
     }

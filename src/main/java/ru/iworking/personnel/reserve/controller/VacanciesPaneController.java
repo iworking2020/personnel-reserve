@@ -22,9 +22,9 @@ import java.util.ResourceBundle;
 
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType;
 
-public class VacanciesPaneFxmlController implements Initializable {
+public class VacanciesPaneController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(VacanciesPaneFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(VacanciesPaneController.class);
 
     private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
     private CompanyDao companyDao = CompanyDao.getInstance();
@@ -79,34 +79,36 @@ public class VacanciesPaneFxmlController implements Initializable {
         vacancyEditController.getSaveVacancyButton().setOnAction(event -> actionButtonSaveVacancy(event));
 
         resumesTreeController.getTreeView().getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
-            TreeViewStep treeStep = newValue.getValue();
-            if (treeStep.getType() == StepType.VALUE) {
-                Long id = treeStep.getCode();
-                if (id != null) {
-                    try {
-                        Resume resume = resumeDao.findFromCash(id);
-                        if (resume == null) {
-                            throw new NotFoundException("resume not found");
-                        } else {
-                            resumeViewController.setData(resume);
-                            resumeViewController.show(() -> {
-                                wrapperClient.setVisible(false);
-                                wrapperClient.setManaged(false);
-                            });
+            if (newValue != null) {
+                TreeViewStep treeStep = newValue.getValue();
+                if (treeStep.getType() == StepType.VALUE) {
+                    Long id = treeStep.getCode();
+                    if (id != null) {
+                        try {
+                            Resume resume = resumeDao.findFromCash(id);
+                            if (resume == null) {
+                                throw new NotFoundException("resume not found");
+                            } else {
+                                resumeViewController.setData(resume);
+                                resumeViewController.show(() -> {
+                                    wrapperClient.setVisible(false);
+                                    wrapperClient.setManaged(false);
+                                });
+                            }
+                        } catch (Exception ex) {
+                            logger.error(ex);
+                            newValue.getParent().getChildren().remove(newValue);
+                            logger.debug("resume is null..., remove from treeView");
                         }
-                    } catch (Exception ex) {
-                        logger.error(ex);
-                        newValue.getParent().getChildren().remove(newValue);
-                        logger.debug("resume is null..., remove from treeView");
+                    } else {
+                        logger.debug("treeStep.getCode() is null..., skip");
                     }
                 } else {
-                    logger.debug("treeStep.getCode() is null..., skip");
+                    resumeViewController.hide(() -> {
+                        wrapperClient.setVisible(true);
+                        wrapperClient.setManaged(true);
+                    });
                 }
-            } else {
-                resumeViewController.hide(() -> {
-                    wrapperClient.setVisible(true);
-                    wrapperClient.setManaged(true);
-                });
             }
         });
 

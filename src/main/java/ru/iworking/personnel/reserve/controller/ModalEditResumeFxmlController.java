@@ -52,6 +52,7 @@ public class ModalEditResumeFxmlController implements Initializable {
     @FXML private TextArea addressTextArea;
     @FXML private DatePicker experienceDateStartDatePicker;
     @FXML private DatePicker experienceDateEndDatePicker;
+    @FXML private ComboBox<ResumeState> resumeStateComboBox;
 
     @FXML private ImageView photoImageView;
 
@@ -65,11 +66,13 @@ public class ModalEditResumeFxmlController implements Initializable {
     private EducationDao educationDao = EducationDao.getInstance();
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
     
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
+    private ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
     
     private Resume resume;
 
@@ -94,6 +97,10 @@ public class ModalEditResumeFxmlController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         wageTextField.setTextFormatter(bigDecimalFormatter);
         numberPhoneTextField.setTextFormatter(numberPhoneFormatter);
+
+        resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
+        resumeStateComboBox.setCellFactory(resumeStateCellFactory);
+        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateDao.findAllFromCash()));
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
@@ -125,6 +132,7 @@ public class ModalEditResumeFxmlController implements Initializable {
             currencyComboBox.setValue(currencyDao.findFromCash(resume.getWage().getCurrencyId()));
         }
         if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeDao.findFromCash(resume.getWorkTypeId()));
+        if (resume.getState() != null) resumeStateComboBox.setValue(resume.getState());
         if (resume.getEducationId() != null) educationComboBox.setValue(educationDao.findFromCash(resume.getEducationId()));
         experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
         experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
@@ -213,6 +221,7 @@ public class ModalEditResumeFxmlController implements Initializable {
             }
         }
         if (workTypeComboBox.getValue() != null) newResume.setWorkTypeId(workTypeComboBox.getValue().getId());
+        if (resumeStateComboBox.getValue() != null) newResume.setState(resumeStateComboBox.getValue());
         if (educationComboBox.getValue() != null) newResume.setEducationId(educationComboBox.getValue().getId());
 
         newResume.getExperience().setDateStart(experienceDateStartDatePicker.getValue());

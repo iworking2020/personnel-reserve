@@ -23,12 +23,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuFxmlController implements Initializable {
+public class MainMenuController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(MainMenuFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(MainMenuController.class);
 
     @FXML private ResumesPaneFxmlController resumesPaneController;
-    @FXML private VacanciesPaneFxmlController vacanciesPaneController;
+    @FXML private VacanciesPaneController vacanciesPaneController;
 
     @FXML private CheckMenuItem winSearchCheckItem;
 
