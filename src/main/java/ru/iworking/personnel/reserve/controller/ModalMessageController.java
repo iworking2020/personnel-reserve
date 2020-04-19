@@ -18,9 +18,9 @@ import ru.iworking.personnel.reserve.utils.AppUtil;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ModalMessageFxmlController implements Initializable {
+public class ModalMessageController implements Initializable {
 
-    static final Logger logger = LogManager.getLogger(ModalMessageFxmlController.class);
+    static final Logger logger = LogManager.getLogger(ModalMessageController.class);
 
     private String message = "";
     private String title = "";

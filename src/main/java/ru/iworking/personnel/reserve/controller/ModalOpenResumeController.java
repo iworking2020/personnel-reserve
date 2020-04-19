@@ -31,9 +31,9 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
-public class ModalOpenResumeFxmlController implements Initializable {
+public class ModalOpenResumeController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(ModalOpenResumeFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(ModalOpenResumeController.class);
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 

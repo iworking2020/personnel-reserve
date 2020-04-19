@@ -25,18 +25,18 @@ import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
-public class ModalEditResumeFxmlController implements Initializable {
+public class ModalAddResumeController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(ModalEditResumeFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(ModalAddResumeController.class);
 
     private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
-    private DecimalFormat decimalFormat = new DecimalFormat("0.00");
     private NumberPhoneFormatter numberPhoneFormatter = new NumberPhoneFormatter();
 
     @FXML private TextField lastNameTextField;
@@ -61,30 +61,19 @@ public class ModalEditResumeFxmlController implements Initializable {
 
     private ProfField currentProfField;
 
-    private PhotoDao photoDao = PhotoDao.getInstance();
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
     private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
     private EducationDao educationDao = EducationDao.getInstance();
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private PhotoDao photoDao = PhotoDao.getInstance();
     private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
-    
+
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
     private ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
-    
-    private Resume resume;
-
-    public void setResume(Resume resume) {
-        this.resume = resume;
-        this.setValues(this.resume);
-    }
-
-    public Resume getResume() {
-        return resume;
-    }
 
     public ProfField getCurrentProfField() {
         return currentProfField;
@@ -96,8 +85,8 @@ public class ModalEditResumeFxmlController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        wageTextField.setTextFormatter(bigDecimalFormatter);
         numberPhoneTextField.setTextFormatter(numberPhoneFormatter);
+        wageTextField.setTextFormatter(bigDecimalFormatter);
 
         resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
         resumeStateComboBox.setCellFactory(resumeStateCellFactory);
@@ -120,38 +109,14 @@ public class ModalEditResumeFxmlController implements Initializable {
         currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
     }
 
-    public void setValues(Resume resume) {
-        lastNameTextField.setText(resume.getProfile().getLastName());
-        firstNameTextField.setText(resume.getProfile().getFirstName());
-        middleNameTextField.setText(resume.getProfile().getMiddleName());
-        numberPhoneTextField.setText(resume.getNumberPhone().getNumber());
-        emailTextField.setText(resume.getEmail());
-        professionTextField.setText(resume.getProfession());
-        if (resume.getProfFieldId() != null) profFieldComboBox.setValue(profFieldDao.findFromCash(resume.getProfFieldId()));
-        if (resume.getWage() != null) {
-            wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
-            currencyComboBox.setValue(currencyDao.findFromCash(resume.getWage().getCurrencyId()));
-        }
-        if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeDao.findFromCash(resume.getWorkTypeId()));
-        if (resume.getState() != null) resumeStateComboBox.setValue(resume.getState());
-        if (resume.getEducationId() != null) educationComboBox.setValue(educationDao.findFromCash(resume.getEducationId()));
-        experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
-        experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
-        
-        addressTextArea.setText(resume.getAddress().getHouse());
-
-        if (resume.getPhotoId() != null) {
-            Photo photo = photoDao.findFromCash(resume.getPhotoId());
-            InputStream targetStream = new ByteArrayInputStream(photo.getImage());
-            Image img = new Image(targetStream);
-            photoImageView.setImage(img);
-        } else {
-            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
-            photoImageView.setImage(defaultImage);
-        }
+    private void initStartValues() {
+        if (currentProfField != null) profFieldComboBox.getSelectionModel().select(currentProfField);
+        photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg")));
     }
 
     public void showAndWait(Parent parent) {
+        this.initStartValues();
+
         Stage primaryStage = MainApp.PARENT_STAGE;
 
         Scene scene = new Scene(parent);
@@ -164,7 +129,7 @@ public class ModalEditResumeFxmlController implements Initializable {
         scene.getStylesheets().add("/styles/modal.css");
 
         Stage modal = new Stage();
-        modal.setTitle("Изменить");
+        modal.setTitle("Добавить");
         AppUtil.setIcon(modal);
         modal.setScene(scene);
         modal.initModality(Modality.WINDOW_MODAL);
@@ -176,9 +141,9 @@ public class ModalEditResumeFxmlController implements Initializable {
     private void actionButtonImageReplace(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("GIF", "*.gif")
+            new FileChooser.ExtensionFilter("PNG", "*.png"),
+            new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+            new FileChooser.ExtensionFilter("GIF", "*.gif")
         );
 
         File file = fileChooser.showOpenDialog(getStage(event));
@@ -194,41 +159,54 @@ public class ModalEditResumeFxmlController implements Initializable {
 
     @FXML
     private void actionButtonCancel(ActionEvent event) {
-        this.closeStage(event);
+        Stage stage = (Stage) buttonCancel.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
-    private void actionButtonEdit(ActionEvent event) throws CloneNotSupportedException {
+    private void actionButtonInsert(ActionEvent event) {
+        Resume resume = new Resume();
 
-        Resume newResume = (Resume) resume.clone();
+        Profile profile = new Profile();
+        profile.setLastName(lastNameTextField.getText());
+        profile.setFirstName(firstNameTextField.getText());
+        profile.setMiddleName(middleNameTextField.getText());
+        resume.setProfile(profile);
 
-        newResume.getProfile().setLastName(lastNameTextField.getText());
-        newResume.getProfile().setFirstName(firstNameTextField.getText());
-        newResume.getProfile().setMiddleName(middleNameTextField.getText());
+        NumberPhone numberPhone = new NumberPhone();
+        numberPhone.setNumber(numberPhoneTextField.getText());
+        resume.setNumberPhone(numberPhone);
 
-        newResume.getNumberPhone().setNumber(numberPhoneTextField.getText());
-
-        newResume.setEmail(emailTextField.getText());
-        newResume.setProfession(professionTextField.getText());
-
-        if (profFieldComboBox.getValue() != null) newResume.setProfFieldId(profFieldComboBox.getValue().getId());
-
+        resume.setEmail(emailTextField.getText());
+        resume.setProfession(professionTextField.getText());
+        ProfField profField = profFieldComboBox.getValue();
+        if (profField != null) resume.setProfFieldId(profField.getId());
         if (!wageTextField.getText().isEmpty()) {
             try {
-                newResume.getWage().setCount(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
-                newResume.getWage().setCurrencyId(currencyComboBox.getValue().getId());
+                Wage wage = new Wage();
+                wage.setCount(new BigDecimal(wageTextField.getText().replaceAll(",",".")));
+                wage.setCurrencyId(currencyComboBox.getValue().getId());
+                resume.setWage(wage);
             } catch (Exception e) {
                 logger.error(e);
             }
         }
-        if (workTypeComboBox.getValue() != null) newResume.setWorkTypeId(workTypeComboBox.getValue().getId());
-        if (resumeStateComboBox.getValue() != null) newResume.setState(resumeStateComboBox.getValue());
-        if (educationComboBox.getValue() != null) newResume.setEducationId(educationComboBox.getValue().getId());
+        WorkType workType = workTypeComboBox.getValue();
+        if (workType != null) resume.setWorkTypeId(workType.getId());
 
-        newResume.getExperience().setDateStart(experienceDateStartDatePicker.getValue());
-        newResume.getExperience().setDateEnd(experienceDateEndDatePicker.getValue());
+        Education education = educationComboBox.getValue();
+        if (education != null) resume.setEducationId(education.getId());
 
-        newResume.getAddress().setHouse(addressTextArea.getText());
+        if (resumeStateComboBox.getValue() != null) resume.setState(resumeStateComboBox.getValue());
+        
+        Experience exp = new Experience();
+        exp.setDateStart(experienceDateStartDatePicker.getValue());
+        exp.setDateEnd(experienceDateEndDatePicker.getValue());
+        resume.setExperience(exp);
+
+        Address address = new Address();
+        address.setHouse(addressTextArea.getText());
+        resume.setAddress(address);
 
         Photo photo = null;
 
@@ -236,24 +214,19 @@ public class ModalEditResumeFxmlController implements Initializable {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
 
-            photo = new Photo(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
+            photo = new Photo(ImageUtil.scaleToSize(stream.toByteArray(), null, 200));
         } catch (IOException e) {
             logger.error(e);
         }
 
-        if (isValidFields(newResume)) {
+        if (isValidFields(resume)) {
             if (photo != null) {
-                try {
-                    Long photoId = photoDao.createAndUpdateInCash(photo).getId();
-                    newResume.setPhotoId(photoId);
-                } catch (OutOfMemoryError ex) {
-                    logger.error(ex);
-                }
+                Long photoId = photoDao.createAndUpdateInCash(photo).getId();
+                resume.setPhotoId(photoId);
             }
-            resumeDao.update(newResume);
+            resumeDao.create(resume);
             this.closeStage(event);
         }
-
     }
 
     private Boolean isValidFields(Resume resume) {

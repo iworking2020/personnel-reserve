@@ -45,6 +45,7 @@
         <poi-ooxml.version>3.12</poi-ooxml.version>
         <guava.version>28.2-jre</guava.version>
         <thumbnailator.version>[0.4, 0.5)</thumbnailator.version>
+        <reflections.version>0.9.12</reflections.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
     </properties>
@@ -160,6 +161,11 @@
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
             <version>${thumbnailator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
         </dependency>
     </dependencies>
 

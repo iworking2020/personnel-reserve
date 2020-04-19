@@ -41,9 +41,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class ResumesPaneFxmlController implements Initializable {
+public class ResumesPaneController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(ResumesPaneFxmlController.class);
+    private static final Logger logger = LogManager.getLogger(ResumesPaneController.class);
 
     private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
@@ -211,7 +211,7 @@ public class ResumesPaneFxmlController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalAddResume.fxml"));
         Parent parent = fxmlLoader.load();
 
-        ModalAddResumeFxmlController dialogController = fxmlLoader.getController();
+        ModalAddResumeController dialogController = fxmlLoader.getController();
         dialogController.setCurrentProfField(currentProfField);
         dialogController.showAndWait(parent);
         selectCategory(event, currentProfField);
@@ -225,7 +225,7 @@ public class ResumesPaneFxmlController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalEditResume.fxml"));
             Parent parent = fxmlLoader.load();
 
-            ModalEditResumeFxmlController dialogController = fxmlLoader.getController();
+            ModalEditResumeController dialogController = fxmlLoader.getController();
             dialogController.setResume(resume);
             dialogController.setCurrentProfField(currentProfField);
             dialogController.showAndWait(parent);
@@ -234,7 +234,7 @@ public class ResumesPaneFxmlController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalMessage.fxml"));
             Parent parent = fxmlLoader.load();
 
-            ModalMessageFxmlController dialogController = fxmlLoader.getController();
+            ModalMessageController dialogController = fxmlLoader.getController();
             dialogController.setTitle("Ошибка");
             dialogController.setMessage("Выберите объект");
             dialogController.setNameButton("Хорошо");
@@ -250,14 +250,14 @@ public class ResumesPaneFxmlController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalOpenResume.fxml"));
             Parent parent = fxmlLoader.load();
 
-            ModalOpenResumeFxmlController dialogController = fxmlLoader.getController();
+            ModalOpenResumeController dialogController = fxmlLoader.getController();
             dialogController.setResume(resume);
             dialogController.showAndWait(parent);
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalMessage.fxml"));
             Parent parent = fxmlLoader.load();
 
-            ModalMessageFxmlController dialogController = fxmlLoader.getController();
+            ModalMessageController dialogController = fxmlLoader.getController();
             dialogController.setTitle("Ошибка");
             dialogController.setMessage("Выберите объект");
             dialogController.setNameButton("Хорошо");
@@ -337,7 +337,7 @@ public class ResumesPaneFxmlController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalMessage.fxml"));
             Parent parent = fxmlLoader.load();
 
-            ModalMessageFxmlController dialogController = fxmlLoader.getController();
+            ModalMessageController dialogController = fxmlLoader.getController();
             dialogController.setTitle("Ошибка");
             dialogController.setMessage("Выберите объект");
             dialogController.setNameButton("Хорошо");

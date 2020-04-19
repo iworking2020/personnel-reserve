@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.String?>
-<StackPane fx:id="modalPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ModalEditResumeFxmlController">
+<StackPane fx:id="modalPane" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ModalEditResumeController">
    <StackPane fx:id="backgroundPane" prefWidth="460.0">
       <children>
          <GridPane maxHeight="1.7976931348623157E308">

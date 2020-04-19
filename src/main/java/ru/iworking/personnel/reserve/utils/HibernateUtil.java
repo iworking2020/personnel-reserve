@@ -9,14 +9,17 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import ru.iworking.personnel.reserve.converter.LocalDateAttributeConverter;
 import ru.iworking.personnel.reserve.converter.LocalDateTimeAttributeConverter;
-import ru.iworking.personnel.reserve.entity.*;
 
 import javax.persistence.Query;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.util.Properties;
+import java.util.Set;
 
 public class HibernateUtil {
 
@@ -46,24 +49,7 @@ public class HibernateUtil {
                 configuration.addAttributeConverter(LocalDateAttributeConverter.class);
                 configuration.addAttributeConverter(LocalDateTimeAttributeConverter.class);
 
-                configuration.addAnnotatedClass(Address.class);
-                configuration.addAnnotatedClass(NumberPhone.class);
-                configuration.addAnnotatedClass(Gender.class);
-                configuration.addAnnotatedClass(Period.class);
-                configuration.addAnnotatedClass(Photo.class);
-                configuration.addAnnotatedClass(Wage.class);
-                configuration.addAnnotatedClass(Profile.class);
-                configuration.addAnnotatedClass(Resume.class);
-                configuration.addAnnotatedClass(ProfField.class);
-                configuration.addAnnotatedClass(WorkType.class);
-                configuration.addAnnotatedClass(Education.class);
-                configuration.addAnnotatedClass(Experience.class);
-                configuration.addAnnotatedClass(Currency.class);
-                configuration.addAnnotatedClass(Company.class);
-                configuration.addAnnotatedClass(CompanyType.class);
-                configuration.addAnnotatedClass(Vacancy.class);
-                configuration.addAnnotatedClass(DescriptionVacancy.class);
-                configuration.addAnnotatedClass(ResumeState.class);
+                loadEntityClasses(configuration, settings);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
@@ -71,7 +57,7 @@ public class HibernateUtil {
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
                 try {
-                    HibernateUtil.initData(sessionFactory);
+                    initData(sessionFactory, settings);
                 } catch (Exception ex) {
                     logger.error("Init file not found... ");
                 }
@@ -88,9 +74,26 @@ public class HibernateUtil {
         sessionFactory = null;
     }
 
-    private static void initData(SessionFactory sessionFactory) throws Exception {
-        String encoding = settings.getProperty("hibernate.init.file.encoding");
-        String platform = settings.getProperty("hibernate.database.platform");
+    private static void loadEntityClasses(Configuration configuration, Properties properties) {
+        String namePackageToScan = properties.getProperty("hibernate.init.package.scan");
+
+        Reflections reflections = new Reflections(namePackageToScan, new SubTypesScanner(false));
+
+        Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
+        allClasses.forEach( entityObject -> {
+            Annotation[] annotations = entityObject.getAnnotations();
+            for (int i = 0; i < annotations.length; i++) {
+                if (annotations[i] instanceof javax.persistence.Entity) {
+                    configuration.addAnnotatedClass(entityObject);
+                    break;
+                }
+            }
+        } );
+    }
+
+    private static void initData(SessionFactory sessionFactory, Properties properties) throws Exception {
+        String encoding = properties.getProperty("hibernate.init.file.encoding");
+        String platform = properties.getProperty("hibernate.database.platform");
 
         String nameSqlFile = platform != null ? "data-"+platform+".sql" : "data.sql";
 
@@ -108,7 +111,5 @@ public class HibernateUtil {
             logger.warn("File for data install not found...");
         }
     }
-
-
 
 }

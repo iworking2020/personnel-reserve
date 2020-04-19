@@ -27,7 +27,7 @@ public class MainMenuController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(MainMenuController.class);
 
-    @FXML private ResumesPaneFxmlController resumesPaneController;
+    @FXML private ResumesPaneController resumesPaneController;
     @FXML private VacanciesPaneController vacanciesPaneController;
 
     @FXML private CheckMenuItem winSearchCheckItem;
