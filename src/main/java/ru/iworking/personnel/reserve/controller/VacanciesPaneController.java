@@ -85,7 +85,7 @@ public class VacanciesPaneController implements Initializable {
                     Long id = treeStep.getCode();
                     if (id != null) {
                         try {
-                            Resume resume = resumeDao.findFromCash(id);
+                            Resume resume = resumeDao.find(id);
                             if (resume == null) {
                                 throw new NotFoundException("resume not found");
                             } else {

@@ -37,7 +37,7 @@ public class ResumesTreeController implements Initializable {
         resumeStateDao.findAllFromCash().forEach(resumeState -> {
             TreeViewStep stepCategory = new TreeViewStep(resumeState.getId(), resumeState.getNameToView(LocaleUtil.getDefault()), CATEGORY);
             TreeItem<TreeViewStep> itemCategory = new TreeItem<>(stepCategory);
-            resumeDao.findAllByResumeStateIdFromCash(resumeState.getId()).forEach(resume -> {
+            resumeDao.findAllByResumeStateId(resumeState.getId()).forEach(resume -> {
                 TreeViewStep stepResume = new TreeViewStep(resume.getId(), resume.getProfile().getFullName(), VALUE);
                 TreeItem<TreeViewStep> itemValue = new TreeItem<>(stepResume);
                 itemCategory.getChildren().add(itemValue);
@@ -55,7 +55,6 @@ public class ResumesTreeController implements Initializable {
 
     public void reload() {
         resumeStateDao.clearCash();
-        resumeDao.clearCash();
         initData();
     }
 

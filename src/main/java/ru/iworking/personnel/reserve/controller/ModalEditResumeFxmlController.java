@@ -21,6 +21,7 @@ import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -235,7 +236,7 @@ public class ModalEditResumeFxmlController implements Initializable {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
 
-            photo = new Photo(stream.toByteArray());
+            photo = new Photo(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
         } catch (IOException e) {
             logger.error(e);
         }
@@ -249,7 +250,7 @@ public class ModalEditResumeFxmlController implements Initializable {
                     logger.error(ex);
                 }
             }
-            resumeDao.updateAndUpdateInCash(newResume);
+            resumeDao.update(newResume);
             this.closeStage(event);
         }
 

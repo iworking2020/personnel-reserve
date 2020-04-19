@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ResumeDao extends CashedDao<Resume, Long> {
@@ -39,7 +38,7 @@ public class ResumeDao extends CashedDao<Resume, Long> {
 
     @Override
     public void initCashData(LoadingCache<Long, Resume> cash) {
-        cash.putAll(findAll().stream().collect(Collectors.toMap(Resume::getId, Function.identity())));
+        //cash.putAll(findAll().stream().collect(Collectors.toMap(Resume::getId, Function.identity())));
     }
 
     public List<Resume> findAllByProfFieldFromCash(ProfField profField) {

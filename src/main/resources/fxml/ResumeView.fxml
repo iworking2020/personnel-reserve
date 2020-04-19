@@ -2,10 +2,8 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
 <StackPane fx:id="resumePaneView" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ResumeViewController">
    <children>
       <GridPane maxHeight="1.7976931348623157E308">
@@ -23,34 +21,12 @@
          <children>
             <VBox spacing="5.0" GridPane.columnIndex="1">
                <children>
-                  <Label text="Ф.И.О.:">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
+                  <Label text="Ф.И.О.:" />
                   <Label fx:id="lastNameLabel" text="Фамилия" />
                   <Label fx:id="firstNameLabel" text="Имя" />
                   <Label fx:id="middleNameLabel" text="Отчество" />
-                  <VBox>
-                     <children>
-                        <Label text="Тел.:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="numberPhoneLabel" text="+7 999 999 99 99" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="Эл. почта:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="emailLabel" text="test@mail.ru" />
-                     </children>
-                  </VBox>
+                  <Label fx:id="numberPhone" text="Тел.:" />
+                  <Label fx:id="email" text="Эл. почта:" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -58,36 +34,9 @@
             </VBox>
             <VBox spacing="5.0" GridPane.columnIndex="2">
                <children>
-                  <VBox>
-                     <children>
-                        <Label text="Образование:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="educationLabel" text="Среднее" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="Опыт работы:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="experienceLabel" text="От 1 года" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="Адрес:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <Label fx:id="addressLabel" text="Россия ....." />
+                  <Label fx:id="education" text="Образование:" />
+                  <Label fx:id="experience" text="Опыт работы:" />
+                  <Label fx:id="address" text="Адрес:" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -95,46 +44,10 @@
             </VBox>
             <VBox spacing="5.0" GridPane.columnIndex="3">
                <children>
-                  <VBox>
-                     <children>
-                        <Label text="Профессия:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="professionLabel" text="Профессия" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="Профобласть:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="profFieldLabel" text="Профобласть" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="Зарплата:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="wageLabel" text="99 999" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="График:">
-                           <font>
-                              <Font size="10.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="workTypeLabel" text="Полный день" />
-                     </children>
-                  </VBox>
+                  <Label fx:id="profession" text="Профессия:" />
+                  <Label fx:id="profField" text="Профобласть:" />
+                  <Label fx:id="wage" text="Зарплата:" />
+                  <Label fx:id="workType" text="График:" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

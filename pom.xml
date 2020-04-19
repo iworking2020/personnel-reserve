@@ -44,6 +44,7 @@
         <poi.version>3.12</poi.version>
         <poi-ooxml.version>3.12</poi-ooxml.version>
         <guava.version>28.2-jre</guava.version>
+        <thumbnailator.version>[0.4, 0.5)</thumbnailator.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
     </properties>
@@ -156,24 +157,9 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>5.2.5.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>5.2.5.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>5.2.5.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>2.2.6.RELEASE</version>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>${thumbnailator.version}</version>
         </dependency>
     </dependencies>
 

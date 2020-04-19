@@ -176,15 +176,15 @@ public class ResumesPaneFxmlController implements Initializable {
             profFieldVBox.getChildren().add(button);
         });
 
-        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAllFromCash());
+        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll());
         table.setItems(resumeObservableList);
     }
 
     public void selectCategory(ActionEvent event, ProfField profField) {
         this.currentProfField = profField;
         List<Resume> list = profField != null ?
-                resumeDao.findAllByProfFieldFromCash(profField) :
-                resumeDao.findAllFromCash();
+                resumeDao.findAllByProfField(profField) :
+                resumeDao.findAll();
         this.resumeObservableList = this.createResumeObservableList(list);
         table.setItems(resumeObservableList);
         Long profFieldId = profField != null ? profField.getId() : 0;
@@ -290,7 +290,7 @@ public class ResumesPaneFxmlController implements Initializable {
 
         if (currentProfField != null) params.put(ResumeRequestParam.PROF_FIELD_ID, currentProfField.getId());
 
-        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAllFromCash(params));
+        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll(params));
         table.setItems(resumeObservableList);
     }
 
@@ -331,7 +331,7 @@ public class ResumesPaneFxmlController implements Initializable {
 
         if (resume != null) {
             resumeObservableList.remove(resume);
-            resumeDao.deleteAndRemoveFromCash(resume);
+            resumeDao.delete(resume);
             table.refresh();
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalMessage.fxml"));
@@ -351,7 +351,6 @@ public class ResumesPaneFxmlController implements Initializable {
         currencyDao.clearCash();
         educationDao.clearCash();
         workTypeDao.clearCash();
-        resumeDao.clearCash();
         PhotoDao.getInstance().clearCash();
         selectCategory(event, null);
         actionButtonClear(event);
