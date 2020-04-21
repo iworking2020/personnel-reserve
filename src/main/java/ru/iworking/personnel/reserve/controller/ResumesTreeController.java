@@ -29,7 +29,7 @@ public class ResumesTreeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initData();
-        /*Object object = resumesTreeView.getSelectionModel().getSelectedItem();*/
+        TreeItem<TreeViewStep> object = resumesTreeView.getSelectionModel().getSelectedItem();
     }
 
     public void initData() {

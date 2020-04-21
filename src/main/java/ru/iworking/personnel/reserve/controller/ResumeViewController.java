@@ -1,26 +1,34 @@
 package ru.iworking.personnel.reserve.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.auth.api.model.IProfile;
+import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.utils.TextUtil;
+import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
 import ru.iworking.service.api.utils.LocaleUtil;
 import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ResumeViewController implements Initializable {
@@ -30,6 +38,8 @@ public class ResumeViewController implements Initializable {
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @FXML private Pane resumePaneView;
+
+    @FXML private TextField resumeIdTextField;
 
     @FXML private Label lastNameLabel;
     @FXML private Label firstNameLabel;
@@ -56,6 +66,7 @@ public class ResumeViewController implements Initializable {
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
     private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
     private EducationDao educationDao = EducationDao.getInstance();
+    private ResumeDao resumeDao = ResumeDao.getInstance();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -93,6 +104,8 @@ public class ResumeViewController implements Initializable {
             String prefixEducation = "Образование: ";
             String prefixExperience = "Опыт паботы: ";
             String prefixAddress = "Адрес: ";
+
+            resumeIdTextField.setText(resume.getId().toString());
 
             IProfile profile = resume.getProfile();
             if (profile != null) {
@@ -153,4 +166,34 @@ public class ResumeViewController implements Initializable {
             logger.debug("Resume is null. We can't view resume...");
         }
     }
+
+    private Long getResumeId() {
+        String resumeId = resumeIdTextField.getText();
+        if (resumeId.length() > 0 ) {
+            return Long.valueOf(resumeId);
+        } else {
+            return null;
+        }
+    }
+
+    @FXML
+    public void actionSavePdf(ActionEvent event) {
+        Resume resume = resumeDao.findFromCash(getResumeId());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName("Resume"+resume.getId()+".pdf");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*"),
+                new FileChooser.ExtensionFilter("PDF", "*.pdf")
+        );
+
+        File file = fileChooser.showSaveDialog(MainApp.PARENT_STAGE);
+        if (file != null) {
+            String path = file.getAbsoluteFile().getAbsolutePath();
+            Map props = new HashMap<>();
+            props.put(PdfResumeWriter.props.PATH, path);
+            props.put(PdfResumeWriter.props.RESUME, resume);
+            PdfResumeWriter.getInstance().write(props);
+        }
+    }
+
 }

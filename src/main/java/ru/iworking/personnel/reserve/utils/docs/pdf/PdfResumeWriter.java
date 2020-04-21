@@ -1,25 +1,15 @@
-package ru.iworking.personnel.reserve.utils;
+package ru.iworking.personnel.reserve.utils.docs.pdf;
 
-import com.itextpdf.io.font.FontProgram;
-import com.itextpdf.io.font.FontProgramFactory;
-import com.itextpdf.io.font.PdfEncodings;
-import com.itextpdf.io.image.ImageData;
-import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.Border;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
-import com.itextpdf.layout.property.VerticalAlignment;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.*;
@@ -27,13 +17,13 @@ import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.service.api.utils.LocaleUtil;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
-public class PdfUtil {
+public class PdfResumeWriter extends PdfWriterFactory {
 
-    static final Logger logger = LogManager.getLogger(PdfUtil.class);
-
-    private static volatile PdfUtil instance;
+    private static final Logger logger = LogManager.getLogger(PdfResumeWriter.class);
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
     private EducationDao educationDao = EducationDao.getInstance();
@@ -41,25 +31,60 @@ public class PdfUtil {
     private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
     private PhotoDao photoDao = PhotoDao.getInstance();
 
-    public void createResumePdf(String dest, Resume resume) throws IOException {
-        PdfFont pdfFont = getStandartPdfFont();
+    public enum props {
+        PATH, RESUME
+    }
+
+    private static volatile PdfResumeWriter instance;
+
+    public static PdfResumeWriter getInstance() {
+        PdfResumeWriter localInstance = instance;
+        if (localInstance == null) {
+            synchronized (PdfResumeWriter.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new PdfResumeWriter();
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    private PdfResumeWriter() { }
+
+    @Override
+    public void write(Map<String, Object> props) {
+        String path = (String) props.get(PdfResumeWriter.props.PATH);
+        Resume resume = (Resume) props.get(PdfResumeWriter.props.RESUME);
+
+        PdfFont pdfFont = null;
+        try {
+            pdfFont = getStandartPdfFont();
+        } catch (IOException e) {
+            logger.error(e);
+        }
 
         //Initialize PDF writer
-        PdfWriter writer = new PdfWriter(dest);
+        PdfWriter writer = null;
+        try {
+            writer = new PdfWriter(path);
+        } catch (FileNotFoundException e) {
+            logger.error(e);
+        }
 
         //Initialize PDF document
         PdfDocument pdf = new PdfDocument(writer);
 
         // Initialize document
-        Document document = new Document(pdf, PageSize.A4);
+        com.itextpdf.layout.Document document = new Document(pdf, PageSize.A4);
         document.setMargins(30, 50, 30, 50);
 
         //Add paragraph to the document
         document.add(new Paragraph("Резюме").setFont(pdfFont).setTextAlignment(TextAlignment.CENTER));
 
         String FIO = "Ф.И.О.: " + resume.getProfile().getLastName() + " " + resume.getProfile().getFirstName() + " " + resume.getProfile().getMiddleName();
-        String number = "тел.: "+resume.getNumberPhone().getNumber();
-        String email = "емайл: "+resume.getEmail();
+        String number = "тел.: " + resume.getNumberPhone().getNumber();
+        String email = "емайл: " + resume.getEmail();
         String profession = "профессия: "+resume.getProfession();
         String wage = resume.getWage() != null ?
                 "зарплата: "+resume.getWage().getCountBigDecimal().toString() + " " +
@@ -98,54 +123,6 @@ public class PdfUtil {
         document.add(parentTable);
 
         document.close();
-    }
-
-    private Cell createImgCell(byte[] imgBytes) {
-        ImageData data = ImageDataFactory.create(imgBytes);
-        Image img = new Image(data);
-        img.setWidth(UnitValue.createPercentValue(100));
-        Cell cell = new Cell().add(img);
-        cell.setBorder(Border.NO_BORDER);
-        return cell;
-    }
-
-    private Cell createTextCell(String text) {
-        Cell cell = new Cell();
-        Paragraph p = new Paragraph(text);
-        p.setTextAlignment(TextAlignment.LEFT);
-        try {
-            p.setFont(getStandartPdfFont());
-        } catch (IOException e) {
-            logger.error(e);
-        }
-        cell.add(p).setVerticalAlignment(VerticalAlignment.BOTTOM);
-        cell.setBorder(Border.NO_BORDER);
-        return cell;
-    }
-
-    private Cell createTableCell(Table table) {
-        Cell cell = new Cell().add(table);
-        cell.setBorder(Border.NO_BORDER);
-        return cell;
-    }
-
-    private PdfFont getStandartPdfFont() throws IOException {
-        byte[] fontContents = IOUtils.toByteArray(PdfUtil.class.getClassLoader().getResourceAsStream("fonts/CenturyGothic.ttf"));
-        FontProgram fontProgram = FontProgramFactory.createFont(fontContents);
-        return PdfFontFactory.createFont(fontProgram, PdfEncodings.IDENTITY_H);
-    }
-
-    public static PdfUtil getInstance() {
-        PdfUtil localInstance = instance;
-        if (localInstance == null) {
-            synchronized (PdfUtil.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new PdfUtil();
-                }
-            }
-        }
-        return localInstance;
     }
 
 }

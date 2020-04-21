@@ -26,8 +26,8 @@ import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 import ru.iworking.personnel.reserve.utils.AppUtil;
-import ru.iworking.personnel.reserve.utils.ExelUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
+import ru.iworking.personnel.reserve.utils.docs.exel.ExelResumeListWriter;
 import ru.iworking.service.api.utils.LocaleUtil;
 import ru.iworking.service.api.utils.TimeUtil;
 
@@ -317,11 +317,10 @@ public class ResumesPaneController implements Initializable {
         File file = fileChooser.showSaveDialog(MainApp.PARENT_STAGE);
         if (file != null) {
             String path = file.getAbsoluteFile().getAbsolutePath();
-            try {
-                ExelUtil.getInstance().createXLSResumeList(path, resumeObservableList);
-            } catch (IOException ex) {
-                logger.error("не удалось выгрузить в exel", ex);
-            }
+            Map props = new HashMap<>();
+            props.put(ExelResumeListWriter.props.PATH, path);
+            props.put(ExelResumeListWriter.props.LIST_RESUME, resumeObservableList);
+            ExelResumeListWriter.getInstance().write(props);
         }
     }
 

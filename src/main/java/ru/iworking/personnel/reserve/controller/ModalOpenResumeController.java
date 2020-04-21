@@ -18,17 +18,18 @@ import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
-import ru.iworking.personnel.reserve.utils.PdfUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
+import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
 import ru.iworking.service.api.utils.LocaleUtil;
 import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ModalOpenResumeController implements Initializable {
@@ -155,14 +156,11 @@ public class ModalOpenResumeController implements Initializable {
         File file = fileChooser.showSaveDialog(getStage(event));
         if (file != null) {
             String path = file.getAbsoluteFile().getAbsolutePath();
-            try {
-                PdfUtil.getInstance().createResumePdf(path, this.resume);
-            } catch (IOException e) {
-                logger.error(e);
-            }
+            Map props = new HashMap<>();
+            props.put(PdfResumeWriter.props.PATH, path);
+            props.put(PdfResumeWriter.props.RESUME, this.resume);
+            PdfResumeWriter.getInstance().write(props);
         }
-
-
     }
 
     @FXML
