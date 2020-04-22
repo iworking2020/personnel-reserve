@@ -18,7 +18,6 @@ import com.itextpdf.layout.property.VerticalAlignment;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.utils.PdfUtil;
 import ru.iworking.personnel.reserve.utils.docs.DocumentWriterFactory;
 
 import java.io.IOException;
@@ -60,7 +59,7 @@ public abstract class PdfWriterFactory implements DocumentWriterFactory {
     }
 
     protected PdfFont getStandartPdfFont() throws IOException {
-        byte[] fontContents = IOUtils.toByteArray(PdfUtil.class.getClassLoader().getResourceAsStream("fonts/CenturyGothic.ttf"));
+        byte[] fontContents = IOUtils.toByteArray(PdfWriterFactory.class.getClassLoader().getResourceAsStream("fonts/CenturyGothic.ttf"));
         FontProgram fontProgram = FontProgramFactory.createFont(fontContents);
         return PdfFontFactory.createFont(fontProgram, PdfEncodings.IDENTITY_H);
     }

@@ -34,9 +34,10 @@
                      <StackPane fx:id="wrapperResume">
                          <children>
                              <fx:include fx:id="resumeView" source="ResumeView.fxml" />
+                             <fx:include fx:id="resumeEdit" source="ResumeEdit.fxml" />
                          </children>
                      </StackPane>
-                     <GridPane fx:id="wrapperClient" BorderPane.alignment="CENTER">
+                     <GridPane fx:id="wrapperClient" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                          <columnConstraints>
                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="20.0" />

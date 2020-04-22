@@ -1,8 +1,8 @@
 package ru.iworking.personnel.reserve.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
@@ -22,6 +22,17 @@ public class ResumesTreeController implements Initializable {
     public TreeView<TreeViewStep> getTreeView() {
         return resumesTreeView;
     }
+
+    @FXML private Button updateButton;
+    public Button getUpdateButton() {
+        return updateButton;
+    }
+
+    @FXML private Button buttonEdit;
+    public Button getButtonEdit() {
+        return buttonEdit;
+    }
+
 
     private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
     private ResumeDao resumeDao = ResumeDao.getInstance();
@@ -46,11 +57,6 @@ public class ResumesTreeController implements Initializable {
         });
         resumesTreeView.setRoot(rootTreeNode);
         resumesTreeView.setShowRoot(false);
-    }
-
-    @FXML
-    public void actionTreeUpdate(ActionEvent event) {
-        this.reload();
     }
 
     public void reload() {

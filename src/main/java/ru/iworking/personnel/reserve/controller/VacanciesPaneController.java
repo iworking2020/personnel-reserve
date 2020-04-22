@@ -46,6 +46,7 @@ public class VacanciesPaneController implements Initializable {
     @FXML private VacancyViewController vacancyViewController;
     @FXML private VacancyEditController vacancyEditController;
     @FXML private ResumeViewController resumeViewController;
+    @FXML private ResumeEditController resumeEditController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -90,10 +91,10 @@ public class VacanciesPaneController implements Initializable {
                                 throw new NotFoundException("resume not found");
                             } else {
                                 resumeViewController.setData(resume);
-                                resumeViewController.show(() -> {
-                                    wrapperClient.setVisible(false);
-                                    wrapperClient.setManaged(false);
-                                });
+                                resumeViewController.show();
+                                resumeEditController.hide();
+                                wrapperClient.setVisible(false);
+                                wrapperClient.setManaged(false);
                             }
                         } catch (Exception ex) {
                             logger.error(ex);
@@ -104,18 +105,33 @@ public class VacanciesPaneController implements Initializable {
                         logger.debug("treeStep.getCode() is null..., skip");
                     }
                 } else {
-                    resumeViewController.hide(() -> {
-                        wrapperClient.setVisible(true);
-                        wrapperClient.setManaged(true);
-                    });
+                    resumeViewController.hide();
+                    resumeEditController.hide();
+                    wrapperClient.setVisible(true);
+                    wrapperClient.setManaged(true);
                 }
             }
         });
 
-        resumeViewController.getButtonCancel().setOnAction(event -> resumeViewController.hide(() -> {
+        resumesTreeController.getUpdateButton().setOnAction(event -> {
+            resumeViewController.hide();
+            resumeEditController.hide();
+            resumesTreeController.reload();
             wrapperClient.setVisible(true);
             wrapperClient.setManaged(true);
-        }));
+        });
+
+        resumesTreeController.getButtonEdit().setOnAction(event -> {
+            resumeEditController.show();
+            wrapperClient.setVisible(false);
+            wrapperClient.setManaged(false);
+        });
+
+        resumeViewController.getButtonCancel().setOnAction(event -> {
+            resumeViewController.hide();
+            wrapperClient.setVisible(true);
+            wrapperClient.setManaged(true);
+        });
     }
 
     public void actionButtonCreateCompany(ActionEvent event) {
