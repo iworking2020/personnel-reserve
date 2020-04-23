@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType;
 
-public class VacanciesPaneController implements Initializable {
+public class VacanciesPaneController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(VacanciesPaneController.class);
 
@@ -113,25 +113,29 @@ public class VacanciesPaneController implements Initializable {
             }
         });
 
-        resumesTreeController.getUpdateButton().setOnAction(event -> {
+        /*resumesTreeController.getUpdateButton().setOnAction(event -> {
             resumeViewController.hide();
             resumeEditController.hide();
             resumesTreeController.reload();
             wrapperClient.setVisible(true);
             wrapperClient.setManaged(true);
-        });
-
-        resumesTreeController.getButtonEdit().setOnAction(event -> {
-            resumeEditController.show();
-            wrapperClient.setVisible(false);
-            wrapperClient.setManaged(false);
-        });
+        });*/
 
         resumeViewController.getButtonCancel().setOnAction(event -> {
             resumeViewController.hide();
             wrapperClient.setVisible(true);
             wrapperClient.setManaged(true);
         });
+    }
+
+    public void showWrapperClient() {
+        wrapperClient.setVisible(true);
+        wrapperClient.setManaged(true);
+    }
+
+    public void hideWrapperClient() {
+        wrapperClient.setVisible(false);
+        wrapperClient.setManaged(false);
     }
 
     public void actionButtonCreateCompany(ActionEvent event) {

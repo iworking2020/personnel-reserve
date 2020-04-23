@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class ResumesPaneController implements Initializable {
+public class ResumesPaneController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumesPaneController.class);
 

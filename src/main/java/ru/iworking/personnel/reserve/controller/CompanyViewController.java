@@ -15,7 +15,7 @@ import ru.iworking.service.api.utils.LocaleUtil;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CompanyViewController implements Initializable {
+public class CompanyViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(CompanyViewController.class);
 

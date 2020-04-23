@@ -18,7 +18,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class VacanciesTableController implements Initializable {
+public class VacanciesTableController extends FxmlController {
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 

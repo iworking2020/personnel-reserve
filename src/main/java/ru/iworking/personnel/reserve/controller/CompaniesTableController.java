@@ -19,7 +19,7 @@ import ru.iworking.service.api.utils.LocaleUtil;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CompaniesTableController implements Initializable {
+public class CompaniesTableController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(CompaniesTableController.class);
 

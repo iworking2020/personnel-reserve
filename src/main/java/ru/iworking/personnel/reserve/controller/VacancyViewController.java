@@ -18,7 +18,7 @@ import ru.iworking.vacancy.api.model.IVacancy;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class VacancyViewController implements Initializable {
+public class VacancyViewController extends FxmlController{
 
     private static final Logger logger = LogManager.getLogger(VacancyViewController.class);
 

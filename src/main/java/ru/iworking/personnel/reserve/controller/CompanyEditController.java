@@ -26,7 +26,7 @@ import ru.iworking.service.api.model.INumberPhone;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CompanyEditController implements Initializable {
+public class CompanyEditController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(CompanyEditController.class);
 

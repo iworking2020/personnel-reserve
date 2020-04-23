@@ -21,7 +21,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class VacancyEditController implements Initializable {
+public class VacancyEditController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(VacancyEditController.class);
 

@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -16,7 +17,7 @@ import java.util.ResourceBundle;
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.CATEGORY;
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.VALUE;
 
-public class ResumesTreeController implements Initializable {
+public class ResumesTreeController extends FxmlController {
 
     @FXML private TreeView<TreeViewStep> resumesTreeView;
     public TreeView<TreeViewStep> getTreeView() {
@@ -57,6 +58,25 @@ public class ResumesTreeController implements Initializable {
         });
         resumesTreeView.setRoot(rootTreeNode);
         resumesTreeView.setShowRoot(false);
+    }
+
+    @FXML
+    public void actionEdit(ActionEvent event) {
+        ResumeEditController resumeEditController = (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
+        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
+        resumeEditController.show();
+        vacanciesPaneController.hideWrapperClient();
+    }
+
+    @FXML
+    public void actionUpdate(ActionEvent event) {
+        ResumeViewController resumeViewController = (ResumeViewController) getControllerProvider().get(ResumeViewController.class);
+        ResumeEditController resumeEditController = (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
+        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
+        resumeViewController.hide();
+        resumeEditController.hide();
+        reload();
+        vacanciesPaneController.showWrapperClient();
     }
 
     public void reload() {

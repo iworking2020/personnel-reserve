@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class ResumeViewController implements Initializable {
+public class ResumeViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeViewController.class);
 

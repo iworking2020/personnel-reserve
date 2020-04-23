@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController implements Initializable {
+public class MainMenuController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(MainMenuController.class);
 

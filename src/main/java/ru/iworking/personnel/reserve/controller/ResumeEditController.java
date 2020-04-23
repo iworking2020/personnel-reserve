@@ -17,7 +17,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
-public class ResumeEditController implements Initializable {
+public class ResumeEditController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeEditController.class);
 
