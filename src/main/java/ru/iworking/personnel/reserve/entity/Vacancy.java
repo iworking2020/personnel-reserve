@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.vacancy.api.model.IVacancy;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "vacancy")
-public class Vacancy implements IVacancy {
+public class Vacancy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -53,7 +51,6 @@ public class Vacancy implements IVacancy {
 
     public Vacancy() { }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -61,7 +58,6 @@ public class Vacancy implements IVacancy {
         this.id = id;
     }
 
-    @Override
     public Long getUserId() {
         return userId;
     }
@@ -69,7 +65,6 @@ public class Vacancy implements IVacancy {
         this.userId = userId;
     }
 
-    @Override
     public Long getCompanyId() {
         return companyId;
     }
@@ -77,7 +72,6 @@ public class Vacancy implements IVacancy {
         this.companyId = companyId;
     }
 
-    @Override
     public LocalDateTime getDatecreate() {
         return datecreate;
     }
@@ -85,7 +79,6 @@ public class Vacancy implements IVacancy {
         this.datecreate = datecreate;
     }
 
-    @Override
     public String getProfession() {
         return profession;
     }
@@ -93,7 +86,6 @@ public class Vacancy implements IVacancy {
         this.profession = profession;
     }
 
-    @Override
     public Long getProfFieldId() {
         return profFieldId;
     }
@@ -101,7 +93,6 @@ public class Vacancy implements IVacancy {
         this.profFieldId = profFieldId;
     }
 
-    @Override
     public Long getWorkTypeId() {
         return workTypeId;
     }
@@ -109,7 +100,6 @@ public class Vacancy implements IVacancy {
         this.workTypeId = workTypeId;
     }
 
-    @Override
     public Wage getWage() {
         return wage;
     }
@@ -117,7 +107,6 @@ public class Vacancy implements IVacancy {
         this.wage = wage;
     }
 
-    @Override
     public Long getEducationId() {
         return educationId;
     }
@@ -125,7 +114,6 @@ public class Vacancy implements IVacancy {
         this.educationId = educationId;
     }
 
-    @Override
     public Experience getExperience() {
         return experience;
     }
@@ -133,7 +121,6 @@ public class Vacancy implements IVacancy {
         this.experience = experience;
     }
 
-    @Override
     public DescriptionVacancy getDescription() {
         return description;
     }
@@ -141,7 +128,6 @@ public class Vacancy implements IVacancy {
         this.description = description;
     }
 
-    @Override
     public Address getAddress() {
         return address;
     }

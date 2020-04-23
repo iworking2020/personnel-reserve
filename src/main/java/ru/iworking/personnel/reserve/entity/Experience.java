@@ -1,7 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.iworking.service.api.model.IExperience;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "experience")
-public class Experience implements IExperience {
+public class Experience {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,29 +29,23 @@ public class Experience implements IExperience {
         this.dateEnd = dateEnd;
     }
 
-    @Override
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Override
     public LocalDate getDateStart() {
         return dateStart;
     }
-
     public void setDateStart(LocalDate dateStart) {
         this.dateStart = dateStart;
     }
 
-    @Override
     public LocalDate getDateEnd() {
         return dateEnd;
     }
-
     public void setDateEnd(LocalDate dateEnd) {
         this.dateEnd = dateEnd;
     }

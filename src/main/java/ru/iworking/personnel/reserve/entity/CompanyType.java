@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.company.api.model.ICompanyType;
 import ru.iworking.service.api.enums.FinancialType;
 
 import javax.persistence.*;
@@ -11,7 +10,7 @@ import java.util.Objects;
 
 @Entity(name = "CompanyType")
 @Table(name = "company_type")
-public class CompanyType implements ICompanyType {
+public class CompanyType {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -37,7 +36,6 @@ public class CompanyType implements ICompanyType {
 
     public CompanyType() { }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -45,7 +43,6 @@ public class CompanyType implements ICompanyType {
         this.id = id;
     }
 
-    @Override
     public String getNameToSystem() {
         return nameToSystem;
     }
@@ -53,7 +50,6 @@ public class CompanyType implements ICompanyType {
         this.nameToSystem = nameToSystem;
     }
 
-    @Override
     public FinancialType getFinancialType() {
         return financialType;
     }
@@ -61,7 +57,6 @@ public class CompanyType implements ICompanyType {
         this.financialType = financialType;
     }
 
-    @Override
     public Map<Locale, String> getAbbreviatedNamesToView() {
         return abbreviatedNamesToView;
     }
@@ -69,7 +64,6 @@ public class CompanyType implements ICompanyType {
         this.abbreviatedNamesToView = abbreviatedNamesToView;
     }
 
-    @Override
     public Map<Locale, String> getNamesToView() {
         return namesToView;
     }

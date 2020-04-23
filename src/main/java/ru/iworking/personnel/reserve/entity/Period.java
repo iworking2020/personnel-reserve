@@ -1,7 +1,5 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.money.api.model.IPeriod;
-
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Locale;
@@ -10,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "period")
-public class Period implements IPeriod {
+public class Period {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +26,6 @@ public class Period implements IPeriod {
 
     public Period() { }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -36,7 +33,6 @@ public class Period implements IPeriod {
         this.id = id;
     }
 
-    @Override
     public String getNameToSystem() {
         return nameToSystem;
     }
@@ -44,7 +40,6 @@ public class Period implements IPeriod {
         this.nameToSystem = nameToSystem;
     }
 
-    @Override
     public Map<Locale, String> getNamesToView() {
         return namesToView;
     }

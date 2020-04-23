@@ -1,7 +1,5 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.money.api.model.ICurrency;
-
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Locale;
@@ -10,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "currency")
-public class Currency implements ICurrency {
+public class Currency {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -27,7 +25,6 @@ public class Currency implements ICurrency {
 
     public Currency() {}
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -35,7 +32,6 @@ public class Currency implements ICurrency {
         this.id = id;
     }
 
-    @Override
     public String getNameToSystem() {
         return nameToSystem;
     }
@@ -43,7 +39,6 @@ public class Currency implements ICurrency {
         this.nameToSystem = nameToSystem;
     }
 
-    @Override
     public Map<Locale, String> getNamesToView() {
         return namesToView;
     }
