@@ -21,7 +21,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class VacancyEditController extends FxmlController {
+public class VacancyEditController extends FxmlController implements VacanciesTableProvider, CompaniesTableProvider {
 
     private static final Logger logger = LogManager.getLogger(VacancyEditController.class);
 
@@ -90,15 +90,12 @@ public class VacancyEditController extends FxmlController {
 
     @FXML
     public void actionSave(ActionEvent event) {
-        CompaniesTableController companiesTableController = (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
-        VacanciesTableController vacanciesTableController = (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
-
-        Long companyId = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem().getId();
+        Long companyId = getCompaniesTableController().getTableCompanies().getSelectionModel().getSelectedItem().getId();
         Boolean isSaved = save(companyId);
         if (isSaved) {
             hide();
             clear();
-            vacanciesTableController.actionUpdate(event);
+            getVacanciesTableController().actionUpdate(event);
         }
     }
 
@@ -210,5 +207,15 @@ public class VacancyEditController extends FxmlController {
         vacancyWorkTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
         vacancyEducationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
+    }
+
+    @Override
+    public CompaniesTableController getCompaniesTableController() {
+        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+    }
+
+    @Override
+    public VacanciesTableController getVacanciesTableController() {
+        return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
     }
 }

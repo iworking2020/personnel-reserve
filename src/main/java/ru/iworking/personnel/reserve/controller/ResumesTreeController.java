@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.CATEGORY;
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.VALUE;
 
-public class ResumesTreeController extends FxmlController {
+public class ResumesTreeController extends FxmlController implements ResumeEditProvider, ResumeViewProvider, VacanciesPaneProvider {
 
     private static final Logger logger = LogManager.getLogger(ResumesTreeController.class);
 
@@ -56,9 +56,6 @@ public class ResumesTreeController extends FxmlController {
 
         resumesTreeView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
             if (newValue != null) {
-                ResumeViewController resumeViewController = (ResumeViewController) getControllerProvider().get(ResumeViewController.class);
-                ResumeEditController resumeEditController = (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
-                VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
                 TreeViewStep treeStep = newValue.getValue();
                 if (treeStep.getType() == TreeViewStep.StepType.VALUE) {
                     Long id = treeStep.getCode();
@@ -68,10 +65,10 @@ public class ResumesTreeController extends FxmlController {
                             if (resume == null) {
                                 throw new NotFoundException("resume not found");
                             } else {
-                                resumeViewController.setData(resume);
-                                resumeViewController.show();
-                                resumeEditController.hide();
-                                vacanciesPaneController.hideWrapperClient();
+                                getResumeViewController().setData(resume);
+                                getResumeViewController().show();
+                                getResumeEditController().hide();
+                                getVacanciesPaneController().hideWrapperClient();
                             }
                         } catch (Exception ex) {
                             logger.error(ex);
@@ -82,9 +79,9 @@ public class ResumesTreeController extends FxmlController {
                         logger.debug("treeStep.getCode() is null..., skip");
                     }
                 } else {
-                    resumeViewController.hide();
-                    resumeEditController.hide();
-                    vacanciesPaneController.showWrapperClient();
+                    getResumeViewController().hide();
+                    getResumeEditController().hide();
+                    getVacanciesPaneController().showWrapperClient();
                 }
             }
         });
@@ -92,21 +89,16 @@ public class ResumesTreeController extends FxmlController {
 
     @FXML
     public void actionEdit(ActionEvent event) {
-        ResumeEditController resumeEditController = (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
-        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
-        resumeEditController.show();
-        vacanciesPaneController.hideWrapperClient();
+        getResumeEditController().show();
+        getVacanciesPaneController().hideWrapperClient();
     }
 
     @FXML
     public void actionUpdate(ActionEvent event) {
-        ResumeViewController resumeViewController = (ResumeViewController) getControllerProvider().get(ResumeViewController.class);
-        ResumeEditController resumeEditController = (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
-        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
-        resumeViewController.hide();
-        resumeEditController.hide();
+        getResumeViewController().hide();
+        getResumeEditController().hide();
         reload();
-        vacanciesPaneController.showWrapperClient();
+        getVacanciesPaneController().showWrapperClient();
     }
 
     public void reload() {
@@ -114,4 +106,18 @@ public class ResumesTreeController extends FxmlController {
         initData();
     }
 
+    @Override
+    public ResumeEditController getResumeEditController() {
+        return (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
+    }
+
+    @Override
+    public ResumeViewController getResumeViewController() {
+        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class);
+    }
+
+    @Override
+    public VacanciesPaneController getVacanciesPaneController() {
+        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
+    }
 }

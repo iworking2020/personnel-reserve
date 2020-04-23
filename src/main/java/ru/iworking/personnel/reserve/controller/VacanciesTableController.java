@@ -21,7 +21,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class VacanciesTableController extends FxmlController {
+public class VacanciesTableController extends FxmlController implements VacancyEditProvider, VacancyViewProvider, CompaniesTableProvider {
 
     private static final Logger logger = LogManager.getLogger(VacanciesTableController.class);
 
@@ -91,10 +91,9 @@ public class VacanciesTableController extends FxmlController {
         });
 
         tableVacancies.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            VacancyViewController vacancyViewController = (VacancyViewController) getControllerProvider().get(VacancyViewController.class);
             enableTargetItemButtons();
-            vacancyViewController.setData(newSelection);
-            vacancyViewController.show();
+            getVacancyViewController().setData(newSelection);
+            getVacancyViewController().show();
         });
     }
 
@@ -104,37 +103,30 @@ public class VacanciesTableController extends FxmlController {
 
     @FXML
     public void actionCreate(ActionEvent event) {
-        VacancyEditController vacancyEditController = (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
-        vacancyEditController.clear();
-        vacancyEditController.show();
+        getVacancyEditController().clear();
+        getVacancyEditController().show();
     }
 
     @FXML
     public void actionUpdate(ActionEvent event) {
-        CompaniesTableController companiesTableController = (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
-        VacancyEditController vacancyEditController = (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
-        VacancyViewController vacancyViewController = (VacancyViewController) getControllerProvider().get(VacancyViewController.class);
-
         clear();
         disableTargetItemButtons();
-        if (companiesTableController.getTableCompanies().getSelectionModel() != null) {
-            Company company = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem();
+        if (getCompaniesTableController().getTableCompanies().getSelectionModel() != null) {
+            Company company = getCompaniesTableController().getTableCompanies().getSelectionModel().getSelectedItem();
             if (company != null) setData(vacancyDao.findAllByCompanyId(company.getId()));
         }
-        vacancyEditController.hide();
-        vacancyViewController.hide();
+        getVacancyEditController().hide();
+        getVacancyViewController().hide();
         logger.debug("Vacancies table has been updated...");
     }
 
     @FXML
     public void actionEdit(ActionEvent event) {
-        VacancyEditController vacancyEditController = (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
-
         Vacancy vacancy = tableVacancies.getSelectionModel().getSelectedItem();
         if (vacancy != null) {
-            vacancyEditController.setData(vacancy);
-            vacancyEditController.show();
-        } else vacancyEditController.actionSave(event);
+            getVacancyEditController().setData(vacancy);
+            getVacancyEditController().show();
+        } else getVacancyEditController().actionSave(event);
     }
 
     @FXML
@@ -170,4 +162,18 @@ public class VacanciesTableController extends FxmlController {
         disableTargetItemButtons();
     }
 
+    @Override
+    public VacancyEditController getVacancyEditController() {
+        return (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
+    }
+
+    @Override
+    public VacancyViewController getVacancyViewController() {
+        return (VacancyViewController) getControllerProvider().get(VacancyViewController.class);
+    }
+
+    @Override
+    public CompaniesTableController getCompaniesTableController() {
+        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+    }
 }

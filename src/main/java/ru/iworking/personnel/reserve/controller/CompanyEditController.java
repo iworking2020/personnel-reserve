@@ -26,7 +26,7 @@ import ru.iworking.service.api.model.INumberPhone;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CompanyEditController extends FxmlController {
+public class CompanyEditController extends FxmlController implements CompaniesTableProvider {
 
     private static final Logger logger = LogManager.getLogger(CompanyEditController.class);
 
@@ -64,10 +64,9 @@ public class CompanyEditController extends FxmlController {
     public void actionSave(ActionEvent event) {
         Boolean isSaved = save();
         if (isSaved) {
-            CompaniesTableController companiesTableController = (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
             hide();
             clear();
-            companiesTableController.actionUpdate(event);
+            getCompaniesTableController().actionUpdate(event);
         }
     }
 
@@ -181,5 +180,10 @@ public class CompanyEditController extends FxmlController {
         actionCancel(event);
         companyTypeDao.clearCash();
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
+    }
+
+    @Override
+    public CompaniesTableController getCompaniesTableController() {
+        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
     }
 }
