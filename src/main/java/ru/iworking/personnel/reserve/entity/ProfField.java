@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.profession.api.model.IProfField;
+
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Locale;
@@ -8,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "prof_field")
-public class ProfField {
+public class ProfField implements IProfField {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +26,7 @@ public class ProfField {
 
     public ProfField() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -31,6 +34,7 @@ public class ProfField {
         this.id = id;
     }
 
+    @Override
     public String getNameToSystem() {
         return nameToSystem;
     }
@@ -38,6 +42,7 @@ public class ProfField {
         this.nameToSystem = nameToSystem;
     }
 
+    @Override
     public Map<Locale, String> getNamesToView() {
         return namesToView;
     }

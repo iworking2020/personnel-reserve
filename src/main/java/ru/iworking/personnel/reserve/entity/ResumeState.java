@@ -1,6 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
 import ru.iworking.personnel.reserve.model.State;
+import ru.iworking.service.api.model.NameToSystem;
+import ru.iworking.service.api.model.NameToView;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -10,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "resume_state")
-public class ResumeState implements State {
+public class ResumeState implements NameToSystem, NameToView, State {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -33,6 +35,7 @@ public class ResumeState implements State {
         this.id = id;
     }
 
+    @Override
     public String getNameToSystem() {
         return nameToSystem;
     }
@@ -40,6 +43,7 @@ public class ResumeState implements State {
         this.nameToSystem = nameToSystem;
     }
 
+    @Override
     public Map<Locale, String> getNamesToView() {
         return namesToView;
     }

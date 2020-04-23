@@ -1,12 +1,14 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.company.api.model.ICompany;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity(name = "Company")
 @Table(name = "company")
-public class Company {
+public class Company implements ICompany {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -43,6 +45,7 @@ public class Company {
 
     public Company() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -50,6 +53,7 @@ public class Company {
         this.id = id;
     }
 
+    @Override
     public LocalDateTime getDatecreate() {
         return datecreate;
     }
@@ -57,6 +61,7 @@ public class Company {
         this.datecreate = datecreate;
     }
 
+    @Override
     public Long getCompanyTypeId() {
         return companyTypeId;
     }
@@ -64,6 +69,7 @@ public class Company {
         this.companyTypeId = companyTypeId;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -71,6 +77,7 @@ public class Company {
         this.name = name;
     }
 
+    @Override
     public NumberPhone getNumberPhone() {
         return numberPhone;
     }
@@ -78,6 +85,7 @@ public class Company {
         this.numberPhone = numberPhone;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
@@ -85,6 +93,7 @@ public class Company {
         this.email = email;
     }
 
+    @Override
     public String getWebPage() {
         return webPage;
     }
@@ -92,6 +101,7 @@ public class Company {
         this.webPage = webPage;
     }
 
+    @Override
     public Address getAddress() {
         return address;
     }
@@ -99,6 +109,7 @@ public class Company {
         this.address = address;
     }
 
+    @Override
     public Long getCreaterId() {
         return createrId;
     }
@@ -106,6 +117,7 @@ public class Company {
         this.createrId = createrId;
     }
 
+    @Override
     public Long getLogoId() {
         return logoId;
     }

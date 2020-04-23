@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.auth.api.model.IGender;
+
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Locale;
@@ -8,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "gender")
-public class Gender {
+public class Gender implements IGender {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,6 +27,7 @@ public class Gender {
 
     public Gender() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -32,6 +35,7 @@ public class Gender {
         this.id = id;
     }
 
+    @Override
     public String getNameToSystem() {
         return nameToSystem;
     }
@@ -39,6 +43,7 @@ public class Gender {
         this.nameToSystem = nameToSystem;
     }
 
+    @Override
     public Map<Locale, String> getNamesToView() {
         return namesToView;
     }

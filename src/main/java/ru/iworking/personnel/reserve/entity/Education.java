@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.education.api.model.IEducation;
+
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Locale;
@@ -8,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "education")
-public class Education {
+public class Education implements IEducation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,6 +27,7 @@ public class Education {
 
     public Education() {}
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -32,6 +35,7 @@ public class Education {
         this.id = id;
     }
 
+    @Override
     public String getNameToSystem() {
         return nameToSystem;
     }
@@ -39,6 +43,7 @@ public class Education {
         this.nameToSystem = nameToSystem;
     }
 
+    @Override
     public Map<Locale, String> getNamesToView() {
         return namesToView;
     }

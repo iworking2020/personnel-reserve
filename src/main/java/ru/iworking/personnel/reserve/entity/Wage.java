@@ -1,12 +1,14 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.service.api.model.IWage;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
 @Table(name = "wage")
-public class Wage {
+public class Wage implements IWage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -23,6 +25,7 @@ public class Wage {
 
     public Wage() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -30,6 +33,7 @@ public class Wage {
         this.id = id;
     }
 
+    @Override
     public Integer getCount() {
         return Integer.valueOf(Double.valueOf(count.toString()).intValue());
     }
@@ -40,6 +44,7 @@ public class Wage {
         this.count = count;
     }
 
+    @Override
     public Long getCurrencyId() {
         return currencyId;
     }
@@ -47,6 +52,7 @@ public class Wage {
         this.currencyId = currencyId;
     }
 
+    @Override
     public Long getPeriodId() {
         return periodId;
     }

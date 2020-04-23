@@ -1,11 +1,13 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.service.api.model.INumberPhone;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "number_phone")
-public class NumberPhone {
+public class NumberPhone implements INumberPhone {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -19,6 +21,7 @@ public class NumberPhone {
 
     public NumberPhone() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -26,6 +29,7 @@ public class NumberPhone {
         this.id = id;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
@@ -33,6 +37,7 @@ public class NumberPhone {
         this.code = code;
     }
 
+    @Override
     public String getNumber() {
         return number;
     }

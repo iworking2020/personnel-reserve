@@ -1,11 +1,13 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.service.api.model.IAddress;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "address")
-public class Address {
+public class Address implements IAddress {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -24,6 +26,7 @@ public class Address {
 
     public Address() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -31,6 +34,7 @@ public class Address {
         this.id = id;
     }
 
+    @Override
     public Long getCountryId() {
         return countryId;
     }
@@ -38,6 +42,7 @@ public class Address {
         this.countryId = countryId;
     }
 
+    @Override
     public Long getRegionId() {
         return regionId;
     }
@@ -45,6 +50,7 @@ public class Address {
         this.regionId = regionId;
     }
 
+    @Override
     public Long getCityId() {
         return cityId;
     }
@@ -52,6 +58,7 @@ public class Address {
         this.cityId = cityId;
     }
 
+    @Override
     public String getStreet() {
         return street;
     }
@@ -59,6 +66,7 @@ public class Address {
         this.street = street;
     }
 
+    @Override
     public String getHouse() {
         return house;
     }

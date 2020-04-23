@@ -1,12 +1,14 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.vacancy.api.model.IVacancy;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "vacancy")
-public class Vacancy {
+public class Vacancy implements IVacancy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -51,6 +53,7 @@ public class Vacancy {
 
     public Vacancy() { }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -58,6 +61,7 @@ public class Vacancy {
         this.id = id;
     }
 
+    @Override
     public Long getUserId() {
         return userId;
     }
@@ -65,6 +69,7 @@ public class Vacancy {
         this.userId = userId;
     }
 
+    @Override
     public Long getCompanyId() {
         return companyId;
     }
@@ -72,6 +77,7 @@ public class Vacancy {
         this.companyId = companyId;
     }
 
+    @Override
     public LocalDateTime getDatecreate() {
         return datecreate;
     }
@@ -79,6 +85,7 @@ public class Vacancy {
         this.datecreate = datecreate;
     }
 
+    @Override
     public String getProfession() {
         return profession;
     }
@@ -86,6 +93,7 @@ public class Vacancy {
         this.profession = profession;
     }
 
+    @Override
     public Long getProfFieldId() {
         return profFieldId;
     }
@@ -93,6 +101,7 @@ public class Vacancy {
         this.profFieldId = profFieldId;
     }
 
+    @Override
     public Long getWorkTypeId() {
         return workTypeId;
     }
@@ -100,6 +109,7 @@ public class Vacancy {
         this.workTypeId = workTypeId;
     }
 
+    @Override
     public Wage getWage() {
         return wage;
     }
@@ -107,6 +117,7 @@ public class Vacancy {
         this.wage = wage;
     }
 
+    @Override
     public Long getEducationId() {
         return educationId;
     }
@@ -114,6 +125,7 @@ public class Vacancy {
         this.educationId = educationId;
     }
 
+    @Override
     public Experience getExperience() {
         return experience;
     }
@@ -121,6 +133,7 @@ public class Vacancy {
         this.experience = experience;
     }
 
+    @Override
     public DescriptionVacancy getDescription() {
         return description;
     }
@@ -128,6 +141,7 @@ public class Vacancy {
         this.description = description;
     }
 
+    @Override
     public Address getAddress() {
         return address;
     }
