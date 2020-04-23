@@ -21,7 +21,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class VacanciesTableController extends FxmlController implements VacancyEditProvider, VacancyViewProvider, CompaniesTableProvider {
+public class VacanciesTableController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(VacanciesTableController.class);
 
@@ -162,17 +162,14 @@ public class VacanciesTableController extends FxmlController implements VacancyE
         disableTargetItemButtons();
     }
 
-    @Override
     public VacancyEditController getVacancyEditController() {
         return (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
     }
 
-    @Override
     public VacancyViewController getVacancyViewController() {
         return (VacancyViewController) getControllerProvider().get(VacancyViewController.class);
     }
 
-    @Override
     public CompaniesTableController getCompaniesTableController() {
         return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
     }

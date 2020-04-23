@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.CATEGORY;
 import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.VALUE;
 
-public class ResumesTreeController extends FxmlController implements ResumeEditProvider, ResumeViewProvider, VacanciesPaneProvider {
+public class ResumesTreeController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumesTreeController.class);
 
@@ -106,17 +106,14 @@ public class ResumesTreeController extends FxmlController implements ResumeEditP
         initData();
     }
 
-    @Override
     public ResumeEditController getResumeEditController() {
         return (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
     }
 
-    @Override
     public ResumeViewController getResumeViewController() {
         return (ResumeViewController) getControllerProvider().get(ResumeViewController.class);
     }
 
-    @Override
     public VacanciesPaneController getVacanciesPaneController() {
         return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
     }

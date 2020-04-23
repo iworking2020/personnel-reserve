@@ -4,7 +4,6 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -52,49 +51,39 @@ public class CompaniesTableController extends FxmlController {
         tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
 
         tableCompanies.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            CompanyViewController companyViewController = (CompanyViewController) getControllerProvider().get(CompanyViewController.class);
-            VacanciesTableController vacanciesTableController = (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
-
             enableTargetItemButtons();
-            companyViewController.setData(newSelection);
-            companyViewController.show();
-            vacanciesTableController.enableNoTargetButtons();
-            if (newSelection != null) vacanciesTableController.actionUpdate(null);
+            getCompanyViewController().setData(newSelection);
+            getCompanyViewController().show();
+            getVacanciesTableController().enableNoTargetButtons();
+            if (newSelection != null) getVacanciesTableController().actionUpdate(null);
         });
 
     }
 
     @FXML
     public void actionCreate(ActionEvent event) {
-        CompanyEditController companyEditController = (CompanyEditController) getControllerProvider().get(CompanyEditController.class);
-        companyEditController.clear();
-        companyEditController.show();
+        getCompanyEditController().clear();
+        getCompanyEditController().show();
     }
 
     @FXML
     public void actionEdit(ActionEvent event) {
-        CompanyEditController companyEditController = (CompanyEditController) getControllerProvider().get(CompanyEditController.class);
-
         Company company = tableCompanies.getSelectionModel().getSelectedItem();
         if (company != null) {
-            companyEditController.setData(company);
-            companyEditController.show();
-        } else companyEditController.actionSave(event);
+            getCompanyEditController().setData(company);
+            getCompanyEditController().show();
+        } else getCompanyEditController().actionSave(event);
     }
 
     @FXML
     public void actionUpdate(ActionEvent event) {
-        VacanciesTableController vacanciesTableController = (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
-        CompanyEditController companyEditController = (CompanyEditController) getControllerProvider().get(CompanyEditController.class);
-        CompanyViewController companyViewController = (CompanyViewController) getControllerProvider().get(CompanyViewController.class);
-
         clear();
-        vacanciesTableController.disableNoTargetItemButtons();
-        vacanciesTableController.clear();
-        vacanciesTableController.actionUpdate(event);
+        getVacanciesTableController().disableNoTargetItemButtons();
+        getVacanciesTableController().clear();
+        getVacanciesTableController().actionUpdate(event);
         tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
-        companyEditController.hide();
-        companyViewController.hide();
+        getCompanyEditController().hide();
+        getCompanyViewController().hide();
         logger.debug("Companies table has been updated...");
     }
 
@@ -123,5 +112,17 @@ public class CompaniesTableController extends FxmlController {
         if (tableCompanies.getSelectionModel() != null) tableCompanies.getSelectionModel().clearSelection();
         editCompanyButton.setDisable(true);
         deleteCompanyButton.setDisable(true);
+    }
+
+    public CompanyEditController getCompanyEditController() {
+        return (CompanyEditController) getControllerProvider().get(CompanyEditController.class);
+    }
+
+    public CompanyViewController getCompanyViewController() {
+        return (CompanyViewController) getControllerProvider().get(CompanyViewController.class);
+    }
+
+    public VacanciesTableController getVacanciesTableController() {
+        return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
     }
 }

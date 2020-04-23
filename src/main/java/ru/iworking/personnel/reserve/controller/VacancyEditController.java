@@ -21,7 +21,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class VacancyEditController extends FxmlController implements VacanciesTableProvider, CompaniesTableProvider {
+public class VacancyEditController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(VacancyEditController.class);
 
@@ -209,12 +209,10 @@ public class VacancyEditController extends FxmlController implements VacanciesTa
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
     }
 
-    @Override
     public CompaniesTableController getCompaniesTableController() {
         return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
     }
 
-    @Override
     public VacanciesTableController getVacanciesTableController() {
         return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
     }

@@ -26,7 +26,7 @@ import ru.iworking.service.api.model.INumberPhone;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CompanyEditController extends FxmlController implements CompaniesTableProvider {
+public class CompanyEditController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(CompanyEditController.class);
 
@@ -182,7 +182,6 @@ public class CompanyEditController extends FxmlController implements CompaniesTa
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
     }
 
-    @Override
     public CompaniesTableController getCompaniesTableController() {
         return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
     }
