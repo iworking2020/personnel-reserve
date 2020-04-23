@@ -7,12 +7,12 @@
     <children>
         <FlowPane>
             <children>
-                <Button fx:id="createCompanyButton" mnemonicParsing="false" styleClass="grey" text="Добавить">
+                <Button fx:id="createCompanyButton" mnemonicParsing="false" styleClass="grey" text="Добавить" onAction="#actionCreate">
                     <FlowPane.margin>
                         <Insets bottom="5.0" right="5.0" />
                     </FlowPane.margin>
                 </Button>
-                <Button fx:id="updateCompaniesTableButton" mnemonicParsing="false" styleClass="grey" text="Обновить">
+                <Button fx:id="updateCompaniesTableButton" mnemonicParsing="false" styleClass="grey" text="Обновить" onAction="#actionUpdate">
                     <opaqueInsets>
                         <Insets />
                     </opaqueInsets>
@@ -20,12 +20,12 @@
                         <Insets bottom="5.0" right="5.0" />
                     </FlowPane.margin>
                 </Button>
-                <Button fx:id="editCompanyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Редактировать">
+                <Button fx:id="editCompanyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Редактировать" onAction="#actionEdit">
                     <FlowPane.margin>
                         <Insets bottom="5.0" right="5.0" />
                     </FlowPane.margin>
                 </Button>
-                <Button fx:id="deleteCompanyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Удалить">
+                <Button fx:id="deleteCompanyButton" disable="true" mnemonicParsing="false" styleClass="grey" text="Удалить" onAction="#actionDelete">
                     <FlowPane.margin>
                         <Insets bottom="5.0" />
                     </FlowPane.margin>

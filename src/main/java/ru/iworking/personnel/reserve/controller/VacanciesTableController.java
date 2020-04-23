@@ -2,12 +2,15 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.service.api.utils.LocaleUtil;
@@ -20,27 +23,14 @@ import java.util.ResourceBundle;
 
 public class VacanciesTableController extends FxmlController {
 
+    private static final Logger logger = LogManager.getLogger(VacanciesTableController.class);
+
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @FXML private Button addVacancyButton;
-    public Button getAddVacancyButton() {
-        return addVacancyButton;
-    }
-
     @FXML private Button updateVacanciesButton;
-    public Button getUpdateVacanciesButton() {
-        return updateVacanciesButton;
-    }
-
     @FXML private Button editVacancyButton;
-    public Button getEditVacancyButton() {
-        return editVacancyButton;
-    }
-
     @FXML private Button deleteVacancyButton;
-    public Button getDeleteVacancyButton() {
-        return deleteVacancyButton;
-    }
 
     @FXML private TableView<Vacancy> tableVacancies;
     public TableView<Vacancy> getTableVacancies() {
@@ -99,10 +89,59 @@ public class VacanciesTableController extends FxmlController {
             String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
+
+        tableVacancies.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            VacancyViewController vacancyViewController = (VacancyViewController) getControllerProvider().get(VacancyViewController.class);
+            enableTargetItemButtons();
+            vacancyViewController.setData(newSelection);
+            vacancyViewController.show();
+        });
     }
 
     public void setData(List<Vacancy> data) {
         tableVacancies.setItems(FXCollections.observableList(data));
+    }
+
+    @FXML
+    public void actionCreate(ActionEvent event) {
+        VacancyEditController vacancyEditController = (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
+        vacancyEditController.clear();
+        vacancyEditController.show();
+    }
+
+    @FXML
+    public void actionUpdate(ActionEvent event) {
+        CompaniesTableController companiesTableController = (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+        VacancyEditController vacancyEditController = (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
+        VacancyViewController vacancyViewController = (VacancyViewController) getControllerProvider().get(VacancyViewController.class);
+
+        clear();
+        disableTargetItemButtons();
+        if (companiesTableController.getTableCompanies().getSelectionModel() != null) {
+            Company company = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem();
+            if (company != null) setData(vacancyDao.findAllByCompanyId(company.getId()));
+        }
+        vacancyEditController.hide();
+        vacancyViewController.hide();
+        logger.debug("Vacancies table has been updated...");
+    }
+
+    @FXML
+    public void actionEdit(ActionEvent event) {
+        VacancyEditController vacancyEditController = (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
+
+        Vacancy vacancy = tableVacancies.getSelectionModel().getSelectedItem();
+        if (vacancy != null) {
+            vacancyEditController.setData(vacancy);
+            vacancyEditController.show();
+        } else vacancyEditController.actionSave(event);
+    }
+
+    @FXML
+    public void actionDelete(ActionEvent event) {
+        Vacancy vacancy = tableVacancies.getSelectionModel().getSelectedItem();
+        if (vacancy != null) vacancyDao.delete(vacancy);
+        actionUpdate(event);
     }
 
     public void enableTargetItemButtons() {

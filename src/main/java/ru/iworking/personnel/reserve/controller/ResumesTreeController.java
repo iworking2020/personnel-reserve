@@ -6,8 +6,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javassist.NotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.dao.ResumeStateDao;
+import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.model.TreeViewStep;
 import ru.iworking.service.api.utils.LocaleUtil;
 
@@ -19,20 +23,11 @@ import static ru.iworking.personnel.reserve.model.TreeViewStep.StepType.VALUE;
 
 public class ResumesTreeController extends FxmlController {
 
+    private static final Logger logger = LogManager.getLogger(ResumesTreeController.class);
+
     @FXML private TreeView<TreeViewStep> resumesTreeView;
-    public TreeView<TreeViewStep> getTreeView() {
-        return resumesTreeView;
-    }
-
     @FXML private Button updateButton;
-    public Button getUpdateButton() {
-        return updateButton;
-    }
-
     @FXML private Button buttonEdit;
-    public Button getButtonEdit() {
-        return buttonEdit;
-    }
 
 
     private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
@@ -58,6 +53,41 @@ public class ResumesTreeController extends FxmlController {
         });
         resumesTreeView.setRoot(rootTreeNode);
         resumesTreeView.setShowRoot(false);
+
+        resumesTreeView.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+            if (newValue != null) {
+                ResumeViewController resumeViewController = (ResumeViewController) getControllerProvider().get(ResumeViewController.class);
+                ResumeEditController resumeEditController = (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
+                VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
+                TreeViewStep treeStep = newValue.getValue();
+                if (treeStep.getType() == TreeViewStep.StepType.VALUE) {
+                    Long id = treeStep.getCode();
+                    if (id != null) {
+                        try {
+                            Resume resume = resumeDao.find(id);
+                            if (resume == null) {
+                                throw new NotFoundException("resume not found");
+                            } else {
+                                resumeViewController.setData(resume);
+                                resumeViewController.show();
+                                resumeEditController.hide();
+                                vacanciesPaneController.hideWrapperClient();
+                            }
+                        } catch (Exception ex) {
+                            logger.error(ex);
+                            newValue.getParent().getChildren().remove(newValue);
+                            logger.debug("resume is null..., remove from treeView");
+                        }
+                    } else {
+                        logger.debug("treeStep.getCode() is null..., skip");
+                    }
+                } else {
+                    resumeViewController.hide();
+                    resumeEditController.hide();
+                    vacanciesPaneController.showWrapperClient();
+                }
+            }
+        });
     }
 
     @FXML

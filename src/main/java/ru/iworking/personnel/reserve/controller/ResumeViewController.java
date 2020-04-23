@@ -177,6 +177,13 @@ public class ResumeViewController extends FxmlController {
     }
 
     @FXML
+    public void actionCancel(ActionEvent event) {
+        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
+        hide();
+        vacanciesPaneController.showWrapperClient();
+    }
+
+    @FXML
     public void actionSavePdf(ActionEvent event) {
         Resume resume = resumeDao.findFromCash(getResumeId());
         FileChooser fileChooser = new FileChooser();

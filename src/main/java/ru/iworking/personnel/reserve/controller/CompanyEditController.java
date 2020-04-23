@@ -42,10 +42,6 @@ public class CompanyEditController extends FxmlController {
 
     @FXML private Button saveCompanyButton;
 
-    public Button getSaveCompanyButton() {
-        return saveCompanyButton;
-    }
-
     private NumberPhoneFormatter numberPhoneFormatter = new NumberPhoneFormatter();
 
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
@@ -62,6 +58,17 @@ public class CompanyEditController extends FxmlController {
         companyTypeComboBox.setCellFactory(companyTypeCellFactory);
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
 
+    }
+
+    @FXML
+    public void actionSave(ActionEvent event) {
+        Boolean isSaved = save();
+        if (isSaved) {
+            CompaniesTableController companiesTableController = (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+            hide();
+            clear();
+            companiesTableController.actionUpdate(event);
+        }
     }
 
     public void show() {

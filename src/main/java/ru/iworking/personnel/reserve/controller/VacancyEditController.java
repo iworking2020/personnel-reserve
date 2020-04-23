@@ -37,11 +37,6 @@ public class VacancyEditController extends FxmlController {
     @FXML private DatePicker vacancyExpDateEndDatePicker;
     @FXML private TextArea vacancyAddressTextArea;
 
-    @FXML private Button saveVacancyButton;
-    public Button getSaveVacancyButton() {
-        return saveVacancyButton;
-    }
-
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
     private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
     private EducationDao educationDao = EducationDao.getInstance();
@@ -90,6 +85,20 @@ public class VacancyEditController extends FxmlController {
             if (vacancy.getAddress() != null) vacancyAddressTextArea.setText(vacancy.getAddress().getStreet());
         } else {
             logger.debug("vacancy is null..");
+        }
+    }
+
+    @FXML
+    public void actionSave(ActionEvent event) {
+        CompaniesTableController companiesTableController = (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+        VacanciesTableController vacanciesTableController = (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
+
+        Long companyId = companiesTableController.getTableCompanies().getSelectionModel().getSelectedItem().getId();
+        Boolean isSaved = save(companyId);
+        if (isSaved) {
+            hide();
+            clear();
+            vacanciesTableController.actionUpdate(event);
         }
     }
 
