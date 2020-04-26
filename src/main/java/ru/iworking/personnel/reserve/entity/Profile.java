@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve.entity;
 
 import ru.iworking.auth.api.model.IProfile;
+import ru.iworking.service.api.model.INumberPhone;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -79,7 +80,7 @@ public class Profile implements IProfile {
     }
 
     @Override
-    public NumberPhone getNumberPhone() {
+    public INumberPhone getNumberPhone() {
         return numberPhone;
     }
     public void setNumberPhone(NumberPhone numberPhone) {

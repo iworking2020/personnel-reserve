@@ -2,7 +2,6 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -12,7 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.auth.api.model.IProfile;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
@@ -107,7 +105,7 @@ public class ResumeViewController extends FxmlController {
 
             resumeIdTextField.setText(resume.getId().toString());
 
-            IProfile profile = resume.getProfile();
+            Profile profile = resume.getProfile();
             if (profile != null) {
                 lastNameLabel.setText(profile.getLastName());
                 firstNameLabel.setText(profile.getFirstName());
@@ -178,14 +176,14 @@ public class ResumeViewController extends FxmlController {
 
     @FXML
     public void actionCancel(ActionEvent event) {
-        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
+        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
         hide();
         vacanciesPaneController.showWrapperClient();
     }
 
     @FXML
     public void actionSavePdf(ActionEvent event) {
-        Resume resume = resumeDao.findFromCash(getResumeId());
+        Resume resume = resumeDao.find(getResumeId());
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName("Resume"+resume.getId()+".pdf");
         fileChooser.getExtensionFilters().addAll(

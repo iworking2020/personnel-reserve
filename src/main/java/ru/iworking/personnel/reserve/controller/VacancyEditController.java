@@ -3,8 +3,10 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +16,6 @@ import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
-import ru.iworking.vacancy.api.model.IVacancy;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -69,7 +70,7 @@ public class VacancyEditController extends FxmlController {
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
     }
 
-    public void setData(IVacancy vacancy) {
+    public void setData(Vacancy vacancy) {
         if (vacancy != null) {
             if (vacancy.getId() != null) vacancyIdTextField.setText(vacancy.getId().toString());
             vacancyProfessionTextField.setText(vacancy.getProfession());
@@ -210,10 +211,10 @@ public class VacancyEditController extends FxmlController {
     }
 
     public CompaniesTableController getCompaniesTableController() {
-        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class.getName());
     }
 
     public VacanciesTableController getVacanciesTableController() {
-        return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
+        return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class.getName());
     }
 }

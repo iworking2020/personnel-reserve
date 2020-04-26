@@ -2,7 +2,7 @@ package ru.iworking.personnel.reserve.controller;
 
 import java.util.HashMap;
 
-public class ControllerProvider extends HashMap<Class<?>, Object> {
+public class ControllerProvider extends HashMap<String, Object> {
 
     private static volatile ControllerProvider instance;
 

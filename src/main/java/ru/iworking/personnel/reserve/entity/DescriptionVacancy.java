@@ -1,13 +1,11 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.vacancy.api.model.IDescriptionVacancy;
-
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "description_vacancy")
-public class DescriptionVacancy implements IDescriptionVacancy {
+public class DescriptionVacancy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,7 +28,6 @@ public class DescriptionVacancy implements IDescriptionVacancy {
 
     public DescriptionVacancy() {}
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -38,7 +35,6 @@ public class DescriptionVacancy implements IDescriptionVacancy {
         this.id = id;
     }
 
-    @Override
     public String getAbout() {
         return about;
     }
@@ -46,7 +42,6 @@ public class DescriptionVacancy implements IDescriptionVacancy {
         this.about = about;
     }
 
-    @Override
     public String getResponsibilities() {
         return responsibilities;
     }
@@ -54,7 +49,6 @@ public class DescriptionVacancy implements IDescriptionVacancy {
         this.responsibilities = responsibilities;
     }
 
-    @Override
     public String getRequirements() {
         return requirements;
     }
@@ -62,7 +56,6 @@ public class DescriptionVacancy implements IDescriptionVacancy {
         this.requirements = requirements;
     }
 
-    @Override
     public String getConditions() {
         return conditions;
     }
@@ -70,7 +63,6 @@ public class DescriptionVacancy implements IDescriptionVacancy {
         this.conditions = conditions;
     }
 
-    @Override
     public String getContact() {
         return contact;
     }

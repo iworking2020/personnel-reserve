@@ -115,14 +115,14 @@ public class CompaniesTableController extends FxmlController {
     }
 
     public CompanyEditController getCompanyEditController() {
-        return (CompanyEditController) getControllerProvider().get(CompanyEditController.class);
+        return (CompanyEditController) getControllerProvider().get(CompanyEditController.class.getName());
     }
 
     public CompanyViewController getCompanyViewController() {
-        return (CompanyViewController) getControllerProvider().get(CompanyViewController.class);
+        return (CompanyViewController) getControllerProvider().get(CompanyViewController.class.getName());
     }
 
     public VacanciesTableController getVacanciesTableController() {
-        return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class);
+        return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class.getName());
     }
 }

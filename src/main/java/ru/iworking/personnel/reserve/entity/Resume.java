@@ -1,7 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
 import ru.iworking.personnel.reserve.model.StateProvider;
-import ru.iworking.resume.api.model.IResume;
 import ru.iworking.service.api.model.IDescription;
 
 import javax.persistence.*;
@@ -10,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "resume")
-public class Resume implements IResume, Cloneable, StateProvider {
+public class Resume implements Cloneable, StateProvider {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -66,7 +65,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
 
     public Resume() { }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -74,7 +72,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.id = id;
     }
 
-    @Override
     public Long getUserId() {
         return userId;
     }
@@ -82,7 +79,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.userId = userId;
     }
 
-    @Override
     public LocalDateTime getDatecreate() {
         return datecreate;
     }
@@ -97,7 +93,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.profile = profile;
     }
 
-    @Override
     public String getProfession() {
         return profession;
     }
@@ -105,7 +100,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.profession = profession;
     }
 
-    @Override
     public NumberPhone getNumberPhone() {
         return numberPhone;
     }
@@ -113,7 +107,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.numberPhone = numberPhone;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
@@ -121,7 +114,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.email = email;
     }
 
-    @Override
     public Long getProfFieldId() {
         return profFieldId;
     }
@@ -129,7 +121,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.profFieldId = profFieldId;
     }
 
-    @Override
     public Long getWorkTypeId() {
         return workTypeId;
     }
@@ -137,7 +128,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.workTypeId = workTypeId;
     }
 
-    @Override
     public Wage getWage() {
         return wage;
     }
@@ -145,7 +135,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.wage = wage;
     }
 
-    @Override
     public Long getEducationId() {
         return educationId;
     }
@@ -153,7 +142,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.educationId = educationId;
     }
 
-    @Override
     public Experience getExperience() {
         return experience;
     }
@@ -161,7 +149,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.experience = experience;
     }
 
-    @Override
     public Address getAddress() {
         return address;
     }
@@ -169,7 +156,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.address = address;
     }
 
-    @Override
     public Long getPhotoId() {
         return photoId;
     }
@@ -177,7 +163,6 @@ public class Resume implements IResume, Cloneable, StateProvider {
         this.photoId = photoId;
     }
 
-    @Override
     public IDescription getDescription() {
         return null;
     }

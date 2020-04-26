@@ -1,15 +1,14 @@
 package ru.iworking.personnel.reserve.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.company.api.model.ICompany;
 import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
-import ru.iworking.service.api.model.IAddress;
-import ru.iworking.service.api.model.INumberPhone;
+import ru.iworking.personnel.reserve.entity.Address;
+import ru.iworking.personnel.reserve.entity.Company;
+import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.service.api.utils.LocaleUtil;
 
 import java.net.URL;
@@ -44,7 +43,7 @@ public class CompanyViewController extends FxmlController {
         companyView.setManaged(false);
     }
 
-    public void setData(ICompany company) {
+    public void setData(Company company) {
         if (company != null) {
 
             String companyTypePrefix = "Тип компании: ";
@@ -63,7 +62,7 @@ public class CompanyViewController extends FxmlController {
             String companyNamePrefix = "Наименование: ";
             companyNameLabel.setText(companyNamePrefix + company.getName());
             String companyNumberPhonePrefix = "Номер тел.: ";
-            INumberPhone numberPhone = company.getNumberPhone();
+            NumberPhone numberPhone = company.getNumberPhone();
             if (numberPhone != null && !numberPhone.getNumber().isEmpty()) {
                 companyNumberPhoneLabel.setText(companyNumberPhonePrefix + numberPhone.getNumber());
             } else {
@@ -87,7 +86,7 @@ public class CompanyViewController extends FxmlController {
             }
 
             String companyAddresPrefix = "Адрес: ";
-            IAddress address = company.getAddress();
+            Address address = company.getAddress();
             if (address != null && !address.getStreet().isEmpty()) {
                 companyAddressLabel.setText(companyAddresPrefix + address.getStreet());
             } else {

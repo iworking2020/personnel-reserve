@@ -1,8 +1,8 @@
 package ru.iworking.personnel.reserve.controller;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +13,8 @@ import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
@@ -93,8 +95,59 @@ public class ResumeEditController extends FxmlController {
         photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg")));
     }
 
-    public void initData(Resume resume) {
+    public void setData(Resume resume) {
+        lastNameTextField.setText(resume.getProfile().getLastName());
+        firstNameTextField.setText(resume.getProfile().getFirstName());
+        middleNameTextField.setText(resume.getProfile().getMiddleName());
+        numberPhoneTextField.setText(resume.getNumberPhone().getNumber());
+        emailTextField.setText(resume.getEmail());
+        professionTextField.setText(resume.getProfession());
+        if (resume.getProfFieldId() != null) profFieldComboBox.setValue(profFieldDao.findFromCash(resume.getProfFieldId()));
+        if (resume.getWage() != null) {
+            wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
+            currencyComboBox.setValue(currencyDao.findFromCash(resume.getWage().getCurrencyId()));
+        }
+        if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeDao.findFromCash(resume.getWorkTypeId()));
+        if (resume.getState() != null) resumeStateComboBox.setValue(resume.getState());
+        if (resume.getEducationId() != null) educationComboBox.setValue(educationDao.findFromCash(resume.getEducationId()));
+        experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
+        experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
 
+        addressTextArea.setText(resume.getAddress().getHouse());
+
+        if (resume.getPhotoId() != null) {
+            Photo photo = photoDao.findFromCash(resume.getPhotoId());
+            InputStream targetStream = new ByteArrayInputStream(photo.getImage());
+            Image img = new Image(targetStream);
+            photoImageView.setImage(img);
+        } else {
+            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
+            photoImageView.setImage(defaultImage);
+        }
+    }
+
+    @FXML
+    public void actionCancel(ActionEvent event) {
+        hide();
+        clear();
+    }
+
+    public void clear() {
+        lastNameTextField.setText("");
+        firstNameTextField.setText("");
+        middleNameTextField.setText("");
+        numberPhoneTextField.setText("");
+        emailTextField.setText("");
+        professionTextField.setText("");
+        profFieldComboBox.setValue(null);
+        wageTextField.setText("");
+        currencyComboBox.setValue(null);
+        workTypeComboBox.setValue(null);
+        educationComboBox.setValue(null);
+        addressTextArea.setText("");
+        experienceDateStartDatePicker.setValue(null);
+        experienceDateEndDatePicker.setValue(null);
+        resumeStateComboBox.setValue(null);
     }
 
     public void show() {

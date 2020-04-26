@@ -2,7 +2,6 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -35,8 +34,9 @@ public class ResumesTreeController extends FxmlController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        buttonEdit.setDisable(true);
         initData();
-        TreeItem<TreeViewStep> object = resumesTreeView.getSelectionModel().getSelectedItem();
+        //TreeItem<TreeViewStep> object = resumesTreeView.getSelectionModel().getSelectedItem();
     }
 
     public void initData() {
@@ -58,6 +58,7 @@ public class ResumesTreeController extends FxmlController {
             if (newValue != null) {
                 TreeViewStep treeStep = newValue.getValue();
                 if (treeStep.getType() == TreeViewStep.StepType.VALUE) {
+                    buttonEdit.setDisable(false);
                     Long id = treeStep.getCode();
                     if (id != null) {
                         try {
@@ -68,6 +69,7 @@ public class ResumesTreeController extends FxmlController {
                                 getResumeViewController().setData(resume);
                                 getResumeViewController().show();
                                 getResumeEditController().hide();
+                                getResumeEditController().clear();
                                 getVacanciesPaneController().hideWrapperClient();
                             }
                         } catch (Exception ex) {
@@ -79,24 +81,36 @@ public class ResumesTreeController extends FxmlController {
                         logger.debug("treeStep.getCode() is null..., skip");
                     }
                 } else {
+                    buttonEdit.setDisable(true);
                     getResumeViewController().hide();
                     getResumeEditController().hide();
+                    getResumeEditController().clear();
                     getVacanciesPaneController().showWrapperClient();
                 }
+            } else {
+                buttonEdit.setDisable(true);
             }
         });
     }
 
     @FXML
-    public void actionEdit(ActionEvent event) {
-        getResumeEditController().show();
-        getVacanciesPaneController().hideWrapperClient();
+    public void actionEdit(ActionEvent event) throws Exception {
+        TreeViewStep treeStep = resumesTreeView.getSelectionModel().getSelectedItem().getValue();
+        if (treeStep.getType() == TreeViewStep.StepType.VALUE) {
+            Resume resume = resumeDao.find(treeStep.getCode());
+            getResumeEditController().setData(resume);
+            getResumeEditController().show();
+            getVacanciesPaneController().hideWrapperClient();
+        } else {
+            throw new Exception("error load resume");
+        }
     }
 
     @FXML
     public void actionUpdate(ActionEvent event) {
         getResumeViewController().hide();
         getResumeEditController().hide();
+        getResumeEditController().clear();
         reload();
         getVacanciesPaneController().showWrapperClient();
     }
@@ -107,14 +121,14 @@ public class ResumesTreeController extends FxmlController {
     }
 
     public ResumeEditController getResumeEditController() {
-        return (ResumeEditController) getControllerProvider().get(ResumeEditController.class);
+        return (ResumeEditController) getControllerProvider().get(ResumeEditController.class.getName());
     }
 
     public ResumeViewController getResumeViewController() {
-        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class);
+        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
     }
 
     public VacanciesPaneController getVacanciesPaneController() {
-        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class);
+        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
     }
 }

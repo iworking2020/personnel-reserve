@@ -1,7 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
@@ -11,9 +10,9 @@ import ru.iworking.personnel.reserve.dao.EducationDao;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.WorkTypeDao;
 import ru.iworking.personnel.reserve.entity.Currency;
-import ru.iworking.service.api.model.IWage;
+import ru.iworking.personnel.reserve.entity.Vacancy;
+import ru.iworking.personnel.reserve.entity.Wage;
 import ru.iworking.service.api.utils.LocaleUtil;
-import ru.iworking.vacancy.api.model.IVacancy;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -51,7 +50,7 @@ public class VacancyViewController extends FxmlController{
         vacancyView.setManaged(false);
     }
 
-    public void setData(IVacancy vacancy) {
+    public void setData(Vacancy vacancy) {
         if (vacancy != null) {
             String prefixProfession = "Профессия: ";
             String prefixProfField = "Проф. область: ";
@@ -80,7 +79,7 @@ public class VacancyViewController extends FxmlController{
                             prefixEducation + educationDao.findFromCash(educationId).getNameToView(LocaleUtil.getDefault()) :
                             prefixEducation + "не указано");
 
-            IWage wage = vacancy.getWage();
+            Wage wage = vacancy.getWage();
             if (wage != null) {
                 String wageStr = prefixWage + wage.getCount();
                 Long currencyId = vacancy.getWage().getCurrencyId();

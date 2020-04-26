@@ -4,7 +4,6 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -163,14 +162,14 @@ public class VacanciesTableController extends FxmlController {
     }
 
     public VacancyEditController getVacancyEditController() {
-        return (VacancyEditController) getControllerProvider().get(VacancyEditController.class);
+        return (VacancyEditController) getControllerProvider().get(VacancyEditController.class.getName());
     }
 
     public VacancyViewController getVacancyViewController() {
-        return (VacancyViewController) getControllerProvider().get(VacancyViewController.class);
+        return (VacancyViewController) getControllerProvider().get(VacancyViewController.class.getName());
     }
 
     public CompaniesTableController getCompaniesTableController() {
-        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class.getName());
     }
 }

@@ -11,7 +11,7 @@ public abstract class FxmlController implements Initializable {
     }
 
     public FxmlController() {
-        controllerProvider.put(this.getClass(), this);
+        controllerProvider.put(this.getClass().getName(), this);
     }
 
 }

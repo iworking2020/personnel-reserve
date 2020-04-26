@@ -3,7 +3,6 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
@@ -11,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.company.api.model.ICompany;
 import ru.iworking.personnel.reserve.dao.CompanyDao;
 import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.entity.Address;
@@ -20,8 +18,6 @@ import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
-import ru.iworking.service.api.model.IAddress;
-import ru.iworking.service.api.model.INumberPhone;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -80,17 +76,17 @@ public class CompanyEditController extends FxmlController {
         companyEdit.setManaged(false);
     }
 
-    public void setData(ICompany company) {
+    public void setData(Company company) {
         if (company != null) {
             if (company.getId() != null) companyIdTextField.setText(company.getId().toString());
             Long companyTypeId = company.getCompanyTypeId();
             if (companyTypeId != null) companyTypeComboBox.setValue(companyTypeDao.findFromCash(companyTypeId));
             nameCompanyTextField.setText(company.getName());
-            INumberPhone numberPhone = company.getNumberPhone();
+            NumberPhone numberPhone = company.getNumberPhone();
             if (numberPhone != null) numberPhoneTextField.setText(numberPhone.getNumber());
             webPageTextField.setText(company.getWebPage());
             emailTextField.setText(company.getEmail());
-            IAddress address = company.getAddress();
+            Address address = company.getAddress();
             if (address != null) addressTextArea.setText(address.getStreet());
         } else {
             logger.debug("company is null..");
@@ -183,6 +179,6 @@ public class CompanyEditController extends FxmlController {
     }
 
     public CompaniesTableController getCompaniesTableController() {
-        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class);
+        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class.getName());
     }
 }
