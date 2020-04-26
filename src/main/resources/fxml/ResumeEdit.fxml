@@ -7,6 +7,7 @@
 <?import java.lang.String?>
 <StackPane fx:id="resumePaneEdit" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ResumeEditController">
     <children>
+      <TextField fx:id="resumeIdTextField" editable="false" visible="false" />
         <GridPane maxHeight="1.7976931348623157E308">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
@@ -70,7 +71,7 @@
                 </VBox>
                 <VBox alignment="CENTER_RIGHT" spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                     <children>
-                        <Button mnemonicParsing="false" styleClass="grey" text="Изменить">
+                        <Button mnemonicParsing="false" onAction="#actionSave" styleClass="grey" text="Изменить">
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
