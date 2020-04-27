@@ -1,3 +1,18 @@
+.button.invisible {
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+}
+
+.button.invisible:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.02);
+}
+
+.button.invisible:pressed {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
 .button.black {
     -fx-font-weight: bold;
     -fx-border-radius: 0px;

@@ -2,7 +2,6 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
@@ -71,6 +70,8 @@ public class MainMenuController extends FxmlController {
         scene.getStylesheets().add("/styles/menu-bar.css");
         scene.getStylesheets().add("/styles/vacancies-pane.css");
         scene.getStylesheets().add("/styles/tree-view.css");
+        scene.getStylesheets().add("/styles/split-pane.css");
+        scene.getStylesheets().add("/styles/accordion.css");
     }
 
     public void show(Parent root) {

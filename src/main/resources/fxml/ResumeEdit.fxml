@@ -99,7 +99,7 @@
                 </StackPane>
                 <StackPane prefHeight="150.0" prefWidth="200.0">
                     <children>
-                        <Button mnemonicParsing="false" text="Изменить">
+                        <Button mnemonicParsing="false" onAction="#actionLoadImage" text="Изменить">
                             <styleClass>
                                 <String fx:value="grey" />
                                 <String fx:value="select-image" />

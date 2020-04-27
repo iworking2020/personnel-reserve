@@ -201,4 +201,20 @@ public class ResumeViewController extends FxmlController {
         }
     }
 
+    @FXML
+    public void actionEdit(ActionEvent event) throws Exception {
+        Resume resume = resumeDao.find(getResumeId());
+        getResumeEditController().setData(resume);
+        getResumeEditController().show();
+        getVacanciesPaneController().hideWrapperClient();
+    }
+
+    public ResumeEditController getResumeEditController() {
+        return (ResumeEditController) getControllerProvider().get(ResumeEditController.class.getName());
+    }
+
+    public VacanciesPaneController getVacanciesPaneController() {
+        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
+    }
+
 }

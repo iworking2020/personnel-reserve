@@ -102,12 +102,12 @@ public class ResumeDao extends CashedDao<Resume, Long> {
         return findAll(params);
     }
 
-    public Long count(Resume resume) {
+    public Long countByResumeStateId(Long id) {
         Long count = 0L;
         try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("select COUNT(resume) from Resume as resume where id = :id", Long.class);
-            query.setParameter("id", resume.getId());
+            Query query = session.createQuery("select COUNT(resume) from Resume as resume where resume.state.id = :id", Long.class);
+            query.setParameter("id", id);
             count = (Long) query.getSingleResult();
             session.flush();
             transaction.commit();

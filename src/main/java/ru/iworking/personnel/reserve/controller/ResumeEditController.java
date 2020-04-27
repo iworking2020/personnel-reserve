@@ -8,8 +8,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
@@ -17,10 +19,7 @@ import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -138,6 +137,26 @@ public class ResumeEditController extends FxmlController {
     }
 
     @FXML
+    private void actionLoadImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("GIF", "*.gif")
+        );
+
+        File file = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
+        if (file != null) {
+            try {
+                Image img = new Image(file.toURI().toString());
+                photoImageView.setImage(img);
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        }
+    }
+
+    @FXML
     public void actionCancel(ActionEvent event) {
         hide();
         clear();
@@ -149,7 +168,7 @@ public class ResumeEditController extends FxmlController {
         if (isSaved) {
             hide();
             clear();
-            getResumesTreeController().actionUpdate(event);
+            getResumesAccordionController().actionUpdate(event);
         }
     }
 
@@ -297,8 +316,8 @@ public class ResumeEditController extends FxmlController {
         this.hide();
     }
 
-    public ResumesTreeController getResumesTreeController() {
-        return (ResumesTreeController) getControllerProvider().get(ResumesTreeController.class.getName());
+    public ResumesAccordionController getResumesAccordionController() {
+        return (ResumesAccordionController) getControllerProvider().get(ResumesAccordionController.class.getName());
     }
 
 }

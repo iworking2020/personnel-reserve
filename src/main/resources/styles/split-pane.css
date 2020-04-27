@@ -1,0 +1,14 @@
+.grey.split-pane:horizontal {
+    -fx-background-color: transparent;
+}
+
+.grey.split-pane:vertical {
+    -fx-background-color: transparent;
+}
+
+.grey.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: transparent;
+}
+.grey.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: transparent;
+}

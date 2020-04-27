@@ -43,13 +43,13 @@
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
     -fx-background-color : rgba(0,0,0, 0.20);
-    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-insets : 3.2, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
 
 .scroll-bar:horizontal .thumb:hover,
 .scroll-bar:vertical .thumb:hover {
     -fx-background-color : rgba(0,0,0, 0.30);
-    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-insets : 3.2, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
