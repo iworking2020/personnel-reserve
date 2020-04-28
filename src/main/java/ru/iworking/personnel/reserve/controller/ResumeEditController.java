@@ -8,10 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.component.EducationEditBlock;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
@@ -57,6 +59,8 @@ public class ResumeEditController extends FxmlController {
     @FXML private ImageView photoImageView;
 
     @FXML private Button buttonCancel;
+
+    @FXML private VBox educationEditList;
 
     private ProfField currentProfField;
 
@@ -134,6 +138,12 @@ public class ResumeEditController extends FxmlController {
             Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
             photoImageView.setImage(defaultImage);
         }
+    }
+
+    @FXML
+    public void actionAddEducation(ActionEvent event) {
+        EducationEditBlock educationEditBlock = new EducationEditBlock();
+        educationEditList.getChildren().add(educationEditBlock);
     }
 
     @FXML

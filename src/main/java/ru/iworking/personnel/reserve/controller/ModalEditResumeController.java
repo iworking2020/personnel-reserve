@@ -173,7 +173,7 @@ public class ModalEditResumeController implements Initializable {
     }
 
     @FXML
-    private void actionButtonImageReplace(ActionEvent event) {
+    public void actionButtonImageReplace(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
@@ -193,12 +193,12 @@ public class ModalEditResumeController implements Initializable {
     }
 
     @FXML
-    private void actionButtonCancel(ActionEvent event) {
+    public void actionButtonCancel(ActionEvent event) {
         this.closeStage(event);
     }
 
     @FXML
-    private void actionButtonEdit(ActionEvent event) throws CloneNotSupportedException {
+    public void actionButtonEdit(ActionEvent event) throws CloneNotSupportedException {
 
         Resume newResume = (Resume) resume.clone();
 
