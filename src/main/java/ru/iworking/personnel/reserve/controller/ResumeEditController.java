@@ -16,6 +16,7 @@ import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.EducationEditBlock;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
 import ru.iworking.personnel.reserve.utils.ImageUtil;
 

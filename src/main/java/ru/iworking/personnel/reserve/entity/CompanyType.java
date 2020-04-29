@@ -1,6 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.company.api.model.ICompanyType;
+import ru.iworking.personnel.reserve.entity.name.AbbreviatedNameView;
+import ru.iworking.personnel.reserve.entity.name.NameSystem;
+import ru.iworking.personnel.reserve.entity.name.NameView;
 import ru.iworking.service.api.enums.FinancialType;
 
 import javax.persistence.*;
@@ -11,33 +13,21 @@ import java.util.Objects;
 
 @Entity(name = "CompanyType")
 @Table(name = "company_type")
-public class CompanyType implements ICompanyType {
+public class CompanyType {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_to_system")
-    private String nameToSystem;
-
     @Column(name = "financial_type")
     private FinancialType financialType;
 
-    @ElementCollection
-    @CollectionTable(name="company_type_abbreviated_names_to_view", joinColumns = @JoinColumn(name="company_type_id"))
-    @Column(name="abbreviated_names_to_view")
-    @MapKeyColumn(name="abbreviated_names_to_view_key")
-    private Map<Locale, String> abbreviatedNamesToView = new HashMap<>();
-
-    @ElementCollection
-    @CollectionTable(name="company_type_names_to_view", joinColumns = @JoinColumn(name="company_type_id"))
-    @Column(name="names_to_view")
-    @MapKeyColumn(name="names_to_view_key")
-    private Map<Locale, String> namesToView = new HashMap<>();
+    @Embedded private NameSystem nameSystem;
+    @Embedded private NameView nameView;
+    @Embedded private AbbreviatedNameView abbreviatedNameView;
 
     public CompanyType() { }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -45,15 +35,6 @@ public class CompanyType implements ICompanyType {
         this.id = id;
     }
 
-    @Override
-    public String getNameToSystem() {
-        return nameToSystem;
-    }
-    public void setNameToSystem(String nameToSystem) {
-        this.nameToSystem = nameToSystem;
-    }
-
-    @Override
     public FinancialType getFinancialType() {
         return financialType;
     }
@@ -61,20 +42,25 @@ public class CompanyType implements ICompanyType {
         this.financialType = financialType;
     }
 
-    @Override
-    public Map<Locale, String> getAbbreviatedNamesToView() {
-        return abbreviatedNamesToView;
+    public NameSystem getNameSystem() {
+        return nameSystem;
     }
-    public void setAbbreviatedNamesToView(Map<Locale, String> abbreviatedNamesToView) {
-        this.abbreviatedNamesToView = abbreviatedNamesToView;
+    public void setNameSystem(NameSystem nameSystem) {
+        this.nameSystem = nameSystem;
     }
 
-    @Override
-    public Map<Locale, String> getNamesToView() {
-        return namesToView;
+    public NameView getNameView() {
+        return nameView;
     }
-    public void setNamesToView(Map<Locale, String> namesToView) {
-        this.namesToView = namesToView;
+    public void setNameView(NameView nameView) {
+        this.nameView = nameView;
+    }
+
+    public AbbreviatedNameView getAbbreviatedNameView() {
+        return abbreviatedNameView;
+    }
+    public void setAbbreviatedNameView(AbbreviatedNameView abbreviatedNameView) {
+        this.abbreviatedNameView = abbreviatedNameView;
     }
 
     @Override
@@ -82,12 +68,14 @@ public class CompanyType implements ICompanyType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompanyType that = (CompanyType) o;
-        return Objects.equals(nameToSystem, that.nameToSystem) &&
-                financialType == that.financialType;
+        return financialType == that.financialType &&
+                Objects.equals(nameSystem, that.nameSystem) &&
+                Objects.equals(nameView, that.nameView) &&
+                Objects.equals(abbreviatedNameView, that.abbreviatedNameView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameToSystem, financialType);
+        return Objects.hash(financialType, nameSystem, nameView, abbreviatedNameView);
     }
 }

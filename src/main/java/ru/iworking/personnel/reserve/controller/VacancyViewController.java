@@ -12,7 +12,7 @@ import ru.iworking.personnel.reserve.dao.WorkTypeDao;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.entity.Wage;
-import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -64,19 +64,19 @@ public class VacancyViewController extends FxmlController{
             Long profFieldId = vacancy.getProfFieldId();
             profFieldLabel.setText(
                     profFieldId != null ?
-                            prefixProfField + profFieldDao.findFromCash(profFieldId).getNameToView(LocaleUtil.getDefault()) :
+                            prefixProfField + profFieldDao.findFromCash(profFieldId).getNameView().getName(LocaleUtil.getDefault()) :
                             prefixProfField + "не указана");
 
             Long workTypeId = vacancy.getWorkTypeId();
             workTypeLabel.setText(
                     workTypeId != null ?
-                            prefixWorkType + workTypeDao.findFromCash(workTypeId).getNameToView(LocaleUtil.getDefault()) :
+                            prefixWorkType + workTypeDao.findFromCash(workTypeId).getNameView().getName(LocaleUtil.getDefault()) :
                             prefixWorkType + "не указан");
 
             Long educationId = vacancy.getEducationId();
             educationLabel.setText(
                     educationId != null ?
-                            prefixEducation + educationDao.findFromCash(educationId).getNameToView(LocaleUtil.getDefault()) :
+                            prefixEducation + educationDao.findFromCash(educationId).getNameView().getName(LocaleUtil.getDefault()) :
                             prefixEducation + "не указано");
 
             Wage wage = vacancy.getWage();
@@ -85,7 +85,7 @@ public class VacancyViewController extends FxmlController{
                 Long currencyId = vacancy.getWage().getCurrencyId();
                 if (currencyId != null) {
                     Currency currency = currencyDao.findFromCash(currencyId);
-                    wageStr += " " + currency.getNameToView(LocaleUtil.getDefault());
+                    wageStr += " " + currency.getNameView().getName(LocaleUtil.getDefault());
                 }
                 wageLabel.setText(wageStr);
             }

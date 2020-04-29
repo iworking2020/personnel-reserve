@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -88,19 +88,19 @@ public class PdfResumeWriter extends PdfWriterFactory {
         String profession = "профессия: "+resume.getProfession();
         String wage = resume.getWage() != null ?
                 "зарплата: "+resume.getWage().getCountBigDecimal().toString() + " " +
-                        currencyDao.findFromCash(resume.getWage().getCurrencyId()).getNameToView(LocaleUtil.getDefault()) :
+                        currencyDao.findFromCash(resume.getWage().getCurrencyId()).getNameView().getName(LocaleUtil.getDefault()) :
                 "зарплата: не указана";
         String profField = resume.getProfFieldId() != null ?
                 "профобласть: "+
-                        profFieldDao.findFromCash(resume.getProfFieldId()).getNameToView(LocaleUtil.getDefault()) :
+                        profFieldDao.findFromCash(resume.getProfFieldId()).getNameView().getName(LocaleUtil.getDefault()) :
                 "профобласть: не указана";
         String workType = resume.getWorkTypeId() != null ?
                 "график: "+
-                        workTypeDao.findFromCash(resume.getWorkTypeId()).getNameToView(LocaleUtil.getDefault()) :
+                        workTypeDao.findFromCash(resume.getWorkTypeId()).getNameView().getName(LocaleUtil.getDefault()) :
                 "график: не указан";
         String education = resume.getEducationId() != null ?
                 "образование: "+
-                        educationDao.findFromCash(resume.getEducationId()).getNameToView(LocaleUtil.getDefault()) :
+                        educationDao.findFromCash(resume.getEducationId()).getNameView().getName(LocaleUtil.getDefault()) :
                 "образование: не указано";
 
         Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));

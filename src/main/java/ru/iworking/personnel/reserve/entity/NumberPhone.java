@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "number_phone")
-public class NumberPhone implements INumberPhone {
+public class NumberPhone {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,7 +21,10 @@ public class NumberPhone implements INumberPhone {
 
     public NumberPhone() { }
 
-    @Override
+    public String getFullNumber() {
+        return this.getCode() + this.getNumber();
+    }
+
     public Long getId() {
         return id;
     }
@@ -29,7 +32,6 @@ public class NumberPhone implements INumberPhone {
         this.id = id;
     }
 
-    @Override
     public String getCode() {
         return code;
     }
@@ -37,7 +39,6 @@ public class NumberPhone implements INumberPhone {
         this.code = code;
     }
 
-    @Override
     public String getNumber() {
         return number;
     }

@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.entity;
 
+import ru.iworking.personnel.reserve.entity.name.NameSystem;
+import ru.iworking.personnel.reserve.entity.name.NameView;
 import ru.iworking.profession.api.model.IWorkType;
 
 import javax.persistence.*;
@@ -10,24 +12,17 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "work_type")
-public class WorkType implements IWorkType {
+public class WorkType {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_to_system")
-    private String nameToSystem;
-
-    @ElementCollection
-    @CollectionTable(name="work_type_names_to_view", joinColumns = @JoinColumn(name="work_type_id"))
-    @Column(name="names_to_view")
-    @MapKeyColumn(name="names_to_view_key")
-    private Map<Locale, String> namesToView = new HashMap<>();
+    @Embedded private NameSystem nameSystem;
+    @Embedded private NameView nameView;
 
     public WorkType() { }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -35,20 +30,18 @@ public class WorkType implements IWorkType {
         this.id = id;
     }
 
-    @Override
-    public String getNameToSystem() {
-        return nameToSystem;
+    public NameSystem getNameSystem() {
+        return nameSystem;
     }
-    public void setNameToSystem(String nameToSystem) {
-        this.nameToSystem = nameToSystem;
+    public void setNameSystem(NameSystem nameSystem) {
+        this.nameSystem = nameSystem;
     }
 
-    @Override
-    public Map<Locale, String> getNamesToView() {
-        return namesToView;
+    public NameView getNameView() {
+        return nameView;
     }
-    public void setNamesToView(Map<Locale, String> namesToView) {
-        this.namesToView = namesToView;
+    public void setNameView(NameView nameView) {
+        this.nameView = nameView;
     }
 
     @Override
@@ -56,12 +49,12 @@ public class WorkType implements IWorkType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkType workType = (WorkType) o;
-        return Objects.equals(nameToSystem, workType.nameToSystem) &&
-                Objects.equals(namesToView, workType.namesToView);
+        return Objects.equals(nameSystem, workType.nameSystem) &&
+                Objects.equals(nameView, workType.nameView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameToSystem, namesToView);
+        return Objects.hash(nameSystem, nameView);
     }
 }

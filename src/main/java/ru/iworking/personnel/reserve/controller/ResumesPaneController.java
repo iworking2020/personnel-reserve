@@ -28,7 +28,7 @@ import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.docs.exel.ExelResumeListWriter;
-import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.File;
@@ -124,7 +124,7 @@ public class ResumesPaneController extends FxmlController {
         workTypeColumn.setCellValueFactory(cellData -> {
             WorkType workType = null;
             if (cellData.getValue().getWorkTypeId() != null)  workType = workTypeDao.findFromCash(cellData.getValue().getWorkTypeId());
-            String textColumn = workType != null ? workType.getNameToView(LocaleUtil.getDefault()) : "не указан";
+            String textColumn = workType != null ? workType.getNameView().getName(LocaleUtil.getDefault()) : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
         wageColumn.setCellValueFactory(cellData -> {
@@ -136,13 +136,13 @@ public class ResumesPaneController extends FxmlController {
         currencyColumn.setCellValueFactory(cellData -> {
             Wage wage = cellData.getValue().getWage();
             Currency currency = wage != null ? currencyDao.findFromCash(wage.getCurrencyId()) : null;
-            String textColumn = currency != null ? currency.getNameToView(LocaleUtil.getDefault()) : "не указана";
+            String textColumn = currency != null ? currency.getNameView().getName(LocaleUtil.getDefault()) : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
         educationColumn.setCellValueFactory(cellData -> {
             Education education = null;
             if (cellData.getValue().getEducationId() != null) education = educationDao.findFromCash(cellData.getValue().getEducationId());
-            String textColumn = education != null ? education.getNameToView(LocaleUtil.getDefault()) : "не указано";
+            String textColumn = education != null ? education.getNameView().getName(LocaleUtil.getDefault()) : "не указано";
             return new ReadOnlyStringWrapper(textColumn);
         });
         experienceColumn.setCellValueFactory(cellData -> {
@@ -168,7 +168,7 @@ public class ResumesPaneController extends FxmlController {
 
         profFieldDao.findAllFromCash().stream().forEach(profField -> {
             Button button = new Button();
-            button.setText(profField.getNameToView(LocaleUtil.getDefault()));
+            button.setText(profField.getNameView().getName(LocaleUtil.getDefault()));
             button.setOnAction(event -> {
                 selectCategory(event, profField);
                 actionButtonClear(event);

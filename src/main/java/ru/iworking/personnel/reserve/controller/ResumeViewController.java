@@ -14,10 +14,10 @@ import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.model.AppFunctionalInterface;
+import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
-import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.ByteArrayInputStream;
@@ -116,7 +116,7 @@ public class ResumeViewController extends FxmlController {
             profession.setText(prefixProfession + resume.getProfession());
             if (resume.getProfFieldId() != null) {
                 Long profFieldId = resume.getProfFieldId();
-                profField.setText(prefixProfField + profFieldDao.findFromCash(profFieldId).getNameToView(LocaleUtil.getDefault()));
+                profField.setText(prefixProfField + profFieldDao.findFromCash(profFieldId).getNameView().getName(LocaleUtil.getDefault()));
             } else {
                 profField.setText(prefixProfField + "не указана");
             }
@@ -124,7 +124,7 @@ public class ResumeViewController extends FxmlController {
                 String wageString = prefixWage;
                 if(resume.getWage().getCurrencyId() != null) {
                     Currency currency = currencyDao.findFromCash(resume.getWage().getCurrencyId());
-                    wageString += decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameToView(LocaleUtil.getDefault());
+                    wageString += decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameView().getName(LocaleUtil.getDefault());
                 } else {
                     wageString += decimalFormat.format(resume.getWage().getCountBigDecimal());
                 }
@@ -136,13 +136,13 @@ public class ResumeViewController extends FxmlController {
 
             if (resume.getWorkTypeId() != null) {
                 WorkType workType1 = workTypeDao.findFromCash(resume.getWorkTypeId());
-                workType.setText(prefixWorkType + workType1.getNameToView(LocaleUtil.getDefault()));
+                workType.setText(prefixWorkType + workType1.getNameView().getName(LocaleUtil.getDefault()));
             } else {
                 workType.setText(prefixWorkType + "не указан");
             }
             if (resume.getEducationId() != null) {
                 Education education1 = educationDao.findFromCash(resume.getEducationId());
-                education.setText(prefixEducation + education1.getNameToView(LocaleUtil.getDefault()));
+                education.setText(prefixEducation + education1.getNameView().getName(LocaleUtil.getDefault()));
             } else {
                 education.setText(prefixEducation + "не указано");
             }

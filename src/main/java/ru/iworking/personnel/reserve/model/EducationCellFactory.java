@@ -6,7 +6,7 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.Education;
-import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 public class EducationCellFactory implements Callback<ListView<Education>, ListCell<Education>> {
 
@@ -22,7 +22,7 @@ public class EducationCellFactory implements Callback<ListView<Education>, ListC
                     setGraphic(null);
                 } else {
                     try {
-                        setText(item.getNameToView(LocaleUtil.getDefault()));
+                        setText(item.getNameView().getName(LocaleUtil.getDefault()));
                     } catch (Exception ex) {
                         logger.error(ex);
                         setText("");

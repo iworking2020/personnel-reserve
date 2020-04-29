@@ -1,6 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.personnel.reserve.model.StateProvider;
+import ru.iworking.personnel.reserve.interfaces.StateProvider;
 import ru.iworking.service.api.model.IDescription;
 
 import javax.persistence.*;

@@ -1,6 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.personnel.reserve.model.State;
+import ru.iworking.personnel.reserve.entity.name.NameSystem;
+import ru.iworking.personnel.reserve.entity.name.NameView;
+import ru.iworking.personnel.reserve.interfaces.State;
 import ru.iworking.service.api.model.NameToSystem;
 import ru.iworking.service.api.model.NameToView;
 
@@ -12,20 +14,14 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "resume_state")
-public class ResumeState implements NameToSystem, NameToView, State {
+public class ResumeState implements State {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_to_system")
-    private String nameToSystem;
-
-    @ElementCollection
-    @CollectionTable(name="resume_state_names_to_view", joinColumns = @JoinColumn(name="resume_state_id"))
-    @Column(name="names_to_view")
-    @MapKeyColumn(name="names_to_view_key")
-    private Map<Locale, String> namesToView = new HashMap<>();
+    @Embedded private NameSystem nameSystem;
+    @Embedded private NameView nameView;
 
     @Override
     public Long getId() {
@@ -35,20 +31,18 @@ public class ResumeState implements NameToSystem, NameToView, State {
         this.id = id;
     }
 
-    @Override
-    public String getNameToSystem() {
-        return nameToSystem;
+    public NameSystem getNameSystem() {
+        return nameSystem;
     }
-    public void setNameToSystem(String nameToSystem) {
-        this.nameToSystem = nameToSystem;
+    public void setNameSystem(NameSystem nameSystem) {
+        this.nameSystem = nameSystem;
     }
 
-    @Override
-    public Map<Locale, String> getNamesToView() {
-        return namesToView;
+    public NameView getNameView() {
+        return nameView;
     }
-    public void setNamesToView(Map<Locale, String> namesToView) {
-        this.namesToView = namesToView;
+    public void setNameView(NameView nameView) {
+        this.nameView = nameView;
     }
 
     @Override
@@ -56,13 +50,12 @@ public class ResumeState implements NameToSystem, NameToView, State {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ResumeState that = (ResumeState) o;
-        return Objects.equals(nameToSystem, that.nameToSystem) &&
-                Objects.equals(namesToView, that.namesToView);
+        return Objects.equals(nameSystem, that.nameSystem) &&
+                Objects.equals(nameView, that.nameView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameToSystem, namesToView);
+        return Objects.hash(nameSystem, nameView);
     }
-
 }

@@ -1,6 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
 import ru.iworking.money.api.model.ICurrency;
+import ru.iworking.personnel.reserve.entity.name.NameSystem;
+import ru.iworking.personnel.reserve.entity.name.NameView;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -10,24 +12,17 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "currency")
-public class Currency implements ICurrency {
+public class Currency {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_to_system")
-    private String nameToSystem;
-
-    @ElementCollection
-    @CollectionTable(name="currency_names_to_view", joinColumns = @JoinColumn(name="currency_id"))
-    @Column(name="names_to_view")
-    @MapKeyColumn(name="names_to_view_key")
-    private Map<Locale, String> namesToView = new HashMap<>();
+    @Embedded private NameSystem nameSystem;
+    @Embedded private NameView nameView;
 
     public Currency() {}
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -35,20 +30,18 @@ public class Currency implements ICurrency {
         this.id = id;
     }
 
-    @Override
-    public String getNameToSystem() {
-        return nameToSystem;
+    public NameSystem getNameSystem() {
+        return nameSystem;
     }
-    public void setNameToSystem(String nameToSystem) {
-        this.nameToSystem = nameToSystem;
+    public void setNameSystem(NameSystem nameSystem) {
+        this.nameSystem = nameSystem;
     }
 
-    @Override
-    public Map<Locale, String> getNamesToView() {
-        return namesToView;
+    public NameView getNameView() {
+        return nameView;
     }
-    public void setNamesToView(Map<Locale, String> namesToView) {
-        this.namesToView = namesToView;
+    public void setNameView(NameView nameView) {
+        this.nameView = nameView;
     }
 
     @Override
@@ -56,12 +49,12 @@ public class Currency implements ICurrency {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Currency currency = (Currency) o;
-        return Objects.equals(nameToSystem, currency.nameToSystem) &&
-                Objects.equals(namesToView, currency.namesToView);
+        return Objects.equals(nameSystem, currency.nameSystem) &&
+                Objects.equals(nameView, currency.nameView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameToSystem, namesToView);
+        return Objects.hash(nameSystem, nameView);
     }
 }

@@ -1,6 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
 import ru.iworking.money.api.model.IPeriod;
+import ru.iworking.personnel.reserve.entity.name.NameSystem;
+import ru.iworking.personnel.reserve.entity.name.NameView;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -10,25 +12,18 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "period")
-public class Period implements IPeriod {
+public class Period {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_to_system")
-    private String nameToSystem;
-
-    @ElementCollection
-    @CollectionTable(name="period_names_to_view", joinColumns = @JoinColumn(name="period_id"))
-    @Column(name="names_to_view")
-    @MapKeyColumn(name="names_to_view_key")
-    private Map<Locale, String> namesToView = new HashMap<>();
+    @Embedded private NameSystem nameSystem;
+    @Embedded private NameView nameView;
 
     public Period() { }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -36,20 +31,18 @@ public class Period implements IPeriod {
         this.id = id;
     }
 
-    @Override
-    public String getNameToSystem() {
-        return nameToSystem;
+    public NameSystem getNameSystem() {
+        return nameSystem;
     }
-    public void setNameToSystem(String nameToSystem) {
-        this.nameToSystem = nameToSystem;
+    public void setNameSystem(NameSystem nameSystem) {
+        this.nameSystem = nameSystem;
     }
 
-    @Override
-    public Map<Locale, String> getNamesToView() {
-        return namesToView;
+    public NameView getNameView() {
+        return nameView;
     }
-    public void setNamesToView(Map<Locale, String> namesToView) {
-        this.namesToView = namesToView;
+    public void setNameView(NameView nameView) {
+        this.nameView = nameView;
     }
 
     @Override
@@ -57,12 +50,12 @@ public class Period implements IPeriod {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Period period = (Period) o;
-        return Objects.equals(nameToSystem, period.nameToSystem) &&
-                Objects.equals(namesToView, period.namesToView);
+        return Objects.equals(nameSystem, period.nameSystem) &&
+                Objects.equals(nameView, period.nameView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameToSystem, namesToView);
+        return Objects.hash(nameSystem, nameView);
     }
 }

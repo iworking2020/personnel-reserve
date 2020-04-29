@@ -2,6 +2,7 @@ package ru.iworking.personnel.reserve.entity;
 
 import ru.iworking.auth.api.model.IProfile;
 import ru.iworking.service.api.model.INumberPhone;
+import ru.iworking.service.api.utils.TimeUtil;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "profile")
-public class Profile implements IProfile {
+public class Profile {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -38,7 +39,14 @@ public class Profile implements IProfile {
 
     public Profile() { }
 
-    @Override
+    public String getFullName() {
+        return this.getLastName() + " " + this.getFirstName() + " " + this.getMiddleName();
+    }
+
+    public Integer getAge() {
+        return TimeUtil.calAge(this.getDateBirthday(), (LocalDate)null);
+    }
+
     public Long getId() {
         return id;
     }
@@ -46,7 +54,6 @@ public class Profile implements IProfile {
         this.id = id;
     }
 
-    @Override
     public String getLastName() {
         return lastName;
     }
@@ -54,7 +61,6 @@ public class Profile implements IProfile {
         this.lastName = lastName;
     }
 
-    @Override
     public String getFirstName() {
         return firstName;
     }
@@ -62,7 +68,6 @@ public class Profile implements IProfile {
         this.firstName = firstName;
     }
 
-    @Override
     public String getMiddleName() {
         return middleName;
     }
@@ -70,24 +75,20 @@ public class Profile implements IProfile {
         this.middleName = middleName;
     }
 
-    @Override
     public Long getGenderId() {
         return genderId;
     }
-
     public void setGenderId(Long genderId) {
         this.genderId = genderId;
     }
 
-    @Override
-    public INumberPhone getNumberPhone() {
+    public NumberPhone getNumberPhone() {
         return numberPhone;
     }
     public void setNumberPhone(NumberPhone numberPhone) {
         this.numberPhone = numberPhone;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
@@ -95,7 +96,6 @@ public class Profile implements IProfile {
         this.email = email;
     }
 
-    @Override
     public LocalDate getDateBirthday() {
         return dateBirthday;
     }
@@ -103,7 +103,6 @@ public class Profile implements IProfile {
         this.dateBirthday = dateBirthday;
     }
 
-    @Override
     public Long getAvatarId() {
         return null;
     }

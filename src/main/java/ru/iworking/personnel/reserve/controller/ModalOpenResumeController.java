@@ -20,7 +20,7 @@ import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
-import ru.iworking.service.api.utils.LocaleUtil;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 import ru.iworking.service.api.utils.TimeUtil;
 
 import java.io.ByteArrayInputStream;
@@ -75,7 +75,7 @@ public class ModalOpenResumeController implements Initializable {
         professionLabel.setText(resume.getProfession());
         if (resume.getProfFieldId() != null) {
             Long profFieldId = resume.getProfFieldId();
-            profFieldLabel.setText(profFieldDao.findFromCash(profFieldId).getNameToView(LocaleUtil.getDefault()));
+            profFieldLabel.setText(profFieldDao.findFromCash(profFieldId).getNameView().getName(LocaleUtil.getDefault()));
         } else {
             profFieldLabel.setText("не указана");
         }
@@ -83,7 +83,7 @@ public class ModalOpenResumeController implements Initializable {
             String wageString;
             if(resume.getWage().getCurrencyId() != null) {
                 Currency currency = currencyDao.findFromCash(resume.getWage().getCurrencyId());
-                wageString = decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameToView(LocaleUtil.getDefault());
+                wageString = decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameView().getName(LocaleUtil.getDefault());
             } else {
                 wageString = decimalFormat.format(resume.getWage().getCountBigDecimal());
             }
@@ -95,13 +95,13 @@ public class ModalOpenResumeController implements Initializable {
 
         if (resume.getWorkTypeId() != null) {
             WorkType workType = workTypeDao.findFromCash(resume.getWorkTypeId());
-            workTypeLabel.setText(workType.getNameToView(LocaleUtil.getDefault()));
+            workTypeLabel.setText(workType.getNameView().getName(LocaleUtil.getDefault()));
         } else {
             workTypeLabel.setText("не указан");
         }
         if (resume.getEducationId() != null) {
             Education education = educationDao.findFromCash(resume.getEducationId());
-            educationLabel.setText(education.getNameToView(LocaleUtil.getDefault()));
+            educationLabel.setText(education.getNameView().getName(LocaleUtil.getDefault()));
         } else {
             educationLabel.setText("не указано");
         }

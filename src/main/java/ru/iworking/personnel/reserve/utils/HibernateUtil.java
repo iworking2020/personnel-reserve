@@ -11,6 +11,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
+import ru.iworking.personnel.reserve.config.SnakeCasePhysicalNamingStrategy;
 import ru.iworking.personnel.reserve.converter.LocalDateAttributeConverter;
 import ru.iworking.personnel.reserve.converter.LocalDateTimeAttributeConverter;
 
@@ -45,6 +46,8 @@ public class HibernateUtil {
                     logger.error("hibernate.properties not found...", ex);
                 }
                 configuration.setProperties(settings);
+
+                configuration.setPhysicalNamingStrategy(new SnakeCasePhysicalNamingStrategy());
 
                 configuration.addAttributeConverter(LocalDateAttributeConverter.class);
                 configuration.addAttributeConverter(LocalDateTimeAttributeConverter.class);
