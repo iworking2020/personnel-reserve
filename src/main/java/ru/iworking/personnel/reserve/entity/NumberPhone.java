@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.service.api.model.INumberPhone;
 
 import javax.persistence.*;
 import java.util.Objects;

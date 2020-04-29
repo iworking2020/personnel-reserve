@@ -9,7 +9,7 @@ import ru.iworking.personnel.reserve.entity.ProfField;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 import ru.iworking.personnel.reserve.utils.HibernateUtil;
-import ru.iworking.service.api.PersistenceSeparator;
+import ru.iworking.personnel.reserve.utils.PersistenceSeparator;
 
 import javax.persistence.Query;
 import java.math.BigDecimal;

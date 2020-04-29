@@ -1,8 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.auth.api.model.IProfile;
-import ru.iworking.service.api.model.INumberPhone;
-import ru.iworking.service.api.utils.TimeUtil;
+import ru.iworking.personnel.reserve.utils.TimeUtil;
 
 import javax.persistence.*;
 import java.time.LocalDate;

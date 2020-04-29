@@ -1,7 +1,7 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.sun.org.glassfish.gmbal.Description;
 import ru.iworking.personnel.reserve.interfaces.StateProvider;
-import ru.iworking.service.api.model.IDescription;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -163,7 +163,7 @@ public class Resume implements Cloneable, StateProvider {
         this.photoId = photoId;
     }
 
-    public IDescription getDescription() {
+    public Description getDescription() {
         return null;
     }
 

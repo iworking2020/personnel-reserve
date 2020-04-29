@@ -1,13 +1,9 @@
 package ru.iworking.personnel.reserve.entity;
 
-import ru.iworking.auth.api.model.IGender;
 import ru.iworking.personnel.reserve.entity.name.NameSystem;
 import ru.iworking.personnel.reserve.entity.name.NameView;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity

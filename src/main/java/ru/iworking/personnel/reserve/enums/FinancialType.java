@@ -7,8 +7,7 @@ public enum FinancialType {
     COMMERCIAL,
     NOT_COMMERCIAL;
 
-    private FinancialType() {
-    }
+    private FinancialType() { }
 
     public static FinancialType getEnum(String value) {
         AtomicReference<FinancialType> returnedObject = new AtomicReference();

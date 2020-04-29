@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.entity;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,11 +13,9 @@ public class Experience {
     @Column(name = "id")
     private Long id;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Column(name = "date_start")
     private LocalDate dateStart;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Column(name = "date_end")
     private LocalDate dateEnd;
 
