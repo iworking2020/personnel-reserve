@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.dao.ResumeStateDao;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -57,7 +56,7 @@ public class ResumesAccordionController extends FxmlController {
             Long count = resumeDao.countByResumeStateId(resumeState.getId());
 
             TitledPane titledPane = new TitledPane();
-            titledPane.setText(resumeState.getNameView().getName(LocaleUtil.getDefault()) + " (" + count + ")");
+            titledPane.setText(resumeState.getNameView().getName() + " (" + count + ")");
 
             VBox vBoxResumes = new VBox();
             resumeDao.findAllByResumeStateId(resumeState.getId()).forEach(resume -> {

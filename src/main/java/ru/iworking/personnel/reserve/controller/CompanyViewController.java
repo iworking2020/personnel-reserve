@@ -9,7 +9,6 @@ import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,7 +49,7 @@ public class CompanyViewController extends FxmlController {
             Long companyTypeId = company.getCompanyTypeId();
             if (companyTypeId != null) {
                 try {
-                    companyTypeLabel.setText(companyTypePrefix + companyTypeDao.findFromCash(companyTypeId).getNameView().getName(LocaleUtil.getDefault()));
+                    companyTypeLabel.setText(companyTypePrefix + companyTypeDao.findFromCash(companyTypeId).getNameView().getName());
                 } catch (Exception ex) {
                     companyTypeLabel.setText(companyTypePrefix + "");
                     logger.error(ex);

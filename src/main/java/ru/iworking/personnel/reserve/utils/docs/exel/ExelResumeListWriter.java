@@ -12,7 +12,6 @@ import ru.iworking.personnel.reserve.dao.EducationDao;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.WorkTypeDao;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -87,14 +86,14 @@ public class ExelResumeListWriter extends ExelWriterFactory {
             Cell profField = row.createCell(7);
             if (resume.getProfFieldId() != null) {
                 ProfField profField1 = profFieldDao.findFromCash(resume.getProfFieldId());
-                profField.setCellValue(profField1.getNameView().getName(LocaleUtil.getDefault()));
+                profField.setCellValue(profField1.getNameView().getName());
             } else {
                 profField.setCellValue("не указана");
             }
             Cell workType = row.createCell(8);
             if (resume.getWorkTypeId() != null) {
                 WorkType workType1 = workTypeDao.findFromCash(resume.getWorkTypeId());
-                workType.setCellValue(workType1.getNameView().getName(LocaleUtil.getDefault()));
+                workType.setCellValue(workType1.getNameView().getName());
             } else {
                 workType.setCellValue("не указан");
             }
@@ -107,14 +106,14 @@ public class ExelResumeListWriter extends ExelWriterFactory {
             Cell currency = row.createCell(10);
             if (resume.getWage() != null && resume.getWage().getCurrencyId()!= null) {
                 Currency currency1 = currencyDao.findFromCash(resume.getWage().getCurrencyId());
-                currency.setCellValue(currency1.getNameView().getName(LocaleUtil.getDefault()));
+                currency.setCellValue(currency1.getNameView().getName());
             } else {
                 currency.setCellValue("не указана");
             }
             Cell education = row.createCell(11);
             if (resume.getEducationId() != null) {
                 Education education1 = educationDao.findFromCash(resume.getEducationId());
-                education.setCellValue(education1.getNameView().getName(LocaleUtil.getDefault()));
+                education.setCellValue(education1.getNameView().getName());
             } else {
                 education.setCellValue("не указано");
             }

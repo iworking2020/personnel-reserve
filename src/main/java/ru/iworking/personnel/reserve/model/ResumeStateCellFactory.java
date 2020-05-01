@@ -6,7 +6,6 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.ResumeState;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 public class ResumeStateCellFactory implements Callback<ListView<ResumeState>, ListCell<ResumeState>> {
 
@@ -22,7 +21,7 @@ public class ResumeStateCellFactory implements Callback<ListView<ResumeState>, L
                     setGraphic(null);
                 } else {
                     try {
-                        setText(item.getNameView().getName(LocaleUtil.getDefault()));
+                        setText(item.getNameView().getName());
                     } catch (Exception ex) {
                         logger.error(ex);
                         setText("");

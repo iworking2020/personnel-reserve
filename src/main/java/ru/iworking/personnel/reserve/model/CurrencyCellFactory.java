@@ -6,7 +6,6 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.Currency;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 public class CurrencyCellFactory implements Callback<ListView<Currency>, ListCell<Currency>> {
 
@@ -22,7 +21,7 @@ public class CurrencyCellFactory implements Callback<ListView<Currency>, ListCel
                     setGraphic(null);
                 } else {
                     try {
-                        setText(item.getNameView().getName(LocaleUtil.getDefault()));
+                        setText(item.getNameView().getName());
                     } catch (Exception ex) {
                         logger.error(ex);
                         setText("");

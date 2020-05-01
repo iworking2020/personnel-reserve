@@ -6,7 +6,6 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.ProfField;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 public class ProfFieldCellFactory implements Callback<ListView<ProfField>, ListCell<ProfField>> {
 
@@ -22,7 +21,7 @@ public class ProfFieldCellFactory implements Callback<ListView<ProfField>, ListC
                     setGraphic(null);
                 } else {
                     try {
-                        setText(item.getNameView().getName(LocaleUtil.getDefault()));
+                        setText(item.getNameView().getName());
                     } catch (Exception ex) {
                         logger.error(ex);
                         setText("");

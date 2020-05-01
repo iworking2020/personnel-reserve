@@ -1,7 +1,7 @@
 package ru.iworking.personnel.reserve.entity.name;
 
 import ru.iworking.personnel.reserve.interfaces.name.IAbbreviatedNameView;
-import ru.iworking.personnel.reserve.interfaces.name.INameView;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -35,7 +35,7 @@ public class AbbreviatedNameView implements IAbbreviatedNameView, Serializable {
 
     @Override
     public String getName() {
-        return null;
+        return getName(LocaleUtil.getInstance().getDefault());
     }
 
     @Override

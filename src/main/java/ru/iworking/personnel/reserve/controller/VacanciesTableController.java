@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -56,7 +55,7 @@ public class VacanciesTableController extends FxmlController {
             String textColumn = "не указана";
             if (cellData.getValue() != null && cellData.getValue().getProfFieldId() != null) {
                 ProfField profField = profFieldDao.findFromCash(cellData.getValue().getProfFieldId());
-                textColumn = profField.getNameView().getName(LocaleUtil.getDefault());
+                textColumn = profField.getNameView().getName();
             }
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -64,7 +63,7 @@ public class VacanciesTableController extends FxmlController {
             String textColumn = "не указан";
             if (cellData.getValue() != null && cellData.getValue().getWorkTypeId()!= null) {
                 WorkType workType = workTypeDao.findFromCash(cellData.getValue().getWorkTypeId());
-                textColumn = workType.getNameView().getName(LocaleUtil.getDefault());
+                textColumn = workType.getNameView().getName();
             }
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -72,7 +71,7 @@ public class VacanciesTableController extends FxmlController {
             String textColumn = "не указано";
             if (cellData.getValue() != null && cellData.getValue().getEducationId() != null) {
                 Education education = educationDao.findFromCash(cellData.getValue().getEducationId());
-                textColumn = education.getNameView().getName(LocaleUtil.getDefault());
+                textColumn = education.getNameView().getName();
             }
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -85,7 +84,7 @@ public class VacanciesTableController extends FxmlController {
         currencyCol.setCellValueFactory(cellData -> {
             Wage wage = cellData.getValue().getWage();
             Currency currency = wage != null ? currencyDao.findFromCash(wage.getCurrencyId()) : null;
-            String textColumn = currency != null ? currency.getNameView().getName(LocaleUtil.getDefault()) : "не указана";
+            String textColumn = currency != null ? currency.getNameView().getName() : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
 

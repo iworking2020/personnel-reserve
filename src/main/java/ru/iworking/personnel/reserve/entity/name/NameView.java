@@ -1,8 +1,12 @@
 package ru.iworking.personnel.reserve.entity.name;
 
 import ru.iworking.personnel.reserve.interfaces.name.INameView;
+import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
+import javax.persistence.MapKeyColumn;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
@@ -31,7 +35,7 @@ public class NameView implements INameView, Serializable {
 
     @Override
     public String getName() {
-        return null;
+        return namesView.get(LocaleUtil.getInstance().getDefault());
     }
 
     @Override

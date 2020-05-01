@@ -15,7 +15,6 @@ import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.CompanyType;
-import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,7 +43,7 @@ public class CompaniesTableController extends FxmlController {
     public void initialize(URL location, ResourceBundle resources) {
         companyTypeColumn.setCellValueFactory(cellData -> {
             CompanyType companyType = companyTypeDao.findFromCash(cellData.getValue().getCompanyTypeId());
-            String textColumn = companyType != null ? companyType.getAbbreviatedNameView().getName(LocaleUtil.getDefault()) : "не указан";
+            String textColumn = companyType != null ? companyType.getAbbreviatedNameView().getName() : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
         companyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
