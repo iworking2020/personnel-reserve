@@ -1,4 +1,4 @@
-package ru.iworking.personnel.reserve.utils;
+package ru.iworking.personnel.reserve.utils.db;
 
 public class PersistenceSeparator {
 

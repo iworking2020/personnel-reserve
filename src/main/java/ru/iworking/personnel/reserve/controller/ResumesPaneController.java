@@ -18,12 +18,17 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.dao.CurrencyDao;
+import ru.iworking.personnel.reserve.dao.PhotoDao;
+import ru.iworking.personnel.reserve.dao.ProfFieldDao;
+import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
@@ -49,8 +54,8 @@ public class ResumesPaneController extends FxmlController {
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
+    private EducationService educationService = EducationService.INSTANCE;
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
 
     @FXML private TableView<Resume> table;
     @FXML private TableColumn<Resume, String> lastNameColumn;
@@ -100,11 +105,11 @@ public class ResumesPaneController extends FxmlController {
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
-        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
+        workTypeComboBox.setItems(FXCollections.observableList(workTypeService.findAll()));
 
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
+        educationComboBox.setItems(FXCollections.observableList(educationService.findAll()));
 
         lastNameColumn.setCellValueFactory(cellData -> {
             Profile profile = cellData.getValue().getProfile();
@@ -121,7 +126,7 @@ public class ResumesPaneController extends FxmlController {
         professionColumn.setCellValueFactory(new PropertyValueFactory<>("profession"));
         workTypeColumn.setCellValueFactory(cellData -> {
             WorkType workType = null;
-            if (cellData.getValue().getWorkTypeId() != null)  workType = workTypeDao.findFromCash(cellData.getValue().getWorkTypeId());
+            if (cellData.getValue().getWorkTypeId() != null)  workType = workTypeService.findById(cellData.getValue().getWorkTypeId());
             String textColumn = workType != null ? workType.getNameView().getName() : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -139,7 +144,7 @@ public class ResumesPaneController extends FxmlController {
         });
         educationColumn.setCellValueFactory(cellData -> {
             Education education = null;
-            if (cellData.getValue().getEducationId() != null) education = educationDao.findFromCash(cellData.getValue().getEducationId());
+            if (cellData.getValue().getEducationId() != null) education = educationService.findById(cellData.getValue().getEducationId());
             String textColumn = education != null ? education.getNameView().getName() : "не указано";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -164,7 +169,7 @@ public class ResumesPaneController extends FxmlController {
         });
         profFieldVBox.getChildren().add(buttonFindAll);
 
-        profFieldDao.findAllFromCash().stream().forEach(profField -> {
+        profFieldDao.findAllFromCache().stream().forEach(profField -> {
             Button button = new Button();
             button.setText(profField.getNameView().getName());
             button.setOnAction(event -> {
@@ -344,11 +349,9 @@ public class ResumesPaneController extends FxmlController {
     }
 
     public void reload(ActionEvent event) {
-        profFieldDao.clearCash();
-        currencyDao.clearCash();
-        educationDao.clearCash();
-        workTypeDao.clearCash();
-        PhotoDao.getInstance().clearCash();
+        profFieldDao.clearCache();
+        currencyDao.clearCache();
+        PhotoDao.getInstance().clearCache();
         selectCategory(event, null);
         actionButtonClear(event);
     }

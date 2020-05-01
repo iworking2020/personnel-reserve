@@ -20,6 +20,8 @@ import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.ImageUtil;
 
@@ -62,8 +64,8 @@ public class ModalAddResumeController implements Initializable {
     private ProfField currentProfField;
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
     private PhotoDao photoDao = PhotoDao.getInstance();
@@ -90,23 +92,23 @@ public class ModalAddResumeController implements Initializable {
 
         resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
         resumeStateComboBox.setCellFactory(resumeStateCellFactory);
-        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateDao.findAllFromCash()));
+        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateDao.findAllFromCache()));
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
-        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCash()));
+        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCache()));
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
-        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
+        workTypeComboBox.setItems(FXCollections.observableList(workTypeService.findAll()));
 
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
+        educationComboBox.setItems(FXCollections.observableList(educationService.findAll()));
 
         currencyComboBox.setButtonCell(currencyCellFactory.call(null));
         currencyComboBox.setCellFactory(currencyCellFactory);
-        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
+        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCache()));
     }
 
     private void initStartValues() {

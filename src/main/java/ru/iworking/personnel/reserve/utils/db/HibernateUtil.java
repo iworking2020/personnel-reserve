@@ -1,4 +1,4 @@
-package ru.iworking.personnel.reserve.utils;
+package ru.iworking.personnel.reserve.utils.db;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;

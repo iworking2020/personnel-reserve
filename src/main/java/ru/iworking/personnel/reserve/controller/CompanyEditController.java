@@ -52,7 +52,7 @@ public class CompanyEditController extends FxmlController {
 
         companyTypeComboBox.setButtonCell(companyTypeCellFactory.call(null));
         companyTypeComboBox.setCellFactory(companyTypeCellFactory);
-        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
+        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCache()));
 
     }
 
@@ -174,8 +174,8 @@ public class CompanyEditController extends FxmlController {
 
     public void reload(ActionEvent event) {
         actionCancel(event);
-        companyTypeDao.clearCash();
-        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCash()));
+        companyTypeDao.clearCache();
+        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCache()));
     }
 
     public CompaniesTableController getCompaniesTableController() {

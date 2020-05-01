@@ -18,6 +18,8 @@ import ru.iworking.personnel.reserve.dao.*;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import javax.imageio.ImageIO;
@@ -67,8 +69,8 @@ public class ResumeEditController extends FxmlController {
 
     private PhotoDao photoDao = PhotoDao.getInstance();
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
     private ResumeDao resumeDao = ResumeDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
     private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
@@ -88,23 +90,23 @@ public class ResumeEditController extends FxmlController {
 
         resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
         resumeStateComboBox.setCellFactory(resumeStateCellFactory);
-        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateDao.findAllFromCash()));
+        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateDao.findAllFromCache()));
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
-        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCash()));
+        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCache()));
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
-        workTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
+        workTypeComboBox.setItems(FXCollections.observableList(workTypeService.findAll()));
 
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
+        educationComboBox.setItems(FXCollections.observableList(educationService.findAll()));
 
         currencyComboBox.setButtonCell(currencyCellFactory.call(null));
         currencyComboBox.setCellFactory(currencyCellFactory);
-        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
+        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCache()));
 
         photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg")));
     }
@@ -122,9 +124,9 @@ public class ResumeEditController extends FxmlController {
             wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
             currencyComboBox.setValue(currencyDao.findFromCash(resume.getWage().getCurrencyId()));
         }
-        if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeDao.findFromCash(resume.getWorkTypeId()));
+        if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeService.findById(resume.getWorkTypeId()));
         if (resume.getState() != null) resumeStateComboBox.setValue(resume.getState());
-        if (resume.getEducationId() != null) educationComboBox.setValue(educationDao.findFromCash(resume.getEducationId()));
+        if (resume.getEducationId() != null) educationComboBox.setValue(educationService.findById(resume.getEducationId()));
         experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
         experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
 

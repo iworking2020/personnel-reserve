@@ -8,8 +8,8 @@ import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.ProfField;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
-import ru.iworking.personnel.reserve.utils.PersistenceSeparator;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
+import ru.iworking.personnel.reserve.utils.db.PersistenceSeparator;
 
 import javax.persistence.Query;
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class ResumeDao extends CashedDao<Resume, Long> {
+public class ResumeDao extends СachedDao<Resume, Long> {
 
     private static volatile ResumeDao instance;
 
@@ -37,33 +37,33 @@ public class ResumeDao extends CashedDao<Resume, Long> {
     }
 
     @Override
-    public void initCashData(LoadingCache<Long, Resume> cash) {
+    public void initCacheData(LoadingCache<Long, Resume> cash) {
         //cash.putAll(findAll().stream().collect(Collectors.toMap(Resume::getId, Function.identity())));
     }
 
     public List<Resume> findAllByProfFieldFromCash(ProfField profField) {
-        return findAllFromCash().stream().filter(r -> r.getProfFieldId() == profField.getId()).collect(Collectors.toList());
+        return findAllFromCache().stream().filter(r -> r.getProfFieldId() == profField.getId()).collect(Collectors.toList());
     }
 
     public List<Resume> findAllByResumeStateIdFromCash(Long resumeStateId) {
-        return findAllFromCash().stream().filter(r -> r.getState() != null && r.getState().getId() == resumeStateId).collect(Collectors.toList());
+        return findAllFromCache().stream().filter(r -> r.getState() != null && r.getState().getId() == resumeStateId).collect(Collectors.toList());
     }
 
     public Resume createAndUpdateInCash(Resume resume) {
         Resume resume1 = create(resume);
-        updateInCash(resume1.getId());
+        updateInCache(resume1.getId());
         return resume1;
     }
 
     public Resume updateAndUpdateInCash(Resume resume) {
         Resume resume1 = update(resume);
-        updateInCash(resume1.getId());
+        updateInCache(resume1.getId());
         return resume1;
     }
 
     public void deleteAndRemoveFromCash(Resume resume) {
         delete(resume);
-        removeFromCash(resume.getId());
+        removeFromCache(resume.getId());
     }
 
     public List<Resume> findAllFromCash(Map<String, Object> params) {
@@ -77,7 +77,7 @@ public class ResumeDao extends CashedDao<Resume, Long> {
         Long workTypeId = params.get(ResumeRequestParam.WORK_TYPE_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.WORK_TYPE_ID).toString()) : null;
         Long resumeStateId = params.get(ResumeRequestParam.RESUME_STATE_ID) != null ? Long.valueOf(params.get(ResumeRequestParam.RESUME_STATE_ID).toString()) : null;
 
-        return findAllFromCash().stream()
+        return findAllFromCache().stream()
                 .filter(resume -> firstName == null ? true : resume.getProfile() != null && resume.getProfile().getFirstName().equals(firstName))
                 .filter(resume -> lastName == null ? true : resume.getProfile() != null && resume.getProfile().getLastName().equals(lastName))
                 .filter(resume -> middleName == null ? true : resume.getProfile() != null && resume.getProfile().getMiddleName().equals(middleName))

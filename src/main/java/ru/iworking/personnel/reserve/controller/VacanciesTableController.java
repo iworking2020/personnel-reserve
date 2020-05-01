@@ -10,8 +10,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.dao.CurrencyDao;
+import ru.iworking.personnel.reserve.dao.ProfFieldDao;
+import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -43,8 +47,8 @@ public class VacanciesTableController extends FxmlController {
     @FXML private TableColumn<Vacancy, String> currencyCol;
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
     private VacancyDao vacancyDao = VacancyDao.getInstance();
 
@@ -62,7 +66,7 @@ public class VacanciesTableController extends FxmlController {
         workTypeCol.setCellValueFactory(cellData -> {
             String textColumn = "не указан";
             if (cellData.getValue() != null && cellData.getValue().getWorkTypeId()!= null) {
-                WorkType workType = workTypeDao.findFromCash(cellData.getValue().getWorkTypeId());
+                WorkType workType = workTypeService.findById(cellData.getValue().getWorkTypeId());
                 textColumn = workType.getNameView().getName();
             }
             return new ReadOnlyStringWrapper(textColumn);
@@ -70,7 +74,7 @@ public class VacanciesTableController extends FxmlController {
         educationCol.setCellValueFactory(cellData -> {
             String textColumn = "не указано";
             if (cellData.getValue() != null && cellData.getValue().getEducationId() != null) {
-                Education education = educationDao.findFromCash(cellData.getValue().getEducationId());
+                Education education = educationService.findById(cellData.getValue().getEducationId());
                 textColumn = education.getNameView().getName();
             }
             return new ReadOnlyStringWrapper(textColumn);

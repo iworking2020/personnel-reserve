@@ -10,12 +10,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.dao.CurrencyDao;
+import ru.iworking.personnel.reserve.dao.ProfFieldDao;
+import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -39,8 +43,8 @@ public class VacancyEditController extends FxmlController {
     @FXML private TextArea vacancyAddressTextArea;
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
     private VacancyDao vacancyDao = VacancyDao.getInstance();
 
@@ -55,19 +59,19 @@ public class VacancyEditController extends FxmlController {
 
         vacancyProfFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         vacancyProfFieldComboBox.setCellFactory(profFieldCellFactory);
-        vacancyProfFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCash()));
+        vacancyProfFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCache()));
 
         vacancyWorkTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         vacancyWorkTypeComboBox.setCellFactory(workTypeCellFactory);
-        vacancyWorkTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
+        vacancyWorkTypeComboBox.setItems(FXCollections.observableList(workTypeService.findAll()));
 
         vacancyEducationComboBox.setButtonCell(educationCellFactory.call(null));
         vacancyEducationComboBox.setCellFactory(educationCellFactory);
-        vacancyEducationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
+        vacancyEducationComboBox.setItems(FXCollections.observableList(educationService.findAll()));
 
         vacancyCurrencyComboBox.setButtonCell(currencyCellFactory.call(null));
         vacancyCurrencyComboBox.setCellFactory(currencyCellFactory);
-        vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
+        vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCache()));
     }
 
     public void setData(Vacancy vacancy) {
@@ -75,8 +79,8 @@ public class VacancyEditController extends FxmlController {
             if (vacancy.getId() != null) vacancyIdTextField.setText(vacancy.getId().toString());
             vacancyProfessionTextField.setText(vacancy.getProfession());
             if (vacancy.getProfFieldId() != null) vacancyProfFieldComboBox.setValue(profFieldDao.findFromCash(vacancy.getProfFieldId()));
-            if (vacancy.getWorkTypeId() != null) vacancyWorkTypeComboBox.setValue(workTypeDao.findFromCash(vacancy.getWorkTypeId()));
-            if (vacancy.getEducationId() != null) vacancyEducationComboBox.setValue(educationDao.findFromCash(vacancy.getEducationId()));
+            if (vacancy.getWorkTypeId() != null) vacancyWorkTypeComboBox.setValue(workTypeService.findById(vacancy.getWorkTypeId()));
+            if (vacancy.getEducationId() != null) vacancyEducationComboBox.setValue(educationService.findById(vacancy.getEducationId()));
             if (vacancy.getWage() != null) vacancyWageTextField.setText(vacancy.getWage().getCount().toString());
             if (vacancy.getWage() != null && vacancy.getWage().getCurrencyId() != null) vacancyCurrencyComboBox.setValue(currencyDao.findFromCash(vacancy.getWage().getCurrencyId()));
             if (vacancy.getExperience() != null) {
@@ -199,15 +203,13 @@ public class VacancyEditController extends FxmlController {
     public void reload(ActionEvent event) {
         actionCancel(event);
 
-        profFieldDao.clearCash();
-        workTypeDao.clearCash();
-        educationDao.clearCash();
-        currencyDao.clearCash();
+        profFieldDao.clearCache();
+        currencyDao.clearCache();
 
-        vacancyProfFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCash()));
-        vacancyWorkTypeComboBox.setItems(FXCollections.observableList(workTypeDao.findAllFromCash()));
-        vacancyEducationComboBox.setItems(FXCollections.observableList(educationDao.findAllFromCash()));
-        vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCash()));
+        vacancyProfFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCache()));
+        vacancyWorkTypeComboBox.setItems(FXCollections.observableList(workTypeService.findAll()));
+        vacancyEducationComboBox.setItems(FXCollections.observableList(educationService.findAll()));
+        vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCache()));
     }
 
     public CompaniesTableController getCompaniesTableController() {

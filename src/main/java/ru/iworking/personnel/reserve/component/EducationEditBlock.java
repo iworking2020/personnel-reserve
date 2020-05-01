@@ -21,8 +21,6 @@ public class EducationEditBlock extends VBox {
 
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
 
-    private EducationDao educationDao = EducationDao.getInstance();
-
     public EducationEditBlock() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/EducationEditBlock.fxml"));
         fxmlLoader.setRoot(this);
@@ -38,7 +36,7 @@ public class EducationEditBlock extends VBox {
     public void initData() {
         educationComboBox.setButtonCell(educationCellFactory.call(null));
         educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(EducationDao.getInstance().findAllFromCash()));
+        educationComboBox.setItems(FXCollections.observableList(EducationDao.INSTANCE.findAll()));
     }
 
     @FXML

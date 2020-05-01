@@ -12,9 +12,14 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.dao.CurrencyDao;
+import ru.iworking.personnel.reserve.dao.PhotoDao;
+import ru.iworking.personnel.reserve.dao.ProfFieldDao;
+import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
 import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
@@ -61,8 +66,8 @@ public class ResumeViewController extends FxmlController {
     private PhotoDao photoDao = PhotoDao.getInstance();
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
     private ResumeDao resumeDao = ResumeDao.getInstance();
 
     @Override
@@ -134,13 +139,13 @@ public class ResumeViewController extends FxmlController {
             }
 
             if (resume.getWorkTypeId() != null) {
-                WorkType workType1 = workTypeDao.findFromCash(resume.getWorkTypeId());
+                WorkType workType1 = workTypeService.findById(resume.getWorkTypeId());
                 workType.setText(prefixWorkType + workType1.getNameView().getName());
             } else {
                 workType.setText(prefixWorkType + "не указан");
             }
             if (resume.getEducationId() != null) {
-                Education education1 = educationDao.findFromCash(resume.getEducationId());
+                Education education1 = educationService.findById(resume.getEducationId());
                 education.setText(prefixEducation + education1.getNameView().getName());
             } else {
                 education.setText(prefixEducation + "не указано");

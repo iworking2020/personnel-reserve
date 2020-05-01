@@ -6,14 +6,14 @@ import com.google.common.cache.LoadingCache;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.ProfField;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ProfFieldDao extends CashedDao<ProfField, Long> {
+public class ProfFieldDao extends СachedDao<ProfField, Long> {
 
     private static volatile ProfFieldDao instance;
 
@@ -31,7 +31,7 @@ public class ProfFieldDao extends CashedDao<ProfField, Long> {
     }
 
     @Override
-    public void initCashData(LoadingCache<Long, ProfField> cash) {
+    public void initCacheData(LoadingCache<Long, ProfField> cash) {
         cash.putAll(findAll().stream().collect(Collectors.toMap(ProfField::getId, Function.identity())));
     }
 

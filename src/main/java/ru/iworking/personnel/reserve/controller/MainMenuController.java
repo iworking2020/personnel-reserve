@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.utils.AppUtil;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.io.File;
 import java.io.FileFilter;

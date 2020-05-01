@@ -6,16 +6,29 @@ import com.google.common.cache.LoadingCache;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Currency;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CurrencyDao extends CashedDao<Currency, Long> {
+public class CurrencyDao extends СachedDao<Currency, Long> {
 
     private static volatile CurrencyDao instance;
+
+    public static CurrencyDao getInstance() {
+        CurrencyDao localInstance = instance;
+        if (localInstance == null) {
+            synchronized (CurrencyDao.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new CurrencyDao();
+                }
+            }
+        }
+        return localInstance;
+    }
 
     @Override
     public LoadingCache<Long, Currency> initLoadingCache() {
@@ -31,7 +44,7 @@ public class CurrencyDao extends CashedDao<Currency, Long> {
     }
 
     @Override
-    public void initCashData(LoadingCache<Long, Currency> cash) {
+    public void initCacheData(LoadingCache<Long, Currency> cash) {
         cash.putAll(findAll().stream().collect(Collectors.toMap(Currency::getId, Function.identity())));
     }
 
@@ -91,16 +104,5 @@ public class CurrencyDao extends CashedDao<Currency, Long> {
         session.close();
     }
 
-    public static CurrencyDao getInstance() {
-        CurrencyDao localInstance = instance;
-        if (localInstance == null) {
-            synchronized (CurrencyDao.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new CurrencyDao();
-                }
-            }
-        }
-        return localInstance;
-    }
+
 }

@@ -8,10 +8,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.EducationDao;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
-import ru.iworking.personnel.reserve.dao.WorkTypeDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,9 +24,9 @@ public class ExelResumeListWriter extends ExelWriterFactory {
     private static final Logger logger = LogManager.getLogger(ExelResumeListWriter.class);
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private EducationService educationService = EducationService.INSTANCE;
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
 
     public enum props {
         PATH, LIST_RESUME
@@ -92,7 +92,7 @@ public class ExelResumeListWriter extends ExelWriterFactory {
             }
             Cell workType = row.createCell(8);
             if (resume.getWorkTypeId() != null) {
-                WorkType workType1 = workTypeDao.findFromCash(resume.getWorkTypeId());
+                WorkType workType1 = workTypeService.findById(resume.getWorkTypeId());
                 workType.setCellValue(workType1.getNameView().getName());
             } else {
                 workType.setCellValue("не указан");
@@ -112,7 +112,7 @@ public class ExelResumeListWriter extends ExelWriterFactory {
             }
             Cell education = row.createCell(11);
             if (resume.getEducationId() != null) {
-                Education education1 = educationDao.findFromCash(resume.getEducationId());
+                Education education1 = educationService.findById(resume.getEducationId());
                 education.setCellValue(education1.getNameView().getName());
             } else {
                 education.setCellValue("не указано");

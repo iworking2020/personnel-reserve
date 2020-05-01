@@ -3,7 +3,8 @@ package ru.iworking.personnel.reserve.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Company;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
+import ru.iworking.personnel.reserve.interfaces.Dao;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import javax.persistence.Query;
 import java.util.List;

@@ -12,9 +12,13 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.dao.CurrencyDao;
+import ru.iworking.personnel.reserve.dao.PhotoDao;
+import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,9 +29,9 @@ public class PdfResumeWriter extends PdfWriterFactory {
     private static final Logger logger = LogManager.getLogger(PdfResumeWriter.class);
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private EducationService educationService = EducationService.INSTANCE;
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private PhotoDao photoDao = PhotoDao.getInstance();
 
     public enum props {
@@ -95,11 +99,11 @@ public class PdfResumeWriter extends PdfWriterFactory {
                 "профобласть: не указана";
         String workType = resume.getWorkTypeId() != null ?
                 "график: "+
-                        workTypeDao.findFromCash(resume.getWorkTypeId()).getNameView().getName() :
+                        workTypeService.findById(resume.getWorkTypeId()).getNameView().getName() :
                 "график: не указан";
         String education = resume.getEducationId() != null ?
                 "образование: "+
-                        educationDao.findFromCash(resume.getEducationId()).getNameView().getName() :
+                        educationService.findById(resume.getEducationId()).getNameView().getName() :
                 "образование: не указано";
 
         Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));

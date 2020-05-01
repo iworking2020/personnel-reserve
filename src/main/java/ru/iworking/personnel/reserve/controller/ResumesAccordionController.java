@@ -52,7 +52,7 @@ public class ResumesAccordionController extends FxmlController {
 
     public void initData() {
         resumesAccordion.getPanes().removeAll(resumesAccordion.getPanes());
-        resumeStateDao.findAllFromCash().forEach(resumeState -> {
+        resumeStateDao.findAllFromCache().forEach(resumeState -> {
             Long count = resumeDao.countByResumeStateId(resumeState.getId());
 
             TitledPane titledPane = new TitledPane();
@@ -102,7 +102,7 @@ public class ResumesAccordionController extends FxmlController {
     }
 
     public void reload() {
-        resumeStateDao.clearCash();
+        resumeStateDao.clearCache();
         initData();
     }
 

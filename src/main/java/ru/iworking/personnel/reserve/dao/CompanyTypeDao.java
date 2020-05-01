@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.CompanyType;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class CompanyTypeDao extends CashedDao<CompanyType, Long> {
+public class CompanyTypeDao extends СachedDao<CompanyType, Long> {
 
     private static final Logger logger = LogManager.getLogger(CompanyTypeDao.class);
 
@@ -36,7 +36,7 @@ public class CompanyTypeDao extends CashedDao<CompanyType, Long> {
     }
 
     @Override
-    public void initCashData(LoadingCache<Long, CompanyType> cash) {
+    public void initCacheData(LoadingCache<Long, CompanyType> cash) {
         cash.putAll(findAll().stream().collect(Collectors.toMap(CompanyType::getId, Function.identity())));
     }
 

@@ -6,12 +6,12 @@ import com.google.common.cache.LoadingCache;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Photo;
-import ru.iworking.personnel.reserve.utils.HibernateUtil;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class PhotoDao extends CashedDao<Photo, Long> {
+public class PhotoDao extends СachedDao<Photo, Long> {
 
     private static volatile PhotoDao instance;
 
@@ -29,25 +29,25 @@ public class PhotoDao extends CashedDao<Photo, Long> {
     }
 
     @Override
-    public void initCashData(LoadingCache<Long, Photo> cash) {
+    public void initCacheData(LoadingCache<Long, Photo> cash) {
         //cash.putAll(findAll().stream().collect(Collectors.toMap(Photo::getId, Function.identity())));
     }
 
     public Photo createAndUpdateInCash(Photo photo) {
         Photo photo1 = create(photo);
-        updateInCash(photo1.getId());
+        updateInCache(photo1.getId());
         return photo1;
     }
 
     public Photo updateAndUpdateInCash(Photo photo) {
         Photo photo1 = update(photo);
-        updateInCash(photo1.getId());
+        updateInCache(photo1.getId());
         return photo1;
     }
 
     public void deleteAndRemoveFromCash(Photo photo) {
         delete(photo);
-        removeFromCash(photo.getId());
+        removeFromCache(photo.getId());
     }
 
     @Override

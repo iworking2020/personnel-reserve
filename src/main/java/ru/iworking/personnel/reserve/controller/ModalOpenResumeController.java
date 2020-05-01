@@ -15,8 +15,12 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.dao.CurrencyDao;
+import ru.iworking.personnel.reserve.dao.PhotoDao;
+import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
@@ -54,8 +58,8 @@ public class ModalOpenResumeController implements Initializable {
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
     private PhotoDao photoDao = PhotoDao.getInstance();
 
     private Resume resume;
@@ -93,13 +97,13 @@ public class ModalOpenResumeController implements Initializable {
         }
 
         if (resume.getWorkTypeId() != null) {
-            WorkType workType = workTypeDao.findFromCash(resume.getWorkTypeId());
+            WorkType workType = workTypeService.findById(resume.getWorkTypeId());
             workTypeLabel.setText(workType.getNameView().getName());
         } else {
             workTypeLabel.setText("не указан");
         }
         if (resume.getEducationId() != null) {
-            Education education = educationDao.findFromCash(resume.getEducationId());
+            Education education = educationService.findById(resume.getEducationId());
             educationLabel.setText(education.getNameView().getName());
         } else {
             educationLabel.setText("не указано");

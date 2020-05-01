@@ -6,12 +6,12 @@ import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.EducationDao;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
-import ru.iworking.personnel.reserve.dao.WorkTypeDao;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.entity.Wage;
+import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,8 +30,8 @@ public class VacancyViewController extends FxmlController{
     @FXML private Label addressLabel;
 
     private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private WorkTypeDao workTypeDao = WorkTypeDao.getInstance();
-    private EducationDao educationDao = EducationDao.getInstance();
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
     private CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     @Override
@@ -69,13 +69,13 @@ public class VacancyViewController extends FxmlController{
             Long workTypeId = vacancy.getWorkTypeId();
             workTypeLabel.setText(
                     workTypeId != null ?
-                            prefixWorkType + workTypeDao.findFromCash(workTypeId).getNameView().getName() :
+                            prefixWorkType + workTypeService.findById(workTypeId).getNameView().getName() :
                             prefixWorkType + "не указан");
 
             Long educationId = vacancy.getEducationId();
             educationLabel.setText(
                     educationId != null ?
-                            prefixEducation + educationDao.findFromCash(educationId).getNameView().getName() :
+                            prefixEducation + educationService.findById(educationId).getNameView().getName() :
                             prefixEducation + "не указано");
 
             Wage wage = vacancy.getWage();
