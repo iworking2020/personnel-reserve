@@ -10,16 +10,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -46,7 +42,7 @@ public class VacancyEditController extends FxmlController {
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private VacancyDao vacancyDao = VacancyDao.getInstance();
+    private VacancyService vacancyService = VacancyService.INSTANCE;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -122,7 +118,7 @@ public class VacancyEditController extends FxmlController {
             LocalDate endDateExperience = vacancyExpDateEndDatePicker.getValue();
             String addressStr = vacancyAddressTextArea.getText();
 
-            Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyDao.find(vacancyId);
+            Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyService.findById(vacancyId);
             vacancy.setCompanyId(companyId);
             vacancy.setProfession(professionStr);
             if (profField != null) vacancy.setProfFieldId(profField.getId());
@@ -150,9 +146,9 @@ public class VacancyEditController extends FxmlController {
             vacancy.setAddress(address);
 
             if (vacancyId == null) {
-                vacancyDao.create(vacancy);
+                vacancyService.persist(vacancy);
             } else {
-                vacancyDao.update(vacancy);
+                vacancyService.update(vacancy);
             }
             logger.debug("Created new vacancy: " + vacancy.toString());
             return true;

@@ -10,11 +10,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.service.CompanyService;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
+import ru.iworking.personnel.reserve.service.VacancyService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,6 +38,7 @@ public class CompaniesTableController extends FxmlController {
 
     private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
     private CompanyService companyService = CompanyService.INSTANCE;
+    private VacancyService vacancyService = VacancyService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,7 +93,7 @@ public class CompaniesTableController extends FxmlController {
         if (company != null) {
             Long companyId = company.getId();
             companyService.delete(company.getId());
-            VacancyDao.getInstance().deleteByCompanyId(companyId);
+            vacancyService.deleteByCompanyId(companyId);
         }
         actionUpdate(event);
     }

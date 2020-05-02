@@ -18,7 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
-import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
 import ru.iworking.personnel.reserve.service.*;
@@ -67,7 +66,7 @@ public class ModalEditResumeController implements Initializable {
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private ResumeDao resumeDao = ResumeDao.getInstance();
+    private ResumeService resumeService = ResumeService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
     
@@ -252,7 +251,7 @@ public class ModalEditResumeController implements Initializable {
                     logger.error(ex);
                 }
             }
-            resumeDao.update(newResume);
+            resumeService.update(newResume);
             this.closeStage(event);
         }
 

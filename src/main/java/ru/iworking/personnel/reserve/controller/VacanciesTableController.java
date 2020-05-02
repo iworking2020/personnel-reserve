@@ -10,12 +10,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -50,7 +46,7 @@ public class VacanciesTableController extends FxmlController {
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private VacancyDao vacancyDao = VacancyDao.getInstance();
+    private VacancyService vacancyService = VacancyService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -115,7 +111,7 @@ public class VacanciesTableController extends FxmlController {
         disableTargetItemButtons();
         if (getCompaniesTableController().getTableCompanies().getSelectionModel() != null) {
             Company company = getCompaniesTableController().getTableCompanies().getSelectionModel().getSelectedItem();
-            if (company != null) setData(vacancyDao.findAllByCompanyId(company.getId()));
+            if (company != null) setData(vacancyService.findAllByCompanyId(company.getId()));
         }
         getVacancyEditController().hide();
         getVacancyViewController().hide();
@@ -134,7 +130,7 @@ public class VacanciesTableController extends FxmlController {
     @FXML
     public void actionDelete(ActionEvent event) {
         Vacancy vacancy = tableVacancies.getSelectionModel().getSelectedItem();
-        if (vacancy != null) vacancyDao.delete(vacancy);
+        if (vacancy != null) vacancyService.delete(vacancy.getId());
         actionUpdate(event);
     }
 

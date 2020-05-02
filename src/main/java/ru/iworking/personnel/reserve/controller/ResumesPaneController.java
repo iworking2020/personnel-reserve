@@ -19,16 +19,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
-import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
@@ -51,7 +47,7 @@ public class ResumesPaneController extends FxmlController {
     private BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter();
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-    private ResumeDao resumeDao = ResumeDao.getInstance();
+    private ResumeService resumeService = ResumeService.INSTANCE;
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
@@ -179,15 +175,15 @@ public class ResumesPaneController extends FxmlController {
             profFieldVBox.getChildren().add(button);
         });
 
-        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll());
+        this.resumeObservableList = this.createResumeObservableList(resumeService.findAll());
         table.setItems(resumeObservableList);
     }
 
     public void selectCategory(ActionEvent event, ProfField profField) {
         this.currentProfField = profField;
         List<Resume> list = profField != null ?
-                resumeDao.findAllByProfField(profField) :
-                resumeDao.findAll();
+                resumeService.findAllByProfFieldId(profField.getId()) :
+                resumeService.findAll();
         this.resumeObservableList = this.createResumeObservableList(list);
         table.setItems(resumeObservableList);
         Long profFieldId = profField != null ? profField.getId() : 0;
@@ -293,7 +289,7 @@ public class ResumesPaneController extends FxmlController {
 
         if (currentProfField != null) params.put(ResumeRequestParam.PROF_FIELD_ID, currentProfField.getId());
 
-        this.resumeObservableList = this.createResumeObservableList(resumeDao.findAll(params));
+        this.resumeObservableList = this.createResumeObservableList(resumeService.findAll(params));
         table.setItems(resumeObservableList);
     }
 
@@ -333,7 +329,7 @@ public class ResumesPaneController extends FxmlController {
 
         if (resume != null) {
             resumeObservableList.remove(resume);
-            resumeDao.delete(resume);
+            resumeService.delete(resume.getId());
             table.refresh();
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ModalMessage.fxml"));

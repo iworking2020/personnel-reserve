@@ -1,125 +1,59 @@
 package ru.iworking.personnel.reserve.dao;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import ru.iworking.personnel.reserve.entity.Vacancy;
-import ru.iworking.personnel.reserve.interfaces.Dao;
-import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
+import ru.iworking.personnel.reserve.props.VacancyRequestParam;
 
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
 
-public class VacancyDao implements Dao<Vacancy, Long> {
+public class VacancyDao extends Dao<Vacancy, Long> {
 
-    private static volatile VacancyDao instance;
+    public static final VacancyDao INSTANCE = new VacancyDao();
+
+    private VacancyDao() {}
 
     @Override
+    public Vacancy findById(Long id) {
+        Vacancy entity = (Vacancy) getSessionProvider().getCurrentSession().get(Vacancy.class, id);
+        return entity;
+    }
+
+    public Long count(Map<String, Object> params) {
+        Long count = (Long) createQuery("select COUNT(vacancy) from Vacancy as vacancy where 1=1", params, Long.class).getSingleResult();
+        return count;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Vacancy> findAll() {
-        List<Vacancy> list;
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            list = session.createQuery("FROM Vacancy", Vacancy.class).list();
-            session.flush();
-            transaction.commit();
-        }
-        return list;
+        List<Vacancy> entities = (List<Vacancy>) getSessionProvider().getCurrentSession().createQuery("from Vacancy").list();
+        return entities;
     }
 
-    public List<Vacancy> findAllByCompanyId(Long companyId) {
-        List<Vacancy> list;
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM Vacancy as v where v.companyId = :companyId", Vacancy.class);
-            query.setParameter("companyId", companyId);
-            list = query.getResultList();
-            session.flush();
-            transaction.commit();
-        }
-        return list;
-    }
-    
+    @SuppressWarnings("unchecked")
     public List<Vacancy> findAll(Map<String, Object> params) {
-        String sql = "from Vacancy as vacancy";
-        List<Vacancy> list;
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(sql, Vacancy.class);
-            list = query.getResultList();
-            session.flush();
-            transaction.commit();
-        }
+        List<Vacancy> list = createQuery("from Vacancy as vacancy where 1=1", params, Vacancy.class).getResultList();
         return list;
     }
 
-    @Override
-    public Vacancy find(Long id) {
-        Vacancy vacancy;
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            vacancy = session.get(Vacancy.class, id);
-            session.flush();
-            transaction.commit();
-        }
-        return vacancy;
+    public void deleteAll(Map<String, Object> params) {
+        createQuery("delete Vacancy as vacancy where 1=1", params, null).executeUpdate();
     }
 
-    @Override
-    public Vacancy create(Vacancy vacancy) {
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.save(vacancy);
-            session.flush();
-            transaction.commit();
-        }
-        return vacancy;
-    }
+    private Query createQuery(String sql, Map<String, Object> params, Class<?> clazz) {
+        Long companyId = params.get(VacancyRequestParam.COMPANY_ID) != null ? Long.valueOf(params.get(VacancyRequestParam.COMPANY_ID).toString()) : null;
 
-    @Override
-    public Vacancy update(Vacancy obj) {
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.update(obj);
-            session.flush();
-            transaction.commit();
-        }
-        return obj;
-    }
+        if (companyId != null) sql += " and vacancy.companyId = :companyId";
 
-    @Override
-    public void delete(Vacancy vacancy) {
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.delete(vacancy);
-            session.flush();
-            transaction.commit();
-        }
-    }
+        Session session = getSessionProvider().getCurrentSession();
 
-    public void deleteByCompanyId(Long companyId) {
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
+        Query query = clazz != null ? session.createQuery(sql, clazz) : session.createQuery(sql);
 
-            session.createQuery("delete Vacancy as v where v.companyId = :companyId")
-                    .setParameter("companyId", companyId)
-                    .executeUpdate();
+        if (companyId != null) query.setParameter("companyId", companyId);
 
-            session.flush();
-            transaction.commit();
-        }
-    }
-
-    public static VacancyDao getInstance() {
-        VacancyDao localInstance = instance;
-        if (localInstance == null) {
-            synchronized (VacancyDao.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new VacancyDao();
-                }
-            }
-        }
-        return localInstance;
+        return query;
     }
 
 }

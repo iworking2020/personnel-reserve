@@ -13,13 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
-import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
 import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
@@ -68,7 +64,7 @@ public class ResumeViewController extends FxmlController {
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private ResumeDao resumeDao = ResumeDao.getInstance();
+    private ResumeService resumeService = ResumeService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -187,7 +183,7 @@ public class ResumeViewController extends FxmlController {
 
     @FXML
     public void actionSavePdf(ActionEvent event) {
-        Resume resume = resumeDao.find(getResumeId());
+        Resume resume = resumeService.findById(getResumeId());
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName("Resume"+resume.getId()+".pdf");
         fileChooser.getExtensionFilters().addAll(
@@ -207,7 +203,7 @@ public class ResumeViewController extends FxmlController {
 
     @FXML
     public void actionEdit(ActionEvent event) throws Exception {
-        Resume resume = resumeDao.find(getResumeId());
+        Resume resume = resumeService.findById(getResumeId());
         getResumeEditController().setData(resume);
         getResumeEditController().show();
         getVacanciesPaneController().hideWrapperClient();

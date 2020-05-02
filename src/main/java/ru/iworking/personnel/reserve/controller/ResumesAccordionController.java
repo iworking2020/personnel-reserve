@@ -10,8 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.service.ResumeService;
 import ru.iworking.personnel.reserve.service.ResumeStateService;
 
 import java.net.URL;
@@ -22,7 +22,7 @@ public class ResumesAccordionController extends FxmlController {
     private static final Logger logger = LogManager.getLogger(ResumesAccordionController.class);
 
     private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
-    private ResumeDao resumeDao = ResumeDao.getInstance();
+    private ResumeService resumeService = ResumeService.INSTANCE;
 
     @FXML private Accordion resumesAccordion;
 
@@ -53,19 +53,19 @@ public class ResumesAccordionController extends FxmlController {
     public void initData() {
         resumesAccordion.getPanes().removeAll(resumesAccordion.getPanes());
         resumeStateService.findAll().forEach(resumeState -> {
-            Long count = resumeDao.countByResumeStateId(resumeState.getId());
+            Long count = resumeService.countByResumeStateId(resumeState.getId());
 
             TitledPane titledPane = new TitledPane();
             titledPane.setText(resumeState.getNameView().getName() + " (" + count + ")");
 
             VBox vBoxResumes = new VBox();
-            resumeDao.findAllByResumeStateId(resumeState.getId()).forEach(resume -> {
+            resumeService.findAllByResumeStateId(resumeState.getId()).forEach(resume -> {
                 if (resume.getProfile() != null) {
 
                     ResumeButton button = new ResumeButton(resume.getProfile().getFullName(), resume.getId());
                     button.getStyleClass().add("invisible");
                     button.setOnAction(event -> {
-                        Resume resume1 = resumeDao.find(button.getResumeId());
+                        Resume resume1 = resumeService.findById(button.getResumeId());
                         if (resume1 != null) {
                             getResumeViewController().setData(resume);
                             getResumeViewController().show();

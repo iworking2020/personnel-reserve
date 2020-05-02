@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.EducationEditBlock;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
-import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
@@ -71,7 +70,7 @@ public class ResumeEditController extends FxmlController {
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private ResumeDao resumeDao = ResumeDao.getInstance();
+    private ResumeService resumeService = ResumeService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
 
@@ -209,7 +208,7 @@ public class ResumeEditController extends FxmlController {
             LocalDate expEnd = experienceDateEndDatePicker.getValue();
             String addressStr = addressTextArea.getText();
 
-            Resume resume = resumeId == null ? new Resume() : resumeDao.find(resumeId);
+            Resume resume = resumeId == null ? new Resume() : resumeService.findById(resumeId);
             if (resume.getProfile() == null) resume.setProfile(new Profile());
             resume.getProfile().setLastName(lastNameStr);
             resume.getProfile().setFirstName(firstNameStr);
@@ -258,9 +257,9 @@ public class ResumeEditController extends FxmlController {
             }
 
             if (resumeId == null) {
-                resumeDao.create(resume);
+                resumeService.persist(resume);
             } else {
-                resumeDao.update(resume);
+                resumeService.update(resume);
             }
             logger.debug("Created new resume: " + resume.toString());
             return true;
