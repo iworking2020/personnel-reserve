@@ -14,7 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.EducationEditBlock;
-import ru.iworking.personnel.reserve.dao.PhotoDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
@@ -66,7 +65,7 @@ public class ResumeEditController extends FxmlController {
 
     private ProfField currentProfField;
 
-    private PhotoDao photoDao = PhotoDao.getInstance();
+    private PhotoService photoService = PhotoService.INSTANCE;
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
@@ -132,7 +131,7 @@ public class ResumeEditController extends FxmlController {
         addressTextArea.setText(resume.getAddress().getHouse());
 
         if (resume.getPhotoId() != null) {
-            Photo photo = photoDao.find(resume.getPhotoId());
+            Photo photo = photoService.findById(resume.getPhotoId());
             InputStream targetStream = new ByteArrayInputStream(photo.getImage());
             Image img = new Image(targetStream);
             photoImageView.setImage(img);
@@ -249,7 +248,8 @@ public class ResumeEditController extends FxmlController {
 
             if (photo != null) {
                 try {
-                    Long photoId = photoDao.createAndUpdateInCash(photo).getId();
+                    photoService.persist(photo);
+                    Long photoId = photo.getId();
                     resume.setPhotoId(photoId);
                 } catch (OutOfMemoryError ex) {
                     logger.error(ex);

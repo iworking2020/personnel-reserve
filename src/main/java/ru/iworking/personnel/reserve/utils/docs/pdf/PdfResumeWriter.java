@@ -12,13 +12,9 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.PhotoDao;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,7 +28,7 @@ public class PdfResumeWriter extends PdfWriterFactory {
     private EducationService educationService = EducationService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private PhotoDao photoDao = PhotoDao.getInstance();
+    private PhotoService photoService = PhotoService.INSTANCE;
 
     public enum props {
         PATH, RESUME
@@ -119,7 +115,7 @@ public class PdfResumeWriter extends PdfWriterFactory {
         rightBlockTable.addCell(createTextCell(email));
 
         Table parentTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
-        Photo photo = photoDao.find(resume.getPhotoId());
+        Photo photo = photoService.findById(resume.getPhotoId());
         parentTable.addCell(createImgCell(photo.getImage()));
         parentTable.addCell(createTableCell(rightBlockTable));
 

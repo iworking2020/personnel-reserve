@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.PhotoDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
 import ru.iworking.personnel.reserve.service.*;
@@ -67,7 +66,7 @@ public class ModalAddResumeController implements Initializable {
     private EducationService educationService = EducationService.INSTANCE;
     private ResumeService resumeService = ResumeService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private PhotoDao photoDao = PhotoDao.getInstance();
+    private PhotoService photoService = PhotoService.INSTANCE;
     private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
@@ -222,7 +221,8 @@ public class ModalAddResumeController implements Initializable {
 
         if (isValidFields(resume)) {
             if (photo != null) {
-                Long photoId = photoDao.createAndUpdateInCash(photo).getId();
+                photoService.persist(photo);
+                Long photoId = photo.getId();
                 resume.setPhotoId(photoId);
             }
             resumeService.persist(resume);

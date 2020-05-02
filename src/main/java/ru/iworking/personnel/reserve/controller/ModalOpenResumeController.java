@@ -15,12 +15,8 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.PhotoDao;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
@@ -60,7 +56,7 @@ public class ModalOpenResumeController implements Initializable {
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private PhotoDao photoDao = PhotoDao.getInstance();
+    private PhotoService photoService = PhotoService.INSTANCE;
 
     private Resume resume;
 
@@ -115,7 +111,7 @@ public class ModalOpenResumeController implements Initializable {
         addressLabel.setText(resume.getAddress().getHouse());
 
         if (resume.getPhotoId() != null) {
-            Photo photo = photoDao.find(resume.getPhotoId());
+            Photo photo = photoService.findById(resume.getPhotoId());
             InputStream targetStream = new ByteArrayInputStream(photo.getImage());
             Image img = new Image(targetStream);
             photoImageView.setImage(img);

@@ -12,7 +12,6 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.PhotoDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.service.*;
@@ -59,7 +58,7 @@ public class ResumeViewController extends FxmlController {
         return buttonCancel;
     }
 
-    private PhotoDao photoDao = PhotoDao.getInstance();
+    private PhotoService photoService = PhotoService.INSTANCE;
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
@@ -152,7 +151,7 @@ public class ResumeViewController extends FxmlController {
             experience.setText(age == null || age <= 0 ? prefixExperience + "без опыта" : prefixExperience + age + " " + TextUtil.nameForNumbers(age));
             address.setText(prefixAddress + resume.getAddress().getHouse());
             if (resume.getPhotoId() != null) {
-                Photo photo = photoDao.find(resume.getPhotoId());
+                Photo photo = photoService.findById(resume.getPhotoId());
                 InputStream targetStream = new ByteArrayInputStream(photo.getImage());
                 Image img = new Image(targetStream);
                 photoImageView.setImage(img);
