@@ -1,22 +1,26 @@
 package ru.iworking.personnel.reserve.dao;
 
-public class LearningHistoryDao {
+import ru.iworking.personnel.reserve.entity.LearningHistory;
 
-    private static volatile LearningHistoryDao instance;
+import java.util.List;
 
-    public static LearningHistoryDao getInstance() {
-        LearningHistoryDao localInstance = instance;
-        if (localInstance == null) {
-            synchronized (LearningHistoryDao.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new LearningHistoryDao();
-                }
-            }
-        }
-        return localInstance;
-    }
+public class LearningHistoryDao extends Dao<LearningHistory, Long> {
+
+    public static final LearningHistoryDao INSTANCE = new LearningHistoryDao();
 
     private LearningHistoryDao() {}
+
+    @Override
+    public LearningHistory findById(Long id) {
+        LearningHistory entity = (LearningHistory) getSessionProvider().getCurrentSession().get(LearningHistory.class, id);
+        return entity;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<LearningHistory> findAll() {
+        List<LearningHistory> books = (List<LearningHistory>) getSessionProvider().getCurrentSession().createQuery("from LearningHistory").list();
+        return books;
+    }
 
 }

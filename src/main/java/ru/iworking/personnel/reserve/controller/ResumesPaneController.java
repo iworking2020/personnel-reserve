@@ -18,16 +18,16 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
+import ru.iworking.personnel.reserve.service.CurrencyService;
 import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.ProfFieldService;
 import ru.iworking.personnel.reserve.service.WorkTypeService;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
@@ -52,8 +52,8 @@ public class ResumesPaneController extends FxmlController {
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     private ResumeDao resumeDao = ResumeDao.getInstance();
-    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
 
@@ -138,7 +138,7 @@ public class ResumesPaneController extends FxmlController {
         });
         currencyColumn.setCellValueFactory(cellData -> {
             Wage wage = cellData.getValue().getWage();
-            Currency currency = wage != null ? currencyDao.findFromCash(wage.getCurrencyId()) : null;
+            Currency currency = wage != null ? currencyService.findById(wage.getCurrencyId()) : null;
             String textColumn = currency != null ? currency.getNameView().getName() : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });
@@ -169,7 +169,7 @@ public class ResumesPaneController extends FxmlController {
         });
         profFieldVBox.getChildren().add(buttonFindAll);
 
-        profFieldDao.findAllFromCache().stream().forEach(profField -> {
+        profFieldService.findAll().stream().forEach(profField -> {
             Button button = new Button();
             button.setText(profField.getNameView().getName());
             button.setOnAction(event -> {
@@ -349,8 +349,6 @@ public class ResumesPaneController extends FxmlController {
     }
 
     public void reload(ActionEvent event) {
-        profFieldDao.clearCache();
-        currencyDao.clearCache();
         PhotoDao.getInstance().clearCache();
         selectCategory(event, null);
         actionButtonClear(event);

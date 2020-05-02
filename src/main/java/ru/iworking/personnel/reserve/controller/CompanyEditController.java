@@ -10,14 +10,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.CompanyDao;
-import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
+import ru.iworking.personnel.reserve.service.CompanyService;
+import ru.iworking.personnel.reserve.service.CompanyTypeService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -42,8 +42,8 @@ public class CompanyEditController extends FxmlController {
 
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
 
-    private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
-    private CompanyDao companyDao = CompanyDao.getInstance();
+    private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
+    private CompanyService companyService = CompanyService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -52,7 +52,7 @@ public class CompanyEditController extends FxmlController {
 
         companyTypeComboBox.setButtonCell(companyTypeCellFactory.call(null));
         companyTypeComboBox.setCellFactory(companyTypeCellFactory);
-        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCache()));
+        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeService.findAll()));
 
     }
 
@@ -80,7 +80,7 @@ public class CompanyEditController extends FxmlController {
         if (company != null) {
             if (company.getId() != null) companyIdTextField.setText(company.getId().toString());
             Long companyTypeId = company.getCompanyTypeId();
-            if (companyTypeId != null) companyTypeComboBox.setValue(companyTypeDao.findFromCash(companyTypeId));
+            if (companyTypeId != null) companyTypeComboBox.setValue(companyTypeService.findById(companyTypeId));
             nameCompanyTextField.setText(company.getName());
             NumberPhone numberPhone = company.getNumberPhone();
             if (numberPhone != null) numberPhoneTextField.setText(numberPhone.getNumber());
@@ -118,7 +118,7 @@ public class CompanyEditController extends FxmlController {
             if (companyId == null) {
                 company = new Company();
             } else {
-                company = companyDao.find(companyId);
+                company = companyService.findById(companyId);
             }
 
             if (companyType != null) company.setCompanyTypeId(companyType.getId());
@@ -129,9 +129,9 @@ public class CompanyEditController extends FxmlController {
             company.setAddress(address);
 
             if (companyId == null) {
-                companyDao.create(company);
+                companyService.persist(company);
             } else {
-                companyDao.update(company);
+                companyService.update(company);
             }
             logger.debug("Created new company: " + company.toString());
             return true;
@@ -174,8 +174,7 @@ public class CompanyEditController extends FxmlController {
 
     public void reload(ActionEvent event) {
         actionCancel(event);
-        companyTypeDao.clearCache();
-        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeDao.findAllFromCache()));
+        companyTypeComboBox.setItems(FXCollections.observableList(companyTypeService.findAll()));
     }
 
     public CompaniesTableController getCompaniesTableController() {

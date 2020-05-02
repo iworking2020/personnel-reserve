@@ -14,19 +14,6 @@ public class VacancyDao implements Dao<Vacancy, Long> {
 
     private static volatile VacancyDao instance;
 
-    public Long count(Vacancy vacancy) {
-        Long count = 0L;
-        try (Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("select COUNT(vacancy) from Vacancy as vacancy where id = :id", Long.class);
-            query.setParameter("id", vacancy.getId());
-            count = (Long) query.getSingleResult();
-            session.flush();
-            transaction.commit();
-        }
-        return count;
-    }
-
     @Override
     public List<Vacancy> findAll() {
         List<Vacancy> list;

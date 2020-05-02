@@ -5,10 +5,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
+import ru.iworking.personnel.reserve.service.CompanyTypeService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,7 +25,7 @@ public class CompanyViewController extends FxmlController {
     @FXML private Label companyWebPageLabel;
     @FXML private Label companyAddressLabel;
 
-    private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
+    private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,7 +49,7 @@ public class CompanyViewController extends FxmlController {
             Long companyTypeId = company.getCompanyTypeId();
             if (companyTypeId != null) {
                 try {
-                    companyTypeLabel.setText(companyTypePrefix + companyTypeDao.findFromCash(companyTypeId).getNameView().getName());
+                    companyTypeLabel.setText(companyTypePrefix + companyTypeService.findById(companyTypeId).getNameView().getName());
                 } catch (Exception ex) {
                     companyTypeLabel.setText(companyTypePrefix + "");
                     logger.error(ex);

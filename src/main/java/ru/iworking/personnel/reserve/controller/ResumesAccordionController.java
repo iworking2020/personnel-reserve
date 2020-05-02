@@ -11,8 +11,8 @@ import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
-import ru.iworking.personnel.reserve.dao.ResumeStateDao;
 import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.service.ResumeStateService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,7 +21,7 @@ public class ResumesAccordionController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumesAccordionController.class);
 
-    private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
+    private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
     private ResumeDao resumeDao = ResumeDao.getInstance();
 
     @FXML private Accordion resumesAccordion;
@@ -52,7 +52,7 @@ public class ResumesAccordionController extends FxmlController {
 
     public void initData() {
         resumesAccordion.getPanes().removeAll(resumesAccordion.getPanes());
-        resumeStateDao.findAllFromCache().forEach(resumeState -> {
+        resumeStateService.findAll().forEach(resumeState -> {
             Long count = resumeDao.countByResumeStateId(resumeState.getId());
 
             TitledPane titledPane = new TitledPane();
@@ -102,7 +102,6 @@ public class ResumesAccordionController extends FxmlController {
     }
 
     public void reload() {
-        resumeStateDao.clearCache();
         initData();
     }
 

@@ -15,11 +15,11 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.service.CurrencyService;
 import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.ProfFieldService;
 import ru.iworking.personnel.reserve.service.WorkTypeService;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
@@ -56,8 +56,8 @@ public class ModalOpenResumeController implements Initializable {
 
     @FXML private ImageView photoImageView;
 
-    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
-    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
     private PhotoDao photoDao = PhotoDao.getInstance();
@@ -78,14 +78,14 @@ public class ModalOpenResumeController implements Initializable {
         professionLabel.setText(resume.getProfession());
         if (resume.getProfFieldId() != null) {
             Long profFieldId = resume.getProfFieldId();
-            profFieldLabel.setText(profFieldDao.findFromCash(profFieldId).getNameView().getName());
+            profFieldLabel.setText(profFieldService.findById(profFieldId).getNameView().getName());
         } else {
             profFieldLabel.setText("не указана");
         }
         if (resume.getWage() != null) {
             String wageString;
             if(resume.getWage().getCurrencyId() != null) {
-                Currency currency = currencyDao.findFromCash(resume.getWage().getCurrencyId());
+                Currency currency = currencyService.findById(resume.getWage().getCurrencyId());
                 wageString = decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameView().getName();
             } else {
                 wageString = decimalFormat.format(resume.getWage().getCountBigDecimal());
@@ -115,7 +115,7 @@ public class ModalOpenResumeController implements Initializable {
         addressLabel.setText(resume.getAddress().getHouse());
 
         if (resume.getPhotoId() != null) {
-            Photo photo = photoDao.findFromCash(resume.getPhotoId());
+            Photo photo = photoDao.find(resume.getPhotoId());
             InputStream targetStream = new ByteArrayInputStream(photo.getImage());
             Image img = new Image(targetStream);
             photoImageView.setImage(img);

@@ -12,12 +12,12 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
 import ru.iworking.personnel.reserve.dao.PhotoDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.service.CurrencyService;
 import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.ProfFieldService;
 import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.io.FileNotFoundException;
@@ -28,9 +28,9 @@ public class PdfResumeWriter extends PdfWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(PdfResumeWriter.class);
 
-    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private PhotoDao photoDao = PhotoDao.getInstance();
 
@@ -91,11 +91,11 @@ public class PdfResumeWriter extends PdfWriterFactory {
         String profession = "профессия: "+resume.getProfession();
         String wage = resume.getWage() != null ?
                 "зарплата: "+resume.getWage().getCountBigDecimal().toString() + " " +
-                        currencyDao.findFromCash(resume.getWage().getCurrencyId()).getNameView().getName() :
+                        currencyService.findById(resume.getWage().getCurrencyId()).getNameView().getName() :
                 "зарплата: не указана";
         String profField = resume.getProfFieldId() != null ?
                 "профобласть: "+
-                        profFieldDao.findFromCash(resume.getProfFieldId()).getNameView().getName() :
+                        profFieldService.findById(resume.getProfFieldId()).getNameView().getName() :
                 "профобласть: не указана";
         String workType = resume.getWorkTypeId() != null ?
                 "график: "+
@@ -119,7 +119,7 @@ public class PdfResumeWriter extends PdfWriterFactory {
         rightBlockTable.addCell(createTextCell(email));
 
         Table parentTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
-        Photo photo = photoDao.findFromCash(resume.getPhotoId());
+        Photo photo = photoDao.find(resume.getPhotoId());
         parentTable.addCell(createImgCell(photo.getImage()));
         parentTable.addCell(createTableCell(rightBlockTable));
 

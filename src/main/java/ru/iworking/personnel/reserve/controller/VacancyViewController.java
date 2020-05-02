@@ -5,12 +5,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.entity.Wage;
+import ru.iworking.personnel.reserve.service.CurrencyService;
 import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.ProfFieldService;
 import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.net.URL;
@@ -29,10 +29,10 @@ public class VacancyViewController extends FxmlController{
     @FXML private Label wageLabel;
     @FXML private Label addressLabel;
 
-    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,7 +63,7 @@ public class VacancyViewController extends FxmlController{
             Long profFieldId = vacancy.getProfFieldId();
             profFieldLabel.setText(
                     profFieldId != null ?
-                            prefixProfField + profFieldDao.findFromCash(profFieldId).getNameView().getName() :
+                            prefixProfField + profFieldService.findById(profFieldId).getNameView().getName() :
                             prefixProfField + "не указана");
 
             Long workTypeId = vacancy.getWorkTypeId();
@@ -83,7 +83,7 @@ public class VacancyViewController extends FxmlController{
                 String wageStr = prefixWage + wage.getCount();
                 Long currencyId = vacancy.getWage().getCurrencyId();
                 if (currencyId != null) {
-                    Currency currency = currencyDao.findFromCash(currencyId);
+                    Currency currency = currencyService.findById(currencyId);
                     wageStr += " " + currency.getNameView().getName();
                 }
                 wageLabel.setText(wageStr);

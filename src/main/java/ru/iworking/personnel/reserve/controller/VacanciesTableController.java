@@ -10,11 +10,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.service.CurrencyService;
 import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.ProfFieldService;
 import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.math.BigDecimal;
@@ -46,10 +46,10 @@ public class VacanciesTableController extends FxmlController {
     @FXML private TableColumn<Vacancy, String> wageCol;
     @FXML private TableColumn<Vacancy, String> currencyCol;
 
-    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
     private VacancyDao vacancyDao = VacancyDao.getInstance();
 
     @Override
@@ -58,7 +58,7 @@ public class VacanciesTableController extends FxmlController {
         profFieldCol.setCellValueFactory(cellData -> {
             String textColumn = "не указана";
             if (cellData.getValue() != null && cellData.getValue().getProfFieldId() != null) {
-                ProfField profField = profFieldDao.findFromCash(cellData.getValue().getProfFieldId());
+                ProfField profField = profFieldService.findById(cellData.getValue().getProfFieldId());
                 textColumn = profField.getNameView().getName();
             }
             return new ReadOnlyStringWrapper(textColumn);
@@ -87,7 +87,7 @@ public class VacanciesTableController extends FxmlController {
         });
         currencyCol.setCellValueFactory(cellData -> {
             Wage wage = cellData.getValue().getWage();
-            Currency currency = wage != null ? currencyDao.findFromCash(wage.getCurrencyId()) : null;
+            Currency currency = wage != null ? currencyService.findById(wage.getCurrencyId()) : null;
             String textColumn = currency != null ? currency.getNameView().getName() : "не указана";
             return new ReadOnlyStringWrapper(textColumn);
         });

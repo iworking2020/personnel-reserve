@@ -7,10 +7,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.service.CurrencyService;
 import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.service.ProfFieldService;
 import ru.iworking.personnel.reserve.service.WorkTypeService;
 
 import java.io.FileOutputStream;
@@ -23,9 +23,9 @@ public class ExelResumeListWriter extends ExelWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(ExelResumeListWriter.class);
 
-    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
 
     public enum props {
@@ -85,7 +85,7 @@ public class ExelResumeListWriter extends ExelWriterFactory {
             email.setCellValue(resume.getEmail());
             Cell profField = row.createCell(7);
             if (resume.getProfFieldId() != null) {
-                ProfField profField1 = profFieldDao.findFromCash(resume.getProfFieldId());
+                ProfField profField1 = profFieldService.findById(resume.getProfFieldId());
                 profField.setCellValue(profField1.getNameView().getName());
             } else {
                 profField.setCellValue("не указана");
@@ -105,7 +105,7 @@ public class ExelResumeListWriter extends ExelWriterFactory {
             }
             Cell currency = row.createCell(10);
             if (resume.getWage() != null && resume.getWage().getCurrencyId()!= null) {
-                Currency currency1 = currencyDao.findFromCash(resume.getWage().getCurrencyId());
+                Currency currency1 = currencyService.findById(resume.getWage().getCurrencyId());
                 currency.setCellValue(currency1.getNameView().getName());
             } else {
                 currency.setCellValue("не указана");

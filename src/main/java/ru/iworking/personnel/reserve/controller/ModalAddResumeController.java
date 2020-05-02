@@ -17,11 +17,11 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.*;
+import ru.iworking.personnel.reserve.dao.PhotoDao;
+import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.*;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.ImageUtil;
 
@@ -63,13 +63,13 @@ public class ModalAddResumeController implements Initializable {
 
     private ProfField currentProfField;
 
-    private ProfFieldDao profFieldDao = ProfFieldDao.getInstance();
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
     private ResumeDao resumeDao = ResumeDao.getInstance();
-    private CurrencyDao currencyDao = CurrencyDao.getInstance();
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
     private PhotoDao photoDao = PhotoDao.getInstance();
-    private ResumeStateDao resumeStateDao = ResumeStateDao.getInstance();
+    private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -92,11 +92,11 @@ public class ModalAddResumeController implements Initializable {
 
         resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
         resumeStateComboBox.setCellFactory(resumeStateCellFactory);
-        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateDao.findAllFromCache()));
+        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateService.findAll()));
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
-        profFieldComboBox.setItems(FXCollections.observableList(profFieldDao.findAllFromCache()));
+        profFieldComboBox.setItems(FXCollections.observableList(profFieldService.findAll()));
 
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
@@ -108,7 +108,7 @@ public class ModalAddResumeController implements Initializable {
 
         currencyComboBox.setButtonCell(currencyCellFactory.call(null));
         currencyComboBox.setCellFactory(currencyCellFactory);
-        currencyComboBox.setItems(FXCollections.observableList(currencyDao.findAllFromCache()));
+        currencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
     }
 
     private void initStartValues() {

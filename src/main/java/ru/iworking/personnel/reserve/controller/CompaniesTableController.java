@@ -10,11 +10,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.dao.CompanyDao;
-import ru.iworking.personnel.reserve.dao.CompanyTypeDao;
 import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.CompanyType;
+import ru.iworking.personnel.reserve.service.CompanyService;
+import ru.iworking.personnel.reserve.service.CompanyTypeService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,18 +36,18 @@ public class CompaniesTableController extends FxmlController {
     @FXML private TableColumn<Company, String> companyTypeColumn;
     @FXML private TableColumn<Company, String> companyNameColumn;
 
-    private CompanyTypeDao companyTypeDao = CompanyTypeDao.getInstance();
-    private CompanyDao companyDao = CompanyDao.getInstance();
+    private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
+    private CompanyService companyService = CompanyService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         companyTypeColumn.setCellValueFactory(cellData -> {
-            CompanyType companyType = companyTypeDao.findFromCash(cellData.getValue().getCompanyTypeId());
+            CompanyType companyType = companyTypeService.findById(cellData.getValue().getCompanyTypeId());
             String textColumn = companyType != null ? companyType.getAbbreviatedNameView().getName() : "не указан";
             return new ReadOnlyStringWrapper(textColumn);
         });
         companyNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
+        tableCompanies.setItems(FXCollections.observableList(companyService.findAll()));
 
         tableCompanies.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             enableTargetItemButtons();
@@ -80,7 +80,7 @@ public class CompaniesTableController extends FxmlController {
         getVacanciesTableController().disableNoTargetItemButtons();
         getVacanciesTableController().clear();
         getVacanciesTableController().actionUpdate(event);
-        tableCompanies.setItems(FXCollections.observableList(companyDao.findAll()));
+        tableCompanies.setItems(FXCollections.observableList(companyService.findAll()));
         getCompanyEditController().hide();
         getCompanyViewController().hide();
         logger.debug("Companies table has been updated...");
@@ -91,7 +91,7 @@ public class CompaniesTableController extends FxmlController {
         Company company = tableCompanies.getSelectionModel().getSelectedItem();
         if (company != null) {
             Long companyId = company.getId();
-            companyDao.delete(company);
+            companyService.delete(company.getId());
             VacancyDao.getInstance().deleteByCompanyId(companyId);
         }
         actionUpdate(event);
