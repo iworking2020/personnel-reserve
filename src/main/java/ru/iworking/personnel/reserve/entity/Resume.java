@@ -5,6 +5,7 @@ import ru.iworking.personnel.reserve.interfaces.StateProvider;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -62,6 +63,9 @@ public class Resume implements Cloneable, StateProvider {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="resume_state_id")
     private ResumeState state;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LearningHistory> learningHistoryList;
 
     public Resume() { }
 
@@ -166,13 +170,19 @@ public class Resume implements Cloneable, StateProvider {
     public Description getDescription() {
         return null;
     }
-
     public void setState(ResumeState state) {
         this.state = state;
     }
     @Override
     public ResumeState getState() {
         return state;
+    }
+
+    public List<LearningHistory> getLearningHistoryList() {
+        return learningHistoryList;
+    }
+    public void setLearningHistoryList(List<LearningHistory> learningHistoryList) {
+        this.learningHistoryList = learningHistoryList;
     }
 
     @Override
@@ -197,11 +207,13 @@ public class Resume implements Cloneable, StateProvider {
                 Objects.equals(educationId, resume.educationId) &&
                 Objects.equals(experience, resume.experience) &&
                 Objects.equals(address, resume.address) &&
-                Objects.equals(photoId, resume.photoId);
+                Objects.equals(photoId, resume.photoId) &&
+                Objects.equals(state, resume.state) &&
+                Objects.equals(learningHistoryList, resume.learningHistoryList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, datecreate, profile, profession, numberPhone, email, profFieldId, workTypeId, wage, educationId, experience, address, photoId);
+        return Objects.hash(userId, datecreate, profile, profession, numberPhone, email, profFieldId, workTypeId, wage, educationId, experience, address, photoId, state, learningHistoryList);
     }
 }

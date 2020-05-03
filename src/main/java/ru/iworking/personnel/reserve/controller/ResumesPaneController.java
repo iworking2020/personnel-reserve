@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.dao.PhotoDao;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
@@ -345,7 +344,6 @@ public class ResumesPaneController extends FxmlController {
     }
 
     public void reload(ActionEvent event) {
-        PhotoDao.getInstance().clearCache();
         selectCategory(event, null);
         actionButtonClear(event);
     }

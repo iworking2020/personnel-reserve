@@ -13,7 +13,7 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.component.EducationEditBlock;
+import ru.iworking.personnel.reserve.component.LearningHistoryEditBlock;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
@@ -27,7 +27,9 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ResumeEditController extends FxmlController {
 
@@ -38,6 +40,8 @@ public class ResumeEditController extends FxmlController {
     private NumberPhoneFormatter numberPhoneFormatter = new NumberPhoneFormatter();
 
     @FXML private Pane resumePaneEdit;
+
+    @FXML private TabPane resumeEdiTabPane;
 
     @FXML private TextField resumeIdTextField;
 
@@ -139,12 +143,18 @@ public class ResumeEditController extends FxmlController {
             Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
             photoImageView.setImage(defaultImage);
         }
+
+        resume.getLearningHistoryList().forEach( learningHistory -> {
+            LearningHistoryEditBlock learningHistoryEditBlock = new LearningHistoryEditBlock();
+            learningHistoryEditBlock.setLearningHistory(learningHistory);
+            educationEditList.getChildren().add(learningHistoryEditBlock);
+        });
     }
 
     @FXML
     public void actionAddEducation(ActionEvent event) {
-        EducationEditBlock educationEditBlock = new EducationEditBlock();
-        educationEditList.getChildren().add(educationEditBlock);
+        LearningHistoryEditBlock learningHistoryEditBlock = new LearningHistoryEditBlock();
+        educationEditList.getChildren().add(learningHistoryEditBlock);
     }
 
     @FXML
@@ -256,6 +266,14 @@ public class ResumeEditController extends FxmlController {
                 }
             }
 
+            List<LearningHistory> learningHistories = educationEditList.getChildren().stream()
+                    .filter(node -> node instanceof LearningHistoryEditBlock)
+                    .map(node -> (LearningHistoryEditBlock) node)
+                    .filter(node -> node.getLearningHistory() != null)
+                    .map(node ->  node.getLearningHistory())
+                    .collect(Collectors.toList());
+            resume.setLearningHistoryList(learningHistories);
+
             if (resumeId == null) {
                 resumeService.persist(resume);
             } else {
@@ -306,6 +324,13 @@ public class ResumeEditController extends FxmlController {
         experienceDateStartDatePicker.setValue(null);
         experienceDateEndDatePicker.setValue(null);
         resumeStateComboBox.setValue(null);
+        List<LearningHistoryEditBlock> removeList = educationEditList.getChildren().stream()
+                .filter(node -> node instanceof LearningHistoryEditBlock)
+                .map(node -> (LearningHistoryEditBlock) node)
+                .collect(Collectors.toList());
+        educationEditList.getChildren().removeAll(removeList);
+        educationEditList.getChildren().clear();
+        resumeEdiTabPane.getSelectionModel().select(0);
     }
 
     public void show() {

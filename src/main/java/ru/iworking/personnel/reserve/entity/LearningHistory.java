@@ -17,6 +17,11 @@ public class LearningHistory {
 
     public LearningHistory() { }
 
+    public LearningHistory(Education education, String description) {
+        this.education = education;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }

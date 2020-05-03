@@ -10,7 +10,7 @@
       <TextField fx:id="resumeIdTextField" editable="false" visible="false" />
       <BorderPane>
          <center>
-            <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="resumeEdiTabPane" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
                 <Tab text="Основная информация">
                      <content>
