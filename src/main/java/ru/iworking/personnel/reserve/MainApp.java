@@ -3,6 +3,7 @@ package ru.iworking.personnel.reserve;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import ru.iworking.personnel.reserve.controller.MainMenuController;
 
@@ -12,6 +13,9 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Font.loadFont(getClass().getResource("/fonts/CenturyGothic.ttf").toExternalForm(), 14);
+        Font.loadFont(getClass().getResource("/fonts/CenturyGothicBold.ttf").toExternalForm(), 14);
+
         MainApp.PARENT_STAGE = stage;
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));

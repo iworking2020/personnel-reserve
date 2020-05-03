@@ -5,11 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.personnel.reserve.component.ResumeStateTitledPane;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.ResumeService;
 import ru.iworking.personnel.reserve.service.ResumeStateService;
@@ -53,10 +53,8 @@ public class ResumesAccordionController extends FxmlController {
     public void initData() {
         resumesAccordion.getPanes().removeAll(resumesAccordion.getPanes());
         resumeStateService.findAll().forEach(resumeState -> {
-            Long count = resumeService.countByResumeStateId(resumeState.getId());
 
-            TitledPane titledPane = new TitledPane();
-            titledPane.setText(resumeState.getNameView().getName() + " (" + count + ")");
+            ResumeStateTitledPane titledPane = new ResumeStateTitledPane(resumeState);
 
             VBox vBoxResumes = new VBox();
             resumeService.findAllByResumeStateId(resumeState.getId()).forEach(resume -> {
@@ -99,6 +97,14 @@ public class ResumesAccordionController extends FxmlController {
         getResumeEditController().clear();
         reload();
         getVacanciesPaneController().showWrapperClient();
+    }
+
+    public void selectPaneByResumeStateId(Long id) {
+        resumesAccordion.getPanes().stream()
+                .filter(pane -> pane instanceof ResumeStateTitledPane)
+                .map(pane -> (ResumeStateTitledPane) pane)
+                .filter(pane -> pane.getResumeState().getId() == id)
+                .forEach(resumesAccordion::setExpandedPane);
     }
 
     public void reload() {

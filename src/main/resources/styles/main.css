@@ -1,5 +1,7 @@
 * {
-    -fx-font-family: sans-serif;
+    -fx-font-family: 'Century Gothic';
+    -fx-font-size: 14;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
+

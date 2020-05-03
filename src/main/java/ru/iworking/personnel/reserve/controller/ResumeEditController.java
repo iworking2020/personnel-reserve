@@ -185,106 +185,108 @@ public class ResumeEditController extends FxmlController {
 
     @FXML
     public void actionSave(ActionEvent event) {
-        Boolean isSaved = save();
-        if (isSaved) {
+        if (isValid()) {
+            Resume resume = save();
             hide();
             clear();
             getResumesAccordionController().actionUpdate(event);
+            getResumesAccordionController().selectPaneByResumeStateId(resume.getState().getId());
+            getResumeViewController().setData(resume);
+            getResumeViewController().show();
+            getVacanciesPaneController().hideWrapperClient();
+        } else {
+            logger.debug("resume is not valid");
         }
+
     }
 
-    public Boolean save() {
-        if (isValid()) {
-            Long resumeId = null;
-            String vacancyIdStr = resumeIdTextField.getText();
-            if (vacancyIdStr != null && !vacancyIdStr.isEmpty()) {
-                resumeId = Long.valueOf(vacancyIdStr);
-            }
+    public Resume save() {
+        Long resumeId = null;
+        String vacancyIdStr = resumeIdTextField.getText();
+        if (vacancyIdStr != null && !vacancyIdStr.isEmpty()) {
+            resumeId = Long.valueOf(vacancyIdStr);
+        }
 
-            String lastNameStr = lastNameTextField.getText();
-            String firstNameStr = firstNameTextField.getText();
-            String middleNameStr = middleNameTextField.getText();
-            String numberStr = numberPhoneTextField.getText();
-            String emailStr = emailTextField.getText();
-            String professionStr = professionTextField.getText();
-            ProfField profField = profFieldComboBox.getValue();
-            String wageStr = wageTextField.getText();
-            Currency currency = currencyComboBox.getValue();
-            WorkType workType = workTypeComboBox.getValue();
-            ResumeState resumeState = resumeStateComboBox.getValue();
-            Education education = educationComboBox.getValue();
-            LocalDate expStart = experienceDateStartDatePicker.getValue();
-            LocalDate expEnd = experienceDateEndDatePicker.getValue();
-            String addressStr = addressTextArea.getText();
+        String lastNameStr = lastNameTextField.getText();
+        String firstNameStr = firstNameTextField.getText();
+        String middleNameStr = middleNameTextField.getText();
+        String numberStr = numberPhoneTextField.getText();
+        String emailStr = emailTextField.getText();
+        String professionStr = professionTextField.getText();
+        ProfField profField = profFieldComboBox.getValue();
+        String wageStr = wageTextField.getText();
+        Currency currency = currencyComboBox.getValue();
+        WorkType workType = workTypeComboBox.getValue();
+        ResumeState resumeState = resumeStateComboBox.getValue();
+        Education education = educationComboBox.getValue();
+        LocalDate expStart = experienceDateStartDatePicker.getValue();
+        LocalDate expEnd = experienceDateEndDatePicker.getValue();
+        String addressStr = addressTextArea.getText();
 
-            Resume resume = resumeId == null ? new Resume() : resumeService.findById(resumeId);
-            if (resume.getProfile() == null) resume.setProfile(new Profile());
-            resume.getProfile().setLastName(lastNameStr);
-            resume.getProfile().setFirstName(firstNameStr);
-            resume.getProfile().setMiddleName(middleNameStr);
-            if (resume.getNumberPhone() == null) resume.setNumberPhone(new NumberPhone());
-            resume.getNumberPhone().setNumber(numberStr);
-            resume.setEmail(emailStr);
-            resume.setProfession(professionStr);
-            if (profField != null) resume.setProfFieldId(profField.getId());
-            if (wageStr != null && !wageStr.isEmpty()) {
-                if (resume.getWage() == null) resume.setWage(new Wage());
-                try {
-                    resume.getWage().setCount(new BigDecimal(wageStr.replaceAll(",",".")));
-                    if (currency != null) resume.getWage().setCurrencyId(currency.getId());
-                } catch (Exception e) {
-                    logger.error(e);
-                }
-            }
-            if (workType != null) resume.setWorkTypeId(workType.getId());
-            if (resumeState != null) resume.setState(resumeState);
-            if (education != null) resume.setEducationId(education.getId());
-            if (resume.getExperience() == null) resume.setExperience(new Experience());
-            resume.getExperience().setDateStart(expStart);
-            resume.getExperience().setDateEnd(expEnd);
-            if (resume.getAddress() == null) resume.setAddress(new Address());
-            resume.getAddress().setHouse(addressStr);
-
-            Photo photo = null;
-
-            try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-                BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
-                ImageIO.write(originalImage, "png", stream);
-
-                photo = new Photo(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
-            } catch (IOException e) {
+        Resume resume = resumeId == null ? new Resume() : resumeService.findById(resumeId);
+        if (resume.getProfile() == null) resume.setProfile(new Profile());
+        resume.getProfile().setLastName(lastNameStr);
+        resume.getProfile().setFirstName(firstNameStr);
+        resume.getProfile().setMiddleName(middleNameStr);
+        if (resume.getNumberPhone() == null) resume.setNumberPhone(new NumberPhone());
+        resume.getNumberPhone().setNumber(numberStr);
+        resume.setEmail(emailStr);
+        resume.setProfession(professionStr);
+        if (profField != null) resume.setProfFieldId(profField.getId());
+        if (wageStr != null && !wageStr.isEmpty()) {
+            if (resume.getWage() == null) resume.setWage(new Wage());
+            try {
+                resume.getWage().setCount(new BigDecimal(wageStr.replaceAll(",",".")));
+                if (currency != null) resume.getWage().setCurrencyId(currency.getId());
+            } catch (Exception e) {
                 logger.error(e);
             }
-
-            if (photo != null) {
-                try {
-                    photoService.persist(photo);
-                    Long photoId = photo.getId();
-                    resume.setPhotoId(photoId);
-                } catch (OutOfMemoryError ex) {
-                    logger.error(ex);
-                }
-            }
-
-            List<LearningHistory> learningHistories = educationEditList.getChildren().stream()
-                    .filter(node -> node instanceof LearningHistoryEditBlock)
-                    .map(node -> (LearningHistoryEditBlock) node)
-                    .filter(node -> node.getLearningHistory() != null)
-                    .map(node ->  node.getLearningHistory())
-                    .collect(Collectors.toList());
-            resume.setLearningHistoryList(learningHistories);
-
-            if (resumeId == null) {
-                resumeService.persist(resume);
-            } else {
-                resumeService.update(resume);
-            }
-            logger.debug("Created new resume: " + resume.toString());
-            return true;
-        } else {
-            logger.debug("Fields vacancy edit block is not valid...");
-            return false;
         }
+        if (workType != null) resume.setWorkTypeId(workType.getId());
+        if (resumeState != null) resume.setState(resumeState);
+        if (education != null) resume.setEducationId(education.getId());
+        if (resume.getExperience() == null) resume.setExperience(new Experience());
+        resume.getExperience().setDateStart(expStart);
+        resume.getExperience().setDateEnd(expEnd);
+        if (resume.getAddress() == null) resume.setAddress(new Address());
+        resume.getAddress().setHouse(addressStr);
+
+        Photo photo = null;
+
+        try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+            BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
+            ImageIO.write(originalImage, "png", stream);
+
+            photo = new Photo(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
+        } catch (IOException e) {
+            logger.error(e);
+        }
+
+        if (photo != null) {
+            try {
+                photoService.persist(photo);
+                Long photoId = photo.getId();
+                resume.setPhotoId(photoId);
+            } catch (OutOfMemoryError ex) {
+                logger.error(ex);
+            }
+        }
+
+        List<LearningHistory> learningHistories = educationEditList.getChildren().stream()
+                .filter(node -> node instanceof LearningHistoryEditBlock)
+                .map(node -> (LearningHistoryEditBlock) node)
+                .filter(node -> node.getLearningHistory() != null)
+                .map(node ->  node.getLearningHistory())
+                .collect(Collectors.toList());
+        resume.setLearningHistoryList(learningHistories);
+
+        if (resumeId == null) {
+            resumeService.persist(resume);
+        } else {
+            resumeService.update(resume);
+        }
+        logger.debug("Created new resume: " + resume.toString());
+        return resume;
     }
 
     private Boolean isValid() {
@@ -355,6 +357,14 @@ public class ResumeEditController extends FxmlController {
 
     public ResumesAccordionController getResumesAccordionController() {
         return (ResumesAccordionController) getControllerProvider().get(ResumesAccordionController.class.getName());
+    }
+
+    public ResumeViewController getResumeViewController() {
+        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
+    }
+
+    public VacanciesPaneController getVacanciesPaneController() {
+        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
     }
 
 }
