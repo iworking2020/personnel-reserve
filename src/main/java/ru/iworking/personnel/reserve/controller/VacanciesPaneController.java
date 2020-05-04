@@ -1,10 +1,15 @@
 package ru.iworking.personnel.reserve.controller;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.personnel.reserve.component.CompanyListViewCell;
+import ru.iworking.personnel.reserve.service.CompanyService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,8 +33,27 @@ public class VacanciesPaneController extends FxmlController {
     @FXML private ResumeViewController resumeViewController;
     @FXML private ResumeEditController resumeEditController;
 
+    @FXML private ListView companyListView;
+    @FXML private ScrollPane resumesAccordionWrapper;
+
     @Override
-    public void initialize(URL location, ResourceBundle resources) { }
+    public void initialize(URL location, ResourceBundle resources) {
+        companyListView.setItems(FXCollections.observableList(CompanyService.INSTANCE.findAll()));
+        companyListView.setCellFactory(listView -> new CompanyListViewCell());
+        isResizable(false);
+    }
+
+    public void isResizable(boolean isResizable) {
+        if (isResizable) {
+            companyListView.setMinWidth(0.00);
+            resumesAccordionWrapper.setMinWidth(0.00);
+        } else {
+            final double maxWidth1 = companyListView.getMaxWidth();
+            companyListView.setMinWidth(maxWidth1);
+            final double maxWidth2 = resumesAccordionWrapper.getMaxWidth();
+            resumesAccordionWrapper.setMinWidth(maxWidth2);
+        }
+    }
 
     public void showWrapperClient() {
         wrapperClient.setVisible(true);

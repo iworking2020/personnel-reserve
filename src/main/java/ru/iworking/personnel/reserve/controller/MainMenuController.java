@@ -30,13 +30,21 @@ public class MainMenuController extends FxmlController {
     @FXML private VacanciesPaneController vacanciesPaneController;
 
     @FXML private CheckMenuItem winSearchCheckItem;
+    @FXML private CheckMenuItem winResizable;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         viewSearchBlock();
+        isResizable(false);
         winSearchCheckItem.setOnAction(event -> {
             if (winSearchCheckItem.isSelected()) {viewSearchBlock();} else {hideSearchBlock();}
         });
+        winResizable.setOnAction(event -> isResizable(winResizable.isSelected()));
+    }
+
+    public void isResizable(boolean isResizable) {
+        winResizable.setSelected(isResizable);
+        getVacanciesPaneController().isResizable(isResizable);
     }
 
     private void viewSearchBlock() {
@@ -145,6 +153,10 @@ public class MainMenuController extends FxmlController {
         File[] files = dir.listFiles(fileFilter);
 
         return files[0];
+    }
+
+    public VacanciesPaneController getVacanciesPaneController() {
+        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
     }
 
 }

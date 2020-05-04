@@ -12,6 +12,7 @@
                 <Menu mnemonicParsing="false" text="Окна">
                      <items>
                         <CheckMenuItem fx:id="winSearchCheckItem" mnemonicParsing="false" text="Окно поиска" />
+                         <CheckMenuItem fx:id="winResizable" mnemonicParsing="false" text="Изменение размера" />
                      </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Данные">

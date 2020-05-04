@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.*?>
@@ -53,8 +54,9 @@
              </StackPane>
          </bottom>
          <center>
-            <SplitPane styleClass="grey" dividerPositions="0.7" BorderPane.alignment="CENTER">
+            <SplitPane dividerPositions="0.3, 0.7" styleClass="grey" BorderPane.alignment="CENTER">
                <items>
+                    <ListView fx:id="companyListView" maxWidth="250" style="-fx-border-width: 0 1px 0 0; -fx-border-color: rgba(0, 0, 0, 0.20);" />
                     <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
                         <content>
                             <VBox>
@@ -68,8 +70,11 @@
                             </VBox>
                         </content>
                     </ScrollPane>
-                   <fx:include fx:id="resumesAccordion" source="ResumesAccordion.fxml" />
-                    <!--<fx:include fx:id="resumesTree" source="ResumesTree.fxml" />-->
+                   <ScrollPane fx:id="resumesAccordionWrapper" fitToHeight="true" fitToWidth="true" maxWidth="300" minWidth="0.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: rgba(0, 0, 0, 0.20);">
+                       <content>
+                           <fx:include fx:id="resumesAccordion" source="ResumesAccordion.fxml" />
+                       </content>
+                   </ScrollPane>
                </items>
             </SplitPane>
          </center>

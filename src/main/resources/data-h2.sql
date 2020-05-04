@@ -183,10 +183,10 @@ MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (7, 'Унитарное предприятие', 'ru_RU');
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (8, 'Потребительский кооператив', 'ru_RU');
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (9, 'Общественные и религиозные объединения', 'ru_RU');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (10, 'Фонды', 'ru_RU');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (11, 'Учреждения', 'ru_RU');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (12, 'Ассоциации', 'ru_RU');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (13, 'Союзы', 'ru_RU');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (10, 'Фонд', 'ru_RU');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (11, 'Учреждение', 'ru_RU');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (12, 'Ассоциация', 'ru_RU');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (13, 'Союз', 'ru_RU');
 
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (1, 'Full partnership', 'en');
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (2, 'Faith partnership', 'en');
@@ -197,10 +197,10 @@ MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (7, 'Unitary enterprise', 'en');
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (8, 'Consumer cooperative', 'en');
 MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (9, 'Public and religious associations', 'en');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (10, 'Funds', 'en');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (11, 'Institutions', 'en');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (12, 'Associations', 'en');
-MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (13, 'Unions', 'en');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (10, 'Fund', 'en');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (11, 'Institution', 'en');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (12, 'Association', 'en');
+MERGE INTO company_type_names_view (company_type_id, name_view, locale) VALUES (13, 'Union', 'en');
 
 MERGE INTO company_type_abbreviated_names_view (company_type_id, abbreviated_name_view, locale) VALUES (1, 'ПТ', 'ru_RU');
 MERGE INTO company_type_abbreviated_names_view (company_type_id, abbreviated_name_view, locale) VALUES (2, 'ТВ', 'ru_RU');

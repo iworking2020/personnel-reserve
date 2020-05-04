@@ -8,6 +8,8 @@ public class CompanyTypeService extends DaoService<CompanyType, Long> {
 
     public static final CompanyTypeService INSTANCE = new CompanyTypeService();
 
+    private CompanyTypeService() {}
+
     @Override
     public Dao<CompanyType, Long> getDao() {
         return CompanyTypeDao.INSTANCE;
