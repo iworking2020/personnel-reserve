@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.*?>
@@ -30,24 +29,6 @@
                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                          </rowConstraints>
                          <children>
-                             <StackPane>
-                                 <children>
-                                     <fx:include fx:id="companyView" source="CompanyView.fxml" />
-                                     <fx:include fx:id="companyEdit" source="CompanyEdit.fxml" />
-                                 </children>
-                                 <padding>
-                                     <Insets bottom="10.0" left="10.0" top="10.0" />
-                                 </padding>
-                             </StackPane>
-                             <StackPane GridPane.columnIndex="2">
-                                 <children>
-                                     <fx:include fx:id="vacancyView" source="VacancyView.fxml" />
-                                     <fx:include fx:id="vacancyEdit" source="VacancyEdit.fxml" />
-                                 </children>
-                                 <padding>
-                                     <Insets bottom="10.0" right="10.0" top="10.0" />
-                                 </padding>
-                             </StackPane>
                          </children>
                      </GridPane>
                  </children>
@@ -56,13 +37,27 @@
          <center>
             <SplitPane dividerPositions="0.3, 0.7" styleClass="grey" BorderPane.alignment="CENTER">
                <items>
-                    <ListView fx:id="companyListView" maxWidth="250" style="-fx-border-width: 0 1px 0 0; -fx-border-color: rgba(0, 0, 0, 0.20);" />
+                   <ScrollPane fx:id="clientListViewWrapper" fitToHeight="true" fitToWidth="true" minWidth="0.0" maxWidth="300" style="-fx-border-width: 0 1px 0 0; -fx-border-color: rgba(0, 0, 0, 0.20);" hbarPolicy="NEVER" vbarPolicy="NEVER">
+                       <fx:include fx:id="clientListView" source="ClientListView.fxml" />
+                   </ScrollPane>
                     <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
                         <content>
-                            <VBox>
+                            <VBox spacing="10.0">
                                 <children>
-                                    <fx:include fx:id="companiesTable" source="CompaniesTable.fxml" />
-                                    <fx:include fx:id="vacanciesTable" source="VacamciesTable.fxml" />
+                                    <StackPane>
+                                        <children>
+                                            <fx:include fx:id="companyView" source="CompanyView.fxml" />
+                                            <fx:include fx:id="companyEdit" source="CompanyEdit.fxml" />
+                                        </children>
+                                    </StackPane>
+                                    <StackPane>
+                                        <children>
+                                            <fx:include fx:id="vacancyView" source="VacancyView.fxml" />
+                                            <fx:include fx:id="vacancyEdit" source="VacancyEdit.fxml" />
+                                        </children>
+                                    </StackPane>
+                                    <!--<fx:include fx:id="companiesTable" source="CompaniesTable.fxml" />
+                                    <fx:include fx:id="vacanciesTable" source="VacamciesTable.fxml" />-->
                                 </children>
                                 <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

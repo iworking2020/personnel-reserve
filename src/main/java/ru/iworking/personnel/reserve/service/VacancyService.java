@@ -12,6 +12,8 @@ public class VacancyService extends DaoService<Vacancy, Long> {
 
     public static final VacancyService INSTANCE = new VacancyService();
 
+    private VacancyService() {}
+
     @Override
     public VacancyDao getDao() {
         return VacancyDao.INSTANCE;

@@ -8,8 +8,24 @@ public class CompanyService extends DaoService<Company, Long> {
 
     public static final CompanyService INSTANCE = new CompanyService();
 
+    private final VacancyService vacancyService = VacancyService.INSTANCE;
+
+    private CompanyService() {}
+
     @Override
     public Dao<Company, Long> getDao() {
         return CompanyDao.INSTANCE;
+    }
+
+    @Override
+    public void delete(Long aLong) {
+        super.delete(aLong);
+        vacancyService.deleteByCompanyId(aLong);
+    }
+
+    @Override
+    public void deleteAll() {
+        super.deleteAll();
+        vacancyService.deleteAll();
     }
 }

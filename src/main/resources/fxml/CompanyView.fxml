@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
-<VBox fx:id="companyView" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.CompanyViewController">
+<?import javafx.scene.layout.*?>
+<VBox fx:id="companyView" spacing="8.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.CompanyViewController">
     <children>
         <Label fx:id="companyTypeLabel" text="Тип компании" />
         <Label fx:id="companyNameLabel" text="Наименование" />
@@ -10,5 +11,28 @@
         <Label fx:id="companyEmailLabel" text="Эл. почта" />
         <Label fx:id="companyWebPageLabel" text="Сайт" />
         <Label fx:id="companyAddressLabel" text="Адрес" />
+      <HBox>
+         <children>
+              <FlowPane>
+                  <children>
+                      <Button mnemonicParsing="false" onAction="#actionEditCompany" styleClass="grey" text="Редактировать">
+                     <FlowPane.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </FlowPane.margin>
+                  </Button>
+                  </children>
+              </FlowPane>
+            <FlowPane alignment="TOP_RIGHT" columnHalignment="RIGHT">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#actionDelete" styleClass="grey" text="Удалить">
+                     <FlowPane.margin>
+                        <Insets bottom="5.0" left="5.0" top="5.0" />
+                     </FlowPane.margin>
+                  </Button>
+               </children>
+            </FlowPane>
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
     </children>
 </VBox>

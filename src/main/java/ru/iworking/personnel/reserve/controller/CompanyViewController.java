@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
+import ru.iworking.personnel.reserve.service.CompanyService;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
 
 import java.net.URL;
@@ -25,7 +27,10 @@ public class CompanyViewController extends FxmlController {
     @FXML private Label companyWebPageLabel;
     @FXML private Label companyAddressLabel;
 
-    private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
+    private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
+    private final CompanyService companyService = CompanyService.INSTANCE;
+
+    private Company currentCompany = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -44,6 +49,7 @@ public class CompanyViewController extends FxmlController {
 
     public void setData(Company company) {
         if (company != null) {
+            currentCompany = company;
 
             String companyTypePrefix = "Тип компании: ";
             Long companyTypeId = company.getCompanyTypeId();
@@ -94,5 +100,32 @@ public class CompanyViewController extends FxmlController {
         } else {
             logger.debug("Company is null. We can't view company...");
         }
+    }
+
+    @FXML
+    public void actionEditCompany(ActionEvent event) {
+        getCompanyEditController().setData(currentCompany);
+        getCompanyEditController().show();
+    }
+
+    @FXML
+    public void actionDelete(ActionEvent event) {
+        companyService.delete(currentCompany.getId());
+        getCompanyListViewController().actionUpdate(event);
+    }
+
+    public Company getCurrentCompany() {
+        return currentCompany;
+    }
+    public void setCurrentCompany(Company currentCompany) {
+        this.currentCompany = currentCompany;
+    }
+
+    public CompanyEditController getCompanyEditController() {
+        return (CompanyEditController) getControllerProvider().get(CompanyEditController.class.getName());
+    }
+
+    public ClientListViewController getCompanyListViewController() {
+        return (ClientListViewController) getControllerProvider().get(ClientListViewController.class.getName());
     }
 }

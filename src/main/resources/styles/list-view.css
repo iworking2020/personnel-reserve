@@ -1,0 +1,8 @@
+.list-view {
+    -fx-border-width: 0;
+}
+
+.list-view:focused {
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+}

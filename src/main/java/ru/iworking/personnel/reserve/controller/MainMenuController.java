@@ -80,6 +80,7 @@ public class MainMenuController extends FxmlController {
         scene.getStylesheets().add("/styles/tree-view.css");
         scene.getStylesheets().add("/styles/split-pane.css");
         scene.getStylesheets().add("/styles/accordion.css");
+        scene.getStylesheets().add("/styles/list-view.css");
     }
 
     public void show(Parent root) {

@@ -3,7 +3,6 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -28,7 +27,6 @@ public class CompanyEditController extends FxmlController {
 
     @FXML private VBox companyEdit;
 
-    @FXML private TextField companyIdTextField;
     @FXML private ComboBox<CompanyType> companyTypeComboBox;
     @FXML private TextField nameCompanyTextField;
     @FXML private TextField numberPhoneTextField;
@@ -36,14 +34,14 @@ public class CompanyEditController extends FxmlController {
     @FXML private TextField emailTextField;
     @FXML private TextArea addressTextArea;
 
-    @FXML private Button saveCompanyButton;
-
     private NumberPhoneFormatter numberPhoneFormatter = new NumberPhoneFormatter();
 
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
 
     private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
     private CompanyService companyService = CompanyService.INSTANCE;
+
+    private Company currentCompany = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,11 +56,15 @@ public class CompanyEditController extends FxmlController {
 
     @FXML
     public void actionSave(ActionEvent event) {
-        Boolean isSaved = save();
-        if (isSaved) {
+        if (isValid()) {
+            Company company = save();
             hide();
             clear();
-            getCompaniesTableController().actionUpdate(event);
+            getCompanyListViewController().actionUpdate(event);
+            getCompanyListViewController().selectCompany(company);
+            //getCompaniesTableController().actionUpdate(event);
+        } else {
+            logger.debug("Fields company edit block is not valid...");
         }
     }
 
@@ -78,7 +80,7 @@ public class CompanyEditController extends FxmlController {
 
     public void setData(Company company) {
         if (company != null) {
-            if (company.getId() != null) companyIdTextField.setText(company.getId().toString());
+            currentCompany = company;
             Long companyTypeId = company.getCompanyTypeId();
             if (companyTypeId != null) companyTypeComboBox.setValue(companyTypeService.findById(companyTypeId));
             nameCompanyTextField.setText(company.getName());
@@ -89,56 +91,50 @@ public class CompanyEditController extends FxmlController {
             Address address = company.getAddress();
             if (address != null) addressTextArea.setText(address.getStreet());
         } else {
+            clear();
             logger.debug("company is null..");
         }
     }
 
-    public Boolean save() {
-        if (isValid()) {
-            Long companyId = null;
-            String companyIdStr = companyIdTextField.getText();
-            if (companyIdStr != null && !companyIdStr.isEmpty()) {
-                companyId = Long.valueOf(companyIdStr);
-            }
+    public Company save() {
+        Long companyId = null;
+        if (currentCompany != null) companyId = currentCompany.getId();
 
-            CompanyType companyType = companyTypeComboBox.getValue();
-            String nameCompanyStr = nameCompanyTextField.getText();
-            String numberPhoneStr = numberPhoneTextField.getText();
-            String webPageStr = webPageTextField.getText();
-            String emailStr = emailTextField.getText();
-            String addressStr = addressTextArea.getText();
+        CompanyType companyType = companyTypeComboBox.getValue();
+        String nameCompanyStr = nameCompanyTextField.getText();
+        String numberPhoneStr = numberPhoneTextField.getText();
+        String webPageStr = webPageTextField.getText();
+        String emailStr = emailTextField.getText();
+        String addressStr = addressTextArea.getText();
 
-            NumberPhone numberPhone = new NumberPhone();
-            numberPhone.setNumber(numberPhoneStr);
+        NumberPhone numberPhone = new NumberPhone();
+        numberPhone.setNumber(numberPhoneStr);
 
-            Address address = new Address();
-            address.setStreet(addressStr);
+        Address address = new Address();
+        address.setStreet(addressStr);
 
-            Company company;
-            if (companyId == null) {
-                company = new Company();
-            } else {
-                company = companyService.findById(companyId);
-            }
-
-            if (companyType != null) company.setCompanyTypeId(companyType.getId());
-            company.setName(nameCompanyStr);
-            company.setNumberPhone(numberPhone);
-            company.setWebPage(webPageStr);
-            company.setEmail(emailStr);
-            company.setAddress(address);
-
-            if (companyId == null) {
-                companyService.persist(company);
-            } else {
-                companyService.update(company);
-            }
-            logger.debug("Created new company: " + company.toString());
-            return true;
+        Company company;
+        if (companyId == null) {
+            company = new Company();
         } else {
-            logger.debug("Fields company edit block is not valid...");
-            return false;
+            company = companyService.findById(companyId);
         }
+
+        if (companyType != null) company.setCompanyTypeId(companyType.getId());
+        company.setName(nameCompanyStr);
+        company.setNumberPhone(numberPhone);
+        company.setWebPage(webPageStr);
+        company.setEmail(emailStr);
+        company.setAddress(address);
+
+        if (companyId == null) {
+            companyService.persist(company);
+        } else {
+            companyService.update(company);
+        }
+        logger.debug("Created new company: " + company.toString());
+
+        return company;
     }
 
     private Boolean isValid() {
@@ -155,7 +151,7 @@ public class CompanyEditController extends FxmlController {
     }
 
     public void clear() {
-        companyIdTextField.setText("");
+        currentCompany = null;
         companyTypeComboBox.setValue(null);
         companyTypeComboBox.getStyleClass().remove("has-error");
         nameCompanyTextField.setText("");
@@ -177,7 +173,7 @@ public class CompanyEditController extends FxmlController {
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeService.findAll()));
     }
 
-    public CompaniesTableController getCompaniesTableController() {
-        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class.getName());
+    public ClientListViewController getCompanyListViewController() {
+        return (ClientListViewController) getControllerProvider().get(ClientListViewController.class.getName());
     }
 }
