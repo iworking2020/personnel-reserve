@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.entity;
 
-import com.sun.org.glassfish.gmbal.Description;
 import ru.iworking.personnel.reserve.interfaces.StateProvider;
 
 import javax.persistence.*;
@@ -167,9 +166,6 @@ public class Resume implements Cloneable, StateProvider {
         this.photoId = photoId;
     }
 
-    public Description getDescription() {
-        return null;
-    }
     public void setState(ResumeState state) {
         this.state = state;
     }

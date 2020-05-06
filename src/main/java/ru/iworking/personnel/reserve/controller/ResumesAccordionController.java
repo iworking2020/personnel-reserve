@@ -26,6 +26,7 @@ public class ResumesAccordionController extends FxmlController {
 
     @FXML private Accordion resumesAccordion;
 
+    @FXML private Button addButton;
     @FXML private Button updateButton;
 
     class ResumeButton extends Button {
@@ -88,6 +89,14 @@ public class ResumesAccordionController extends FxmlController {
             titledPane.setContent(scrollPane);
             resumesAccordion.getPanes().add(titledPane);
         });
+
+        updateButton.setText("");
+        updateButton.getStyleClass().add("image-button");
+        updateButton.getStyleClass().add("image-refresh");
+
+        addButton.setText("");
+        addButton.getStyleClass().add("image-button");
+        addButton.getStyleClass().add("image-add");
     }
 
     @FXML

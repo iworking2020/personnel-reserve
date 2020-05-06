@@ -3,6 +3,7 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +20,9 @@ public class ClientListViewController extends FxmlController {
 
     @FXML private ListView<Company> companyListView;
 
+    @FXML private Button addButton;
+    @FXML private Button updateButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initCompaniesList();
@@ -29,6 +33,14 @@ public class ClientListViewController extends FxmlController {
             getCompanyViewController().setData(newSelection);
             getCompanyViewController().show();
         });
+
+        updateButton.setText("");
+        updateButton.getStyleClass().add("image-button");
+        updateButton.getStyleClass().add("image-refresh");
+
+        addButton.setText("");
+        addButton.getStyleClass().add("image-button");
+        addButton.getStyleClass().add("image-add");
     }
 
     public void initCompaniesList() {
