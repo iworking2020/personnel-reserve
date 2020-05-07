@@ -1,17 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import java.lang.String?>
 <VBox fx:id="companyEdit" spacing="5.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.CompanyEditController">
     <children>
-        <ComboBox fx:id="companyTypeComboBox" maxWidth="1.7976931348623157E308" promptText="Тип компании" />
-        <TextField fx:id="nameCompanyTextField" promptText="Наименование" />
-        <TextField fx:id="numberPhoneTextField" promptText="Номер тел." />
-        <TextField fx:id="emailTextField" promptText="Эл. почта" />
-        <TextField fx:id="webPageTextField" promptText="Сайт" />
-        <TextArea fx:id="addressTextArea" maxHeight="-Infinity" prefHeight="25.0" promptText="Адрес" />
-      <HBox>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="NEVER" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button mnemonicParsing="false" onAction="#actionLoadImage" text="Изменить">
+                     <styleClass>
+                        <String fx:value="grey" />
+                        <String fx:value="select-image" />
+                     </styleClass></Button>
+               </children>
+            </StackPane>
+            <StackPane GridPane.columnIndex="1">
+               <children>
+                  <VBox spacing="5.0">
+                     <children>
+                          <ComboBox fx:id="companyTypeComboBox" maxWidth="1.7976931348623157E308" promptText="Тип компании" />
+                          <TextField fx:id="nameCompanyTextField" promptText="Наименование" />
+                          <TextField fx:id="numberPhoneTextField" promptText="Номер тел." />
+                          <TextField fx:id="emailTextField" promptText="Эл. почта" />
+                          <TextField fx:id="webPageTextField" promptText="Сайт" />
+                     </children>
+                  </VBox>
+               </children>
+            </StackPane>
+         </children>
+      </GridPane>
+      <VBox spacing="5.0">
+         <children>
+            <TextField fx:id="countryTextField" promptText="Страна" />
+            <TextField fx:id="regionTextField" promptText="Регион" />
+            <TextField fx:id="cityTextField" promptText="Город" />
+            <TextField fx:id="streetTextField" promptText="Улица" />
+            <TextField fx:id="houseTextField" promptText="Дом" />
+         </children>
+      </VBox>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
             <FlowPane>
                <children>
@@ -25,7 +71,7 @@
                       </Button>
                </children>
             </FlowPane>
-            <FlowPane alignment="TOP_RIGHT">
+            <FlowPane alignment="TOP_RIGHT" GridPane.columnIndex="1">
                <children>
                       <Button fx:id="saveCompanyButton" mnemonicParsing="false" onAction="#actionSave" styleClass="grey" text="Сохранить">
                           <opaqueInsets>
@@ -37,10 +83,7 @@
                       </Button>
                </children></FlowPane>
          </children>
-         <VBox.margin>
-            <Insets top="5.0" />
-         </VBox.margin>
-      </HBox>
+      </GridPane>
       <Separator prefWidth="200.0" />
     </children>
 </VBox>

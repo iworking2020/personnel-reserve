@@ -8,6 +8,8 @@ public class ResumeStateService extends DaoService<ResumeState, Long> {
 
     public static final ResumeStateService INSTANCE = new ResumeStateService();
 
+    private ResumeStateService() {}
+
     @Override
     public Dao<ResumeState, Long> getDao() {
         return ResumeStateDao.INSTANCE;

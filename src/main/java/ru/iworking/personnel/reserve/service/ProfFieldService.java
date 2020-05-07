@@ -8,6 +8,8 @@ public class ProfFieldService extends DaoService<ProfField, Long> {
 
     public static final ProfFieldService INSTANCE = new ProfFieldService();
 
+    private ProfFieldService() {}
+
     @Override
     public Dao<ProfField, Long> getDao() {
         return ProfFieldDao.INSTANCE;

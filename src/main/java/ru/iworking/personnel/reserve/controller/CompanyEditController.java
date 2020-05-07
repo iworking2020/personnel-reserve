@@ -1,23 +1,30 @@
 package ru.iworking.personnel.reserve.controller;
 
 import javafx.collections.FXCollections;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.entity.Address;
-import ru.iworking.personnel.reserve.entity.Company;
-import ru.iworking.personnel.reserve.entity.CompanyType;
-import ru.iworking.personnel.reserve.entity.NumberPhone;
+import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
 import ru.iworking.personnel.reserve.service.CompanyService;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
+import ru.iworking.personnel.reserve.service.LogoService;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -32,7 +39,13 @@ public class CompanyEditController extends FxmlController {
     @FXML private TextField numberPhoneTextField;
     @FXML private TextField webPageTextField;
     @FXML private TextField emailTextField;
-    @FXML private TextArea addressTextArea;
+    @FXML private TextField countryTextField;
+    @FXML private TextField regionTextField;
+    @FXML private TextField cityTextField;
+    @FXML private TextField streetTextField;
+    @FXML private TextField houseTextField;
+
+    @FXML private ImageView imageView;
 
     private NumberPhoneFormatter numberPhoneFormatter = new NumberPhoneFormatter();
 
@@ -40,6 +53,7 @@ public class CompanyEditController extends FxmlController {
 
     private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
     private CompanyService companyService = CompanyService.INSTANCE;
+    private LogoService logoService = LogoService.INSTANCE;
 
     private Company currentCompany = null;
 
@@ -52,6 +66,8 @@ public class CompanyEditController extends FxmlController {
         companyTypeComboBox.setCellFactory(companyTypeCellFactory);
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeService.findAll()));
 
+        final Circle clip = new Circle(75, 75, 70);
+        imageView.setClip(clip);
     }
 
     @FXML
@@ -89,7 +105,18 @@ public class CompanyEditController extends FxmlController {
             webPageTextField.setText(company.getWebPage());
             emailTextField.setText(company.getEmail());
             Address address = company.getAddress();
-            if (address != null) addressTextArea.setText(address.getStreet());
+            if (address != null) {
+                countryTextField.setText(address.getCountry());
+                regionTextField.setText(address.getRegion());
+                cityTextField.setText(address.getCity());
+                streetTextField.setText(address.getStreet());
+                houseTextField.setText(address.getHouse());
+            }
+            if (company.getLogoId() != null) {
+                setLogoImageById(company.getLogoId());
+            } else {
+                setDefaultImage();
+            }
         } else {
             clear();
             logger.debug("company is null..");
@@ -105,13 +132,16 @@ public class CompanyEditController extends FxmlController {
         String numberPhoneStr = numberPhoneTextField.getText();
         String webPageStr = webPageTextField.getText();
         String emailStr = emailTextField.getText();
-        String addressStr = addressTextArea.getText();
+
+        String countryStr = countryTextField.getText();
+        String regionStr = regionTextField.getText();
+        String cityStr = cityTextField.getText();
+        String streetStr = streetTextField.getText();
+        String houseStr = houseTextField.getText();
 
         NumberPhone numberPhone = new NumberPhone();
         numberPhone.setNumber(numberPhoneStr);
 
-        Address address = new Address();
-        address.setStreet(addressStr);
 
         Company company;
         if (companyId == null) {
@@ -125,7 +155,33 @@ public class CompanyEditController extends FxmlController {
         company.setNumberPhone(numberPhone);
         company.setWebPage(webPageStr);
         company.setEmail(emailStr);
-        company.setAddress(address);
+        if (company.getAddress() == null) company.setAddress(new Address());
+        company.getAddress().setCountry(countryStr);
+        company.getAddress().setRegion(regionStr);
+        company.getAddress().setCity(cityStr);
+        company.getAddress().setStreet(streetStr);
+        company.getAddress().setHouse(houseStr);
+
+        Logo logo = null;
+
+        try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+            BufferedImage originalImage = SwingFXUtils.fromFXImage(imageView.getImage(), null);
+            ImageIO.write(originalImage, "png", stream);
+
+            logo = new Logo(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
+        } catch (IOException e) {
+            logger.error(e);
+        }
+
+        if (logo != null) {
+            try {
+                logoService.persist(logo);
+                Long logoId = logo.getId();
+                company.setLogoId(logoId);
+            } catch (OutOfMemoryError ex) {
+                logger.error(ex);
+            }
+        }
 
         if (companyId == null) {
             companyService.persist(company);
@@ -150,6 +206,23 @@ public class CompanyEditController extends FxmlController {
         return isValid;
     }
 
+    public void setLogoImageById(Long id) {
+        Logo logo = logoService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(logo.getImage());
+        Image img = new Image(targetStream);
+        imageView.setImage(img);
+    }
+
+    public void setDefaultImage() {
+        Image defaultImage = new Image(
+                getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"),
+                150,
+                150,
+                false,
+                false);
+        imageView.setImage(defaultImage);
+    }
+
     public void clear() {
         currentCompany = null;
         companyTypeComboBox.setValue(null);
@@ -159,13 +232,38 @@ public class CompanyEditController extends FxmlController {
         numberPhoneTextField.setText("");
         webPageTextField.setText("");
         emailTextField.setText("");
-        addressTextArea.setText("");
+        countryTextField.setText("");
+        regionTextField.setText("");
+        cityTextField.setText("");
+        streetTextField.setText("");
+        houseTextField.setText("");
+        setDefaultImage();
     }
 
     @FXML
     public void actionCancel(ActionEvent event) {
         hide();
         clear();
+    }
+
+    @FXML
+    private void actionLoadImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("GIF", "*.gif")
+        );
+
+        File file = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
+        if (file != null) {
+            try {
+                Image img = new Image(file.toURI().toString());
+                imageView.setImage(img);
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        }
     }
 
     public void reload(ActionEvent event) {

@@ -11,15 +11,10 @@ public class Address {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "country_id")
-    private Long countryId;
-    @Column(name = "region_id")
-    private Long regionId;
-    @Column(name = "city_id")
-    private Long cityId;
-    @Column(name = "street")
+    private String country;
+    private String region;
+    private String city;
     private String street;
-    @Column(name = "house")
     private String house;
 
     public Address() { }
@@ -31,25 +26,25 @@ public class Address {
         this.id = id;
     }
 
-    public Long getCountryId() {
-        return countryId;
+    public String getCountry() {
+        return country;
     }
-    public void setCountryId(Long countryId) {
-        this.countryId = countryId;
-    }
-
-    public Long getRegionId() {
-        return regionId;
-    }
-    public void setRegionId(Long regionId) {
-        this.regionId = regionId;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public Long getCityId() {
-        return cityId;
+    public String getRegion() {
+        return region;
     }
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getCity() {
+        return city;
+    }
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getStreet() {
@@ -71,15 +66,15 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(countryId, address.countryId) &&
-                Objects.equals(regionId, address.regionId) &&
-                Objects.equals(cityId, address.cityId) &&
+        return Objects.equals(country, address.country) &&
+                Objects.equals(region, address.region) &&
+                Objects.equals(city, address.city) &&
                 Objects.equals(street, address.street) &&
                 Objects.equals(house, address.house);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(countryId, regionId, cityId, street, house);
+        return Objects.hash(country, region, city, street, house);
     }
 }

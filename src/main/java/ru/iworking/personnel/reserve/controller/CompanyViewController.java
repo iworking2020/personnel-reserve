@@ -1,19 +1,30 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.common.base.Strings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
+import ru.iworking.personnel.reserve.entity.Logo;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.personnel.reserve.service.CompanyService;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
+import ru.iworking.personnel.reserve.service.LogoService;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class CompanyViewController extends FxmlController {
 
@@ -26,15 +37,19 @@ public class CompanyViewController extends FxmlController {
     @FXML private Label companyEmailLabel;
     @FXML private Label companyWebPageLabel;
     @FXML private Label companyAddressLabel;
+    @FXML private ImageView imageView;
 
     private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
     private final CompanyService companyService = CompanyService.INSTANCE;
+    private final LogoService logoService = LogoService.INSTANCE;
 
     private Company currentCompany = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hide();
+        final Circle clip = new Circle(75, 75, 70);
+        imageView.setClip(clip);
     }
 
     public void show() {
@@ -92,10 +107,30 @@ public class CompanyViewController extends FxmlController {
 
             String companyAddresPrefix = "Адрес: ";
             Address address = company.getAddress();
-            if (address != null && !address.getStreet().isEmpty()) {
-                companyAddressLabel.setText(companyAddresPrefix + address.getStreet());
+            if (address != null) {
+                List<String> list = new LinkedList();
+
+                if (!Strings.isNullOrEmpty(address.getCountry())) list.add(address.getCountry());
+                if (!Strings.isNullOrEmpty(address.getRegion())) list.add(address.getRegion());
+                if (!Strings.isNullOrEmpty(address.getCity())) list.add(address.getCity());
+                if (!Strings.isNullOrEmpty(address.getStreet())) list.add(address.getStreet());
+                if (!Strings.isNullOrEmpty(address.getHouse())) list.add(address.getHouse());
+
+                String fullAddress = list.stream().collect(Collectors.joining( ", " ));
+
+                if (!Strings.isNullOrEmpty(fullAddress)) {
+                    companyAddressLabel.setText(companyAddresPrefix + fullAddress);
+                } else {
+                    companyAddressLabel.setText(companyAddresPrefix + "не указан");
+                }
             } else {
                 companyAddressLabel.setText(companyAddresPrefix + "не указан");
+            }
+
+            if (company.getLogoId() != null) {
+                setLogoImageById(company.getLogoId());
+            } else {
+                setDefaultImage();
             }
         } else {
             logger.debug("Company is null. We can't view company...");
@@ -112,6 +147,23 @@ public class CompanyViewController extends FxmlController {
     public void actionDelete(ActionEvent event) {
         companyService.delete(currentCompany.getId());
         getCompanyListViewController().actionUpdate(event);
+    }
+
+    public void setLogoImageById(Long id) {
+        Logo logo = logoService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(logo.getImage());
+        Image img = new Image(targetStream);
+        imageView.setImage(img);
+    }
+
+    public void setDefaultImage() {
+        Image defaultImage = new Image(
+                getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"),
+                150,
+                150,
+                false,
+                false);
+        imageView.setImage(defaultImage);
     }
 
     public Company getCurrentCompany() {

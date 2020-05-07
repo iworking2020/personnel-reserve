@@ -35,12 +35,7 @@ public class ClientListViewController extends FxmlController {
         });
 
         updateButton.setText("");
-        updateButton.getStyleClass().add("image-button");
-        updateButton.getStyleClass().add("image-refresh");
-
         addButton.setText("");
-        addButton.getStyleClass().add("image-button");
-        addButton.getStyleClass().add("image-add");
     }
 
     public void initCompaniesList() {

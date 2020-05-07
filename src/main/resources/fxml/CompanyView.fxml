@@ -2,16 +2,48 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <VBox fx:id="companyView" spacing="8.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.CompanyViewController">
     <children>
-        <Label fx:id="companyTypeLabel" text="Тип компании" />
-        <Label fx:id="companyNameLabel" text="Наименование" />
-        <Label fx:id="companyNumberPhoneLabel" text="Номер тел." />
-        <Label fx:id="companyEmailLabel" text="Эл. почта" />
-        <Label fx:id="companyWebPageLabel" text="Сайт" />
-        <Label fx:id="companyAddressLabel" text="Адрес" />
-      <HBox>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="NEVER" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox spacing="8.0" GridPane.columnIndex="1">
+               <children>
+                    <Label fx:id="companyTypeLabel" text="Тип компании" />
+                    <Label fx:id="companyNameLabel" text="Наименование" />
+                    <Label fx:id="companyNumberPhoneLabel" text="Номер тел." />
+                    <Label fx:id="companyEmailLabel" text="Эл. почта" />
+                    <Label fx:id="companyWebPageLabel" text="Сайт" />
+                    <Label fx:id="companyAddressLabel" text="Адрес" wrapText="true" />
+               </children>
+            </VBox>
+            <StackPane alignment="TOP_CENTER">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                     <StackPane.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </StackPane.margin>
+                  </ImageView>
+               </children>
+            </StackPane>
+         </children>
+      </GridPane>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+          <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
               <FlowPane>
                   <children>
@@ -22,7 +54,7 @@
                   </Button>
                   </children>
               </FlowPane>
-            <FlowPane alignment="TOP_RIGHT" columnHalignment="RIGHT">
+            <FlowPane alignment="TOP_RIGHT" columnHalignment="RIGHT" GridPane.columnIndex="1">
                <children>
                   <Button mnemonicParsing="false" onAction="#actionDelete" styleClass="grey" text="Удалить">
                      <FlowPane.margin>
@@ -32,7 +64,7 @@
                </children>
             </FlowPane>
          </children>
-      </HBox>
+      </GridPane>
       <Separator prefWidth="200.0" />
     </children>
 </VBox>

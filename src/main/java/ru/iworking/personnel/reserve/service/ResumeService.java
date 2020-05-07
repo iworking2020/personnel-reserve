@@ -12,6 +12,8 @@ public class ResumeService extends DaoService<Resume, Long> {
 
     public static final ResumeService INSTANCE = new ResumeService();
 
+    private ResumeService() {}
+
     @Override
     public ResumeDao getDao() {
         return ResumeDao.INSTANCE;

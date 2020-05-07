@@ -11,9 +11,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.CompanyType;
+import ru.iworking.personnel.reserve.entity.Logo;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
+import ru.iworking.personnel.reserve.service.LogoService;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -27,6 +31,7 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
     @FXML private Pane parent;
 
     private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
+    private final LogoService logoService = LogoService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,9 +40,9 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
     }
 
     @Override
-    protected void updateItem(Company item, boolean empty) {
-        super.updateItem(item, empty);
-        if(empty || item == null) {
+    protected void updateItem(Company company, boolean empty) {
+        super.updateItem(company, empty);
+        if(empty || company == null) {
             setText(null);
             setGraphic(null);
         } else {
@@ -48,7 +53,7 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
             }
-            CompanyType companyType = companyTypeService.findById(item.getCompanyTypeId());
+            CompanyType companyType = companyTypeService.findById(company.getCompanyTypeId());
 
             String viewName = companyType.getNameView().getName();
 
@@ -59,13 +64,34 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
                 companyTypeLabel.setText(abbreviatedName);
             }
 
-            companyNameLabel.setText("\""+ item.getName() +"\"");
+            companyNameLabel.setText("\""+ company.getName() +"\"");
 
-            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"));
-            companyImageView.setImage(defaultImage);
+            if (company.getLogoId() != null) {
+                setLogoImageById(company.getLogoId());
+            } else {
+                setDefaultImage();
+            }
 
             setText(null);
             setGraphic(parent);
         }
     }
+
+    public void setLogoImageById(Long id) {
+        Logo logo = logoService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(logo.getImage());
+        Image img = new Image(targetStream);
+        companyImageView.setImage(img);
+    }
+
+    public void setDefaultImage() {
+        Image defaultImage = new Image(
+                getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"),
+                150,
+                150,
+                false,
+                false);
+        companyImageView.setImage(defaultImage);
+    }
+
 }
