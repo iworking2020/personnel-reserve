@@ -11,7 +11,7 @@
 }
 
 .combo-box-popup .list-view .list-cell {
-    -fx-text-fill: black;
+    -fx-text-fill: -fx-text-base-color;
 }
 
 .combo-box-popup .list-view .list-cell:hover {

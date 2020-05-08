@@ -53,7 +53,7 @@
     -fx-border-width: 1px;
     -fx-border-color: rgba(0, 0, 0, 0.20);
     -fx-background-color: white;
-    -fx-text-fill: black;
+    -fx-text-fill: -fx-text-base-color;
     -fx-background-insets: 0 0 0 0, 0 0 0 0;
     -fx-background-radius: 0, 0, 0, 0;
 }

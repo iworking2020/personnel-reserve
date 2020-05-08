@@ -6,7 +6,7 @@
     -fx-max-width: Infinity;
     -fx-background-color: transparent;
     -fx-background-radius: 0, 0, 0, 0;
-    -fx-text-fill: black;
+    -fx-text-fill: -fx-text-base-color;
 }
 
 #profFieldVBox .button:hover {

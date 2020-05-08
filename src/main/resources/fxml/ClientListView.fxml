@@ -37,9 +37,8 @@
     <center>
         <StackPane>
             <children>
-                <ListView fx:id="companyListView" />
+                <ListView fx:id="companyListView" styleClass="grey" />
             </children>
         </StackPane>
-
     </center>
 </BorderPane>
