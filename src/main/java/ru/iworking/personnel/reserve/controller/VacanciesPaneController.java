@@ -39,8 +39,6 @@ public class VacanciesPaneController extends FxmlController {
         isResizable(false);
     }
 
-
-
     public void isResizable(boolean isResizable) {
         if (isResizable) {
             clientListViewWrapper.setMinWidth(0.00);
@@ -78,4 +76,7 @@ public class VacanciesPaneController extends FxmlController {
         vacancyEditController.reload(event);
     }
 
+    public ScrollPane getClientListViewWrapper() {
+        return clientListViewWrapper;
+    }
 }

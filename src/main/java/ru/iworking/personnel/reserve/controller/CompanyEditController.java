@@ -78,6 +78,7 @@ public class CompanyEditController extends FxmlController {
             clear();
             getCompanyListViewController().actionUpdate(event);
             getCompanyListViewController().selectCompany(company);
+            getCompanyListViewController().createVacancyListViewPane(company);
             //getCompaniesTableController().actionUpdate(event);
         } else {
             logger.debug("Fields company edit block is not valid...");

@@ -30,6 +30,8 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
 
     @FXML private Pane parent;
 
+    private Company company;
+
     private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
     private final LogoService logoService = LogoService.INSTANCE;
 
@@ -41,6 +43,7 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
 
     @Override
     protected void updateItem(Company company, boolean empty) {
+        this.company = company;
         super.updateItem(company, empty);
         if(empty || company == null) {
             setText(null);
@@ -94,4 +97,7 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
         companyImageView.setImage(defaultImage);
     }
 
+    public Company getCompany() {
+        return company;
+    }
 }

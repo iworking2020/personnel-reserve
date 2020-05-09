@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.Logo;
@@ -146,7 +147,9 @@ public class CompanyViewController extends FxmlController {
     @FXML
     public void actionDelete(ActionEvent event) {
         companyService.delete(currentCompany.getId());
-        getCompanyListViewController().actionUpdate(event);
+        getClientListViewController().actionUpdate(event);
+        VacancyListViewPane vacancyListViewPane = getClientListViewController().getVacancyListViewPane();
+        if (vacancyListViewPane != null) vacancyListViewPane.actionBack(null);
     }
 
     public void setLogoImageById(Long id) {
@@ -177,7 +180,7 @@ public class CompanyViewController extends FxmlController {
         return (CompanyEditController) getControllerProvider().get(CompanyEditController.class.getName());
     }
 
-    public ClientListViewController getCompanyListViewController() {
+    public ClientListViewController getClientListViewController() {
         return (ClientListViewController) getControllerProvider().get(ClientListViewController.class.getName());
     }
 }
