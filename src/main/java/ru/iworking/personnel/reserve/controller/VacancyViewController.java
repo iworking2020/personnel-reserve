@@ -92,6 +92,8 @@ public class VacancyViewController extends FxmlController{
                     wageStr += " " + currency.getNameView().getName();
                 }
                 wageLabel.setText(wageStr);
+            } else {
+                wageLabel.setText(prefixWage + "не указана");
             }
 
             addressLabel.setText(

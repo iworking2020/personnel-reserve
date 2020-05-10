@@ -73,12 +73,13 @@ public class CompanyEditController extends FxmlController {
     @FXML
     public void actionSave(ActionEvent event) {
         if (isValid()) {
+            Long companyId = currentCompany != null ? currentCompany.getId() : null;
             Company company = save();
             hide();
             clear();
             getCompanyListViewController().actionUpdate(event);
             getCompanyListViewController().selectCompany(company);
-            getCompanyListViewController().createVacancyListViewPane(company);
+            if (companyId == null) getCompanyListViewController().createVacancyListViewPane(company);
             //getCompaniesTableController().actionUpdate(event);
         } else {
             logger.debug("Fields company edit block is not valid...");

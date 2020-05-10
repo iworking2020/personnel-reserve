@@ -3,6 +3,7 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
@@ -12,16 +13,16 @@ import ru.iworking.personnel.reserve.component.CompanyCell;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.service.CompanyService;
-import ru.iworking.personnel.reserve.service.VacancyService;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class ClientListViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ClientListViewController.class);
 
-    private final VacancyService vacancyService = VacancyService.INSTANCE;
+    private final CompanyService companyService = CompanyService.INSTANCE;
 
     @FXML private Pane parent;
 
@@ -34,38 +35,45 @@ public class ClientListViewController extends FxmlController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initCompaniesList();
         companyListView.setCellFactory(listView -> {
             CompanyCell cell = new CompanyCell();
-            cell.setOnMouseClicked(event -> createVacancyListViewPane(cell.getCompany()));
+            cell.setOnMouseClicked(event -> {
+                getCompanyEditController().clear();
+                getCompanyEditController().hide();
+                createVacancyListViewPane(cell.getCompany());
+            });
             return cell;
         });
         companyListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            getCompanyEditController().clear();
-            getCompanyEditController().hide();
             getCompanyViewController().setData(newSelection);
             getCompanyViewController().show();
         });
 
         updateButton.setText("");
         addButton.setText("");
+
+        initData();
     }
 
     public void createVacancyListViewPane(Company company) {
+        Iterator<Node> i = parent.getChildren().iterator();
+        while (i.hasNext()) {
+            Node node = i.next(); // должен быть вызван перед тем, как вызывается i.remove()
+            if (node instanceof VacancyListViewPane) i.remove();
+        }
         vacancyListViewPane = new VacancyListViewPane();
-        vacancyListViewPane.setData(vacancyService.findAll());
         vacancyListViewPane.setXPosition(getVacanciesPaneController().getClientListViewWrapper().getMaxWidth());
         vacancyListViewPane.show();
         parent.getChildren().add(vacancyListViewPane);
     }
 
-    public void initCompaniesList() {
-        companyListView.setItems(FXCollections.observableList(CompanyService.INSTANCE.findAll()));
+    public void initData() {
+        companyListView.setItems(FXCollections.observableList(companyService.findAll()));
     }
 
     @FXML
     public void actionUpdate(ActionEvent event) {
-        companyListView.setItems(FXCollections.observableList(CompanyService.INSTANCE.findAll()));
+        this.initData();
         getCompanyEditController().hide();
 
         Company company = companyListView.getSelectionModel().getSelectedItem();
@@ -79,10 +87,8 @@ public class ClientListViewController extends FxmlController {
 
     @FXML
     public void actionCreate(ActionEvent event) {
-        //companyListView.getSelectionModel().clearSelection();
         getCompanyEditController().clear();
         getCompanyEditController().show();
-        //getCompanyViewController().hide();
     }
 
     public VacancyListViewPane getVacancyListViewPane() {

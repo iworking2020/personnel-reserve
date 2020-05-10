@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
@@ -27,7 +28,6 @@ public class VacancyEditController extends FxmlController {
     private static final Logger logger = LogManager.getLogger(VacancyEditController.class);
 
     @FXML private VBox vacancyEdit;
-    @FXML private TextField vacancyIdTextField;
     @FXML private TextField vacancyProfessionTextField;
     @FXML private ComboBox<ProfField> vacancyProfFieldComboBox;
     @FXML private ComboBox<WorkType> vacancyWorkTypeComboBox;
@@ -48,6 +48,8 @@ public class VacancyEditController extends FxmlController {
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
+
+    private Vacancy currentVacancy = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,7 +74,7 @@ public class VacancyEditController extends FxmlController {
 
     public void setData(Vacancy vacancy) {
         if (vacancy != null) {
-            if (vacancy.getId() != null) vacancyIdTextField.setText(vacancy.getId().toString());
+            this.currentVacancy = vacancy;
             vacancyProfessionTextField.setText(vacancy.getProfession());
             if (vacancy.getProfFieldId() != null) vacancyProfFieldComboBox.setValue(profFieldService.findById(vacancy.getProfFieldId()));
             if (vacancy.getWorkTypeId() != null) vacancyWorkTypeComboBox.setValue(workTypeService.findById(vacancy.getWorkTypeId()));
@@ -91,71 +93,68 @@ public class VacancyEditController extends FxmlController {
 
     @FXML
     public void actionSave(ActionEvent event) {
-        Long companyId = getCompaniesTableController().getTableCompanies().getSelectionModel().getSelectedItem().getId();
-        Boolean isSaved = save(companyId);
-        if (isSaved) {
+        Long companyId = getCompanyViewController().getCurrentCompany().getId();
+        if (isValid()) {
+            Vacancy vacancy = save(companyId);
             hide();
             clear();
-            getVacanciesTableController().actionUpdate(event);
-        }
-    }
-
-    public Boolean save(Long companyId) {
-        if (isValid()) {
-            Long vacancyId = null;
-            String vacancyIdStr = vacancyIdTextField.getText();
-            if (vacancyIdStr != null && !vacancyIdStr.isEmpty()) {
-                vacancyId = Long.valueOf(vacancyIdStr);
-            }
-
-            String professionStr = vacancyProfessionTextField.getText();
-            ProfField profField = vacancyProfFieldComboBox.getValue();
-            WorkType workType = vacancyWorkTypeComboBox.getValue();
-            Education education = vacancyEducationComboBox.getValue();
-            String wageStr = vacancyWageTextField.getText();
-            Currency currency = vacancyCurrencyComboBox.getValue();
-            LocalDate startDateExperience = vacancyExpDateStartDatePicker.getValue();
-            LocalDate endDateExperience = vacancyExpDateEndDatePicker.getValue();
-            String addressStr = vacancyAddressTextArea.getText();
-
-            Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyService.findById(vacancyId);
-            vacancy.setCompanyId(companyId);
-            vacancy.setProfession(professionStr);
-            if (profField != null) vacancy.setProfFieldId(profField.getId());
-            if (workType != null) vacancy.setWorkTypeId(workType.getId());
-            if (education != null) vacancy.setEducationId(education.getId());
-            if (!wageStr.isEmpty()) {
-                try {
-                    Wage wage = new Wage();
-                    wage.setCount(new BigDecimal(wageStr.replaceAll(",",".")));
-                    if (currency != null) wage.setCurrencyId(currency.getId());
-                    vacancy.setWage(wage);
-                } catch (Exception e) {
-                    logger.error(e);
-                }
-            }
-            if (startDateExperience != null) {
-                Experience experience = new Experience();
-                experience.setDateStart(startDateExperience);
-                if (endDateExperience != null) experience.setDateEnd(endDateExperience);
-            }
-
-            Address address = new Address();
-            address.setStreet(addressStr);
-
-            vacancy.setAddress(address);
-
-            if (vacancyId == null) {
-                vacancyService.persist(vacancy);
-            } else {
-                vacancyService.update(vacancy);
-            }
-            logger.debug("Created new vacancy: " + vacancy.toString());
-            return true;
+            getVacancyListViewPane().actionUpdate(event);
+            getVacancyListViewPane().select(vacancy);
+            //getVacanciesTableController().actionUpdate(event);
         } else {
             logger.debug("Fields vacancy edit block is not valid...");
-            return false;
         }
+
+    }
+
+    public Vacancy save(Long companyId) {
+        Long vacancyId = null;
+        if (currentVacancy != null) vacancyId = currentVacancy.getId();
+
+        String professionStr = vacancyProfessionTextField.getText();
+        ProfField profField = vacancyProfFieldComboBox.getValue();
+        WorkType workType = vacancyWorkTypeComboBox.getValue();
+        Education education = vacancyEducationComboBox.getValue();
+        String wageStr = vacancyWageTextField.getText();
+        Currency currency = vacancyCurrencyComboBox.getValue();
+        LocalDate startDateExperience = vacancyExpDateStartDatePicker.getValue();
+        LocalDate endDateExperience = vacancyExpDateEndDatePicker.getValue();
+        String addressStr = vacancyAddressTextArea.getText();
+
+        Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyService.findById(vacancyId);
+        vacancy.setCompanyId(companyId);
+        vacancy.setProfession(professionStr);
+        if (profField != null) vacancy.setProfFieldId(profField.getId());
+        if (workType != null) vacancy.setWorkTypeId(workType.getId());
+        if (education != null) vacancy.setEducationId(education.getId());
+        if (!wageStr.isEmpty()) {
+            try {
+                Wage wage = new Wage();
+                wage.setCount(new BigDecimal(wageStr.replaceAll(",",".")));
+                if (currency != null) wage.setCurrencyId(currency.getId());
+                vacancy.setWage(wage);
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
+        if (startDateExperience != null) {
+            Experience experience = new Experience();
+            experience.setDateStart(startDateExperience);
+            if (endDateExperience != null) experience.setDateEnd(endDateExperience);
+        }
+
+        Address address = new Address();
+        address.setStreet(addressStr);
+
+        vacancy.setAddress(address);
+
+        if (vacancyId == null) {
+            vacancyService.persist(vacancy);
+        } else {
+            vacancyService.update(vacancy);
+        }
+        logger.debug("Created new vacancy: " + vacancy.toString());
+        return vacancy;
     }
 
     private Boolean isValid() {
@@ -184,6 +183,7 @@ public class VacancyEditController extends FxmlController {
     }
 
     public void clear() {
+        currentVacancy = null;
         vacancyProfessionTextField.setText("");
         vacancyProfessionTextField.getStyleClass().remove("has-error");
         vacancyProfFieldComboBox.setValue(null);
@@ -206,6 +206,14 @@ public class VacancyEditController extends FxmlController {
 
     public CompaniesTableController getCompaniesTableController() {
         return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class.getName());
+    }
+
+    public CompanyViewController getCompanyViewController() {
+        return (CompanyViewController) getControllerProvider().get(CompanyViewController.class.getName());
+    }
+
+    public VacancyListViewPane getVacancyListViewPane() {
+        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
     }
 
     public VacanciesTableController getVacanciesTableController() {
