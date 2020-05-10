@@ -28,7 +28,6 @@ public class VacancyViewController extends FxmlController{
     @FXML private Label workTypeLabel;
     @FXML private Label educationLabel;
     @FXML private Label wageLabel;
-    @FXML private Label addressLabel;
 
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
@@ -61,7 +60,6 @@ public class VacancyViewController extends FxmlController{
             String prefixWorkType = "График работы: ";
             String prefixEducation = "Образование: ";
             String prefixWage = "Зарплата: ";
-            String prefixAddress = "Адрес: ";
 
             professionLabel.setText(prefixProfession + vacancy.getProfession());
 
@@ -95,11 +93,6 @@ public class VacancyViewController extends FxmlController{
             } else {
                 wageLabel.setText(prefixWage + "не указана");
             }
-
-            addressLabel.setText(
-                    vacancy.getAddress() != null ?
-                        prefixAddress + vacancy.getAddress().getStreet() :
-                        prefixAddress + "не указан");
 
         } else {
             logger.debug("Vacancy is null. We can't view vacancy...");

@@ -15,7 +15,6 @@ public class VacanciesPaneController extends FxmlController {
     private static final Logger logger = LogManager.getLogger(VacanciesPaneController.class);
 
     @FXML private Pane wrapperResume;
-    @FXML private Pane wrapperClient;
 
     @FXML private CompaniesTableController companiesTableController;
     @FXML private VacanciesTableController vacanciesTableController;
@@ -49,16 +48,6 @@ public class VacanciesPaneController extends FxmlController {
             final double maxWidth2 = resumesAccordionWrapper.getMaxWidth();
             resumesAccordionWrapper.setMinWidth(maxWidth2);
         }
-    }
-
-    public void showWrapperClient() {
-        wrapperClient.setVisible(true);
-        wrapperClient.setManaged(true);
-    }
-
-    public void hideWrapperClient() {
-        wrapperClient.setVisible(false);
-        wrapperClient.setManaged(false);
     }
 
     public void reloadVacancyTable(ActionEvent event) {

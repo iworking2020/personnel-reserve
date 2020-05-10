@@ -177,7 +177,6 @@ public class ResumeViewController extends FxmlController {
     public void actionCancel(ActionEvent event) {
         VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
         hide();
-        vacanciesPaneController.showWrapperClient();
     }
 
     @FXML
@@ -205,7 +204,6 @@ public class ResumeViewController extends FxmlController {
         Resume resume = resumeService.findById(getResumeId());
         getResumeEditController().setData(resume);
         getResumeEditController().show();
-        getVacanciesPaneController().hideWrapperClient();
     }
 
     public ResumeEditController getResumeEditController() {

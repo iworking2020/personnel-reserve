@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +35,6 @@ public class VacancyEditController extends FxmlController {
     @FXML private ComboBox<Currency> vacancyCurrencyComboBox;
     @FXML private DatePicker vacancyExpDateStartDatePicker;
     @FXML private DatePicker vacancyExpDateEndDatePicker;
-    @FXML private TextArea vacancyAddressTextArea;
 
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
@@ -85,7 +83,6 @@ public class VacancyEditController extends FxmlController {
                 vacancyExpDateStartDatePicker.setValue(vacancy.getExperience().getDateStart());
                 vacancyExpDateEndDatePicker.setValue(vacancy.getExperience().getDateEnd());
             }
-            if (vacancy.getAddress() != null) vacancyAddressTextArea.setText(vacancy.getAddress().getStreet());
         } else {
             logger.debug("vacancy is null..");
         }
@@ -119,7 +116,6 @@ public class VacancyEditController extends FxmlController {
         Currency currency = vacancyCurrencyComboBox.getValue();
         LocalDate startDateExperience = vacancyExpDateStartDatePicker.getValue();
         LocalDate endDateExperience = vacancyExpDateEndDatePicker.getValue();
-        String addressStr = vacancyAddressTextArea.getText();
 
         Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyService.findById(vacancyId);
         vacancy.setCompanyId(companyId);
@@ -142,11 +138,6 @@ public class VacancyEditController extends FxmlController {
             experience.setDateStart(startDateExperience);
             if (endDateExperience != null) experience.setDateEnd(endDateExperience);
         }
-
-        Address address = new Address();
-        address.setStreet(addressStr);
-
-        vacancy.setAddress(address);
 
         if (vacancyId == null) {
             vacancyService.persist(vacancy);
@@ -193,7 +184,6 @@ public class VacancyEditController extends FxmlController {
         vacancyCurrencyComboBox.setValue(null);
         vacancyExpDateStartDatePicker.setValue(null);
         vacancyExpDateEndDatePicker.setValue(null);
-        vacancyAddressTextArea.setText("");
     }
 
     public void reload(ActionEvent event) {

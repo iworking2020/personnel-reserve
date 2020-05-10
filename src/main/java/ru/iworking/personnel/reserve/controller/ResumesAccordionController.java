@@ -70,7 +70,7 @@ public class ResumesAccordionController extends FxmlController {
                             getResumeViewController().show();
                             getResumeEditController().hide();
                             getResumeEditController().clear();
-                            getVacanciesPaneController().hideWrapperClient();
+                            //getVacanciesPaneController().hideWrapperClient();
                         }
                     });
 
@@ -105,7 +105,7 @@ public class ResumesAccordionController extends FxmlController {
         getResumeEditController().hide();
         getResumeEditController().clear();
         reload();
-        getVacanciesPaneController().showWrapperClient();
+        //getVacanciesPaneController().showWrapperClient();
     }
 
     public void selectPaneByResumeStateId(Long id) {

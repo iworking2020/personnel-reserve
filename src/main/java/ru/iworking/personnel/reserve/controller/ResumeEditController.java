@@ -193,7 +193,7 @@ public class ResumeEditController extends FxmlController {
             getResumesAccordionController().selectPaneByResumeStateId(resume.getState().getId());
             getResumeViewController().setData(resume);
             getResumeViewController().show();
-            getVacanciesPaneController().hideWrapperClient();
+            //getVacanciesPaneController().hideWrapperClient();
         } else {
             logger.debug("resume is not valid");
         }

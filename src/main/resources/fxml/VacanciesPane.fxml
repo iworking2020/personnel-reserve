@@ -10,61 +10,47 @@
          <right>
              <StackPane style="-fx-border-width: 0 0 0 1px; -fx-border-color: rgba(0, 0, 0, 0.20);" />
          </right>
-         <bottom>
-             <StackPane fx:id="bottomPane" alignment="BOTTOM_CENTER" minHeight="200.0" style="-fx-border-width: 1px 0 0 0; -fx-border-color: rgba(0, 0, 0, 0.20);">
-                 <children>
-                     <StackPane fx:id="wrapperResume">
-                         <children>
-                             <fx:include fx:id="resumeView" source="ResumeView.fxml" />
-                             <fx:include fx:id="resumeEdit" source="ResumeEdit.fxml" />
-                         </children>
-                     </StackPane>
-                     <GridPane fx:id="wrapperClient" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                         <columnConstraints>
-                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="20.0" />
-                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                         </columnConstraints>
-                         <rowConstraints>
-                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                         </rowConstraints>
-                         <children>
-                         </children>
-                     </GridPane>
-                 </children>
-             </StackPane>
-         </bottom>
          <center>
             <SplitPane dividerPositions="0.3, 0.7" styleClass="grey" BorderPane.alignment="CENTER">
                <items>
-                   <ScrollPane fx:id="clientListViewWrapper" fitToHeight="true" fitToWidth="true" minWidth="0.0" maxWidth="300" style="-fx-border-width: 0 1px 0 0; -fx-border-color: rgba(0, 0, 0, 0.20);" hbarPolicy="NEVER" vbarPolicy="NEVER">
+                   <ScrollPane fx:id="clientListViewWrapper" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxWidth="300" minWidth="0.0" style="-fx-border-width: 0 1px 0 0; -fx-border-color: rgba(0, 0, 0, 0.20);" vbarPolicy="NEVER">
                        <fx:include fx:id="clientListView" source="ClientListView.fxml" />
                    </ScrollPane>
-                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-                        <content>
-                            <VBox spacing="10.0">
-                                <children>
-                                    <StackPane>
-                                        <children>
-                                            <fx:include fx:id="companyView" source="CompanyView.fxml" />
-                                            <fx:include fx:id="companyEdit" source="CompanyEdit.fxml" />
-                                        </children>
-                                    </StackPane>
-                                    <StackPane>
-                                        <children>
-                                            <fx:include fx:id="vacancyView" source="VacancyView.fxml" />
-                                            <fx:include fx:id="vacancyEdit" source="VacancyEdit.fxml" />
-                                        </children>
-                                    </StackPane>
-                                    <!--<fx:include fx:id="companiesTable" source="CompaniesTable.fxml" />
-                                    <fx:include fx:id="vacanciesTable" source="VacamciesTable.fxml" />-->
-                                </children>
-                                <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                </padding>
-                            </VBox>
-                        </content>
-                    </ScrollPane>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                          <ScrollPane fitToWidth="true" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
+                              <content>
+                                  <VBox spacing="10.0">
+                                      <children>
+                                          <StackPane>
+                                              <children>
+                                                  <fx:include fx:id="companyView" source="CompanyView.fxml" />
+                                                  <fx:include fx:id="companyEdit" source="CompanyEdit.fxml" />
+                                              </children>
+                                          </StackPane>
+                                          <StackPane>
+                                              <children>
+                                                  <fx:include fx:id="vacancyView" source="VacancyView.fxml" />
+                                                  <fx:include fx:id="vacancyEdit" source="VacancyEdit.fxml" />
+                                              </children>
+                                          </StackPane>
+                                      </children>
+                                      <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                      </padding>
+                                  </VBox>
+                              </content>
+                          </ScrollPane>
+                     </center>
+                     <bottom>
+                           <StackPane fx:id="wrapperResume" BorderPane.alignment="CENTER" style="-fx-border-width: 1px 0 0 0; -fx-border-color: rgba(0, 0, 0, 0.20);">
+                               <children>
+                                   <fx:include fx:id="resumeView" source="ResumeView.fxml" />
+                                   <fx:include fx:id="resumeEdit" source="ResumeEdit.fxml" />
+                               </children>
+                           </StackPane>
+                     </bottom>
+                  </BorderPane>
                    <ScrollPane fx:id="resumesAccordionWrapper" fitToHeight="true" fitToWidth="true" maxWidth="300" minWidth="0.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: rgba(0, 0, 0, 0.20);">
                        <content>
                            <fx:include fx:id="resumesAccordion" source="ResumesAccordion.fxml" />

@@ -13,7 +13,6 @@
         <ComboBox fx:id="vacancyCurrencyComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Валюта" />
         <DatePicker fx:id="vacancyExpDateStartDatePicker" maxWidth="1.7976931348623157E308" promptText="начало опыта раб." />
         <DatePicker fx:id="vacancyExpDateEndDatePicker" maxWidth="1.7976931348623157E308" promptText="конец опыта раб." />
-        <TextArea fx:id="vacancyAddressTextArea" maxHeight="-Infinity" prefHeight="25.0" promptText="Адрес" />
         <AnchorPane>
             <children>
                 <Button mnemonicParsing="false" onAction="#actionCancel" styleClass="grey" text="Отмена" AnchorPane.leftAnchor="0.0" />
