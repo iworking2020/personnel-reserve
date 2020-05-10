@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -34,6 +35,8 @@ public class VacancyViewController extends FxmlController{
     private EducationService educationService = EducationService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
 
+    private Vacancy currentVacancy;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hide();
@@ -51,6 +54,8 @@ public class VacancyViewController extends FxmlController{
 
     public void setData(Vacancy vacancy) {
         if (vacancy != null) {
+            this.currentVacancy = vacancy;
+
             String prefixProfession = "Профессия: ";
             String prefixProfField = "Проф. область: ";
             String prefixWorkType = "График работы: ";
@@ -99,4 +104,20 @@ public class VacancyViewController extends FxmlController{
         }
     }
 
+    @FXML
+    public void actionEdit(ActionEvent event) {
+        getVacancyEditController().setData(currentVacancy);
+        getVacancyEditController().show();
+    }
+
+    public Vacancy getCurrentVacancy() {
+        return currentVacancy;
+    }
+    public void setCurrentVacancy(Vacancy currentVacancy) {
+        this.currentVacancy = currentVacancy;
+    }
+
+    public VacancyEditController getVacancyEditController() {
+        return (VacancyEditController) getControllerProvider().get(VacancyEditController.class.getName());
+    }
 }

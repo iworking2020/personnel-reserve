@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <VBox fx:id="vacancyView" spacing="8.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacancyViewController">
     <children>
-        <Label fx:id="professionLabel" text="Профессия" />
-        <Label fx:id="profFieldLabel" text="Проф. область" />
-        <Label fx:id="workTypeLabel" text="График работы" />
-        <Label fx:id="educationLabel" text="Образование" />
-        <Label fx:id="wageLabel" text="Зарплата" />
-        <Label fx:id="addressLabel" text="Адрес" />
+          <VBox spacing="8.0">
+              <children>
+                  <Label fx:id="professionLabel" text="Профессия" />
+                  <Label fx:id="profFieldLabel" text="Проф. область" />
+                  <Label fx:id="workTypeLabel" text="График работы" />
+                  <Label fx:id="educationLabel" text="Образование" />
+                  <Label fx:id="wageLabel" text="Зарплата" />
+                  <Label fx:id="addressLabel" text="Адрес" />
+              </children>
+          </VBox>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <FlowPane>
+                    <children>
+                        <Button mnemonicParsing="false" styleClass="grey" text="Редактировать" onAction="#actionEdit">
+                            <FlowPane.margin>
+                                <Insets bottom="5.0" top="5.0" />
+                            </FlowPane.margin>
+                        </Button>
+                    </children>
+                </FlowPane>
+                <FlowPane alignment="TOP_RIGHT" columnHalignment="RIGHT" GridPane.columnIndex="1">
+                    <children>
+                        <Button mnemonicParsing="false" styleClass="grey" text="Удалить">
+                            <FlowPane.margin>
+                                <Insets bottom="5.0" left="5.0" top="5.0" />
+                            </FlowPane.margin>
+                        </Button>
+                    </children>
+                </FlowPane>
+            </children>
+        </GridPane>
+        <Separator />
     </children>
 </VBox>

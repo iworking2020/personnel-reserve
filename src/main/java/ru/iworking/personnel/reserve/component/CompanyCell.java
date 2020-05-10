@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CompanyListViewCell extends ListCell<Company> implements Initializable {
+public class CompanyCell extends ListCell<Company> implements Initializable {
 
     @FXML private Label companyTypeLabel;
     @FXML private Label companyNameLabel;
@@ -49,7 +49,7 @@ public class CompanyListViewCell extends ListCell<Company> implements Initializa
             setText(null);
             setGraphic(null);
         } else {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/components/CompanyListViewCell.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/components/CompanyCell.fxml"));
             fxmlLoader.setController(this);
             try {
                 fxmlLoader.load();

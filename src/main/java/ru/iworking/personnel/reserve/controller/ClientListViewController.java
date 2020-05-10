@@ -8,10 +8,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.component.CompanyListViewCell;
+import ru.iworking.personnel.reserve.component.CompanyCell;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.service.CompanyService;
+import ru.iworking.personnel.reserve.service.VacancyService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,6 +20,8 @@ import java.util.ResourceBundle;
 public class ClientListViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ClientListViewController.class);
+
+    private final VacancyService vacancyService = VacancyService.INSTANCE;
 
     @FXML private Pane parent;
 
@@ -33,7 +36,7 @@ public class ClientListViewController extends FxmlController {
     public void initialize(URL location, ResourceBundle resources) {
         initCompaniesList();
         companyListView.setCellFactory(listView -> {
-            CompanyListViewCell cell = new CompanyListViewCell();
+            CompanyCell cell = new CompanyCell();
             cell.setOnMouseClicked(event -> createVacancyListViewPane(cell.getCompany()));
             return cell;
         });
@@ -50,6 +53,7 @@ public class ClientListViewController extends FxmlController {
 
     public void createVacancyListViewPane(Company company) {
         vacancyListViewPane = new VacancyListViewPane();
+        vacancyListViewPane.setData(vacancyService.findAll());
         vacancyListViewPane.setXPosition(getVacanciesPaneController().getClientListViewWrapper().getMaxWidth());
         vacancyListViewPane.show();
         parent.getChildren().add(vacancyListViewPane);

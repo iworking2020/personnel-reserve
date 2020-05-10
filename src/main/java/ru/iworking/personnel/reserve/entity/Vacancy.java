@@ -49,6 +49,8 @@ public class Vacancy {
     @JoinColumn(name="address_id")
     private Address address;
 
+    private Long logoId;
+
     public Vacancy() { }
 
     public Long getId() {
@@ -135,6 +137,13 @@ public class Vacancy {
         this.address = address;
     }
 
+    public Long getLogoId() {
+        return logoId;
+    }
+    public void setLogoId(Long logoId) {
+        this.logoId = logoId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -150,11 +159,12 @@ public class Vacancy {
                 Objects.equals(educationId, vacancy.educationId) &&
                 Objects.equals(experience, vacancy.experience) &&
                 Objects.equals(description, vacancy.description) &&
-                Objects.equals(address, vacancy.address);
+                Objects.equals(address, vacancy.address) &&
+                Objects.equals(logoId, vacancy.logoId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, companyId, datecreate, profession, profFieldId, workTypeId, wage, educationId, experience, description, address);
+        return Objects.hash(userId, companyId, datecreate, profession, profFieldId, workTypeId, wage, educationId, experience, description, address, logoId);
     }
 }
