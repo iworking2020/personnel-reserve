@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.*?>
 <StackPane fx:id="resumePaneView" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ResumeViewController">
    <children>
-      <TextField fx:id="resumeIdTextField" editable="false" maxWidth="100.0" prefWidth="100.0" visible="false" />
       <FlowPane hgap="5.0" vgap="5.0">
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
@@ -48,15 +47,20 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <FlowPane>
+            <FlowPane hgap="5.0" vgap="5.0">
                <children>
                   <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#actionCancel" styleClass="grey" text="Назад" />
                   <Button mnemonicParsing="false" onAction="#actionEdit" styleClass="grey" text="Редактировать">
                      <FlowPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets />
                      </FlowPane.margin>
                   </Button>
                   <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#actionSavePdf" styleClass="grey" text="Экспорт в PDF" />
+                  <Button mnemonicParsing="false" styleClass="grey" text="Прикрепить к вакансии" onAction="#actionClick">
+                     <FlowPane.margin>
+                        <Insets />
+                     </FlowPane.margin>
+                  </Button>
                </children>
             </FlowPane>
          </children>

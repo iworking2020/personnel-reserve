@@ -146,7 +146,7 @@ public class ModalEditResumeController implements Initializable {
             Image img = new Image(targetStream);
             photoImageView.setImage(img);
         } else {
-            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
+            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"));
             photoImageView.setImage(defaultImage);
         }
     }

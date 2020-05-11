@@ -51,6 +51,10 @@ public class VacancyViewController extends FxmlController{
         vacancyView.setManaged(false);
     }
 
+    public void clear() {
+        currentVacancy = null;
+    }
+
     public void setData(Vacancy vacancy) {
         if (vacancy != null) {
             this.currentVacancy = vacancy;

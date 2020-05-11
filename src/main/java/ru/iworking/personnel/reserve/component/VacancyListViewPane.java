@@ -118,7 +118,9 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
     public void actionBack(ActionEvent event) {
         if (x > 0) this.hide(); else this.remove();
         getVacancyEditController().hide();
+        getVacancyEditController().clear();
         getVacancyViewController().hide();
+        getVacancyViewController().clear();
     }
 
     @FXML

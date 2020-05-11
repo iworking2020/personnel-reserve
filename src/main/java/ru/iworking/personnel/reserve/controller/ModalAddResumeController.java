@@ -111,7 +111,7 @@ public class ModalAddResumeController implements Initializable {
 
     private void initStartValues() {
         if (currentProfField != null) profFieldComboBox.getSelectionModel().select(currentProfField);
-        photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg")));
+        photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg")));
     }
 
     public void showAndWait(Parent parent) {

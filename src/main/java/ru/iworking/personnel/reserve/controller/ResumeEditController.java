@@ -110,7 +110,7 @@ public class ResumeEditController extends FxmlController {
         currencyComboBox.setCellFactory(currencyCellFactory);
         currencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
 
-        photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg")));
+        photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg")));
     }
 
     public void setData(Resume resume) {
@@ -140,7 +140,7 @@ public class ResumeEditController extends FxmlController {
             Image img = new Image(targetStream);
             photoImageView.setImage(img);
         } else {
-            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
+            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"));
             photoImageView.setImage(defaultImage);
         }
 

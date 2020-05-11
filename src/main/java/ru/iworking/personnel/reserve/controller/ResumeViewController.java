@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -32,11 +31,18 @@ public class ResumeViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeViewController.class);
 
+    private final PhotoService photoService = PhotoService.INSTANCE;
+    private final ProfFieldService profFieldService = ProfFieldService.INSTANCE;
+    private final CurrencyService currencyService = CurrencyService.INSTANCE;
+    private final WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private final EducationService educationService = EducationService.INSTANCE;
+    private final ResumeService resumeService = ResumeService.INSTANCE;
+    private final ClickService clickService = ClickService.INSTANCE;
+    private final ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
+
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     @FXML private Pane resumePaneView;
-
-    @FXML private TextField resumeIdTextField;
 
     @FXML private Label lastNameLabel;
     @FXML private Label firstNameLabel;
@@ -54,16 +60,12 @@ public class ResumeViewController extends FxmlController {
     @FXML private ImageView photoImageView;
 
     @FXML private Button buttonCancel;
+
+    private Resume currentResume = null;
+
     public Button getButtonCancel() {
         return buttonCancel;
     }
-
-    private PhotoService photoService = PhotoService.INSTANCE;
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
-    private ResumeService resumeService = ResumeService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,6 +94,7 @@ public class ResumeViewController extends FxmlController {
 
     public void setData(Resume resume) {
         if (resume != null) {
+            this.currentResume = resume;
             String prefixNumberPhone = "Номер тел.: ";
             String prefixEmail = "Эл. почта: ";
             String prefixProfession = "Профессия: ";
@@ -101,8 +104,6 @@ public class ResumeViewController extends FxmlController {
             String prefixEducation = "Образование: ";
             String prefixExperience = "Опыт паботы: ";
             String prefixAddress = "Адрес: ";
-
-            resumeIdTextField.setText(resume.getId().toString());
 
             Profile profile = resume.getProfile();
             if (profile != null) {
@@ -156,7 +157,7 @@ public class ResumeViewController extends FxmlController {
                 Image img = new Image(targetStream);
                 photoImageView.setImage(img);
             } else {
-                Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default.resume.jpg"));
+                Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"));
                 photoImageView.setImage(defaultImage);
             }
         } else {
@@ -165,12 +166,7 @@ public class ResumeViewController extends FxmlController {
     }
 
     private Long getResumeId() {
-        String resumeId = resumeIdTextField.getText();
-        if (resumeId.length() > 0 ) {
-            return Long.valueOf(resumeId);
-        } else {
-            return null;
-        }
+        return currentResume.getId();
     }
 
     @FXML
@@ -206,8 +202,22 @@ public class ResumeViewController extends FxmlController {
         getResumeEditController().show();
     }
 
+    @FXML
+    public void actionClick(ActionEvent event) {
+        ResumeState resumeState = resumeStateService.findById(1L);
+        Vacancy vacancy = getVacancyViewController().getCurrentVacancy();
+        if (vacancy != null) {
+            Click click = new Click(this.currentResume, vacancy, resumeState);
+            clickService.persist(click);
+        }
+    }
+
     public ResumeEditController getResumeEditController() {
         return (ResumeEditController) getControllerProvider().get(ResumeEditController.class.getName());
+    }
+
+    public VacancyViewController getVacancyViewController() {
+        return (VacancyViewController) getControllerProvider().get(VacancyViewController.class.getName());
     }
 
     public VacanciesPaneController getVacanciesPaneController() {
