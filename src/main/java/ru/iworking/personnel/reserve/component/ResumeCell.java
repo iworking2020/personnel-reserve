@@ -8,6 +8,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.PhotoService;
@@ -27,13 +28,15 @@ public class ResumeCell extends ListCell<Resume> implements Initializable {
     @FXML private Label fioLabel;
     @FXML private Label professionLabel;
 
+    @FXML private Pane wrapperImage;
     @FXML private ImageView imageView;
 
     private Resume resume;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        final Circle clip = new Circle(30, 28, 28);
+        wrapperImage.setClip(clip);
     }
 
     @Override
