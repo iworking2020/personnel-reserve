@@ -13,7 +13,9 @@ import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.ResumeService;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ResumeListViewController extends FxmlController {
 
@@ -35,6 +37,7 @@ public class ResumeListViewController extends FxmlController {
             return cell;
         });
         resumeListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            getClickListViewController().selectionItem(newSelection);
             getResumeViewController().setData(newSelection);
             getResumeViewController().show();
             getResumeEditController().hide();
@@ -49,6 +52,24 @@ public class ResumeListViewController extends FxmlController {
 
     public void initData() {
         resumeListView.setItems(FXCollections.observableList(resumeService.findAll()));
+    }
+
+    public void clearSelection() {
+        if (resumeListView.getSelectionModel() != null) resumeListView.getSelectionModel().clearSelection();
+    }
+
+    public void selectionItem(Resume resume) {
+        if (resumeListView.getSelectionModel() != null) {
+            List<Resume> list = resumeListView.getItems().stream()
+                    .filter(resume1 -> resume1.getId() == resume.getId())
+                    .collect(Collectors.toList());
+            if (list.size() > 0) {
+                resumeListView.getSelectionModel().select(list.get(0));
+            } else {
+                this.clearSelection();
+            }
+
+        }
     }
 
     @FXML
@@ -68,6 +89,10 @@ public class ResumeListViewController extends FxmlController {
 
     public ResumeViewController getResumeViewController() {
         return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
+    }
+
+    public ClickListViewController getClickListViewController() {
+        return (ClickListViewController) getControllerProvider().get(ClickListViewController.class.getName());
     }
 
 }

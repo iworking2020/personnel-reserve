@@ -14,10 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import ru.iworking.personnel.reserve.controller.CompanyViewController;
-import ru.iworking.personnel.reserve.controller.ControllerProvider;
-import ru.iworking.personnel.reserve.controller.VacancyEditController;
-import ru.iworking.personnel.reserve.controller.VacancyViewController;
+import ru.iworking.personnel.reserve.controller.*;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.service.VacancyService;
 
@@ -25,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class VacancyListViewPane extends BorderPane implements Initializable {
 
@@ -65,6 +63,17 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
         vacancyListView.setItems(FXCollections.observableList(list));
     }
 
+    private void initClickData(Vacancy vacancy) {
+        List list = vacancy.getClicks().stream().collect(Collectors.toList());
+        if (list.size() > 0) {
+            getClickListViewController().setData(list);
+            getClickListViewController().show();
+        } else {
+            getClickListViewController().hide();
+            getClickListViewController().clear();
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         vacancyListView.setCellFactory(listView -> {
@@ -76,6 +85,7 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
             getVacancyEditController().hide();
             getVacancyViewController().setData(newSelection);
             getVacancyViewController().show();
+            this.initClickData(newSelection);
         });
 
         backButton.setText("");
@@ -84,7 +94,6 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
         initData();
     }
-
     public void setXPosition(double x) {
         this.x = x;
         parent.translateXProperty().set(x);
@@ -121,6 +130,8 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
         getVacancyEditController().clear();
         getVacancyViewController().hide();
         getVacancyViewController().clear();
+        getClickListViewController().hide();
+        getClickListViewController().clear();
     }
 
     @FXML
@@ -132,6 +143,7 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
         if (vacancy != null) {
             getVacancyViewController().setData(vacancy);
             getVacancyViewController().show();
+            this.initClickData(vacancy);
         } else {
             getVacancyViewController().hide();
         }
@@ -155,6 +167,10 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     public CompanyViewController getCompanyViewController() {
         return (CompanyViewController) getControllerProvider().get(CompanyViewController.class.getName());
+    }
+
+    public ClickListViewController getClickListViewController() {
+        return (ClickListViewController) getControllerProvider().get(ClickListViewController.class.getName());
     }
 
     public ControllerProvider getControllerProvider() {

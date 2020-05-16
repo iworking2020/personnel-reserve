@@ -1,5 +1,8 @@
-.combo-box-base .combo-box .list-cell {
+.combo-box > .list-cell {
+    -fx-background: white;
     -fx-background-color: white;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
     -fx-background-insets: 0 0 0 0, 0 0 0 0;
     -fx-background-radius: 0, 0, 0, 0;
 }

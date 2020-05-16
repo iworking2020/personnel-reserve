@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.service.*;
@@ -26,6 +27,8 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ResumeViewController extends FxmlController {
 
@@ -39,6 +42,7 @@ public class ResumeViewController extends FxmlController {
     private final ResumeService resumeService = ResumeService.INSTANCE;
     private final ClickService clickService = ClickService.INSTANCE;
     private final ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
+    private final VacancyService vacancyService = VacancyService.INSTANCE;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -62,6 +66,7 @@ public class ResumeViewController extends FxmlController {
     @FXML private Button buttonCancel;
 
     private Resume currentResume = null;
+    private boolean isShow = false;
 
     public Button getButtonCancel() {
         return buttonCancel;
@@ -73,8 +78,13 @@ public class ResumeViewController extends FxmlController {
     }
 
     public void show() {
+        isShow = true;
         resumePaneView.setVisible(true);
         resumePaneView.setManaged(true);
+    }
+
+    public boolean isShow() {
+        return isShow;
     }
 
     public void show(AppFunctionalInterface function) {
@@ -83,6 +93,7 @@ public class ResumeViewController extends FxmlController {
     }
 
     public void hide() {
+        isShow = false;
         resumePaneView.setVisible(false);
         resumePaneView.setManaged(false);
     }
@@ -171,7 +182,8 @@ public class ResumeViewController extends FxmlController {
 
     @FXML
     public void actionCancel(ActionEvent event) {
-        VacanciesPaneController vacanciesPaneController = (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
+        getResumeListViewController().clearSelection();
+        getClickListViewController().clearSelection();
         hide();
     }
 
@@ -206,9 +218,19 @@ public class ResumeViewController extends FxmlController {
     public void actionClick(ActionEvent event) {
         ResumeState resumeState = resumeStateService.findById(1L);
         Vacancy vacancy = getVacancyViewController().getCurrentVacancy();
-        if (vacancy != null) {
-            Click click = new Click(this.currentResume, vacancy, resumeState);
+
+        Set<Click> clicks = vacancy.getClicks().stream()
+                .filter(click1 -> click1.getResume().getId() == this.currentResume.getId())
+                .collect(Collectors.toSet());
+
+        if (vacancy != null && clicks.isEmpty()) {
+            Click click = Click.builder()
+                    .resume(this.currentResume)
+                    .vacancy(vacancy)
+                    .resumeState(resumeState)
+                    .build();
             clickService.persist(click);
+            getVacancyListViewPane().actionUpdate(event);
         }
     }
 
@@ -222,6 +244,18 @@ public class ResumeViewController extends FxmlController {
 
     public VacanciesPaneController getVacanciesPaneController() {
         return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
+    }
+
+    public VacancyListViewPane getVacancyListViewPane() {
+        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
+    }
+
+    public ResumeListViewController getResumeListViewController() {
+        return (ResumeListViewController) getControllerProvider().get(ResumeListViewController.class.getName());
+    }
+
+    public ClickListViewController getClickListViewController() {
+        return (ClickListViewController) getControllerProvider().get(ClickListViewController.class.getName());
     }
 
 }

@@ -32,6 +32,8 @@ public class VacanciesPaneController extends FxmlController {
     @FXML private ScrollPane resumesAccordionWrapper;
     @FXML private ScrollPane clientListViewWrapper;
 
+    @FXML private ScrollPane clientScrollPane;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -67,5 +69,9 @@ public class VacanciesPaneController extends FxmlController {
 
     public ScrollPane getClientListViewWrapper() {
         return clientListViewWrapper;
+    }
+
+    public void downClientSrollPane() {
+        clientScrollPane.setVvalue(1.0);
     }
 }
