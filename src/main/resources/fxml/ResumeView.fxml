@@ -4,69 +4,118 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<StackPane fx:id="resumePaneView" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ResumeViewController">
-   <children>
-      <FlowPane hgap="5.0" vgap="5.0">
-         <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <ImageView fx:id="photoImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </StackPane>
-            <VBox spacing="5.0">
-               <children>
-                  <Label text="Ф.И.О.:" />
-                  <Label fx:id="lastNameLabel" text="Фамилия" />
-                  <Label fx:id="firstNameLabel" text="Имя" />
-                  <Label fx:id="middleNameLabel" text="Отчество" />
-                  <Label fx:id="numberPhone" text="Тел.:" />
-                  <Label fx:id="email" text="Эл. почта:" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <Label fx:id="profession" text="Профессия:" />
-                  <Label fx:id="profField" text="Профобласть:" />
-                  <Label fx:id="wage" text="Зарплата:" />
-                  <Label fx:id="workType" text="График:" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <Label fx:id="education" text="Образование:" />
-                  <Label fx:id="experience" text="Опыт работы:" />
-                  <Label fx:id="address" text="Адрес:" />
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </VBox>
-            <FlowPane hgap="5.0" vgap="5.0">
-               <children>
-                  <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#actionCancel" styleClass="grey" text="Назад" />
-                  <Button mnemonicParsing="false" onAction="#actionEdit" styleClass="grey" text="Редактировать">
-                     <FlowPane.margin>
-                        <Insets />
-                     </FlowPane.margin>
-                  </Button>
-                  <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#actionSavePdf" styleClass="grey" text="Экспорт в PDF" />
-                  <Button mnemonicParsing="false" styleClass="grey" text="Прикрепить к вакансии" onAction="#actionClick">
-                     <FlowPane.margin>
-                        <Insets />
-                     </FlowPane.margin>
-                  </Button>
-               </children>
-            </FlowPane>
-         </children>
-      </FlowPane>
-   </children>
+<BorderPane fx:id="resumePaneView" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ResumeViewController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
-</StackPane>
+   <center>
+      <TabPane styleClass="no-borders" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+         <tabs>
+            <Tab text="Основная информация">
+               <content>
+
+               </content>
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <StackPane prefHeight="150.0" prefWidth="150.0">
+                           <children>
+                              <ImageView fx:id="photoImageView" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </StackPane>
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                           <children>
+                              <Label text="Ф.И.О.:" />
+                              <Label fx:id="lastNameLabel" text="Фамилия" />
+                              <Label fx:id="firstNameLabel" text="Имя" />
+                              <Label fx:id="middleNameLabel" text="Отчество" />
+                              <Label fx:id="numberPhone" text="Тел.:" />
+                              <Label fx:id="email" text="Эл. почта:" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </GridPane>
+               </content>
+            </Tab>
+            <Tab text="Профессия">
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="profession" text="Профессия:" />
+                              <Label fx:id="profField" text="Профобласть:" />
+                              <Label fx:id="wage" text="Зарплата:" />
+                              <Label fx:id="workType" text="График:" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+            <Tab text="Образование">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+            <Tab text="Дополнительно">
+               <content>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label fx:id="education" text="Образование:" />
+                        <Label fx:id="experience" text="Опыт работы:" />
+                        <Label fx:id="address" text="Адрес:" />
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
+   <bottom>
+      <FlowPane hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#actionCancel" styleClass="grey" text="Назад" />
+            <Button mnemonicParsing="false" onAction="#actionEdit" styleClass="grey" text="Редактировать">
+               <FlowPane.margin>
+                  <Insets />
+               </FlowPane.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#actionClick" styleClass="grey" text="Прикрепить">
+               <FlowPane.margin>
+                  <Insets />
+               </FlowPane.margin>
+            </Button>
+            <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#actionSavePdf" styleClass="grey" text="Экспорт в PDF" />
+         </children>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </FlowPane>
+   </bottom>
+</BorderPane>

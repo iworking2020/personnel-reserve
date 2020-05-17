@@ -17,6 +17,7 @@ import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.ResumeState;
 import ru.iworking.personnel.reserve.model.ResumeStateCellFactory;
+import ru.iworking.personnel.reserve.service.ClickService;
 import ru.iworking.personnel.reserve.service.PhotoService;
 import ru.iworking.personnel.reserve.service.ResumeStateService;
 
@@ -32,6 +33,7 @@ public class ClickItem extends FlowPane implements Initializable {
 
     private final PhotoService photoService = PhotoService.INSTANCE;
     private final ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
+    private final ClickService clickService = ClickService.INSTANCE;
 
     private final ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
 
@@ -54,6 +56,10 @@ public class ClickItem extends FlowPane implements Initializable {
         resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
         resumeStateComboBox.setCellFactory(resumeStateCellFactory);
         resumeStateComboBox.setItems(FXCollections.observableList(resumeStateService.findAll()));
+        resumeStateComboBox.setOnAction(event -> {
+            click.setResumeState(resumeStateComboBox.getValue());
+            clickService.update(click);
+        });
     }
 
     public ClickItem() {
