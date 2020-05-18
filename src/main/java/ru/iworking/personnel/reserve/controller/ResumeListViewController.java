@@ -37,7 +37,7 @@ public class ResumeListViewController extends FxmlController {
             return cell;
         });
         resumeListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            getClickListViewController().selectionItem(newSelection);
+            //getClickListViewController().selectionItem(newSelection);
             getResumeViewController().setData(newSelection);
             getResumeViewController().show();
             getResumeEditController().hide();
@@ -74,7 +74,20 @@ public class ResumeListViewController extends FxmlController {
 
     @FXML
     public void actionUpdate(ActionEvent event) {
+        Long resumeId = null;
+        if (resumeListView.getSelectionModel() != null) {
+            Resume resume = resumeListView.getSelectionModel().getSelectedItem();
+            if (resume != null) resumeId = resume.getId();
+        }
         this.initData();
+        if (resumeListView.getSelectionModel() != null) {
+            if (resumeId != null) {
+                Long finalResumeId = resumeId;
+                resumeListView.getItems().stream()
+                        .filter(resume -> resume.getId() == finalResumeId)
+                        .forEach(resume -> resumeListView.getSelectionModel().select(resume));
+            }
+        }
     }
 
     @FXML

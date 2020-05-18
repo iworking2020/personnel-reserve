@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<BorderPane fx:id="resumePaneView" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ResumeViewController">
+<BorderPane fx:id="resumePaneView" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.ResumeViewController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
@@ -32,10 +32,24 @@
                         </StackPane>
                         <VBox spacing="5.0" GridPane.columnIndex="1">
                            <children>
-                              <Label text="Ф.И.О.:" />
-                              <Label fx:id="lastNameLabel" text="Фамилия" />
-                              <Label fx:id="firstNameLabel" text="Имя" />
-                              <Label fx:id="middleNameLabel" text="Отчество" />
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <Label text="Фамилия:" />
+                                    <Label fx:id="lastNameLabel" text="Фамилия" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <Label text="Имя:" />
+                                    <Label fx:id="firstNameLabel" text="Имя" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="5.0">
+                                 <children>
+                                    <Label text="Отчество:" />
+                                    <Label fx:id="middleNameLabel" text="Отчество" />
+                                 </children>
+                              </HBox>
                               <Label fx:id="numberPhone" text="Тел.:" />
                               <Label fx:id="email" text="Эл. почта:" />
                            </children>
@@ -72,12 +86,17 @@
                            </padding>
                         </VBox>
                      </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
                   </GridPane>
                </content>
             </Tab>
             <Tab text="Образование">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <ScrollPane fx:id="learningHistoryPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="150.0" vbarPolicy="AS_NEEDED">
+                     
+                  </ScrollPane>
                </content>
             </Tab>
             <Tab text="Дополнительно">
@@ -89,7 +108,7 @@
                         <Label fx:id="address" text="Адрес:" />
                      </children>
                      <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </VBox>
                </content>
@@ -106,7 +125,7 @@
                   <Insets />
                </FlowPane.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#actionClick" styleClass="grey" text="Прикрепить">
+            <Button fx:id="clickButton" disable="true" mnemonicParsing="false" onAction="#actionClick" styleClass="grey" text="Прикрепить">
                <FlowPane.margin>
                   <Insets />
                </FlowPane.margin>

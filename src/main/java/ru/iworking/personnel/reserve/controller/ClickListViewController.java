@@ -37,7 +37,6 @@ public class ClickListViewController extends FxmlController {
         });
         clickListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null && newSelection.getResume() != null) {
-                getResumeListViewController().selectionItem(newSelection.getResume());
                 getResumeViewController().setData(newSelection.getResume());
                 getResumeViewController().show();
                 getResumeEditController().hide();
@@ -49,7 +48,6 @@ public class ClickListViewController extends FxmlController {
 
     public void setData(List<Click> list) {
         ObservableList<Click> observableList = FXCollections.observableList(list);
-
         clickListView.setItems(observableList);
     }
 
@@ -94,10 +92,6 @@ public class ClickListViewController extends FxmlController {
 
     public ResumeViewController getResumeViewController() {
         return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
-    }
-
-    public ResumeListViewController getResumeListViewController() {
-        return (ResumeListViewController) getControllerProvider().get(ResumeListViewController.class.getName());
     }
 
     public VacanciesPaneController getVacanciesPaneController() {

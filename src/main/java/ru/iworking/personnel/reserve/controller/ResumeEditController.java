@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.LearningHistoryEditBlock;
+import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
@@ -189,11 +190,8 @@ public class ResumeEditController extends FxmlController {
             Resume resume = save();
             hide();
             clear();
-            getResumesAccordionController().actionUpdate(event);
-            getResumesAccordionController().selectPaneByResumeStateId(resume.getState().getId());
-            getResumeViewController().setData(resume);
-            getResumeViewController().show();
-            //getVacanciesPaneController().hideWrapperClient();
+            getResumeListViewController().actionUpdate(event);
+            if (getVacancyListViewPane() != null) getVacancyListViewPane().actionUpdate(event);
         } else {
             logger.debug("resume is not valid");
         }
@@ -355,16 +353,12 @@ public class ResumeEditController extends FxmlController {
         this.hide();
     }
 
-    public ResumesAccordionController getResumesAccordionController() {
-        return (ResumesAccordionController) getControllerProvider().get(ResumesAccordionController.class.getName());
+    public ResumeListViewController getResumeListViewController() {
+        return (ResumeListViewController) getControllerProvider().get(ResumeListViewController.class.getName());
     }
 
-    public ResumeViewController getResumeViewController() {
-        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
-    }
-
-    public VacanciesPaneController getVacanciesPaneController() {
-        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
+    public VacancyListViewPane getVacancyListViewPane() {
+        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
     }
 
 }

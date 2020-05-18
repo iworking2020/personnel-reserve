@@ -2,16 +2,20 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
+import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.service.*;
@@ -24,10 +28,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ResumeViewController extends FxmlController {
@@ -61,9 +62,12 @@ public class ResumeViewController extends FxmlController {
     @FXML private Label wage;
     @FXML private Label workType;
 
+    @FXML private ScrollPane learningHistoryPane;
+
     @FXML private ImageView photoImageView;
 
     @FXML private Button buttonCancel;
+    @FXML private Button clickButton;
 
     private Resume currentResume = null;
     private boolean isShow = false;
@@ -101,6 +105,10 @@ public class ResumeViewController extends FxmlController {
     public void hide(AppFunctionalInterface function) {
         function.execute();
         this.hide();
+    }
+
+    public void isDisableClickButton(boolean isDisable) {
+        clickButton.setDisable(isDisable);
     }
 
     public void setData(Resume resume) {
@@ -171,9 +179,25 @@ public class ResumeViewController extends FxmlController {
                 Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"));
                 photoImageView.setImage(defaultImage);
             }
+
+            setDataLearningHistory(resume.getLearningHistoryList());
+
         } else {
             logger.debug("Resume is null. We can't view resume...");
         }
+    }
+
+    private void setDataLearningHistory(List<LearningHistory> list) {
+        VBox pane = new VBox();
+        list.stream().forEach(learningHistory -> {
+            VBox wrap = new VBox();
+            VBox.setMargin(wrap, new Insets(10.0, 0.0, 10.0, 0.0));
+            wrap.getChildren().add(new Label(learningHistory.getEducation().getNameView().getName()));
+            wrap.getChildren().add(new Label(learningHistory.getDescription()));
+            pane.getChildren().add(wrap);
+        });
+        learningHistoryPane.setContent(pane);
+
     }
 
     private Long getResumeId() {
@@ -240,10 +264,6 @@ public class ResumeViewController extends FxmlController {
 
     public VacancyViewController getVacancyViewController() {
         return (VacancyViewController) getControllerProvider().get(VacancyViewController.class.getName());
-    }
-
-    public VacanciesPaneController getVacanciesPaneController() {
-        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
     }
 
     public VacancyListViewPane getVacancyListViewPane() {

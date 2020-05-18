@@ -64,6 +64,7 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
     }
 
     private void initClickData(Vacancy vacancy) {
+        getResumeViewController().isDisableClickButton(false);
         List list = vacancy.getClicks().stream().collect(Collectors.toList());
         if (list.size() > 0) {
             getClickListViewController().setData(list);
@@ -132,6 +133,7 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
         getVacancyViewController().clear();
         getClickListViewController().hide();
         getClickListViewController().clear();
+        getResumeViewController().isDisableClickButton(true);
     }
 
     @FXML
@@ -171,6 +173,10 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     public ClickListViewController getClickListViewController() {
         return (ClickListViewController) getControllerProvider().get(ClickListViewController.class.getName());
+    }
+
+    public ResumeViewController getResumeViewController() {
+        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
     }
 
     public ControllerProvider getControllerProvider() {
