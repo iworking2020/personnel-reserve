@@ -57,7 +57,6 @@
                </VBox>
                <VBox spacing="5.0" GridPane.rowIndex="1">
                   <children>
-                     <ComboBox fx:id="resumeStateComboBox" maxWidth="1.7976931348623157E308" promptText="Состояние заявки" />
                      <ComboBox fx:id="educationComboBox" maxWidth="1.7976931348623157E308" promptText="Образование" />
                      <DatePicker fx:id="experienceDateStartDatePicker" maxWidth="1.7976931348623157E308" promptText="Опыт работы от" />
                      <DatePicker fx:id="experienceDateEndDatePicker" maxWidth="1.7976931348623157E308" promptText="Опыт работы до" />

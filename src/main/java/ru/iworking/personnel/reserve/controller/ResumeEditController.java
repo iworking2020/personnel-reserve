@@ -60,7 +60,6 @@ public class ResumeEditController extends FxmlController {
     @FXML private TextArea addressTextArea;
     @FXML private DatePicker experienceDateStartDatePicker;
     @FXML private DatePicker experienceDateEndDatePicker;
-    @FXML private ComboBox<ResumeState> resumeStateComboBox;
 
     @FXML private ImageView photoImageView;
 
@@ -76,13 +75,11 @@ public class ResumeEditController extends FxmlController {
     private EducationService educationService = EducationService.INSTANCE;
     private ResumeService resumeService = ResumeService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
-    private ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -90,10 +87,6 @@ public class ResumeEditController extends FxmlController {
 
         numberPhoneTextField.setTextFormatter(numberPhoneFormatter);
         wageTextField.setTextFormatter(bigDecimalFormatter);
-
-        resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
-        resumeStateComboBox.setCellFactory(resumeStateCellFactory);
-        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateService.findAll()));
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
@@ -128,7 +121,6 @@ public class ResumeEditController extends FxmlController {
             currencyComboBox.setValue(currencyService.findById(resume.getWage().getCurrencyId()));
         }
         if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeService.findById(resume.getWorkTypeId()));
-        if (resume.getState() != null) resumeStateComboBox.setValue(resume.getState());
         if (resume.getEducationId() != null) educationComboBox.setValue(educationService.findById(resume.getEducationId()));
         experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
         experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
@@ -215,7 +207,6 @@ public class ResumeEditController extends FxmlController {
         String wageStr = wageTextField.getText();
         Currency currency = currencyComboBox.getValue();
         WorkType workType = workTypeComboBox.getValue();
-        ResumeState resumeState = resumeStateComboBox.getValue();
         Education education = educationComboBox.getValue();
         LocalDate expStart = experienceDateStartDatePicker.getValue();
         LocalDate expEnd = experienceDateEndDatePicker.getValue();
@@ -241,7 +232,6 @@ public class ResumeEditController extends FxmlController {
             }
         }
         if (workType != null) resume.setWorkTypeId(workType.getId());
-        if (resumeState != null) resume.setState(resumeState);
         if (education != null) resume.setEducationId(education.getId());
         if (resume.getExperience() == null) resume.setExperience(new Experience());
         resume.getExperience().setDateStart(expStart);
@@ -323,7 +313,6 @@ public class ResumeEditController extends FxmlController {
         addressTextArea.setText("");
         experienceDateStartDatePicker.setValue(null);
         experienceDateEndDatePicker.setValue(null);
-        resumeStateComboBox.setValue(null);
         List<LearningHistoryEditBlock> removeList = educationEditList.getChildren().stream()
                 .filter(node -> node instanceof LearningHistoryEditBlock)
                 .map(node -> (LearningHistoryEditBlock) node)

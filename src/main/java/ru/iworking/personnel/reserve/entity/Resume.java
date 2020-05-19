@@ -1,7 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
 import lombok.*;
-import ru.iworking.personnel.reserve.interfaces.StateProvider;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Resume implements Cloneable, StateProvider {
+public class Resume implements Cloneable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,9 +47,6 @@ public class Resume implements Cloneable, StateProvider {
     private Address address;
 
     private Long photoId;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private ResumeState state;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LearningHistory> learningHistoryList;

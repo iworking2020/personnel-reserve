@@ -53,7 +53,6 @@ public class ModalAddResumeController implements Initializable {
     @FXML private TextArea addressTextArea;
     @FXML private DatePicker experienceDateStartDatePicker;
     @FXML private DatePicker experienceDateEndDatePicker;
-    @FXML private ComboBox<ResumeState> resumeStateComboBox;
 
     @FXML private ImageView photoImageView;
 
@@ -67,13 +66,11 @@ public class ModalAddResumeController implements Initializable {
     private ResumeService resumeService = ResumeService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
     private PhotoService photoService = PhotoService.INSTANCE;
-    private ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
-    private ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
 
     public ProfField getCurrentProfField() {
         return currentProfField;
@@ -87,10 +84,6 @@ public class ModalAddResumeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         numberPhoneTextField.setTextFormatter(numberPhoneFormatter);
         wageTextField.setTextFormatter(bigDecimalFormatter);
-
-        resumeStateComboBox.setButtonCell(resumeStateCellFactory.call(null));
-        resumeStateComboBox.setCellFactory(resumeStateCellFactory);
-        resumeStateComboBox.setItems(FXCollections.observableList(resumeStateService.findAll()));
 
         profFieldComboBox.setButtonCell(profFieldCellFactory.call(null));
         profFieldComboBox.setCellFactory(profFieldCellFactory);
@@ -197,8 +190,6 @@ public class ModalAddResumeController implements Initializable {
         Education education = educationComboBox.getValue();
         if (education != null) resume.setEducationId(education.getId());
 
-        if (resumeStateComboBox.getValue() != null) resume.setState(resumeStateComboBox.getValue());
-        
         Experience exp = new Experience();
         exp.setDateStart(experienceDateStartDatePicker.getValue());
         exp.setDateEnd(experienceDateEndDatePicker.getValue());
