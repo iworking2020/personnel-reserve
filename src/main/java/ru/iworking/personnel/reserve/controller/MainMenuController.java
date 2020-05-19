@@ -90,6 +90,7 @@ public class MainMenuController extends FxmlController {
         Scene scene = new Scene(root);
         addStylesheets(scene);
         stage.setScene(scene);
+        //stage.setMaximized(true);
         stage.show();
     }
 
