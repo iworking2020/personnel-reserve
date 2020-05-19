@@ -2,18 +2,14 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.io.File;
@@ -61,39 +57,6 @@ public class MainMenuController extends FxmlController {
         GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 4);
     }
 
-    private void addStylesheets(Scene scene) {
-        scene.getStylesheets().add("/styles/main.css");
-        scene.getStylesheets().add("/styles/window.css");
-        scene.getStylesheets().add("/styles/button.css");
-        scene.getStylesheets().add("/styles/combo-box.css");
-        scene.getStylesheets().add("/styles/date-picker.css");
-        scene.getStylesheets().add("/styles/text-area.css");
-        scene.getStylesheets().add("/styles/text-field.css");
-        scene.getStylesheets().add("/styles/scroll-bar.css");
-        scene.getStylesheets().add("/styles/scroll-pane.css");
-        scene.getStylesheets().add("/styles/tab-pane.css");
-        scene.getStylesheets().add("/styles/prof-field.css");
-        scene.getStylesheets().add("/styles/table-view.css");
-        scene.getStylesheets().add("/styles/context-menu.css");
-        scene.getStylesheets().add("/styles/menu-bar.css");
-        scene.getStylesheets().add("/styles/vacancies-pane.css");
-        scene.getStylesheets().add("/styles/tree-view.css");
-        scene.getStylesheets().add("/styles/split-pane.css");
-        scene.getStylesheets().add("/styles/accordion.css");
-        scene.getStylesheets().add("/styles/list-view.css");
-    }
-
-    public void show(Parent root) {
-        Stage stage = MainApp.PARENT_STAGE;
-        stage.setTitle("Personnel reserve");
-        AppUtil.setIcon(stage);
-        Scene scene = new Scene(root);
-        addStylesheets(scene);
-        stage.setScene(scene);
-        //stage.setMaximized(true);
-        stage.show();
-    }
-
     @FXML
     private void actionLoadData(ActionEvent event) {
         File currentDatabase = getCurrentDataBase();
@@ -112,8 +75,9 @@ public class MainMenuController extends FxmlController {
             } catch (IOException e) {
                 logger.error(e);
             }
-            resumesPaneController.reload(event);
-            vacanciesPaneController.reload(event);
+            /*resumesPaneController.reload(event);
+            vacanciesPaneController.reload(event);*/
+            MainApp.reload();
         }
 
 
