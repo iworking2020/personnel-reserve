@@ -51,6 +51,9 @@ public class Resume implements Cloneable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LearningHistory> learningHistoryList;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExperienceHistory> experienceHistoryList;
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
