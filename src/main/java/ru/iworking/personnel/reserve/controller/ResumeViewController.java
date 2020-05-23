@@ -255,6 +255,15 @@ public class ResumeViewController extends FxmlController {
     }
 
     @FXML
+    public void actionDelete(ActionEvent event) {
+        resumeService.delete(currentResume.getId());
+        getResumeListViewController().actionUpdate(event);
+        if (getVacancyListViewPane() != null) getVacancyListViewPane().actionUpdate(event);
+        hide();
+        clear();
+    }
+
+    @FXML
     public void actionClick(ActionEvent event) {
         ResumeState resumeState = resumeStateService.findById(1L);
         Vacancy vacancy = getVacancyViewController().getCurrentVacancy();
@@ -272,6 +281,10 @@ public class ResumeViewController extends FxmlController {
             clickService.persist(click);
             getVacancyListViewPane().actionUpdate(event);
         }
+    }
+
+    public void clear() {
+        setData(null);
     }
 
     public ResumeEditController getResumeEditController() {

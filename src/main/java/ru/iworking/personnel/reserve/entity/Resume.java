@@ -50,6 +50,9 @@ public class Resume implements Cloneable {
     @OrderBy("dateStart ASC")
     private List<ExperienceHistory> experienceHistoryList;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "resume")
+    private List<Click> clicks;
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

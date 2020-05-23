@@ -92,8 +92,8 @@ public class ResumeListViewController extends FxmlController {
 
     @FXML
     public void actionCreate(ActionEvent event) {
-        /*getCompanyEditController().clear();
-        getCompanyEditController().show();*/
+        getResumeEditController().clear();
+        getResumeEditController().show();
     }
 
     public ResumeEditController getResumeEditController() {

@@ -128,6 +128,7 @@
                   <Insets />
                </FlowPane.margin>
             </Button>
+            <Button mnemonicParsing="false" onAction="#actionDelete" styleClass="grey" text="Удалить" />
             <Button fx:id="clickButton" disable="true" mnemonicParsing="false" onAction="#actionClick" styleClass="grey" text="Прикрепить">
                <FlowPane.margin>
                   <Insets />
