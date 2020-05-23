@@ -97,10 +97,11 @@ public class PdfResumeWriter extends PdfWriterFactory {
                 "график: "+
                         workTypeService.findById(resume.getWorkTypeId()).getNameView().getName() :
                 "график: не указан";
-        String education = resume.getEducationId() != null ?
+        //TODO
+        /*String education = resume.getEducationId() != null ?
                 "образование: "+
                         educationService.findById(resume.getEducationId()).getNameView().getName() :
-                "образование: не указано";
+                "образование: не указано";*/
 
         Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));
         rightBlockTable.setBorder(Border.NO_BORDER);
@@ -110,7 +111,8 @@ public class PdfResumeWriter extends PdfWriterFactory {
         rightBlockTable.addCell(createTextCell(profField));
         rightBlockTable.addCell(createTextCell(wage));
         rightBlockTable.addCell(createTextCell(workType));
-        rightBlockTable.addCell(createTextCell(education));
+        //TODO
+        //rightBlockTable.addCell(createTextCell(education));
         rightBlockTable.addCell(createTextCell(number));
         rightBlockTable.addCell(createTextCell(email));
 

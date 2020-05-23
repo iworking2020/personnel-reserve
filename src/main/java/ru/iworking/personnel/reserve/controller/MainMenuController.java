@@ -3,7 +3,6 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -30,11 +29,11 @@ public class MainMenuController extends FxmlController {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        viewSearchBlock();
+        //viewSearchBlock();
         isResizable(false);
-        winSearchCheckItem.setOnAction(event -> {
+        /*winSearchCheckItem.setOnAction(event -> {
             if (winSearchCheckItem.isSelected()) {viewSearchBlock();} else {hideSearchBlock();}
-        });
+        });*/
         winResizable.setOnAction(event -> isResizable(winResizable.isSelected()));
     }
 
@@ -43,7 +42,7 @@ public class MainMenuController extends FxmlController {
         getVacanciesPaneController().isResizable(isResizable);
     }
 
-    private void viewSearchBlock() {
+    /*private void viewSearchBlock() {
         winSearchCheckItem.setSelected(true);
         resumesPaneController.getSearchPane().setVisible(true);
         GridPane.setColumnSpan(resumesPaneController.getTablePane(), 3);
@@ -55,7 +54,7 @@ public class MainMenuController extends FxmlController {
         resumesPaneController.getSearchPane().setVisible(false);
         GridPane.setColumnSpan(resumesPaneController.getTablePane(), 4);
         GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 4);
-    }
+    }*/
 
     @FXML
     private void actionLoadData(ActionEvent event) {

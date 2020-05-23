@@ -188,12 +188,12 @@ public class ModalAddResumeController implements Initializable {
         if (workType != null) resume.setWorkTypeId(workType.getId());
 
         Education education = educationComboBox.getValue();
-        if (education != null) resume.setEducationId(education.getId());
+        //if (education != null) resume.setEducationId(education.getId());
 
         Experience exp = new Experience();
         exp.setDateStart(experienceDateStartDatePicker.getValue());
         exp.setDateEnd(experienceDateEndDatePicker.getValue());
-        resume.setExperience(exp);
+        //resume.setExperience(exp);
 
         Address address = new Address();
         address.setHouse(addressTextArea.getText());

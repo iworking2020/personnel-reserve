@@ -15,11 +15,12 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.entity.Currency;
+import ru.iworking.personnel.reserve.entity.Photo;
+import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.entity.WorkType;
 import ru.iworking.personnel.reserve.service.*;
 import ru.iworking.personnel.reserve.utils.AppUtil;
-import ru.iworking.personnel.reserve.utils.TextUtil;
-import ru.iworking.personnel.reserve.utils.TimeUtil;
 import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
 
 import java.io.ByteArrayInputStream;
@@ -98,16 +99,16 @@ public class ModalOpenResumeController implements Initializable {
         } else {
             workTypeLabel.setText("не указан");
         }
-        if (resume.getEducationId() != null) {
+        /*if (resume.getEducationId() != null) {
             Education education = educationService.findById(resume.getEducationId());
             educationLabel.setText(education.getNameView().getName());
         } else {
             educationLabel.setText("не указано");
-        }
+        }*/
 
-        Integer age = TimeUtil.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
+        //Integer age = TimeUtil.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
         
-        experienceLabel.setText(age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age));
+        //experienceLabel.setText(age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age));
         addressLabel.setText(resume.getAddress().getHouse());
 
         if (resume.getPhotoId() != null) {

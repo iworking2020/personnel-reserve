@@ -25,11 +25,11 @@
             </MenuBar>
             <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
               <tabs>
-                <Tab text="Резюме">
+                <!--<Tab text="Резюме">
                      <content>
                          <fx:include fx:id="resumesPane" source="ResumesPane.fxml" />
                      </content>
-                </Tab>
+                </Tab>-->
                 <Tab text="Вакансии">
                   <content>
                       <fx:include fx:id="vacanciesPane" source="VacanciesPane.fxml" />

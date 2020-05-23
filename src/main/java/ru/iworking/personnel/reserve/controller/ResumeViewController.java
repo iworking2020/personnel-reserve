@@ -63,6 +63,7 @@ public class ResumeViewController extends FxmlController {
     @FXML private Label workType;
 
     @FXML private ScrollPane learningHistoryPane;
+    @FXML private ScrollPane experienceHistoryPane;
 
     @FXML private ImageView photoImageView;
 
@@ -159,16 +160,16 @@ public class ResumeViewController extends FxmlController {
             } else {
                 workType.setText(prefixWorkType + "не указан");
             }
-            if (resume.getEducationId() != null) {
+            /*if (resume.getEducationId() != null) {
                 Education education1 = educationService.findById(resume.getEducationId());
                 education.setText(prefixEducation + education1.getNameView().getName());
             } else {
                 education.setText(prefixEducation + "не указано");
-            }
+            }*/
 
-            Integer age = TimeUtil.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
+            //Integer age = TimeUtil.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
 
-            experience.setText(age == null || age <= 0 ? prefixExperience + "без опыта" : prefixExperience + age + " " + TextUtil.nameForNumbers(age));
+            //experience.setText(age == null || age <= 0 ? prefixExperience + "без опыта" : prefixExperience + age + " " + TextUtil.nameForNumbers(age));
             address.setText(prefixAddress + resume.getAddress().getHouse());
             if (resume.getPhotoId() != null) {
                 Photo photo = photoService.findById(resume.getPhotoId());
@@ -181,7 +182,7 @@ public class ResumeViewController extends FxmlController {
             }
 
             setDataLearningHistory(resume.getLearningHistoryList());
-
+            setDataExperienceHistory(resume.getExperienceHistoryList());
         } else {
             logger.debug("Resume is null. We can't view resume...");
         }
@@ -197,7 +198,22 @@ public class ResumeViewController extends FxmlController {
             pane.getChildren().add(wrap);
         });
         learningHistoryPane.setContent(pane);
+    }
 
+    private void setDataExperienceHistory(List<ExperienceHistory> list) {
+        VBox pane = new VBox();
+        list.stream().forEach(experienceHistory -> {
+            VBox wrap = new VBox();
+            VBox.setMargin(wrap, new Insets(10.0, 0.0, 10.0, 0.0));
+
+            Integer age = TimeUtil.calAge(experienceHistory.getDateStart(), experienceHistory.getDateEnd());
+            String experience = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age);
+
+            wrap.getChildren().add(new Label("Опыт работы: " + experience));
+            wrap.getChildren().add(new Label(experienceHistory.getDescription()));
+            pane.getChildren().add(wrap);
+        });
+        experienceHistoryPane.setContent(pane);
     }
 
     private Long getResumeId() {

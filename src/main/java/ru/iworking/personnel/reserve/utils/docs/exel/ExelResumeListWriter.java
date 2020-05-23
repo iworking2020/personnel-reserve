@@ -7,7 +7,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import ru.iworking.personnel.reserve.entity.*;
+import ru.iworking.personnel.reserve.entity.Currency;
+import ru.iworking.personnel.reserve.entity.ProfField;
+import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.entity.WorkType;
 import ru.iworking.personnel.reserve.service.CurrencyService;
 import ru.iworking.personnel.reserve.service.EducationService;
 import ru.iworking.personnel.reserve.service.ProfFieldService;
@@ -111,12 +114,13 @@ public class ExelResumeListWriter extends ExelWriterFactory {
                 currency.setCellValue("не указана");
             }
             Cell education = row.createCell(11);
-            if (resume.getEducationId() != null) {
+            //TODO
+            /*if (resume.getEducationId() != null) {
                 Education education1 = educationService.findById(resume.getEducationId());
                 education.setCellValue(education1.getNameView().getName());
             } else {
                 education.setCellValue("не указано");
-            }
+            }*/
             Cell address = row.createCell(12);
             address.setCellValue(resume.getAddress().getHouse());
         }

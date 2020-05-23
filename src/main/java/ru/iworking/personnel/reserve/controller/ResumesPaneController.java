@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.BigDecimalFormatter;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
@@ -34,10 +35,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.util.*;
 
 public class ResumesPaneController extends FxmlController {
 
@@ -139,19 +138,34 @@ public class ResumesPaneController extends FxmlController {
         });
         educationColumn.setCellValueFactory(cellData -> {
             Education education = null;
-            if (cellData.getValue().getEducationId() != null) education = educationService.findById(cellData.getValue().getEducationId());
+            if (cellData.getValue().getLearningHistoryList()!= null && !cellData.getValue().getLearningHistoryList().isEmpty()) {
+                LearningHistory learningHistory = cellData.getValue().getLearningHistoryList().stream()
+                        .max(Comparator.comparing(LearningHistory::getId))
+                        .orElseThrow(NoSuchElementException::new);
+                education = learningHistory.getEducation();
+            }
             String textColumn = education != null ? education.getNameView().getName() : "не указано";
             return new ReadOnlyStringWrapper(textColumn);
         });
         experienceColumn.setCellValueFactory(cellData -> {
-            Experience exp = cellData.getValue().getExperience();
-            String textColumn = "";
-            if (exp != null) {
-                Integer age = TimeUtil.calAge(exp.getDateStart(), exp.getDateEnd());
-                textColumn = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age);
-            } else {
-                textColumn = "без опыта";
+            LocalDate minLocalDate = null;
+            LocalDate maxLocalDate = null;
+            if (cellData.getValue().getExperienceHistoryList() != null && !cellData.getValue().getExperienceHistoryList().isEmpty()) {
+                minLocalDate = cellData.getValue().getExperienceHistoryList().stream()
+                        .map(ExperienceHistory::getDateStart)
+                        .filter(Objects::nonNull)
+                        .min(LocalDate::compareTo)
+                        .get();
+                maxLocalDate = cellData.getValue().getExperienceHistoryList().stream()
+                        .map(ExperienceHistory::getDateEnd)
+                        .filter(Objects::nonNull)
+                        .max(LocalDate::compareTo)
+                        .get();
             }
+
+            Integer age = TimeUtil.calAge(minLocalDate, maxLocalDate);
+
+            String textColumn = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age);
 
             return new ReadOnlyStringWrapper(textColumn);
         });

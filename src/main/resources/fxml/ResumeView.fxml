@@ -99,12 +99,15 @@
                   </ScrollPane>
                </content>
             </Tab>
+            <Tab text="Опыт работы">
+               <ScrollPane fx:id="experienceHistoryPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="150.0" vbarPolicy="AS_NEEDED">
+
+               </ScrollPane>
+            </Tab>
             <Tab text="Дополнительно">
                <content>
                   <VBox spacing="5.0">
                      <children>
-                        <Label fx:id="education" text="Образование:" />
-                        <Label fx:id="experience" text="Опыт работы:" />
                         <Label fx:id="address" text="Адрес:" />
                      </children>
                      <padding>

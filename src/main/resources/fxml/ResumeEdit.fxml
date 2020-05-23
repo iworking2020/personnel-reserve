@@ -120,14 +120,32 @@
                          </VBox>
                      </content>
                 </Tab>
+                  <Tab text="Опыт работы">
+                      <content>
+                          <VBox>
+                              <children>
+                                  <FlowPane BorderPane.alignment="CENTER">
+                                      <children>
+                                          <Button mnemonicParsing="false" onAction="#actionAddExperienceHistory" styleClass="grey" text="Добавить">
+                                              <FlowPane.margin>
+                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                              </FlowPane.margin>
+                                          </Button>
+                                      </children>
+                                  </FlowPane>
+                                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="150.0" vbarPolicy="AS_NEEDED">
+                                      <content>
+                                          <VBox fx:id="experienceHistoryEditList" spacing="10.0" />
+                                      </content>
+                                  </ScrollPane>
+                              </children>
+                          </VBox>
+                      </content>
+                  </Tab>
                 <Tab text="Дополнительно">
                     <content>
                         <VBox prefWidth="200.0" spacing="5.0">
                             <children>
-                                <ComboBox fx:id="resumeStateComboBox" maxWidth="1.7976931348623157E308" promptText="Состояние заявки" />
-                                <ComboBox fx:id="educationComboBox" maxWidth="1.7976931348623157E308" promptText="Образование" />
-                                <DatePicker fx:id="experienceDateStartDatePicker" maxWidth="1.7976931348623157E308" promptText="Опыт работы от" />
-                                <DatePicker fx:id="experienceDateEndDatePicker" maxWidth="1.7976931348623157E308" promptText="Опыт работы до" />
                                 <TextArea fx:id="addressTextArea" prefHeight="20.0" prefWidth="200.0" promptText="Адрес" />
                             </children>
                             <padding>

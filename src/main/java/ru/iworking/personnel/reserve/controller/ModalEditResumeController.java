@@ -126,9 +126,9 @@ public class ModalEditResumeController implements Initializable {
             currencyComboBox.setValue(currencyService.findById(resume.getWage().getCurrencyId()));
         }
         if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeService.findById(resume.getWorkTypeId()));
-        if (resume.getEducationId() != null) educationComboBox.setValue(educationService.findById(resume.getEducationId()));
-        experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
-        experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
+        //if (resume.getEducationId() != null) educationComboBox.setValue(educationService.findById(resume.getEducationId()));
+        //experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
+        //experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
         
         addressTextArea.setText(resume.getAddress().getHouse());
 
@@ -214,10 +214,10 @@ public class ModalEditResumeController implements Initializable {
             }
         }
         if (workTypeComboBox.getValue() != null) newResume.setWorkTypeId(workTypeComboBox.getValue().getId());
-        if (educationComboBox.getValue() != null) newResume.setEducationId(educationComboBox.getValue().getId());
+        //if (educationComboBox.getValue() != null) newResume.setEducationId(educationComboBox.getValue().getId());
 
-        newResume.getExperience().setDateStart(experienceDateStartDatePicker.getValue());
-        newResume.getExperience().setDateEnd(experienceDateEndDatePicker.getValue());
+        //newResume.getExperience().setDateStart(experienceDateStartDatePicker.getValue());
+        //newResume.getExperience().setDateEnd(experienceDateEndDatePicker.getValue());
 
         newResume.getAddress().setHouse(addressTextArea.getText());
 

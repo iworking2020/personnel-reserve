@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.component.ExperienceHistoryEditBlock;
 import ru.iworking.personnel.reserve.component.LearningHistoryEditBlock;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
@@ -27,7 +28,6 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -56,29 +56,25 @@ public class ResumeEditController extends FxmlController {
     @FXML private TextField wageTextField;
     @FXML private ComboBox<Currency> currencyComboBox;
     @FXML private ComboBox<WorkType> workTypeComboBox;
-    @FXML private ComboBox<Education> educationComboBox;
     @FXML private TextArea addressTextArea;
-    @FXML private DatePicker experienceDateStartDatePicker;
-    @FXML private DatePicker experienceDateEndDatePicker;
 
     @FXML private ImageView photoImageView;
 
     @FXML private Button buttonCancel;
 
     @FXML private VBox educationEditList;
+    @FXML private VBox experienceHistoryEditList;
 
     private ProfField currentProfField;
 
     private PhotoService photoService = PhotoService.INSTANCE;
     private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
     private ResumeService resumeService = ResumeService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
-    private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
 
     @Override
@@ -95,10 +91,6 @@ public class ResumeEditController extends FxmlController {
         workTypeComboBox.setButtonCell(workTypeCellFactory.call(null));
         workTypeComboBox.setCellFactory(workTypeCellFactory);
         workTypeComboBox.setItems(FXCollections.observableList(workTypeService.findAll()));
-
-        educationComboBox.setButtonCell(educationCellFactory.call(null));
-        educationComboBox.setCellFactory(educationCellFactory);
-        educationComboBox.setItems(FXCollections.observableList(educationService.findAll()));
 
         currencyComboBox.setButtonCell(currencyCellFactory.call(null));
         currencyComboBox.setCellFactory(currencyCellFactory);
@@ -121,9 +113,6 @@ public class ResumeEditController extends FxmlController {
             currencyComboBox.setValue(currencyService.findById(resume.getWage().getCurrencyId()));
         }
         if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeService.findById(resume.getWorkTypeId()));
-        if (resume.getEducationId() != null) educationComboBox.setValue(educationService.findById(resume.getEducationId()));
-        experienceDateStartDatePicker.setValue(resume.getExperience().getDateStart());
-        experienceDateEndDatePicker.setValue(resume.getExperience().getDateEnd());
 
         addressTextArea.setText(resume.getAddress().getHouse());
 
@@ -142,12 +131,24 @@ public class ResumeEditController extends FxmlController {
             learningHistoryEditBlock.setLearningHistory(learningHistory);
             educationEditList.getChildren().add(learningHistoryEditBlock);
         });
+
+        resume.getExperienceHistoryList().forEach( experienceHistory -> {
+            ExperienceHistoryEditBlock experienceHistoryEditBlock = new ExperienceHistoryEditBlock();
+            experienceHistoryEditBlock.setExperienceHistory(experienceHistory);
+            experienceHistoryEditList.getChildren().add(experienceHistoryEditBlock);
+        });
     }
 
     @FXML
     public void actionAddEducation(ActionEvent event) {
         LearningHistoryEditBlock learningHistoryEditBlock = new LearningHistoryEditBlock();
         educationEditList.getChildren().add(learningHistoryEditBlock);
+    }
+
+    @FXML
+    public void actionAddExperienceHistory(ActionEvent event) {
+        ExperienceHistoryEditBlock experienceHistoryEditBlock = new ExperienceHistoryEditBlock();
+        experienceHistoryEditList.getChildren().add(experienceHistoryEditBlock);
     }
 
     @FXML
@@ -207,9 +208,6 @@ public class ResumeEditController extends FxmlController {
         String wageStr = wageTextField.getText();
         Currency currency = currencyComboBox.getValue();
         WorkType workType = workTypeComboBox.getValue();
-        Education education = educationComboBox.getValue();
-        LocalDate expStart = experienceDateStartDatePicker.getValue();
-        LocalDate expEnd = experienceDateEndDatePicker.getValue();
         String addressStr = addressTextArea.getText();
 
         Resume resume = resumeId == null ? new Resume() : resumeService.findById(resumeId);
@@ -232,10 +230,6 @@ public class ResumeEditController extends FxmlController {
             }
         }
         if (workType != null) resume.setWorkTypeId(workType.getId());
-        if (education != null) resume.setEducationId(education.getId());
-        if (resume.getExperience() == null) resume.setExperience(new Experience());
-        resume.getExperience().setDateStart(expStart);
-        resume.getExperience().setDateEnd(expEnd);
         if (resume.getAddress() == null) resume.setAddress(new Address());
         resume.getAddress().setHouse(addressStr);
 
@@ -267,6 +261,14 @@ public class ResumeEditController extends FxmlController {
                 .map(node ->  node.getLearningHistory())
                 .collect(Collectors.toList());
         resume.setLearningHistoryList(learningHistories);
+
+        List<ExperienceHistory> experienceHistories = experienceHistoryEditList.getChildren().stream()
+                .filter(node -> node instanceof ExperienceHistoryEditBlock)
+                .map(node -> (ExperienceHistoryEditBlock) node)
+                .filter(node -> node.getExperienceHistory() != null)
+                .map(node ->  node.getExperienceHistory())
+                .collect(Collectors.toList());
+        resume.setExperienceHistoryList(experienceHistories);
 
         if (resumeId == null) {
             resumeService.persist(resume);
@@ -309,16 +311,19 @@ public class ResumeEditController extends FxmlController {
         wageTextField.setText("");
         currencyComboBox.setValue(null);
         workTypeComboBox.setValue(null);
-        educationComboBox.setValue(null);
         addressTextArea.setText("");
-        experienceDateStartDatePicker.setValue(null);
-        experienceDateEndDatePicker.setValue(null);
         List<LearningHistoryEditBlock> removeList = educationEditList.getChildren().stream()
                 .filter(node -> node instanceof LearningHistoryEditBlock)
                 .map(node -> (LearningHistoryEditBlock) node)
                 .collect(Collectors.toList());
         educationEditList.getChildren().removeAll(removeList);
         educationEditList.getChildren().clear();
+        List<ExperienceHistoryEditBlock> experienceHistoryEditBlocks = experienceHistoryEditList.getChildren().stream()
+                .filter(node -> node instanceof ExperienceHistoryEditBlock)
+                .map(node -> (ExperienceHistoryEditBlock) node)
+                .collect(Collectors.toList());
+        experienceHistoryEditList.getChildren().removeAll(experienceHistoryEditBlocks);
+        experienceHistoryEditList.getChildren().clear();
         resumeEdiTabPane.getSelectionModel().select(0);
     }
 

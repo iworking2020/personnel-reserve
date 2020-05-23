@@ -1,9 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ExperienceHistory {
