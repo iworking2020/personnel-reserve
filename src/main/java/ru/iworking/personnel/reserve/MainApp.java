@@ -2,7 +2,6 @@ package ru.iworking.personnel.reserve;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
@@ -11,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.controller.MainMenuController;
 import ru.iworking.personnel.reserve.utils.AppUtil;
+import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
 public class MainApp extends Application {
 
@@ -25,7 +25,7 @@ public class MainApp extends Application {
 
         MainApp.PARENT_STAGE = stage;
 
-        Parent parent = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml")).load();
+        Parent parent = FXMLUtil.load("/fxml/MainMenu.fxml");
         Scene scene = new Scene(parent);
         addStylesheets(scene);
 

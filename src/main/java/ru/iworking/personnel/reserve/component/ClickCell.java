@@ -12,10 +12,10 @@ public class ClickCell extends ListCell<Click> {
             setText(null);
             setGraphic(null);
         } else {
-            ClickItem clickItem = new ClickItem();
-            clickItem.setData(click);
+            ClickPane clickPane = new ClickPane();
+            clickPane.setData(click);
             setText(null);
-            setGraphic(clickItem);
+            setGraphic(clickPane);
         }
     }
 

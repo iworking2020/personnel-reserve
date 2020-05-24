@@ -3,7 +3,6 @@ package ru.iworking.personnel.reserve.component;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
@@ -12,10 +11,9 @@ import ru.iworking.personnel.reserve.entity.Education;
 import ru.iworking.personnel.reserve.entity.LearningHistory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
 import ru.iworking.personnel.reserve.service.EducationService;
+import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
-import java.io.IOException;
-
-public class LearningHistoryEditBlock extends VBox {
+public class LearningHistoryEditPane extends VBox {
 
     @FXML private Pane parent;
 
@@ -28,15 +26,8 @@ public class LearningHistoryEditBlock extends VBox {
 
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
 
-    public LearningHistoryEditBlock() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/LearningHistoryEditBlock.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+    public LearningHistoryEditPane() {
+        FXMLUtil.load("/fxml/LearningHistoryEditBlock.fxml", this, this);
         initData();
     }
 

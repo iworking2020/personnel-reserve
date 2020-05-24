@@ -13,8 +13,8 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
-import ru.iworking.personnel.reserve.component.ExperienceHistoryEditBlock;
-import ru.iworking.personnel.reserve.component.LearningHistoryEditBlock;
+import ru.iworking.personnel.reserve.component.ExperienceHistoryEditPane;
+import ru.iworking.personnel.reserve.component.LearningHistoryEditPane;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
@@ -127,28 +127,28 @@ public class ResumeEditController extends FxmlController {
         }
 
         resume.getLearningHistoryList().forEach( learningHistory -> {
-            LearningHistoryEditBlock learningHistoryEditBlock = new LearningHistoryEditBlock();
-            learningHistoryEditBlock.setLearningHistory(learningHistory);
-            educationEditList.getChildren().add(learningHistoryEditBlock);
+            LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
+            learningHistoryEditPane.setLearningHistory(learningHistory);
+            educationEditList.getChildren().add(learningHistoryEditPane);
         });
 
         resume.getExperienceHistoryList().forEach( experienceHistory -> {
-            ExperienceHistoryEditBlock experienceHistoryEditBlock = new ExperienceHistoryEditBlock();
-            experienceHistoryEditBlock.setExperienceHistory(experienceHistory);
-            experienceHistoryEditList.getChildren().add(experienceHistoryEditBlock);
+            ExperienceHistoryEditPane experienceHistoryEditPane = new ExperienceHistoryEditPane();
+            experienceHistoryEditPane.setExperienceHistory(experienceHistory);
+            experienceHistoryEditList.getChildren().add(experienceHistoryEditPane);
         });
     }
 
     @FXML
     public void actionAddEducation(ActionEvent event) {
-        LearningHistoryEditBlock learningHistoryEditBlock = new LearningHistoryEditBlock();
-        educationEditList.getChildren().add(learningHistoryEditBlock);
+        LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
+        educationEditList.getChildren().add(learningHistoryEditPane);
     }
 
     @FXML
     public void actionAddExperienceHistory(ActionEvent event) {
-        ExperienceHistoryEditBlock experienceHistoryEditBlock = new ExperienceHistoryEditBlock();
-        experienceHistoryEditList.getChildren().add(experienceHistoryEditBlock);
+        ExperienceHistoryEditPane experienceHistoryEditPane = new ExperienceHistoryEditPane();
+        experienceHistoryEditList.getChildren().add(experienceHistoryEditPane);
     }
 
     @FXML
@@ -255,16 +255,16 @@ public class ResumeEditController extends FxmlController {
         }
 
         List<LearningHistory> learningHistories = educationEditList.getChildren().stream()
-                .filter(node -> node instanceof LearningHistoryEditBlock)
-                .map(node -> (LearningHistoryEditBlock) node)
+                .filter(node -> node instanceof LearningHistoryEditPane)
+                .map(node -> (LearningHistoryEditPane) node)
                 .filter(node -> node.getLearningHistory() != null)
                 .map(node ->  node.getLearningHistory())
                 .collect(Collectors.toList());
         resume.setLearningHistoryList(learningHistories);
 
         List<ExperienceHistory> experienceHistories = experienceHistoryEditList.getChildren().stream()
-                .filter(node -> node instanceof ExperienceHistoryEditBlock)
-                .map(node -> (ExperienceHistoryEditBlock) node)
+                .filter(node -> node instanceof ExperienceHistoryEditPane)
+                .map(node -> (ExperienceHistoryEditPane) node)
                 .filter(node -> node.getExperienceHistory() != null)
                 .map(node ->  node.getExperienceHistory())
                 .collect(Collectors.toList());
@@ -312,17 +312,17 @@ public class ResumeEditController extends FxmlController {
         currencyComboBox.setValue(null);
         workTypeComboBox.setValue(null);
         addressTextArea.setText("");
-        List<LearningHistoryEditBlock> removeList = educationEditList.getChildren().stream()
-                .filter(node -> node instanceof LearningHistoryEditBlock)
-                .map(node -> (LearningHistoryEditBlock) node)
+        List<LearningHistoryEditPane> removeList = educationEditList.getChildren().stream()
+                .filter(node -> node instanceof LearningHistoryEditPane)
+                .map(node -> (LearningHistoryEditPane) node)
                 .collect(Collectors.toList());
         educationEditList.getChildren().removeAll(removeList);
         educationEditList.getChildren().clear();
-        List<ExperienceHistoryEditBlock> experienceHistoryEditBlocks = experienceHistoryEditList.getChildren().stream()
-                .filter(node -> node instanceof ExperienceHistoryEditBlock)
-                .map(node -> (ExperienceHistoryEditBlock) node)
+        List<ExperienceHistoryEditPane> experienceHistoryEditPanes = experienceHistoryEditList.getChildren().stream()
+                .filter(node -> node instanceof ExperienceHistoryEditPane)
+                .map(node -> (ExperienceHistoryEditPane) node)
                 .collect(Collectors.toList());
-        experienceHistoryEditList.getChildren().removeAll(experienceHistoryEditBlocks);
+        experienceHistoryEditList.getChildren().removeAll(experienceHistoryEditPanes);
         experienceHistoryEditList.getChildren().clear();
         resumeEdiTabPane.getSelectionModel().select(0);
     }

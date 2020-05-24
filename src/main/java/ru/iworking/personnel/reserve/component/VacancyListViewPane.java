@@ -7,7 +7,6 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -17,8 +16,8 @@ import javafx.util.Duration;
 import ru.iworking.personnel.reserve.controller.*;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.service.VacancyService;
+import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -41,15 +40,7 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
     private double x = 0.00;
 
     public VacancyListViewPane() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/components/VacancyListViewPane.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+        FXMLUtil.load("/fxml/components/VacancyListViewPane.fxml", this, this);
         controllerProvider.put(this.getClass().getName(), this);
     }
 

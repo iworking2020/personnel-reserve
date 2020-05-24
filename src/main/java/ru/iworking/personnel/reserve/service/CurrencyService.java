@@ -8,7 +8,7 @@ public class CurrencyService extends DaoService<Currency, Long> {
 
     public static final CurrencyService INSTANCE = new CurrencyService();
 
-    private CurrencyService() {}
+    public CurrencyService() {}
 
     @Override
     public Dao<Currency, Long> getDao() {

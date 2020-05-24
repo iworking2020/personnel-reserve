@@ -2,7 +2,6 @@ package ru.iworking.personnel.reserve.component;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -20,14 +19,14 @@ import ru.iworking.personnel.reserve.model.ResumeStateCellFactory;
 import ru.iworking.personnel.reserve.service.ClickService;
 import ru.iworking.personnel.reserve.service.PhotoService;
 import ru.iworking.personnel.reserve.service.ResumeStateService;
+import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClickItem extends FlowPane implements Initializable {
+public class ClickPane extends FlowPane implements Initializable {
 
     private final ControllerProvider controllerProvider = ControllerProvider.getInstance();
 
@@ -62,16 +61,8 @@ public class ClickItem extends FlowPane implements Initializable {
         });
     }
 
-    public ClickItem() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/components/ClickItem.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+    public ClickPane() {
+        FXMLUtil.load("/fxml/components/ClickPane.fxml", this, this);
     }
 
     public void setData(Click click) {

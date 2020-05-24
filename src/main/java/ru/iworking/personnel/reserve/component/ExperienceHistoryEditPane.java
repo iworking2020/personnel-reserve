@@ -2,7 +2,6 @@ package ru.iworking.personnel.reserve.component;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
@@ -10,11 +9,10 @@ import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
 import ru.iworking.personnel.reserve.entity.ExperienceHistory;
+import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
-import java.io.IOException;
 
-
-public class ExperienceHistoryEditBlock extends VBox {
+public class ExperienceHistoryEditPane extends VBox {
 
     @FXML private Pane parent;
 
@@ -31,15 +29,8 @@ public class ExperienceHistoryEditBlock extends VBox {
     @Setter
     private Long experienceHistoryId;
 
-    public ExperienceHistoryEditBlock() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ExperienceHistoryEditBlock.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+    public ExperienceHistoryEditPane() {
+        FXMLUtil.load("/fxml/ExperienceHistoryEditBlock.fxml", this, this);
         initData();
     }
 
