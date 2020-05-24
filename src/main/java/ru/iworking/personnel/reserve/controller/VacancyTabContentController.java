@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
@@ -10,16 +9,11 @@ import org.apache.logging.log4j.Logger;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class VacanciesPaneController extends FxmlController {
+public class VacancyTabContentController extends FxmlController {
 
-    private static final Logger logger = LogManager.getLogger(VacanciesPaneController.class);
+    private static final Logger logger = LogManager.getLogger(VacancyTabContentController.class);
 
     @FXML private Pane wrapperResume;
-
-    @FXML private CompaniesTableController companiesTableController;
-    @FXML private VacanciesTableController vacanciesTableController;
-
-    //@FXML private ResumesTreeController resumesTreeController;
 
     @FXML private ClientListViewController clientListViewController;
     @FXML private CompanyViewController companyViewController;
@@ -50,21 +44,6 @@ public class VacanciesPaneController extends FxmlController {
             final double maxWidth2 = resumesAccordionWrapper.getMaxWidth();
             resumesAccordionWrapper.setMinWidth(maxWidth2);
         }
-    }
-
-    public void reloadVacancyTable(ActionEvent event) {
-        vacanciesTableController.actionUpdate(event);
-    }
-
-    public void reloadCompanyTable(ActionEvent event) {
-        companiesTableController.actionUpdate(event);
-    }
-
-    public void reload(ActionEvent event) {
-        reloadCompanyTable(event);
-        companyEditController.reload(event);
-        reloadVacancyTable(event);
-        vacancyEditController.reload(event);
     }
 
     public ScrollPane getClientListViewWrapper() {

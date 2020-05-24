@@ -4,7 +4,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.*?>
-<StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacanciesPaneController">
+<StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacancyTabContentController">
     <children>
       <BorderPane>
          <right>
@@ -59,7 +59,6 @@
                    <ScrollPane fx:id="resumesAccordionWrapper" fitToHeight="true" fitToWidth="true" maxWidth="300" minWidth="0.0" style="-fx-border-width: 0 0 0 1px; -fx-border-color: rgba(0, 0, 0, 0.20);">
                        <content>
                            <fx:include fx:id="resumeListView" source="ResumeListView.fxml" />
-                           <!--<fx:include fx:id="resumesAccordion" source="ResumesAccordion.fxml" />-->
                        </content>
                    </ScrollPane>
                </items>

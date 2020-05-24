@@ -107,8 +107,8 @@ public class ClientListViewController extends FxmlController {
         return (CompanyEditController) getControllerProvider().get(CompanyEditController.class.getName());
     }
 
-    public VacanciesPaneController getVacanciesPaneController() {
-        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
+    public VacancyTabContentController getVacanciesPaneController() {
+        return (VacancyTabContentController) getControllerProvider().get(VacancyTabContentController.class.getName());
     }
 
 }

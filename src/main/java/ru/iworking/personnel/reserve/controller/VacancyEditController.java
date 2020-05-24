@@ -194,19 +194,11 @@ public class VacancyEditController extends FxmlController {
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
     }
 
-    public CompaniesTableController getCompaniesTableController() {
-        return (CompaniesTableController) getControllerProvider().get(CompaniesTableController.class.getName());
-    }
-
     public CompanyViewController getCompanyViewController() {
         return (CompanyViewController) getControllerProvider().get(CompanyViewController.class.getName());
     }
 
     public VacancyListViewPane getVacancyListViewPane() {
         return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
-    }
-
-    public VacanciesTableController getVacanciesTableController() {
-        return (VacanciesTableController) getControllerProvider().get(VacanciesTableController.class.getName());
     }
 }

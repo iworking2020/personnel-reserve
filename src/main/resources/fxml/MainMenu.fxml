@@ -11,7 +11,6 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Окна">
                      <items>
-                        <!--<CheckMenuItem fx:id="winSearchCheckItem" mnemonicParsing="false" text="Окно поиска" />-->
                          <CheckMenuItem fx:id="winResizable" mnemonicParsing="false" text="Изменение размера" />
                      </items>
                 </Menu>
@@ -25,14 +24,9 @@
             </MenuBar>
             <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
               <tabs>
-                <!--<Tab text="Резюме">
-                     <content>
-                         <fx:include fx:id="resumesPane" source="ResumesPane.fxml" />
-                     </content>
-                </Tab>-->
                 <Tab text="Вакансии">
                   <content>
-                      <fx:include fx:id="vacanciesPane" source="VacanciesPane.fxml" />
+                      <fx:include fx:id="vacancyTabContent" source="VacancyTabContent.fxml" />
                   </content>
                 </Tab>
               </tabs>

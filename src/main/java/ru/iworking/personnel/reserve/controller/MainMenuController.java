@@ -21,19 +21,14 @@ public class MainMenuController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(MainMenuController.class);
 
-    @FXML private ResumesPaneController resumesPaneController;
-    @FXML private VacanciesPaneController vacanciesPaneController;
+    @FXML private VacancyTabContentController vacancyTabContentController;
 
     @FXML private CheckMenuItem winSearchCheckItem;
     @FXML private CheckMenuItem winResizable;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //viewSearchBlock();
         isResizable(false);
-        /*winSearchCheckItem.setOnAction(event -> {
-            if (winSearchCheckItem.isSelected()) {viewSearchBlock();} else {hideSearchBlock();}
-        });*/
         winResizable.setOnAction(event -> isResizable(winResizable.isSelected()));
     }
 
@@ -41,20 +36,6 @@ public class MainMenuController extends FxmlController {
         winResizable.setSelected(isResizable);
         getVacanciesPaneController().isResizable(isResizable);
     }
-
-    /*private void viewSearchBlock() {
-        winSearchCheckItem.setSelected(true);
-        resumesPaneController.getSearchPane().setVisible(true);
-        GridPane.setColumnSpan(resumesPaneController.getTablePane(), 3);
-        GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 3);
-    }
-
-    private void hideSearchBlock() {
-        winSearchCheckItem.setSelected(false);
-        resumesPaneController.getSearchPane().setVisible(false);
-        GridPane.setColumnSpan(resumesPaneController.getTablePane(), 4);
-        GridPane.setColumnSpan(resumesPaneController.getButtonsPane(), 4);
-    }*/
 
     @FXML
     private void actionLoadData(ActionEvent event) {
@@ -120,8 +101,8 @@ public class MainMenuController extends FxmlController {
         return files[0];
     }
 
-    public VacanciesPaneController getVacanciesPaneController() {
-        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
+    public VacancyTabContentController getVacanciesPaneController() {
+        return (VacancyTabContentController) getControllerProvider().get(VacancyTabContentController.class.getName());
     }
 
 }

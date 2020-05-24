@@ -94,8 +94,8 @@ public class ClickListViewController extends FxmlController {
         return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
     }
 
-    public VacanciesPaneController getVacanciesPaneController() {
-        return (VacanciesPaneController) getControllerProvider().get(VacanciesPaneController.class.getName());
+    public VacancyTabContentController getVacanciesPaneController() {
+        return (VacancyTabContentController) getControllerProvider().get(VacancyTabContentController.class.getName());
     }
 
     public VacancyListViewPane getVacancyListViewPane() {
