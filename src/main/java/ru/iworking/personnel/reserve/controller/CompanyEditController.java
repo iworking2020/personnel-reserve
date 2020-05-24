@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -51,9 +52,9 @@ public class CompanyEditController extends FxmlController {
 
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
 
-    private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
-    private CompanyService companyService = CompanyService.INSTANCE;
-    private LogoService logoService = LogoService.INSTANCE;
+    @Inject private CompanyTypeService companyTypeService;
+    @Inject private CompanyService companyService;
+    @Inject private LogoService logoService;
 
     private Company currentCompany = null;
 

@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ public class ClientListViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ClientListViewController.class);
 
-    private final CompanyService companyService = CompanyService.INSTANCE;
+    @Inject private CompanyService companyService;
 
     @FXML private Pane parent;
 

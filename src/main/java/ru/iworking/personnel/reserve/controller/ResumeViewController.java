@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -35,15 +36,15 @@ public class ResumeViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeViewController.class);
 
-    private final PhotoService photoService = PhotoService.INSTANCE;
-    private final ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private final CurrencyService currencyService = CurrencyService.INSTANCE;
-    private final WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private final EducationService educationService = EducationService.INSTANCE;
-    private final ResumeService resumeService = ResumeService.INSTANCE;
-    private final ClickService clickService = ClickService.INSTANCE;
-    private final ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
-    private final VacancyService vacancyService = VacancyService.INSTANCE;
+    @Inject private PhotoService photoService;
+    @Inject private ProfFieldService profFieldService;
+    @Inject private CurrencyService currencyService;
+    @Inject private WorkTypeService workTypeService;
+    @Inject private EducationService educationService;
+    @Inject private ResumeService resumeService;
+    @Inject private ClickService clickService ;
+    @Inject private ResumeStateService resumeStateService;
+    @Inject private VacancyService vacancyService;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 

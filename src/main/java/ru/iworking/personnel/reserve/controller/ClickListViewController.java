@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ public class ClickListViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ClickListViewController.class);
 
-    private final ClickService clickService = ClickService.INSTANCE;
+    @Inject private ClickService clickService;
 
     @FXML private Pane parent;
 

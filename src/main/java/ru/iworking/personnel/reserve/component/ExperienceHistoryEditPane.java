@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import ru.iworking.personnel.reserve.config.GuiceConfig;
 import ru.iworking.personnel.reserve.entity.ExperienceHistory;
 import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
@@ -30,6 +31,7 @@ public class ExperienceHistoryEditPane extends VBox {
     private Long experienceHistoryId;
 
     public ExperienceHistoryEditPane() {
+        GuiceConfig.INJECTOR.injectMembers(this);
         FXMLUtil.load("/fxml/ExperienceHistoryEditBlock.fxml", this, this);
         initData();
     }

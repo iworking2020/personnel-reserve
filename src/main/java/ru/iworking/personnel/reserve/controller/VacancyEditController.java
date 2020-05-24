@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,11 +37,11 @@ public class VacancyEditController extends FxmlController {
     @FXML private DatePicker vacancyExpDateStartDatePicker;
     @FXML private DatePicker vacancyExpDateEndDatePicker;
 
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private VacancyService vacancyService = VacancyService.INSTANCE;
+    @Inject private ProfFieldService profFieldService;
+    @Inject private WorkTypeService workTypeService;
+    @Inject private EducationService educationService;
+    @Inject private CurrencyService currencyService;
+    @Inject private VacancyService vacancyService;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -97,7 +98,6 @@ public class VacancyEditController extends FxmlController {
             clear();
             getVacancyListViewPane().actionUpdate(event);
             getVacancyListViewPane().select(vacancy);
-            //getVacanciesTableController().actionUpdate(event);
         } else {
             logger.debug("Fields vacancy edit block is not valid...");
         }
@@ -184,14 +184,6 @@ public class VacancyEditController extends FxmlController {
         vacancyCurrencyComboBox.setValue(null);
         vacancyExpDateStartDatePicker.setValue(null);
         vacancyExpDateEndDatePicker.setValue(null);
-    }
-
-    public void reload(ActionEvent event) {
-        actionCancel(event);
-        vacancyProfFieldComboBox.setItems(FXCollections.observableList(profFieldService.findAll()));
-        vacancyWorkTypeComboBox.setItems(FXCollections.observableList(workTypeService.findAll()));
-        vacancyEducationComboBox.setItems(FXCollections.observableList(educationService.findAll()));
-        vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
     }
 
     public CompanyViewController getCompanyViewController() {

@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve.controller;
 
 import com.google.common.base.Strings;
+import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -40,9 +41,9 @@ public class CompanyViewController extends FxmlController {
     @FXML private Label companyAddressLabel;
     @FXML private ImageView imageView;
 
-    private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
-    private final CompanyService companyService = CompanyService.INSTANCE;
-    private final LogoService logoService = LogoService.INSTANCE;
+    @Inject private CompanyTypeService companyTypeService;
+    @Inject private CompanyService companyService;
+    @Inject private LogoService logoService;
 
     private Company currentCompany = null;
 

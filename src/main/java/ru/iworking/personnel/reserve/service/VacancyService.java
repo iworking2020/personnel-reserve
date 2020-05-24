@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.service;
 
+import ru.iworking.personnel.reserve.annotation.GuiceComponent;
 import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.props.VacancyRequestParam;
@@ -8,11 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@GuiceComponent
 public class VacancyService extends DaoService<Vacancy, Long> {
-
-    public static final VacancyService INSTANCE = new VacancyService();
-
-    private VacancyService() {}
 
     @Override
     public VacancyDao getDao() {

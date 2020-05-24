@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +22,7 @@ public class ResumeListViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeListViewController.class);
 
-    private final ResumeService resumeService = ResumeService.INSTANCE;
+    @Inject private ResumeService resumeService;
 
     @FXML private Pane parent;
 

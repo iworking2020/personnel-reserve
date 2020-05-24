@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.service;
 
+import ru.iworking.personnel.reserve.annotation.GuiceComponent;
 import ru.iworking.personnel.reserve.dao.ClickDao;
 import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.props.ClickRequestParam;
@@ -7,11 +8,8 @@ import ru.iworking.personnel.reserve.props.ClickRequestParam;
 import java.util.HashMap;
 import java.util.Map;
 
+@GuiceComponent
 public class ClickService extends DaoService<Click, Long> {
-
-    public static final ClickService INSTANCE = new ClickService();
-
-    private ClickService() {}
 
     @Override
     public ClickDao getDao() {

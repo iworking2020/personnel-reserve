@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.component;
 
+import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import ru.iworking.personnel.reserve.config.GuiceConfig;
 import ru.iworking.personnel.reserve.entity.Education;
 import ru.iworking.personnel.reserve.entity.LearningHistory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
@@ -22,11 +24,12 @@ public class LearningHistoryEditPane extends VBox {
 
     private Long learningHistoryId;
 
-    private EducationService educationService = EducationService.INSTANCE;
+    @Inject private EducationService educationService;
 
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
 
     public LearningHistoryEditPane() {
+        GuiceConfig.INJECTOR.injectMembers(this);
         FXMLUtil.load("/fxml/LearningHistoryEditBlock.fxml", this, this);
         initData();
     }

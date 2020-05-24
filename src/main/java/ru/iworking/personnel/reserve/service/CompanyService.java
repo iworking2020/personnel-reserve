@@ -1,16 +1,15 @@
 package ru.iworking.personnel.reserve.service;
 
+import com.google.inject.Inject;
+import ru.iworking.personnel.reserve.annotation.GuiceComponent;
 import ru.iworking.personnel.reserve.dao.CompanyDao;
 import ru.iworking.personnel.reserve.dao.Dao;
 import ru.iworking.personnel.reserve.entity.Company;
 
+@GuiceComponent
 public class CompanyService extends DaoService<Company, Long> {
 
-    public static final CompanyService INSTANCE = new CompanyService();
-
-    private final VacancyService vacancyService = VacancyService.INSTANCE;
-
-    private CompanyService() {}
+    @Inject private VacancyService vacancyService;
 
     @Override
     public Dao<Company, Long> getDao() {

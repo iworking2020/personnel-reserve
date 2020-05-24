@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.component;
 
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 import lombok.Setter;
+import ru.iworking.personnel.reserve.config.GuiceConfig;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.PhotoService;
@@ -22,7 +24,7 @@ import java.util.ResourceBundle;
 
 public class ResumePane extends HBox implements Initializable {
 
-    private final PhotoService photoService = PhotoService.INSTANCE;
+    @Inject private PhotoService photoService;
 
     @FXML private Pane parent;
 
@@ -37,6 +39,8 @@ public class ResumePane extends HBox implements Initializable {
     private Resume resume;
 
     public ResumePane() {
+        GuiceConfig.INJECTOR.injectMembers(this);
+
         FXMLUtil.load("/fxml/components/ResumePane.fxml", this, this);
     }
 

@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.component;
 
+import com.google.inject.Inject;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -13,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import ru.iworking.personnel.reserve.config.GuiceConfig;
 import ru.iworking.personnel.reserve.controller.*;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.service.VacancyService;
@@ -27,7 +29,7 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     private final ControllerProvider controllerProvider = ControllerProvider.getInstance();
 
-    private final VacancyService vacancyService = VacancyService.INSTANCE;
+    @Inject private VacancyService vacancyService;
 
     @FXML private Pane parent;
 
@@ -68,6 +70,8 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        GuiceConfig.INJECTOR.injectMembers(this);
+
         vacancyListView.setCellFactory(listView -> {
             VacancyCell cell = new VacancyCell();
             return cell;

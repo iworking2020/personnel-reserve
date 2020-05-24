@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.utils.docs.exel;
 
+import com.google.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -26,10 +27,10 @@ public class ExelResumeListWriter extends ExelWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(ExelResumeListWriter.class);
 
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    @Inject private ProfFieldService profFieldService;
+    @Inject private EducationService educationService;
+    @Inject private CurrencyService currencyService;
+    @Inject private WorkTypeService workTypeService;
 
     public enum props {
         PATH, LIST_RESUME
