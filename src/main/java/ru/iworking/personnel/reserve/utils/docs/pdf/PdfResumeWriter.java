@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.utils.docs.pdf;
 
-import com.google.inject.Inject;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -25,11 +24,11 @@ public class PdfResumeWriter extends PdfWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(PdfResumeWriter.class);
 
-    @Inject private ProfFieldService profFieldService;
-    @Inject private EducationService educationService;
-    @Inject private CurrencyService currencyService;
-    @Inject private WorkTypeService workTypeService;
-    @Inject private PhotoService photoService;
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private PhotoService photoService = PhotoService.INSTANCE;
 
     public enum props {
         PATH, RESUME

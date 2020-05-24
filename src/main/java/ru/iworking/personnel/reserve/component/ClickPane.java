@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.component;
 
-import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,7 +10,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
-import ru.iworking.personnel.reserve.config.GuiceConfig;
 import ru.iworking.personnel.reserve.controller.ClickListViewController;
 import ru.iworking.personnel.reserve.controller.ControllerProvider;
 import ru.iworking.personnel.reserve.entity.Click;
@@ -32,9 +30,9 @@ public class ClickPane extends FlowPane implements Initializable {
 
     private final ControllerProvider controllerProvider = ControllerProvider.getInstance();
 
-    @Inject private PhotoService photoService;
-    @Inject private ResumeStateService resumeStateService;
-    @Inject private ClickService clickService;
+    private final PhotoService photoService = PhotoService.INSTANCE;
+    private final ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
+    private final ClickService clickService = ClickService.INSTANCE;
 
     private final ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
 
@@ -51,8 +49,6 @@ public class ClickPane extends FlowPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        GuiceConfig.INJECTOR.injectMembers(this);
-
         final Circle clip = new Circle(30, 28, 28);
         wrapperImage.setClip(clip);
 

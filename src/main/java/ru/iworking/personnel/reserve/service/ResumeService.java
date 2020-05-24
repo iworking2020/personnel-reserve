@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.service;
 
-import ru.iworking.personnel.reserve.annotation.GuiceComponent;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
@@ -9,8 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@GuiceComponent
 public class ResumeService extends DaoService<Resume, Long> {
+
+    public static final ResumeService INSTANCE = new ResumeService();
+
+    private ResumeService() {}
+
     @Override
     public ResumeDao getDao() {
         return ResumeDao.INSTANCE;

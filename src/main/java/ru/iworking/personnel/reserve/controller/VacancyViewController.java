@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.controller;
 
-import com.google.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -30,10 +29,10 @@ public class VacancyViewController extends FxmlController{
     @FXML private Label educationLabel;
     @FXML private Label wageLabel;
 
-    @Inject private ProfFieldService profFieldService;
-    @Inject private WorkTypeService workTypeService;
-    @Inject private EducationService educationService;
-    @Inject private CurrencyService currencyService;
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private EducationService educationService = EducationService.INSTANCE;
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private Vacancy currentVacancy;
 

@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.component;
 
-import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -11,7 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 import lombok.Setter;
-import ru.iworking.personnel.reserve.config.GuiceConfig;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.entity.Logo;
@@ -36,13 +34,11 @@ public class CompanyPane extends HBox implements Initializable {
     @Getter @Setter
     private Company company;
 
-    @Inject private CompanyTypeService companyTypeService;
-    @Inject private LogoService logoService;
+    private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
+    private final LogoService logoService = LogoService.INSTANCE;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        GuiceConfig.INJECTOR.injectMembers(this);
-
         final Circle clip = new Circle(30, 28, 28);
         companyImageView.setClip(clip);
     }

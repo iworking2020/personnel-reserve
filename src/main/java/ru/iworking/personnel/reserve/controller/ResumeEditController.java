@@ -1,6 +1,5 @@
 package ru.iworking.personnel.reserve.controller;
 
-import com.google.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -68,11 +67,11 @@ public class ResumeEditController extends FxmlController {
 
     private ProfField currentProfField;
 
-    @Inject private PhotoService photoService;
-    @Inject private ProfFieldService profFieldService;
-    @Inject private WorkTypeService workTypeService;
-    @Inject private ResumeService resumeService;
-    @Inject private CurrencyService currencyService;
+    private PhotoService photoService = PhotoService.INSTANCE;
+    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
+    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    private ResumeService resumeService = ResumeService.INSTANCE;
+    private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
