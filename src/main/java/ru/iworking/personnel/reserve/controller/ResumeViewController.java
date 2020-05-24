@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -65,6 +66,8 @@ public class ResumeViewController extends FxmlController {
     @FXML private ScrollPane learningHistoryPane;
     @FXML private ScrollPane experienceHistoryPane;
 
+    @FXML private TabPane resumeViewTabPane;
+
     @FXML private ImageView photoImageView;
 
     @FXML private Button buttonCancel;
@@ -113,6 +116,7 @@ public class ResumeViewController extends FxmlController {
     }
 
     public void setData(Resume resume) {
+        clear();
         if (resume != null) {
             this.currentResume = resume;
             String prefixNumberPhone = "Номер тел.: ";
@@ -160,16 +164,6 @@ public class ResumeViewController extends FxmlController {
             } else {
                 workType.setText(prefixWorkType + "не указан");
             }
-            /*if (resume.getEducationId() != null) {
-                Education education1 = educationService.findById(resume.getEducationId());
-                education.setText(prefixEducation + education1.getNameView().getName());
-            } else {
-                education.setText(prefixEducation + "не указано");
-            }*/
-
-            //Integer age = TimeUtil.calAge(resume.getExperience().getDateStart(), resume.getExperience().getDateEnd());
-
-            //experience.setText(age == null || age <= 0 ? prefixExperience + "без опыта" : prefixExperience + age + " " + TextUtil.nameForNumbers(age));
             address.setText(prefixAddress + resume.getAddress().getHouse());
             if (resume.getPhotoId() != null) {
                 Photo photo = photoService.findById(resume.getPhotoId());
@@ -256,7 +250,7 @@ public class ResumeViewController extends FxmlController {
 
     @FXML
     public void actionDelete(ActionEvent event) {
-        resumeService.delete(currentResume.getId());
+        resumeService.deleteById(currentResume.getId());
         getResumeListViewController().actionUpdate(event);
         if (getVacancyListViewPane() != null) getVacancyListViewPane().actionUpdate(event);
         hide();
@@ -284,7 +278,8 @@ public class ResumeViewController extends FxmlController {
     }
 
     public void clear() {
-        setData(null);
+        this.currentResume = null;
+        resumeViewTabPane.getSelectionModel().select(0);
     }
 
     public ResumeEditController getResumeEditController() {

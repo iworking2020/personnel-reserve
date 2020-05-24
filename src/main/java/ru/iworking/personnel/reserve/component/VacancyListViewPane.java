@@ -19,6 +19,7 @@ import ru.iworking.personnel.reserve.service.VacancyService;
 import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -56,7 +57,8 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     private void initClickData(Vacancy vacancy) {
         getResumeViewController().isDisableClickButton(false);
-        List list = vacancy.getClicks().stream().collect(Collectors.toList());
+        List list = new ArrayList();
+        if (vacancy != null && vacancy.getClicks() != null) list = vacancy.getClicks().stream().collect(Collectors.toList());
         if (list.size() > 0) {
             getClickListViewController().setData(list);
             getClickListViewController().show();

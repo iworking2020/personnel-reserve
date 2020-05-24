@@ -18,8 +18,8 @@ public class CompanyService extends DaoService<Company, Long> {
     }
 
     @Override
-    public void delete(Long aLong) {
-        super.delete(aLong);
+    public void deleteById(Long aLong) {
+        super.deleteById(aLong);
         vacancyService.deleteByCompanyId(aLong);
     }
 

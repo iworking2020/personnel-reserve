@@ -146,7 +146,7 @@ public class CompanyViewController extends FxmlController {
 
     @FXML
     public void actionDelete(ActionEvent event) {
-        companyService.delete(currentCompany.getId());
+        companyService.deleteById(currentCompany.getId());
         getClientListViewController().actionUpdate(event);
         VacancyListViewPane vacancyListViewPane = getClientListViewController().getVacancyListViewPane();
         if (vacancyListViewPane != null) vacancyListViewPane.actionBack(null);

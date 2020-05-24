@@ -28,7 +28,7 @@ public abstract class DaoService<E, ID extends Serializable> {
         return entity;
     }
 
-    public void delete(ID id) {
+    public void deleteById(ID id) {
         getDao().getSessionProvider().openCurrentSessionwithTransaction();
         E entity = getDao().findById(id);
         getDao().delete(entity);

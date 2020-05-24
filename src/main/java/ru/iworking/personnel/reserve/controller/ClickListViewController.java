@@ -72,7 +72,7 @@ public class ClickListViewController extends FxmlController {
 
     public void unfastenItem(Click click) {
         clickListView.getItems().remove(click);
-        clickService.delete(click.getId());
+        clickService.deleteById(click.getId());
         getVacancyListViewPane().actionUpdate(null);
     }
 

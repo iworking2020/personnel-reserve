@@ -6,13 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.entity.Wage;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,6 +31,7 @@ public class VacancyViewController extends FxmlController{
     private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
     private EducationService educationService = EducationService.INSTANCE;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
+    private VacancyService vacancyService = VacancyService.INSTANCE;
 
     private Vacancy currentVacancy;
 
@@ -109,6 +108,14 @@ public class VacancyViewController extends FxmlController{
         getVacancyEditController().show();
     }
 
+    @FXML
+    public void actionDelete(ActionEvent event) {
+        vacancyService.deleteById(currentVacancy.getId());
+        hide();
+        clear();
+        getVacancyListViewPane().actionUpdate(event);
+    }
+
     public Vacancy getCurrentVacancy() {
         return currentVacancy;
     }
@@ -119,4 +126,9 @@ public class VacancyViewController extends FxmlController{
     public VacancyEditController getVacancyEditController() {
         return (VacancyEditController) getControllerProvider().get(VacancyEditController.class.getName());
     }
+
+    public VacancyListViewPane getVacancyListViewPane() {
+        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
+    }
+
 }

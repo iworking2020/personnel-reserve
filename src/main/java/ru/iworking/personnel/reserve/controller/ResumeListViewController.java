@@ -37,7 +37,6 @@ public class ResumeListViewController extends FxmlController {
             return cell;
         });
         resumeListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            //getClickListViewController().selectionItem(newSelection);
             getResumeViewController().setData(newSelection);
             getResumeViewController().show();
             getResumeEditController().hide();
