@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
@@ -99,6 +100,7 @@ public class VacancyEditController extends FxmlController {
             getVacancyListViewPane().select(vacancy);
             //getVacanciesTableController().actionUpdate(event);
         } else {
+            Messager.getInstance().sendMessage("Не введены обязательные поля...");
             logger.debug("Fields vacancy edit block is not valid...");
         }
 

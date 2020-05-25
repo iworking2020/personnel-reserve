@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.ExperienceHistoryEditPane;
 import ru.iworking.personnel.reserve.component.LearningHistoryEditPane;
+import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
@@ -186,6 +187,7 @@ public class ResumeEditController extends FxmlController {
             getResumeListViewController().actionUpdate(event);
             if (getVacancyListViewPane() != null) getVacancyListViewPane().actionUpdate(event);
         } else {
+            Messager.getInstance().sendMessage("Не введены обязательные поля...");
             logger.debug("resume is not valid");
         }
 

@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
@@ -80,8 +81,8 @@ public class CompanyEditController extends FxmlController {
             getCompanyListViewController().actionUpdate(event);
             getCompanyListViewController().selectCompany(company);
             if (companyId == null) getCompanyListViewController().createVacancyListViewPane(company);
-            //getCompaniesTableController().actionUpdate(event);
         } else {
+            Messager.getInstance().sendMessage("Не введены обязательные поля...");
             logger.debug("Fields company edit block is not valid...");
         }
     }
