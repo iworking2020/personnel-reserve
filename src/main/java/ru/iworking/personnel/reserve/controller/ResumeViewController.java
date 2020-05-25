@@ -15,6 +15,7 @@ import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.*;
@@ -274,6 +275,8 @@ public class ResumeViewController extends FxmlController {
                     .build();
             clickService.persist(click);
             getVacancyListViewPane().actionUpdate(event);
+        } else {
+            Messager.getInstance().sendMessage("Резюме уже прикреплено к данной вакансии...");
         }
     }
 

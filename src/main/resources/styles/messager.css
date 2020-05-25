@@ -1,0 +1,26 @@
+.message-pane {
+    -fx-background-color: rgba(0,0,0,0.30);
+    -fx-padding: 5.0;
+}
+
+.message-pane .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.message-pane .button {
+    -fx-font-weight: bold;
+    -fx-border-radius: 0px;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(0, 0, 0, 0.25);
+    -fx-background-color: rgba(0, 0, 0, 0.13);
+    -fx-text-fill: white;
+}
+
+.message-pane .button:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.17);
+}
+
+.message-pane .button:pressed {
+    -fx-background-color: rgba(0, 0, 0, 0.15);
+}

@@ -3,12 +3,14 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.iworking.personnel.reserve.MainApp;
+import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.io.File;
@@ -21,6 +23,8 @@ public class MainMenuController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(MainMenuController.class);
 
+    @FXML private Pane parent;
+
     @FXML private VacancyTabContentController vacancyTabContentController;
 
     @FXML private CheckMenuItem winSearchCheckItem;
@@ -30,6 +34,7 @@ public class MainMenuController extends FxmlController {
     public void initialize(URL url, ResourceBundle rb) {
         isResizable(false);
         winResizable.setOnAction(event -> isResizable(winResizable.isSelected()));
+        parent.getChildren().add(Messager.getInstance());
     }
 
     public void isResizable(boolean isResizable) {

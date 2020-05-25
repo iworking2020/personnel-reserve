@@ -67,6 +67,7 @@ public class MainApp extends Application {
         scene.getStylesheets().add("/styles/split-pane.css");
         scene.getStylesheets().add("/styles/accordion.css");
         scene.getStylesheets().add("/styles/list-view.css");
+        scene.getStylesheets().add("/styles/messager.css");
     }
 
     /**

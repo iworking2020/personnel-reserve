@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<StackPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.MainMenuController">
+<StackPane fx:id="parent" prefHeight="800.0" prefWidth="1000.0" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.MainMenuController">
     <children>
-      <VBox maxHeight="1.7976931348623157E308">
+        <VBox maxHeight="1.7976931348623157E308">
          <children>
             <MenuBar>
               <menus>
