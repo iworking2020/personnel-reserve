@@ -10,6 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.ApplicationContext;
+import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.PhotoService;
@@ -36,8 +38,9 @@ public class ResumePane extends HBox implements Initializable {
     @Setter
     private Resume resume;
 
-    public ResumePane(PhotoService photoService) {
-        this.photoService = photoService;
+    public ResumePane() {
+        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
+        this.photoService = context.getBean(PhotoService.class);
         FXMLUtil.load("/fxml/components/ResumePane.fxml", this, this);
     }
 

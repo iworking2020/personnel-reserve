@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import org.springframework.context.ApplicationContext;
+import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.controller.ClickListViewController;
 import ru.iworking.personnel.reserve.controller.ControllerProvider;
 import ru.iworking.personnel.reserve.entity.Click;
@@ -61,10 +63,11 @@ public class ClickPane extends FlowPane implements Initializable {
         });
     }
 
-    public ClickPane(PhotoService photoService, ResumeStateService resumeStateService, ClickService clickService) {
-        this.photoService = photoService;
-        this.resumeStateService = resumeStateService;
-        this.clickService = clickService;
+    public ClickPane() {
+        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
+        this.photoService = context.getBean(PhotoService.class);
+        this.resumeStateService = context.getBean(ResumeStateService.class);
+        this.clickService = context.getBean(ClickService.class);
         FXMLUtil.load("/fxml/components/ClickPane.fxml", this, this);
     }
 

@@ -74,7 +74,6 @@ public class ResumeEditController extends FxmlController {
     @Autowired private WorkTypeService workTypeService;
     @Autowired private ResumeService resumeService;
     @Autowired private CurrencyService currencyService;
-    @Autowired private EducationService educationService;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -130,7 +129,7 @@ public class ResumeEditController extends FxmlController {
         }
 
         resume.getLearningHistoryList().forEach( learningHistory -> {
-            LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane(educationService);
+            LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
             learningHistoryEditPane.setLearningHistory(learningHistory);
             educationEditList.getChildren().add(learningHistoryEditPane);
         });
@@ -144,7 +143,7 @@ public class ResumeEditController extends FxmlController {
 
     @FXML
     public void actionAddEducation(ActionEvent event) {
-        LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane(educationService);
+        LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
         educationEditList.getChildren().add(learningHistoryEditPane);
     }
 

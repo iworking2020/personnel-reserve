@@ -7,6 +7,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.springframework.context.ApplicationContext;
+import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.entity.Education;
 import ru.iworking.personnel.reserve.entity.LearningHistory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
@@ -26,8 +28,9 @@ public class LearningHistoryEditPane extends VBox {
 
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
 
-    public LearningHistoryEditPane(EducationService educationService) {
-        this.educationService = educationService;
+    public LearningHistoryEditPane() {
+        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
+        this.educationService = context.getBean(EducationService.class);
         FXMLUtil.load("/fxml/LearningHistoryEditBlock.fxml", this, this);
         initData();
     }

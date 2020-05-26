@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.component.ResumeCell;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.service.PhotoService;
 import ru.iworking.personnel.reserve.service.ResumeService;
 
 import java.net.URL;
@@ -24,7 +23,6 @@ public class ResumeListViewController extends FxmlController {
     private static final Logger logger = LogManager.getLogger(ResumeListViewController.class);
 
     @Autowired private ResumeService resumeService;
-    @Autowired private PhotoService photoService;
 
     @FXML private Pane parent;
 
@@ -36,7 +34,7 @@ public class ResumeListViewController extends FxmlController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         resumeListView.setCellFactory(listView -> {
-            ResumeCell cell = new ResumeCell(photoService);
+            ResumeCell cell = new ResumeCell();
             return cell;
         });
         resumeListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

@@ -4,18 +4,11 @@ import javafx.scene.control.ListCell;
 import lombok.Getter;
 import lombok.Setter;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.service.PhotoService;
 
 public class ResumeCell extends ListCell<Resume> {
 
-    private final PhotoService photoService;
-
     @Getter @Setter
     private Resume resume;
-
-    public ResumeCell(PhotoService photoService) {
-        this.photoService = photoService;
-    }
 
     @Override
     protected void updateItem(Resume resume, boolean empty) {
@@ -25,7 +18,7 @@ public class ResumeCell extends ListCell<Resume> {
             setText(null);
             setGraphic(null);
         } else {
-            ResumePane resumePane = new ResumePane(photoService);
+            ResumePane resumePane = new ResumePane();
             resumePane.setData(resume);
             setText(null);
             setGraphic(resumePane);

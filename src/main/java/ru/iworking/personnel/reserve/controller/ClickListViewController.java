@@ -13,8 +13,6 @@ import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.ClickService;
-import ru.iworking.personnel.reserve.service.PhotoService;
-import ru.iworking.personnel.reserve.service.ResumeStateService;
 
 import java.net.URL;
 import java.util.List;
@@ -26,8 +24,6 @@ public class ClickListViewController extends FxmlController {
     private static final Logger logger = LogManager.getLogger(ClickListViewController.class);
 
     @Autowired private ClickService clickService;
-    @Autowired private PhotoService photoService;
-    @Autowired private ResumeStateService resumeStateService;
 
     @FXML private Pane parent;
 
@@ -37,7 +33,7 @@ public class ClickListViewController extends FxmlController {
     public void initialize(URL location, ResourceBundle resources) {
         hide();
         clickListView.setCellFactory(listView -> {
-            ClickCell cell = new ClickCell(photoService, resumeStateService, clickService);
+            ClickCell cell = new ClickCell();
             return cell;
         });
         clickListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

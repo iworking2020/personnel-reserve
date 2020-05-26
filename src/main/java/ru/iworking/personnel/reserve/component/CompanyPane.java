@@ -10,6 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.ApplicationContext;
+import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.CompanyType;
 import ru.iworking.personnel.reserve.entity.Logo;
@@ -37,9 +39,10 @@ public class CompanyPane extends HBox implements Initializable {
     private final CompanyTypeService companyTypeService;
     private final LogoService logoService;
 
-    public CompanyPane(CompanyTypeService companyTypeService, LogoService logoService) {
-        this.companyTypeService = companyTypeService;
-        this.logoService = logoService;
+    public CompanyPane() {
+        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
+        this.companyTypeService = context.getBean(CompanyTypeService.class);
+        this.logoService = context.getBean(LogoService.class);
         FXMLUtil.load("/fxml/components/CompanyPane.fxml", this, this);
     }
 

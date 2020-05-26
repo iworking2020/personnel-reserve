@@ -13,6 +13,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import org.springframework.context.ApplicationContext;
+import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.controller.*;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.service.VacancyService;
@@ -40,8 +42,9 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     private double x = 0.00;
 
-    public VacancyListViewPane(VacancyService vacancyService) {
-        this.vacancyService = vacancyService;
+    public VacancyListViewPane() {
+        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
+        this.vacancyService = context.getBean(VacancyService.class);
         FXMLUtil.load("/fxml/components/VacancyListViewPane.fxml", this, this);
         controllerProvider.put(this.getClass().getName(), this);
     }
