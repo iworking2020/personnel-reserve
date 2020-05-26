@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.entity.Logo;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.service.LogoService;
@@ -32,8 +33,8 @@ public class VacancyPane extends HBox implements Initializable {
     @Getter @Setter
     private Vacancy vacancy;
 
-    private final VacancyService vacancyService = VacancyService.INSTANCE;
-    private final LogoService logoService = LogoService.INSTANCE;
+    @Autowired private VacancyService vacancyService;
+    @Autowired private LogoService logoService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

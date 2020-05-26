@@ -22,11 +22,12 @@ public class LearningHistoryEditPane extends VBox {
 
     private Long learningHistoryId;
 
-    private EducationService educationService = EducationService.INSTANCE;
+    private  final EducationService educationService;
 
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
 
-    public LearningHistoryEditPane() {
+    public LearningHistoryEditPane(EducationService educationService) {
+        this.educationService = educationService;
         FXMLUtil.load("/fxml/LearningHistoryEditBlock.fxml", this, this);
         initData();
     }

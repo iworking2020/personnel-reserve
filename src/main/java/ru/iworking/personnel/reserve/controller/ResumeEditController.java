@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.ExperienceHistoryEditPane;
 import ru.iworking.personnel.reserve.component.LearningHistoryEditPane;
@@ -68,11 +69,12 @@ public class ResumeEditController extends FxmlController {
 
     private ProfField currentProfField;
 
-    private PhotoService photoService = PhotoService.INSTANCE;
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private ResumeService resumeService = ResumeService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
+    @Autowired private PhotoService photoService;
+    @Autowired private ProfFieldService profFieldService;
+    @Autowired private WorkTypeService workTypeService;
+    @Autowired private ResumeService resumeService;
+    @Autowired private CurrencyService currencyService;
+    @Autowired private EducationService educationService;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -128,7 +130,7 @@ public class ResumeEditController extends FxmlController {
         }
 
         resume.getLearningHistoryList().forEach( learningHistory -> {
-            LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
+            LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane(educationService);
             learningHistoryEditPane.setLearningHistory(learningHistory);
             educationEditList.getChildren().add(learningHistoryEditPane);
         });
@@ -142,7 +144,7 @@ public class ResumeEditController extends FxmlController {
 
     @FXML
     public void actionAddEducation(ActionEvent event) {
-        LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
+        LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane(educationService);
         educationEditList.getChildren().add(learningHistoryEditPane);
     }
 

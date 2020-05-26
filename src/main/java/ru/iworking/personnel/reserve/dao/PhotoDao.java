@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Photo;
 
 import java.util.List;
@@ -18,11 +19,8 @@ import java.util.List;
  *                 });
  *     }
  */
+@Component
 public class PhotoDao extends Dao<Photo, Long> {
-
-    public static final PhotoDao INSTANCE = new PhotoDao();
-
-    private PhotoDao() {}
 
     @Override
     public Photo findById(Long id) {

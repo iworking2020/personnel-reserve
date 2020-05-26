@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.Vacancy;
@@ -27,11 +28,11 @@ public class VacancyViewController extends FxmlController{
     @FXML private Label educationLabel;
     @FXML private Label wageLabel;
 
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private VacancyService vacancyService = VacancyService.INSTANCE;
+    @Autowired private ProfFieldService profFieldService;
+    @Autowired private WorkTypeService workTypeService;
+    @Autowired private EducationService educationService;
+    @Autowired private CurrencyService currencyService;
+    @Autowired private VacancyService vacancyService;
 
     private Vacancy currentVacancy;
 

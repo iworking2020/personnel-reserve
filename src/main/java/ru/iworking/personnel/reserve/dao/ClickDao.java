@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve.dao;
 
 import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.props.ClickRequestParam;
 
@@ -8,11 +9,8 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class ClickDao extends Dao<Click, Long> {
-
-    public static final ClickDao INSTANCE = new ClickDao();
-
-    private ClickDao() {}
 
     @Override
     public Click findById(Long id) {

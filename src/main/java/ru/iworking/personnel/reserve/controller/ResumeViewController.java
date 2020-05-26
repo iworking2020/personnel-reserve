@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
@@ -37,15 +38,15 @@ public class ResumeViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeViewController.class);
 
-    private final PhotoService photoService = PhotoService.INSTANCE;
-    private final ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private final CurrencyService currencyService = CurrencyService.INSTANCE;
-    private final WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private final EducationService educationService = EducationService.INSTANCE;
-    private final ResumeService resumeService = ResumeService.INSTANCE;
-    private final ClickService clickService = ClickService.INSTANCE;
-    private final ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
-    private final VacancyService vacancyService = VacancyService.INSTANCE;
+    @Autowired private PhotoService photoService;
+    @Autowired private ProfFieldService profFieldService;
+    @Autowired private CurrencyService currencyService;
+    @Autowired private WorkTypeService workTypeService;
+    @Autowired private EducationService educationService;
+    @Autowired private ResumeService resumeService;
+    @Autowired private ClickService clickService;
+    @Autowired private ResumeStateService resumeStateService;
+    @Autowired private VacancyService vacancyService;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 

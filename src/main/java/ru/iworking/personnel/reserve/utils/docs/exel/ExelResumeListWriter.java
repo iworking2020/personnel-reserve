@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.ProfField;
 import ru.iworking.personnel.reserve.entity.Resume;
@@ -26,10 +27,10 @@ public class ExelResumeListWriter extends ExelWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(ExelResumeListWriter.class);
 
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
+    @Autowired private ProfFieldService profFieldService;
+    @Autowired private EducationService educationService;
+    @Autowired private CurrencyService currencyService;
+    @Autowired private WorkTypeService workTypeService;
 
     public enum props {
         PATH, LIST_RESUME

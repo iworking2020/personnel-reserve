@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Logo;
 
 import java.util.List;
@@ -18,11 +19,8 @@ import java.util.List;
  *                 });
  *     }
  */
+@Component
 public class LogoDao extends Dao<Logo, Long> {
-
-    public static final LogoDao INSTANCE = new LogoDao();
-
-    private LogoDao() {}
 
     @Override
     public Logo findById(Long id) {

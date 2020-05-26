@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve.dao;
 
 import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.props.VacancyRequestParam;
 
@@ -8,11 +9,8 @@ import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class VacancyDao extends Dao<Vacancy, Long> {
-
-    public static final VacancyDao INSTANCE = new VacancyDao();
-
-    private VacancyDao() {}
 
     @Override
     public Vacancy findById(Long id) {

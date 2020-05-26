@@ -1,17 +1,23 @@
 package ru.iworking.personnel.reserve.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.iworking.personnel.reserve.dao.Dao;
 import ru.iworking.personnel.reserve.dao.ProfFieldDao;
 import ru.iworking.personnel.reserve.entity.ProfField;
 
+@Service
 public class ProfFieldService extends DaoService<ProfField, Long> {
 
-    public static final ProfFieldService INSTANCE = new ProfFieldService();
+    private final ProfFieldDao profFieldDao;
 
-    private ProfFieldService() {}
+    @Autowired
+    public ProfFieldService(ProfFieldDao profFieldDao) {
+        this.profFieldDao = profFieldDao;
+    }
 
     @Override
     public Dao<ProfField, Long> getDao() {
-        return ProfFieldDao.INSTANCE;
+        return profFieldDao;
     }
 }

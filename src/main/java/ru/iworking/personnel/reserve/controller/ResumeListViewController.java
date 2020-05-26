@@ -8,8 +8,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.component.ResumeCell;
 import ru.iworking.personnel.reserve.entity.Resume;
+import ru.iworking.personnel.reserve.service.PhotoService;
 import ru.iworking.personnel.reserve.service.ResumeService;
 
 import java.net.URL;
@@ -21,7 +23,8 @@ public class ResumeListViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeListViewController.class);
 
-    private final ResumeService resumeService = ResumeService.INSTANCE;
+    @Autowired private ResumeService resumeService;
+    @Autowired private PhotoService photoService;
 
     @FXML private Pane parent;
 
@@ -33,7 +36,7 @@ public class ResumeListViewController extends FxmlController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         resumeListView.setCellFactory(listView -> {
-            ResumeCell cell = new ResumeCell();
+            ResumeCell cell = new ResumeCell(photoService);
             return cell;
         });
         resumeListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

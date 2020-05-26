@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
@@ -8,15 +10,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class ResumeService extends DaoService<Resume, Long> {
 
-    public static final ResumeService INSTANCE = new ResumeService();
+    private final ResumeDao resumeDao;
 
-    private ResumeService() {}
+    @Autowired
+    public ResumeService(ResumeDao resumeDao) {
+        this.resumeDao = resumeDao;
+    }
 
     @Override
     public ResumeDao getDao() {
-        return ResumeDao.INSTANCE;
+        return resumeDao;
     }
 
     public List<Resume> findAll(Map<String, Object> params) {

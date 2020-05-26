@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.CompanyType;
 
 import java.util.List;
 
+@Component
 public class CompanyTypeDao extends Dao<CompanyType, Long> {
-
-    public static final CompanyTypeDao INSTANCE = new CompanyTypeDao();
-
-    private CompanyTypeDao() {}
 
     @Override
     public CompanyType findById(Long id) {

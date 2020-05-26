@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve.component;
 
 import javafx.scene.control.TitledPane;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.entity.ResumeState;
 import ru.iworking.personnel.reserve.service.ResumeService;
 
@@ -8,7 +9,7 @@ public class ResumeStateTitledPane extends TitledPane {
 
     private ResumeState resumeState;
 
-    private final ResumeService resumeService = ResumeService.INSTANCE;
+    @Autowired private ResumeService resumeService;
 
     public ResumeStateTitledPane(ResumeState resumeState) {
         super();

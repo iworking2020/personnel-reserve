@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
@@ -37,11 +38,11 @@ public class VacancyEditController extends FxmlController {
     @FXML private DatePicker vacancyExpDateStartDatePicker;
     @FXML private DatePicker vacancyExpDateEndDatePicker;
 
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private VacancyService vacancyService = VacancyService.INSTANCE;
+    @Autowired private ProfFieldService profFieldService;
+    @Autowired private WorkTypeService workTypeService;
+    @Autowired private EducationService educationService;
+    @Autowired private CurrencyService currencyService;
+    @Autowired private VacancyService vacancyService;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();

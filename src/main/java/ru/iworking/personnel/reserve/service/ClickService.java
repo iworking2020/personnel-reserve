@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.iworking.personnel.reserve.dao.ClickDao;
 import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.props.ClickRequestParam;
@@ -7,15 +9,19 @@ import ru.iworking.personnel.reserve.props.ClickRequestParam;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class ClickService extends DaoService<Click, Long> {
 
-    public static final ClickService INSTANCE = new ClickService();
+    private final ClickDao clickDao;
 
-    private ClickService() {}
+    @Autowired
+    public ClickService(ClickDao clickDao) {
+        this.clickDao = clickDao;
+    }
 
     @Override
     public ClickDao getDao() {
-        return ClickDao.INSTANCE;
+        return clickDao;
     }
 
     public Long countByVacancyIdAndResumeId(Long vacancyId, Long resumeId) {

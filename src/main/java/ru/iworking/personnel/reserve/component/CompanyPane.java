@@ -34,8 +34,14 @@ public class CompanyPane extends HBox implements Initializable {
     @Getter @Setter
     private Company company;
 
-    private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
-    private final LogoService logoService = LogoService.INSTANCE;
+    private final CompanyTypeService companyTypeService;
+    private final LogoService logoService;
+
+    public CompanyPane(CompanyTypeService companyTypeService, LogoService logoService) {
+        this.companyTypeService = companyTypeService;
+        this.logoService = logoService;
+        FXMLUtil.load("/fxml/components/CompanyPane.fxml", this, this);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -43,9 +49,7 @@ public class CompanyPane extends HBox implements Initializable {
         companyImageView.setClip(clip);
     }
 
-    public CompanyPane() {
-        FXMLUtil.load("/fxml/components/CompanyPane.fxml", this, this);
-    }
+
 
     public void setData(Company company) {
         this.company = company;

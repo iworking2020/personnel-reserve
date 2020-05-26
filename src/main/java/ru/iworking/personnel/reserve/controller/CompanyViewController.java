@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
@@ -40,9 +41,9 @@ public class CompanyViewController extends FxmlController {
     @FXML private Label companyAddressLabel;
     @FXML private ImageView imageView;
 
-    private final CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
-    private final CompanyService companyService = CompanyService.INSTANCE;
-    private final LogoService logoService = LogoService.INSTANCE;
+    @Autowired private CompanyTypeService companyTypeService;
+    @Autowired private CompanyService companyService;
+    @Autowired private LogoService logoService;
 
     private Company currentCompany = null;
 

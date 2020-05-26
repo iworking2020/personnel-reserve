@@ -1,17 +1,23 @@
 package ru.iworking.personnel.reserve.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.iworking.personnel.reserve.dao.Dao;
 import ru.iworking.personnel.reserve.dao.LearningHistoryDao;
 import ru.iworking.personnel.reserve.entity.LearningHistory;
 
+@Service
 public class LearningHistoryService extends DaoService<LearningHistory, Long> {
 
-    public static final LearningHistoryService INSTANCE = new LearningHistoryService();
+    public final LearningHistoryDao learningHistoryDao;
 
-    private LearningHistoryService() {}
+    @Autowired
+    public LearningHistoryService(LearningHistoryDao learningHistoryDao) {
+        this.learningHistoryDao = learningHistoryDao;
+    }
 
     @Override
     public Dao<LearningHistory, Long> getDao() {
-        return LearningHistoryDao.INSTANCE;
+        return learningHistoryDao;
     }
 }

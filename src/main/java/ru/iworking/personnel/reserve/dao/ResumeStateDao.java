@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.ResumeState;
 
 import java.util.List;
 
+@Component
 public class ResumeStateDao extends Dao<ResumeState, Long> {
-
-    public static final ResumeStateDao INSTANCE = new ResumeStateDao();
-
-    private ResumeStateDao() {}
 
     @Override
     public ResumeState findById(Long id) {

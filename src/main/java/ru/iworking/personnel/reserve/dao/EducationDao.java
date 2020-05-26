@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Education;
 
 import java.util.List;
 
+@Component
 public class EducationDao extends Dao<Education, Long> {
-
-    public static final EducationDao INSTANCE = new EducationDao();
-
-    private EducationDao() {}
 
     @Override
     public Education findById(Long id) {

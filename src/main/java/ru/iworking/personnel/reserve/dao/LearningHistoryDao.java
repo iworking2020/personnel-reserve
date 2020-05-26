@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.LearningHistory;
 
 import java.util.List;
 
+@Component
 public class LearningHistoryDao extends Dao<LearningHistory, Long> {
-
-    public static final LearningHistoryDao INSTANCE = new LearningHistoryDao();
-
-    private LearningHistoryDao() {}
 
     @Override
     public LearningHistory findById(Long id) {

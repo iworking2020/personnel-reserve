@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.ProfField;
 
 import java.util.List;
 
+@Component
 public class ProfFieldDao extends Dao<ProfField, Long> {
-
-    public static final ProfFieldDao INSTANCE = new ProfFieldDao();
-
-    private ProfFieldDao() {}
 
     @Override
     public ProfField findById(Long id) {

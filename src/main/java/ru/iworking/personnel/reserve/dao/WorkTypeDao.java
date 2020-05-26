@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.WorkType;
 
 import java.util.List;
 
+@Component
 public class WorkTypeDao extends Dao<WorkType, Long> {
-
-    public static final WorkTypeDao INSTANCE = new WorkTypeDao();
-
-    private WorkTypeDao() {}
 
     @Override
     public WorkType findById(Long id) {

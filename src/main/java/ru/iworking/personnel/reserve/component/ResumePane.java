@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class ResumePane extends HBox implements Initializable {
 
-    private final PhotoService photoService = PhotoService.INSTANCE;
+    private final PhotoService photoService;
 
     @FXML private Pane parent;
 
@@ -36,7 +36,8 @@ public class ResumePane extends HBox implements Initializable {
     @Setter
     private Resume resume;
 
-    public ResumePane() {
+    public ResumePane(PhotoService photoService) {
+        this.photoService = photoService;
         FXMLUtil.load("/fxml/components/ResumePane.fxml", this, this);
     }
 

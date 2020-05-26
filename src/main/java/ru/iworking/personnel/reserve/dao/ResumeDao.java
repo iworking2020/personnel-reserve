@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve.dao;
 
 import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 
@@ -34,11 +35,8 @@ import java.util.Map;
  *                 .collect(Collectors.toList());
  *     }
  */
+@Component
 public class ResumeDao extends Dao<Resume, Long> {
-
-    public static final ResumeDao INSTANCE = new ResumeDao();
-
-    private ResumeDao() {}
 
     @Override
     public Resume findById(Long id) {

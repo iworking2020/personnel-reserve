@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode

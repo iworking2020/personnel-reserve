@@ -12,6 +12,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.entity.Photo;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.*;
@@ -24,11 +25,11 @@ public class PdfResumeWriter extends PdfWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(PdfResumeWriter.class);
 
-    private ProfFieldService profFieldService = ProfFieldService.INSTANCE;
-    private EducationService educationService = EducationService.INSTANCE;
-    private CurrencyService currencyService = CurrencyService.INSTANCE;
-    private WorkTypeService workTypeService = WorkTypeService.INSTANCE;
-    private PhotoService photoService = PhotoService.INSTANCE;
+    @Autowired private ProfFieldService profFieldService;
+    @Autowired private EducationService educationService;
+    @Autowired private CurrencyService currencyService;
+    @Autowired private WorkTypeService workTypeService;
+    @Autowired private PhotoService photoService;
 
     public enum props {
         PATH, RESUME

@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.MainApp;
 import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.entity.*;
@@ -52,9 +53,9 @@ public class CompanyEditController extends FxmlController {
 
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
 
-    private CompanyTypeService companyTypeService = CompanyTypeService.INSTANCE;
-    private CompanyService companyService = CompanyService.INSTANCE;
-    private LogoService logoService = LogoService.INSTANCE;
+    @Autowired private CompanyTypeService companyTypeService;
+    @Autowired private CompanyService companyService;
+    @Autowired private LogoService logoService;
 
     private Company currentCompany = null;
 

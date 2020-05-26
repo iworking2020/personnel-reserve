@@ -28,7 +28,7 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     private final ControllerProvider controllerProvider = ControllerProvider.getInstance();
 
-    private final VacancyService vacancyService = VacancyService.INSTANCE;
+    private final VacancyService vacancyService;
 
     @FXML private Pane parent;
 
@@ -40,7 +40,8 @@ public class VacancyListViewPane extends BorderPane implements Initializable {
 
     private double x = 0.00;
 
-    public VacancyListViewPane() {
+    public VacancyListViewPane(VacancyService vacancyService) {
+        this.vacancyService = vacancyService;
         FXMLUtil.load("/fxml/components/VacancyListViewPane.fxml", this, this);
         controllerProvider.put(this.getClass().getName(), this);
     }

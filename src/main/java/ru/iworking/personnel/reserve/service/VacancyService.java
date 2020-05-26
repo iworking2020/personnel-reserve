@@ -1,5 +1,7 @@
 package ru.iworking.personnel.reserve.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.props.VacancyRequestParam;
@@ -8,15 +10,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class VacancyService extends DaoService<Vacancy, Long> {
 
-    public static final VacancyService INSTANCE = new VacancyService();
+    private final VacancyDao vacancyDao;
 
-    private VacancyService() {}
+    @Autowired
+    public VacancyService(VacancyDao vacancyDao) {
+        this.vacancyDao = vacancyDao;
+    }
 
     @Override
     public VacancyDao getDao() {
-        return VacancyDao.INSTANCE;
+        return vacancyDao;
     }
 
     public List<Vacancy> findAllByCompanyId(Long companyId) {

@@ -30,9 +30,9 @@ public class ClickPane extends FlowPane implements Initializable {
 
     private final ControllerProvider controllerProvider = ControllerProvider.getInstance();
 
-    private final PhotoService photoService = PhotoService.INSTANCE;
-    private final ResumeStateService resumeStateService = ResumeStateService.INSTANCE;
-    private final ClickService clickService = ClickService.INSTANCE;
+    private final PhotoService photoService;
+    private final ResumeStateService resumeStateService;
+    private final ClickService clickService;
 
     private final ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
 
@@ -61,7 +61,10 @@ public class ClickPane extends FlowPane implements Initializable {
         });
     }
 
-    public ClickPane() {
+    public ClickPane(PhotoService photoService, ResumeStateService resumeStateService, ClickService clickService) {
+        this.photoService = photoService;
+        this.resumeStateService = resumeStateService;
+        this.clickService = clickService;
         FXMLUtil.load("/fxml/components/ClickPane.fxml", this, this);
     }
 

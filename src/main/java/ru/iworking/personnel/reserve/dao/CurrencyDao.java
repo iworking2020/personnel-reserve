@@ -1,14 +1,12 @@
 package ru.iworking.personnel.reserve.dao;
 
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Currency;
 
 import java.util.List;
 
+@Component
 public class CurrencyDao extends Dao<Currency, Long> {
-
-    public static final CurrencyDao INSTANCE = new CurrencyDao();
-
-    private CurrencyDao() {}
 
     @Override
     public Currency findById(Long id) {
