@@ -13,17 +13,22 @@ import com.itextpdf.layout.property.UnitValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.iworking.personnel.reserve.entity.Photo;
-import ru.iworking.personnel.reserve.entity.Resume;
+import org.springframework.stereotype.Service;
+import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.service.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+@Service
 public class PdfResumeWriter extends PdfWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(PdfResumeWriter.class);
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
 
     @Autowired private ProfFieldService profFieldService;
     @Autowired private EducationService educationService;
@@ -34,23 +39,6 @@ public class PdfResumeWriter extends PdfWriterFactory {
     public enum props {
         PATH, RESUME
     }
-
-    private static volatile PdfResumeWriter instance;
-
-    public static PdfResumeWriter getInstance() {
-        PdfResumeWriter localInstance = instance;
-        if (localInstance == null) {
-            synchronized (PdfResumeWriter.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new PdfResumeWriter();
-                }
-            }
-        }
-        return localInstance;
-    }
-
-    private PdfResumeWriter() { }
 
     @Override
     public void write(Map<String, Object> props) {
@@ -86,10 +74,18 @@ public class PdfResumeWriter extends PdfWriterFactory {
         String number = "тел.: " + resume.getNumberPhone().getNumber();
         String email = "емайл: " + resume.getEmail();
         String profession = "профессия: "+resume.getProfession();
-        String wage = resume.getWage() != null ?
-                "зарплата: "+resume.getWage().getCountBigDecimal().toString() + " " +
-                        currencyService.findById(resume.getWage().getCurrencyId()).getNameView().getName() :
-                "зарплата: не указана";
+        String wage = "зарплата: %s %s";
+        if (resume.getWage() != null) {
+            BigDecimal wageCount = resume.getWage().getCountBigDecimal();
+            if (resume.getWage().getCurrencyId() != null) {
+                Currency currency = currencyService.findById(resume.getWage().getCurrencyId());
+                wage = String.format(wage, wageCount.toString(), currency.getNameView().getName());
+            } else {
+                wage = String.format(wage, wageCount.toString(), "");
+            }
+        } else {
+            wage = String.format(wage, "не указана", "");
+        }
         String profField = resume.getProfFieldId() != null ?
                 "профобласть: "+
                         profFieldService.findById(resume.getProfFieldId()).getNameView().getName() :
@@ -104,6 +100,11 @@ public class PdfResumeWriter extends PdfWriterFactory {
                         educationService.findById(resume.getEducationId()).getNameView().getName() :
                 "образование: не указано";*/
 
+        Table headerTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
+
+        Photo photo = photoService.findById(resume.getPhotoId());
+        headerTable.addCell(createImgCell(photo.getImage()));
+
         Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));
         rightBlockTable.setBorder(Border.NO_BORDER);
         rightBlockTable.setMargins(0, 15, 0, 15);
@@ -116,13 +117,47 @@ public class PdfResumeWriter extends PdfWriterFactory {
         //rightBlockTable.addCell(createTextCell(education));
         rightBlockTable.addCell(createTextCell(number));
         rightBlockTable.addCell(createTextCell(email));
+        headerTable.addCell(createTableCell(rightBlockTable));
 
-        Table parentTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
-        Photo photo = photoService.findById(resume.getPhotoId());
-        parentTable.addCell(createImgCell(photo.getImage()));
-        parentTable.addCell(createTableCell(rightBlockTable));
+        document.add(headerTable);
 
-        document.add(parentTable);
+        if (resume.getLearningHistoryList() != null || !resume.getLearningHistoryList().isEmpty()) {
+            Table learningHistoryListTable = new Table(UnitValue.createPercentArray(new float[]{100}));
+            learningHistoryListTable.setBorder(Border.NO_BORDER);
+            learningHistoryListTable.setMargins(10, 0, 10, 0);
+            for (LearningHistory learningHistory : resume.getLearningHistoryList()) {
+                Table learningHistoryTable = new Table(UnitValue.createPercentArray(new float[]{100}));
+                learningHistoryTable.setBorder(Border.NO_BORDER);
+                learningHistoryTable.setMargins(5, 0, 5, 0);
+                String strEducation = "Образование: %s";
+                String value = learningHistory.getEducation() != null ?
+                        learningHistory.getEducation().getNameView().getName():
+                        "не указано";
+                learningHistoryTable.addCell(createTextCell(String.format(strEducation, value)));
+                learningHistoryTable.addCell(createTextCell(learningHistory.getDescription()));
+                learningHistoryListTable.addCell(createTableCell(learningHistoryTable));
+            }
+            document.add(learningHistoryListTable);
+        }
+
+        if (resume.getExperienceHistoryList() != null && !resume.getExperienceHistoryList().isEmpty()) {
+            Table experienceHistoryListTable = new Table(UnitValue.createPercentArray(new float[]{100}));
+            experienceHistoryListTable.setBorder(Border.NO_BORDER);
+            experienceHistoryListTable.setMargins(10, 0, 10, 0);
+            for (ExperienceHistory experienceHistory : resume.getExperienceHistoryList()) {
+                Table experienceHistoryTable = new Table(UnitValue.createPercentArray(new float[]{100}));
+                experienceHistoryTable.setBorder(Border.NO_BORDER);
+                experienceHistoryTable.setMargins(5, 0, 5, 0);
+                String strExp = "Опыт работы: %s - %s";
+                String start = formatter.format(experienceHistory.getDateStart());
+                String end = formatter.format(experienceHistory.getDateEnd());
+                String value = String.format(strExp, start, end);
+                experienceHistoryTable.addCell(createTextCell(value));
+                experienceHistoryTable.addCell(createTextCell(experienceHistory.getDescription()));
+                experienceHistoryListTable.addCell(createTableCell(experienceHistoryTable));
+            }
+            document.add(experienceHistoryListTable);
+        }
 
         document.close();
     }

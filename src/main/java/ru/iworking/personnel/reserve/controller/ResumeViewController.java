@@ -47,6 +47,7 @@ public class ResumeViewController extends FxmlController {
     @Autowired private ClickService clickService;
     @Autowired private ResumeStateService resumeStateService;
     @Autowired private VacancyService vacancyService;
+    @Autowired private PdfResumeWriter pdfResumeWriter;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -239,7 +240,7 @@ public class ResumeViewController extends FxmlController {
             Map props = new HashMap<>();
             props.put(PdfResumeWriter.props.PATH, path);
             props.put(PdfResumeWriter.props.RESUME, resume);
-            PdfResumeWriter.getInstance().write(props);
+            pdfResumeWriter.write(props);
         }
     }
 
