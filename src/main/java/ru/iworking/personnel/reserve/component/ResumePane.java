@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.component;
 
+import com.google.common.base.Strings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -53,7 +54,11 @@ public class ResumePane extends HBox implements Initializable {
     public void setData(Resume resume) {
         this.resume = resume;
         fioLabel.setText(resume.getProfile().getFullName());
-        professionLabel.setText(resume.getProfession());
+        if (!Strings.isNullOrEmpty(resume.getProfession())) {
+            professionLabel.setText(resume.getProfession());
+        } else {
+            professionLabel.setText("не указана");
+        }
 
         if (resume.getPhotoId() != null) {
             setLogoImageById(resume.getPhotoId());

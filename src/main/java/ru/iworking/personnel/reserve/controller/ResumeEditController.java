@@ -119,13 +119,9 @@ public class ResumeEditController extends FxmlController {
         addressTextArea.setText(resume.getAddress().getHouse());
 
         if (resume.getPhotoId() != null) {
-            Photo photo = photoService.findById(resume.getPhotoId());
-            InputStream targetStream = new ByteArrayInputStream(photo.getImage());
-            Image img = new Image(targetStream);
-            photoImageView.setImage(img);
+            setPhotoImageById(resume.getPhotoId());
         } else {
-            Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"));
-            photoImageView.setImage(defaultImage);
+            setDefaultImage();
         }
 
         resume.getLearningHistoryList().forEach( learningHistory -> {
@@ -292,14 +288,6 @@ public class ResumeEditController extends FxmlController {
             lastNameTextField.getStyleClass().add("has-error");
             isValid = false;
         }
-        if (middleNameTextField.getText() == null || middleNameTextField.getText().length() <= 0) {
-            middleNameTextField.getStyleClass().add("has-error");
-            isValid = false;
-        }
-        if (professionTextField.getText() == null || professionTextField.getText().length() <= 0) {
-            professionTextField.getStyleClass().add("has-error");
-            isValid = false;
-        }
         return isValid;
     }
 
@@ -328,6 +316,24 @@ public class ResumeEditController extends FxmlController {
         experienceHistoryEditList.getChildren().removeAll(experienceHistoryEditPanes);
         experienceHistoryEditList.getChildren().clear();
         resumeEdiTabPane.getSelectionModel().select(0);
+        setDefaultImage();
+    }
+
+    public void setPhotoImageById(Long id) {
+        Photo photo = photoService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(photo.getImage());
+        Image img = new Image(targetStream);
+        photoImageView.setImage(img);
+    }
+
+    public void setDefaultImage() {
+        Image defaultImage = new Image(
+                getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
+                150,
+                150,
+                false,
+                false);
+        photoImageView.setImage(defaultImage);
     }
 
     public void show() {

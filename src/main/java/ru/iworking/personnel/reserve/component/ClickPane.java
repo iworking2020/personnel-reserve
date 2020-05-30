@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.component;
 
+import com.google.common.base.Strings;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -74,7 +75,11 @@ public class ClickPane extends FlowPane implements Initializable {
     public void setData(Click click) {
         this.click = click;
         fioLabel.setText(click.getResume().getProfile().getFullName());
-        professionLabel.setText(click.getResume().getProfession());
+        if (!Strings.isNullOrEmpty(click.getResume().getProfession())) {
+            professionLabel.setText(click.getResume().getProfession());
+        } else {
+            professionLabel.setText("не указана");
+        }
         resumeStateComboBox.setValue(click.getResumeState());
         if (click.getResume().getPhotoId() != null) {
             setLogoImageById(click.getResume().getPhotoId());

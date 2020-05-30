@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.google.common.base.Strings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -140,7 +141,12 @@ public class ResumeViewController extends FxmlController {
             }
             if (resume.getNumberPhone() != null) numberPhone.setText(prefixNumberPhone + resume.getNumberPhone().getNumber());
             email.setText(prefixEmail + resume.getEmail());
-            profession.setText(prefixProfession + resume.getProfession());
+            if (!Strings.isNullOrEmpty(resume.getProfession())) {
+                profession.setText(prefixProfession + resume.getProfession());
+            } else {
+                profession.setText(prefixProfession + "не указана");
+            }
+
             if (resume.getProfFieldId() != null) {
                 Long profFieldId = resume.getProfFieldId();
                 profField.setText(prefixProfField + profFieldService.findById(profFieldId).getNameView().getName());
@@ -169,13 +175,9 @@ public class ResumeViewController extends FxmlController {
             }
             address.setText(prefixAddress + resume.getAddress().getHouse());
             if (resume.getPhotoId() != null) {
-                Photo photo = photoService.findById(resume.getPhotoId());
-                InputStream targetStream = new ByteArrayInputStream(photo.getImage());
-                Image img = new Image(targetStream);
-                photoImageView.setImage(img);
+                setPhotoImageById(resume.getPhotoId());
             } else {
-                Image defaultImage = new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"));
-                photoImageView.setImage(defaultImage);
+                setDefaultImage();
             }
 
             setDataLearningHistory(resume.getLearningHistoryList());
@@ -183,6 +185,23 @@ public class ResumeViewController extends FxmlController {
         } else {
             logger.debug("Resume is null. We can't view resume...");
         }
+    }
+
+    public void setPhotoImageById(Long id) {
+        Photo photo = photoService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(photo.getImage());
+        Image img = new Image(targetStream);
+        photoImageView.setImage(img);
+    }
+
+    public void setDefaultImage() {
+        Image defaultImage = new Image(
+                getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
+                150,
+                150,
+                false,
+                false);
+        photoImageView.setImage(defaultImage);
     }
 
     private void setDataLearningHistory(List<LearningHistory> list) {
@@ -285,6 +304,7 @@ public class ResumeViewController extends FxmlController {
     public void clear() {
         this.currentResume = null;
         resumeViewTabPane.getSelectionModel().select(0);
+        setDefaultImage();
     }
 
     public ResumeEditController getResumeEditController() {
