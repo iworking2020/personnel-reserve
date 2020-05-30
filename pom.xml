@@ -42,6 +42,7 @@
         <ignite-spring.version>1.0.2</ignite-spring.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
+        <path.splash.image>src/main/resources/images/loading-image.bmp</path.splash.image>
     </properties>
 
     <dependencies>

@@ -1,0 +1,7 @@
+.loading-image-pane {
+    -fx-pref-height: 268px;
+    -fx-pref-width: 440px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url('../images/loading-image.jpg');
+}

@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve;
 
 import com.gluonhq.ignite.spring.SpringContext;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -8,12 +9,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.controller.MainMenuController;
 import ru.iworking.personnel.reserve.utils.AppUtil;
+import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class MainApp extends Application {
@@ -38,25 +43,75 @@ public class MainApp extends Application {
 
     @Autowired private FXMLLoader fxmlLoader;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        context.init();
+    private void initLoadingPane(Stage stage) {
+        Parent parent = null;
+        try {
+            parent = FXMLLoader.load(getClass().getResource("/fxml/LoadingPane.fxml"));
+        } catch (IOException e) {
+            logger.error(e);
+        }
 
-        Font.loadFont(getClass().getResource("/fonts/CenturyGothic.ttf").toExternalForm(), 14);
-        Font.loadFont(getClass().getResource("/fonts/CenturyGothicBold.ttf").toExternalForm(), 14);
+        Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/styles/loading-pane.css");
+        stage.setScene(scene);
+        AppUtil.setIcon(stage);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.centerOnScreen();
+        stage.show();
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(800), parent);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.setCycleCount(1);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(800), parent);
+        fadeOut.setFromValue(1);
+        fadeOut.setToValue(0);
+        fadeOut.setCycleCount(1);
+
+        fadeIn.play();
+
+        fadeIn.setOnFinished((e) -> {
+            HibernateUtil.getSessionFactory();
+            fadeOut.play();
+        });
+
+        fadeOut.setOnFinished((e) -> {
+            stage.hide();
+            initMainStage();
+        });
+    }
+
+    private void initMainStage() {
+        Stage stage = new Stage();
+        context.init();
 
         MainApp.PARENT_STAGE = stage;
 
         fxmlLoader.setLocation(getClass().getResource("/fxml/MainMenu.fxml"));
-        Parent parent = fxmlLoader.load();
+        Parent parent = null;
+        try {
+            parent = fxmlLoader.load();
+        } catch (IOException e) {
+            logger.error(e);
+        }
+
         Scene scene = new Scene(parent);
+        scene.setRoot(parent);
         addStylesheets(scene);
 
         stage.setTitle("Personnel reserve");
         AppUtil.setIcon(stage);
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
+    }
 
+    @Override
+    public void start(Stage stage) throws Exception {
+        Font.loadFont(getClass().getResource("/fonts/CenturyGothic.ttf").toExternalForm(), 14);
+        Font.loadFont(getClass().getResource("/fonts/CenturyGothicBold.ttf").toExternalForm(), 14);
+        initLoadingPane(stage);
     }
 
     public static void reload() {
