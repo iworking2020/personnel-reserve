@@ -112,7 +112,9 @@ public class ResumeEditController extends FxmlController {
         if (resume.getProfFieldId() != null) profFieldComboBox.setValue(profFieldService.findById(resume.getProfFieldId()));
         if (resume.getWage() != null) {
             wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
-            currencyComboBox.setValue(currencyService.findById(resume.getWage().getCurrencyId()));
+            if (resume.getWage().getCurrencyId() != null) {
+                currencyComboBox.setValue(currencyService.findById(resume.getWage().getCurrencyId()));
+            }
         }
         if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeService.findById(resume.getWorkTypeId()));
 
