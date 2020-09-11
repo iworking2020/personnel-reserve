@@ -1,0 +1,28 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_profile" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="PROFILE"/>
+                <sequenceExists sequenceName="PROFILE_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="PROFILE">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="LAST_NAME" type="varchar"/>
+            <column name="FIRST_NAME" type="varchar"/>
+            <column name="MIDDLE_NAME" type="varchar"/>
+            <column name="GENDER_ID" type="bigint"/>
+            <column name="NUMBER_PHONE_ID" type="bigint"/>
+            <column name="EMAIL" type="varchar"/>
+            <column name="DATE_BIRTHDAY" type="datetime"/>
+        </createTable>
+        <createSequence incrementBy="1" minValue="1" ordered="true" sequenceName="PROFILE_SEQ" startValue="1000"/>
+        <addForeignKeyConstraint baseColumnNames="GENDER_ID" baseTableName="PROFILE" constraintName="FK_PROFILE_GENDER" onDelete="SET NULL" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="GENDER" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="NUMBER_PHONE_ID" baseTableName="PROFILE" constraintName="FK_PROFILE_NUMBER_PHONE" onDelete="SET NULL" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="NUMBER_PHONE" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -5,7 +5,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -69,7 +68,7 @@ public class ResumeEditController extends FxmlController {
 
     private ProfField currentProfField;
 
-    @Autowired private PhotoService photoService;
+    @Autowired private ImageContainerService imageContainerService;
     @Autowired private ProfFieldService profFieldService;
     @Autowired private WorkTypeService workTypeService;
     @Autowired private ResumeService resumeService;
@@ -98,7 +97,7 @@ public class ResumeEditController extends FxmlController {
         currencyComboBox.setCellFactory(currencyCellFactory);
         currencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
 
-        photoImageView.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg")));
+        photoImageView.setImage(new javafx.scene.image.Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg")));
     }
 
     public void setData(Resume resume) {
@@ -163,7 +162,7 @@ public class ResumeEditController extends FxmlController {
         File file = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
         if (file != null) {
             try {
-                Image img = new Image(file.toURI().toString());
+                javafx.scene.image.Image img = new javafx.scene.image.Image(file.toURI().toString());
                 photoImageView.setImage(img);
             } catch (Exception ex) {
                 logger.error(ex);
@@ -234,21 +233,21 @@ public class ResumeEditController extends FxmlController {
         if (resume.getAddress() == null) resume.setAddress(new Address());
         resume.getAddress().setHouse(addressStr);
 
-        Photo photo = null;
+        ImageContainer imageContainer = null;
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
 
-            photo = new Photo(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
+            imageContainer = new ImageContainer(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
         } catch (IOException e) {
             logger.error(e);
         }
 
-        if (photo != null) {
+        if (imageContainer != null) {
             try {
-                photoService.persist(photo);
-                Long photoId = photo.getId();
+                imageContainerService.persist(imageContainer);
+                Long photoId = imageContainer.getId();
                 resume.setPhotoId(photoId);
             } catch (OutOfMemoryError ex) {
                 logger.error(ex);
@@ -322,14 +321,14 @@ public class ResumeEditController extends FxmlController {
     }
 
     public void setPhotoImageById(Long id) {
-        Photo photo = photoService.findById(id);
-        InputStream targetStream = new ByteArrayInputStream(photo.getImage());
-        Image img = new Image(targetStream);
+        ImageContainer imageContainer = imageContainerService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(imageContainer.getImage());
+        javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         photoImageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        Image defaultImage = new Image(
+        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
                 getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
                 150,
                 150,
@@ -356,6 +355,10 @@ public class ResumeEditController extends FxmlController {
     public void hide(AppFunctionalInterface function) {
         function.execute();
         this.hide();
+    }
+
+    public ResumeViewController getResumeViewController() {
+        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
     }
 
     public ResumeListViewController getResumeListViewController() {

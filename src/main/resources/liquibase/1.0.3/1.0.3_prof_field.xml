@@ -1,0 +1,469 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_prof_field" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="PROF_FIELD"/>
+                <tableExists tableName="PROF_FIELD_NAMES_VIEW"/>
+                <sequenceExists sequenceName="PROF_FIELD_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="PROF_FIELD">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="NAME_SYSTEM" type="varchar"/>
+        </createTable>
+        <createSequence incrementBy="1" minValue="1" ordered="true" sequenceName="PROF_FIELD_SEQ" startValue="1000"/>
+        <createTable tableName="PROF_FIELD_NAMES_VIEW">
+            <column autoIncrement="false" name="PROF_FIELD_ID" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME_VIEW" type="varchar"/>
+            <column name="LOCALE" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="PROF_FIELD_ID" baseTableName="PROF_FIELD_NAMES_VIEW" constraintName="FK_PROF_FIELD_NAMES_VIEW" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="PROF_FIELD" validate="true"/>
+    </changeSet>
+    <changeSet author="azemtsov" id="1.0.3_insert_data_prof_field" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="PROF_FIELD"/>
+            <tableExists tableName="PROF_FIELD_NAMES_VIEW"/>
+        </preConditions>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="1"/>
+            <column name="NAME_SYSTEM" value="SALES"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="2"/>
+            <column name="NAME_SYSTEM" value="PRODUCATION"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="3"/>
+            <column name="NAME_SYSTEM" value="WORKING_STAFF"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="4"/>
+            <column name="NAME_SYSTEM" value="IT"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="5"/>
+            <column name="NAME_SYSTEM" value="CARIER_START"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="6"/>
+            <column name="NAME_SYSTEM" value="BUILDING"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="7"/>
+            <column name="NAME_SYSTEM" value="ADMINISTRATION"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="8"/>
+            <column name="NAME_SYSTEM" value="BANKS"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="9"/>
+            <column name="NAME_SYSTEM" value="TRANSPORT"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="10"/>
+            <column name="NAME_SYSTEM" value="ACCOUNTING"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="11"/>
+            <column name="NAME_SYSTEM" value="MARKETING"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="12"/>
+            <column name="NAME_SYSTEM" value="TOURISM"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="13"/>
+            <column name="NAME_SYSTEM" value="RESTAURANTS"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="14"/>
+            <column name="NAME_SYSTEM" value="MEDICINE"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="15"/>
+            <column name="NAME_SYSTEM" value="COUNSELING"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="16"/>
+            <column name="NAME_SYSTEM" value="CARS"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="17"/>
+            <column name="NAME_SYSTEM" value="TOP_MANAGEMENT"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="18"/>
+            <column name="NAME_SYSTEM" value="HUMAN_RESOURCES"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="19"/>
+            <column name="NAME_SYSTEM" value="SECURITY"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="20"/>
+            <column name="NAME_SYSTEM" value="PROCUREMENT"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="21"/>
+            <column name="NAME_SYSTEM" value="ART"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="22"/>
+            <column name="NAME_SYSTEM" value="MEDIA"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="23"/>
+            <column name="NAME_SYSTEM" value="SCIENCE"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="24"/>
+            <column name="NAME_SYSTEM" value="EDUCATION"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="25"/>
+            <column name="NAME_SYSTEM" value="JURISPRUDENCE"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="26"/>
+            <column name="NAME_SYSTEM" value="INSTALLATION"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="27"/>
+            <column name="NAME_SYSTEM" value="SPORT"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="28"/>
+            <column name="NAME_SYSTEM" value="INSURANCE"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="29"/>
+            <column name="NAME_SYSTEM" value="HOME_STAFF"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="30"/>
+            <column name="NAME_SYSTEM" value="CIVIL_SERVICE"/>
+        </insert>
+        <insert tableName="PROF_FIELD">
+            <column name="ID" value="31"/>
+            <column name="NAME_SYSTEM" value="MATERIAL_EXTRACTION"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="1"/>
+            <column name="NAME_VIEW" value="продажи"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="2"/>
+            <column name="NAME_VIEW" value="производство"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="3"/>
+            <column name="NAME_VIEW" value="раб. персонал"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="4"/>
+            <column name="NAME_VIEW" value="IT, телеком"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="5"/>
+            <column name="NAME_VIEW" value="начало карьеры"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="6"/>
+            <column name="NAME_VIEW" value="строительство"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="7"/>
+            <column name="NAME_VIEW" value="адм. персонал"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="8"/>
+            <column name="NAME_VIEW" value="банки"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="9"/>
+            <column name="NAME_VIEW" value="транспорт"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="10"/>
+            <column name="NAME_VIEW" value="бухгалтерия"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="11"/>
+            <column name="NAME_VIEW" value="маркетинг"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="12"/>
+            <column name="NAME_VIEW" value="туризм"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="13"/>
+            <column name="NAME_VIEW" value="рестораны"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="14"/>
+            <column name="NAME_VIEW" value="медицина"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="15"/>
+            <column name="NAME_VIEW" value="консультирование"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="16"/>
+            <column name="NAME_VIEW" value="авто"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="17"/>
+            <column name="NAME_VIEW" value="топ-менеджмент"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="18"/>
+            <column name="NAME_VIEW" value="управление персоналом"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="19"/>
+            <column name="NAME_VIEW" value="безопасность"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="20"/>
+            <column name="NAME_VIEW" value="закупки"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="21"/>
+            <column name="NAME_VIEW" value="искусство"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="22"/>
+            <column name="NAME_VIEW" value="медиа"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="23"/>
+            <column name="NAME_VIEW" value="наука"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="24"/>
+            <column name="NAME_VIEW" value="образование"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="25"/>
+            <column name="NAME_VIEW" value="юриспруденция"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="26"/>
+            <column name="NAME_VIEW" value="инсталляция"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="27"/>
+            <column name="NAME_VIEW" value="спорт"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="28"/>
+            <column name="NAME_VIEW" value="страхование"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="29"/>
+            <column name="NAME_VIEW" value="дом. персонал"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="30"/>
+            <column name="NAME_VIEW" value="госслужба"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="31"/>
+            <column name="NAME_VIEW" value="добыча сырья"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="1"/>
+            <column name="NAME_VIEW" value="sales"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="2"/>
+            <column name="NAME_VIEW" value="production"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="3"/>
+            <column name="NAME_VIEW" value="working staff"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="4"/>
+            <column name="NAME_VIEW" value="IT"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="5"/>
+            <column name="NAME_VIEW" value="carier start"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="6"/>
+            <column name="NAME_VIEW" value="building"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="7"/>
+            <column name="NAME_VIEW" value="administration"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="8"/>
+            <column name="NAME_VIEW" value="banks"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="9"/>
+            <column name="NAME_VIEW" value="transport"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="10"/>
+            <column name="NAME_VIEW" value="accounting"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="11"/>
+            <column name="NAME_VIEW" value="marketing"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="12"/>
+            <column name="NAME_VIEW" value="tourism"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="13"/>
+            <column name="NAME_VIEW" value="restaurants"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="14"/>
+            <column name="NAME_VIEW" value="medicine"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="15"/>
+            <column name="NAME_VIEW" value="counseling"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="16"/>
+            <column name="NAME_VIEW" value="cars"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="17"/>
+            <column name="NAME_VIEW" value="top management"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="18"/>
+            <column name="NAME_VIEW" value="human resources"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="19"/>
+            <column name="NAME_VIEW" value="security"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="20"/>
+            <column name="NAME_VIEW" value="procurement"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="21"/>
+            <column name="NAME_VIEW" value="art"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="22"/>
+            <column name="NAME_VIEW" value="media"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="23"/>
+            <column name="NAME_VIEW" value="science"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="24"/>
+            <column name="NAME_VIEW" value="education"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="25"/>
+            <column name="NAME_VIEW" value="jurisprudence"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="26"/>
+            <column name="NAME_VIEW" value="installation"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="27"/>
+            <column name="NAME_VIEW" value="sport"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="28"/>
+            <column name="NAME_VIEW" value="insurance"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="29"/>
+            <column name="NAME_VIEW" value="home staff"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="30"/>
+            <column name="NAME_VIEW" value="civil service"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PROF_FIELD_NAMES_VIEW">
+            <column name="PROF_FIELD_ID" value="31"/>
+            <column name="NAME_VIEW" value="material extraction"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

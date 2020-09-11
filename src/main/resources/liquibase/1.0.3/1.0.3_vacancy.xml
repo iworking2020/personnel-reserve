@@ -1,0 +1,108 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_vacancy" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="VACANCY"/>
+                <sequenceExists sequenceName="VACANCY_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="VACANCY">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="USER_ID" type="bigint"/>
+            <column name="COMPANY_ID" type="bigint"/>
+            <column name="DATE_CREATE" type="datetime"/>
+            <column name="PROFESSION" type="varchar"/>
+            <column name="PROF_FIELD_ID" type="bigint"/>
+            <column name="WORK_TYPE_ID" type="bigint"/>
+            <column name="WAGE_ID" type="bigint"/>
+            <column name="EDUCATION_ID" type="bigint"/>
+            <column name="EXPERIENCE_ID" type="bigint"/>
+            <column name="DESCRIPTION_VACANCY_ID" type="bigint"/>
+            <column name="ADDRESS_ID" type="bigint"/>
+            <column name="IMAGE_CONTAINER_ID" type="bigint"/>
+        </createTable>
+        <createSequence
+                incrementBy="1"
+                minValue="1"
+                ordered="true"
+                sequenceName="VACANCY_SEQ"
+                startValue="1000"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_COMPANY"
+                baseColumnNames="COMPANY_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="COMPANY"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_PROF_FIELD"
+                baseColumnNames="PROF_FIELD_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="PROF_FIELD"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_WORK_TYPE"
+                baseColumnNames="WORK_TYPE_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="WORK_TYPE"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_WAGE"
+                baseColumnNames="WAGE_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="WAGE"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_EDUCATION"
+                baseColumnNames="EDUCATION_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="EDUCATION"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_DESCRIPTION_VACANCY"
+                baseColumnNames="DESCRIPTION_VACANCY_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="DESCRIPTION_VACANCY"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_ADDRESS"
+                baseColumnNames="ADDRESS_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="ADDRESS"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_VACANCY_IMAGE_CONTAINER"
+                baseColumnNames="IMAGE_CONTAINER_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="IMAGE_CONTAINER"
+                validate="true"/>
+    </changeSet>
+</databaseChangeLog>

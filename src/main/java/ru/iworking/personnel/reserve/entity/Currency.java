@@ -1,56 +1,27 @@
 package ru.iworking.personnel.reserve.entity;
 
+import lombok.*;
 import ru.iworking.personnel.reserve.entity.name.NameSystem;
 import ru.iworking.personnel.reserve.entity.name.NameView;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-@Table(name = "currency")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Table(name = "CURRENCY")
 public class Currency {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CURRENCY_SEQ_GEN")
+    @SequenceGenerator(name = "CURRENCY_SEQ_GEN", sequenceName = "CURRENCY_SEQ", initialValue = 1000, allocationSize = 1)
     @Column(name = "id")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @Embedded private NameSystem nameSystem;
     @Embedded private NameView nameView;
 
-    public Currency() {}
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public NameSystem getNameSystem() {
-        return nameSystem;
-    }
-    public void setNameSystem(NameSystem nameSystem) {
-        this.nameSystem = nameSystem;
-    }
-
-    public NameView getNameView() {
-        return nameView;
-    }
-    public void setNameView(NameView nameView) {
-        this.nameView = nameView;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Currency currency = (Currency) o;
-        return Objects.equals(nameSystem, currency.nameSystem) &&
-                Objects.equals(nameView, currency.nameView);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nameSystem, nameView);
-    }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_wage" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="WAGE"/>
+                <sequenceExists sequenceName="WAGE_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="WAGE">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="COUNT" type="decimal"/>
+            <column name="CURRENCY_ID" type="bigint"/>
+            <column name="PERIOD_ID" type="bigint"/>
+        </createTable>
+        <createSequence
+                incrementBy="1"
+                minValue="1"
+                ordered="true"
+                sequenceName="WAGE_SEQ"
+                startValue="1000"/>
+        <addForeignKeyConstraint
+                constraintName="FK_WAGE_CURRENCY"
+                baseColumnNames="CURRENCY_ID"
+                baseTableName="WAGE"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="CURRENCY"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_WAGE_PERIOD"
+                baseColumnNames="PERIOD_ID"
+                baseTableName="WAGE"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="PERIOD"
+                validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,126 +1,54 @@
 package ru.iworking.personnel.reserve.entity;
 
+import lombok.*;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
-@Table(name = "profile")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Table(name = "PROFILE")
 public class Profile {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROFILE_SEQ_GEN")
+    @SequenceGenerator(name = "PROFILE_SEQ_GEN", sequenceName = "PROFILE_SEQ", initialValue = 1000, allocationSize = 1)
+    @Column(name = "ID")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Column(name = "last_name")
+    @Column(name = "LAST_NAME")
     private String lastName;
 
-    @Column(name = "first_name")
+    @Column(name = "FIRST_NAME")
     private String firstName;
 
-    @Column(name = "middle_name")
+    @Column(name = "MIDDLE_NAME")
     private String middleName;
 
-    @Column(name = "gender_id")
+    @Column(name = "GENDER_ID")
     private Long genderId;
 
     @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL, targetEntity = NumberPhone.class)
-    @JoinColumn(name = "number_phone_id")
+    @JoinColumn(name = "NUMBER_PHONE_ID")
     private NumberPhone numberPhone;
 
-    @Column(name = "email")
+    @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "DATE_BIRTHDAY")
     private LocalDate dateBirthday;
-
-    public Profile() { }
 
     public String getFullName() {
         return this.getLastName() + " " + this.getFirstName() + " " + this.getMiddleName();
     }
 
     public Integer getAge() {
-        return TimeUtil.calAge(this.getDateBirthday(), (LocalDate)null);
+        return TimeUtil.calAge(this.getDateBirthday(), null);
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public Long getGenderId() {
-        return genderId;
-    }
-    public void setGenderId(Long genderId) {
-        this.genderId = genderId;
-    }
-
-    public NumberPhone getNumberPhone() {
-        return numberPhone;
-    }
-    public void setNumberPhone(NumberPhone numberPhone) {
-        this.numberPhone = numberPhone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getDateBirthday() {
-        return dateBirthday;
-    }
-    public void setDateBirthday(LocalDate dateBirthday) {
-        this.dateBirthday = dateBirthday;
-    }
-
-    public Long getAvatarId() {
-        return null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Profile profile = (Profile) o;
-        return Objects.equals(lastName, profile.lastName) &&
-                Objects.equals(firstName, profile.firstName) &&
-                Objects.equals(middleName, profile.middleName) &&
-                Objects.equals(genderId, profile.genderId) &&
-                Objects.equals(numberPhone, profile.numberPhone) &&
-                Objects.equals(email, profile.email) &&
-                Objects.equals(dateBirthday, profile.dateBirthday);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(lastName, firstName, middleName, genderId, numberPhone, email, dateBirthday);
-    }
 }

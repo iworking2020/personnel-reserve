@@ -1,0 +1,371 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_company_type" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="COMPANY_TYPE"/>
+                <tableExists tableName="COMPANY_TYPE_NAMES_VIEW"/>
+                <tableExists tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW"/>
+                <sequenceExists sequenceName="COMPANY_TYPE_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="COMPANY_TYPE">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="NAME_SYSTEM" type="varchar"/>
+            <column name="FINANCIAL_TYPE" type="integer"/>
+        </createTable>
+        <createSequence incrementBy="1" minValue="1" ordered="true" sequenceName="COMPANY_TYPE_SEQ" startValue="1000"/>
+        <createTable tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column autoIncrement="false" name="COMPANY_TYPE_ID" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME_VIEW" type="varchar"/>
+            <column name="LOCALE" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="COMPANY_TYPE_ID" baseTableName="COMPANY_TYPE_NAMES_VIEW" constraintName="FK_COMPANY_TYPE_NAMES_VIEW" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="COMPANY_TYPE" validate="true"/>
+        <createTable tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column autoIncrement="false" name="COMPANY_TYPE_ID" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ABBREVIATED_NAME_VIEW" type="varchar"/>
+            <column name="LOCALE" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="COMPANY_TYPE_ID" baseTableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW" constraintName="FK_COMPANY_TYPE_ABBREVIATED_NAMES_VIEW" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="COMPANY_TYPE" validate="true"/>
+    </changeSet>
+    <changeSet author="azemtsov" id="1.0.3_insert_data_currency" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="COMPANY_TYPE"/>
+            <tableExists tableName="COMPANY_TYPE_NAMES_VIEW"/>
+            <tableExists tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW"/>
+        </preConditions>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="1"/>
+            <column name="NAME_SYSTEM" value="FULL_PARTNERSHIP"/>
+            <column name="FINANCIAL_TYPE" value="0"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="2"/>
+            <column name="NAME_SYSTEM" value="FAITH_PARTNERSHIP"/>
+            <column name="FINANCIAL_TYPE" value="0"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="3"/>
+            <column name="NAME_SYSTEM" value="LIMITED_LIABILITY_COMPANY"/>
+            <column name="FINANCIAL_TYPE" value="0"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="4"/>
+            <column name="NAME_SYSTEM" value="PUBLIC_JOINT_STOCK_COMPANY"/>
+            <column name="FINANCIAL_TYPE" value="0"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="5"/>
+            <column name="NAME_SYSTEM" value="NON_PUBLIC_JOINT_STOCK_COMPANY"/>
+            <column name="FINANCIAL_TYPE" value="0"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="6"/>
+            <column name="NAME_SYSTEM" value="PRODUCTION_COOPERATIVE"/>
+            <column name="FINANCIAL_TYPE" value="0"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="7"/>
+            <column name="NAME_SYSTEM" value="UNITARY_ENTERPRISE"/>
+            <column name="FINANCIAL_TYPE" value="0"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="8"/>
+            <column name="NAME_SYSTEM" value="CONSUMER_COOPERATIVE"/>
+            <column name="FINANCIAL_TYPE" value="1"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="9"/>
+            <column name="NAME_SYSTEM" value="PUBLIC_AND_RELIGIOUS_ASSOCIATIONS"/>
+            <column name="FINANCIAL_TYPE" value="1"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="10"/>
+            <column name="NAME_SYSTEM" value="FUNDS"/>
+            <column name="FINANCIAL_TYPE" value="1"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="11"/>
+            <column name="NAME_SYSTEM" value="INSTITUTIONS"/>
+            <column name="FINANCIAL_TYPE" value="1"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="12"/>
+            <column name="NAME_SYSTEM" value="ASSOCIATIONS"/>
+            <column name="FINANCIAL_TYPE" value="1"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE">
+            <column name="ID" value="13"/>
+            <column name="NAME_SYSTEM" value="UNIONS"/>
+            <column name="FINANCIAL_TYPE" value="1"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="1"/>
+            <column name="NAME_VIEW" value="Полное товарищество"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="2"/>
+            <column name="NAME_VIEW" value="Товарищество на вере"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="3"/>
+            <column name="NAME_VIEW" value="Общество с ограниченной ответственностью"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="4"/>
+            <column name="NAME_VIEW" value="Публичное акционерное общество"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="5"/>
+            <column name="NAME_VIEW" value="Непубличное акционерное общество"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="6"/>
+            <column name="NAME_VIEW" value="Производственный кооператив"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="7"/>
+            <column name="NAME_VIEW" value="Унитарное предприятие"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="8"/>
+            <column name="NAME_VIEW" value="Потребительский кооператив"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="9"/>
+            <column name="NAME_VIEW" value="Общественные и религиозные объединения"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="10"/>
+            <column name="NAME_VIEW" value="Фонд"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="11"/>
+            <column name="NAME_VIEW" value="Учреждение"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="12"/>
+            <column name="NAME_VIEW" value="Ассоциация"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="13"/>
+            <column name="NAME_VIEW" value="Союз"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="1"/>
+            <column name="NAME_VIEW" value="Full partnership"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="2"/>
+            <column name="NAME_VIEW" value="Faith partnership"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="3"/>
+            <column name="NAME_VIEW" value="Limited liability company"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="4"/>
+            <column name="NAME_VIEW" value="Public joint stock company"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="5"/>
+            <column name="NAME_VIEW" value="Non public joint stock company"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="6"/>
+            <column name="NAME_VIEW" value="Production cooperative"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="7"/>
+            <column name="NAME_VIEW" value="Unitary enterprise"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="8"/>
+            <column name="NAME_VIEW" value="Consumer cooperative"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="9"/>
+            <column name="NAME_VIEW" value="Public and religious associations"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="10"/>
+            <column name="NAME_VIEW" value="Fund"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="11"/>
+            <column name="NAME_VIEW" value="Institution"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="12"/>
+            <column name="NAME_VIEW" value="Association"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="13"/>
+            <column name="NAME_VIEW" value="Union"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="1"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="ПТ"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="2"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="ТВ"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="3"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="ООО"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="4"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="ПАО"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="5"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="НАО"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="6"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="ПРК"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="7"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="УП"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="8"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="ПТК"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="9"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="О"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="10"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="Ф"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="11"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="У"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="12"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="А"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="13"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="С"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="1"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="FullP"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="2"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="FaithP"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="3"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="LLC"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="4"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="PJSC"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="5"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="NPJSC"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="6"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="PC"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="7"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="UE"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="8"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="CC"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="9"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="PRA"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="10"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="F"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="11"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="I"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="12"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="A"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="COMPANY_TYPE_ABBREVIATED_NAMES_VIEW">
+            <column name="COMPANY_TYPE_ID" value="13"/>
+            <column name="ABBREVIATED_NAME_VIEW" value="U"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

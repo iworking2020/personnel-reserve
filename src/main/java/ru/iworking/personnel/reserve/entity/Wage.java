@@ -1,15 +1,23 @@
 package ru.iworking.personnel.reserve.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Builder
 @Table(name = "wage")
 public class Wage {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "WAGE_SEQ_GEN")
+    @SequenceGenerator(name = "WAGE_SEQ_GEN", sequenceName = "WAGE_SEQ", initialValue = 1000, allocationSize = 1)
+    @Column(name = "ID")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @Column(name = "count")
@@ -21,51 +29,11 @@ public class Wage {
     @Column(name = "period_id")
     private Long periodId;
 
-    public Wage() { }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Integer getCount() {
         return Integer.valueOf(Double.valueOf(count.toString()).intValue());
     }
     public BigDecimal getCountBigDecimal() {
         return count;
     }
-    public void setCount(BigDecimal count) {
-        this.count = count;
-    }
 
-    public Long getCurrencyId() {
-        return currencyId;
-    }
-    public void setCurrencyId(Long currencyId) {
-        this.currencyId = currencyId;
-    }
-
-    public Long getPeriodId() {
-        return periodId;
-    }
-    public void setPeriodId(Long periodId) {
-        this.periodId = periodId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Wage wage = (Wage) o;
-        return Objects.equals(count, wage.count) &&
-                Objects.equals(currencyId, wage.currencyId) &&
-                Objects.equals(periodId, wage.periodId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(count, currencyId, periodId);
-    }
 }

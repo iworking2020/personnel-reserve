@@ -1,0 +1,35 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_learning_history" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="LEARNING_HISTORY"/>
+                <sequenceExists sequenceName="LEARNING_HISTORY_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="LEARNING_HISTORY">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="DESCRIPTION" type="clob"/>
+            <column name="EDUCATION_ID" type="bigint"/>
+        </createTable>
+        <createSequence
+                incrementBy="1"
+                minValue="1"
+                ordered="true"
+                sequenceName="LEARNING_HISTORY_SEQ"
+                startValue="1000"/>
+        <addForeignKeyConstraint
+                baseColumnNames="EDUCATION_ID"
+                baseTableName="LEARNING_HISTORY"
+                constraintName="FK_LEARNING_HISTORY_EDUCATION"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="EDUCATION"
+                validate="true"/>
+    </changeSet>
+</databaseChangeLog>

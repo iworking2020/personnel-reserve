@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -16,11 +15,11 @@ import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.controller.ClickListViewController;
 import ru.iworking.personnel.reserve.controller.ControllerProvider;
 import ru.iworking.personnel.reserve.entity.Click;
-import ru.iworking.personnel.reserve.entity.Photo;
+import ru.iworking.personnel.reserve.entity.ImageContainer;
 import ru.iworking.personnel.reserve.entity.ResumeState;
 import ru.iworking.personnel.reserve.model.ResumeStateCellFactory;
 import ru.iworking.personnel.reserve.service.ClickService;
-import ru.iworking.personnel.reserve.service.PhotoService;
+import ru.iworking.personnel.reserve.service.ImageContainerService;
 import ru.iworking.personnel.reserve.service.ResumeStateService;
 import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
@@ -33,7 +32,7 @@ public class ClickPane extends FlowPane implements Initializable {
 
     private final ControllerProvider controllerProvider = ControllerProvider.getInstance();
 
-    private final PhotoService photoService;
+    private final ImageContainerService imageContainerService;
     private final ResumeStateService resumeStateService;
     private final ClickService clickService;
 
@@ -66,7 +65,7 @@ public class ClickPane extends FlowPane implements Initializable {
 
     public ClickPane() {
         ApplicationContext context = ApplicationContextProvider.getApplicationContext();
-        this.photoService = context.getBean(PhotoService.class);
+        this.imageContainerService = context.getBean(ImageContainerService.class);
         this.resumeStateService = context.getBean(ResumeStateService.class);
         this.clickService = context.getBean(ClickService.class);
         FXMLUtil.load("/fxml/components/ClickPane.fxml", this, this);
@@ -89,14 +88,14 @@ public class ClickPane extends FlowPane implements Initializable {
     }
 
     public void setLogoImageById(Long id) {
-        Photo photo = photoService.findById(id);
-        InputStream targetStream = new ByteArrayInputStream(photo.getImage());
-        Image img = new Image(targetStream);
+        ImageContainer imageContainer = imageContainerService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(imageContainer.getImage());
+        javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         imageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        Image defaultImage = new Image(
+        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
                 getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
                 150,
                 150,

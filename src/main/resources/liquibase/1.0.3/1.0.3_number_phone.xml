@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_number_phone" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="NUMBER_PHONE"/>
+                <sequenceExists sequenceName="NUMBER_PHONE_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="NUMBER_PHONE">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="CODE" type="varchar"/>
+            <column name="NUMBER" type="varchar"/>
+        </createTable>
+        <createSequence incrementBy="1" minValue="1" ordered="true" sequenceName="NUMBER_PHONE_SEQ" startValue="1000"/>
+    </changeSet>
+</databaseChangeLog>

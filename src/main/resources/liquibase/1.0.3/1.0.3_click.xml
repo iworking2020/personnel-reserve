@@ -1,0 +1,54 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_click" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="CLICK"/>
+                <sequenceExists sequenceName="CLICK_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="CLICK">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="RESUME_ID" type="bigint"/>
+            <column name="RESUME_STATE_ID" type="bigint"/>
+            <column name="VACANCY_ID" type="bigint"/>
+        </createTable>
+        <createSequence
+                incrementBy="1"
+                minValue="1"
+                ordered="true"
+                sequenceName="CLICK_SEQ"
+                startValue="1000"/>
+        <addForeignKeyConstraint
+                constraintName="FK_CLICK_RESUME"
+                baseColumnNames="RESUME_ID"
+                baseTableName="CLICK"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="RESUME"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_CLICK_RESUME_STATE"
+                baseColumnNames="RESUME_STATE_ID"
+                baseTableName="CLICK"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="RESUME_STATE"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_CLICK_VACANCY"
+                baseColumnNames="VACANCY_ID"
+                baseTableName="CLICK"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="VACANCY"
+                validate="true"/>
+    </changeSet>
+</databaseChangeLog>

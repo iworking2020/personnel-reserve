@@ -1,61 +1,32 @@
 package ru.iworking.personnel.reserve.entity;
 
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-@Table(name = "number_phone")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Table(name = "NUMBER_PHONE")
 public class NumberPhone {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NUMBER_PHONE_SEQ_GEN")
+    @SequenceGenerator(name = "NUMBER_PHONE_SEQ_GEN", sequenceName = "NUMBER_PHONE_SEQ", initialValue = 1000, allocationSize = 1)
+    @Column(name = "ID")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Column(name = "code")
+    @Column(name = "CODE")
     private String code;
 
-    @Column(name = "number")
+    @Column(name = "NUMBER")
     private String number;
-
-    public NumberPhone() { }
 
     public String getFullNumber() {
         return this.getCode() + this.getNumber();
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        NumberPhone that = (NumberPhone) o;
-        return Objects.equals(code, that.code) &&
-                Objects.equals(number, that.number);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(code, number);
-    }
 }

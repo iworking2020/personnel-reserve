@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve.controller;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -61,7 +62,7 @@ public class ResumeListViewController extends FxmlController {
     public void selectionItem(Resume resume) {
         if (resumeListView.getSelectionModel() != null) {
             List<Resume> list = resumeListView.getItems().stream()
-                    .filter(resume1 -> resume1.getId() == resume.getId())
+                    .filter(resume1 -> resume1.getId().equals(resume.getId()))
                     .collect(Collectors.toList());
             if (list.size() > 0) {
                 resumeListView.getSelectionModel().select(list.get(0));
@@ -83,9 +84,11 @@ public class ResumeListViewController extends FxmlController {
         if (resumeListView.getSelectionModel() != null) {
             if (resumeId != null) {
                 Long finalResumeId = resumeId;
-                resumeListView.getItems().stream()
-                        .filter(resume -> resume.getId() == finalResumeId)
-                        .forEach(resume -> resumeListView.getSelectionModel().select(resume));
+                ObservableList<Resume> resumes = resumeListView.getItems();
+                resumes.stream()
+                        .forEach(resume -> {
+                            if (resume.getId().equals(finalResumeId)) resumeListView.getSelectionModel().select(resume);
+                        });
             }
         }
     }

@@ -34,7 +34,7 @@ public class PdfResumeWriter extends PdfWriterFactory {
     @Autowired private EducationService educationService;
     @Autowired private CurrencyService currencyService;
     @Autowired private WorkTypeService workTypeService;
-    @Autowired private PhotoService photoService;
+    @Autowired private ImageContainerService imageContainerService;
 
     public enum props {
         PATH, RESUME
@@ -102,8 +102,8 @@ public class PdfResumeWriter extends PdfWriterFactory {
 
         Table headerTable = new Table(UnitValue.createPercentArray(new float[]{40, 60}));
 
-        Photo photo = photoService.findById(resume.getPhotoId());
-        headerTable.addCell(createImgCell(photo.getImage()));
+        ImageContainer imageContainer = imageContainerService.findById(resume.getPhotoId());
+        headerTable.addCell(createImgCell(imageContainer.getImage()));
 
         Table rightBlockTable = new Table(UnitValue.createPercentArray(new float[]{100}));
         rightBlockTable.setBorder(Border.NO_BORDER);

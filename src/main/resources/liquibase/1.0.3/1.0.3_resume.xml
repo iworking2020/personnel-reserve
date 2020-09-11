@@ -1,0 +1,126 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_resume" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="RESUME"/>
+                <tableExists tableName="RESUME_LEARNING_HISTORY"/>
+                <tableExists tableName="RESUME_EXPERIENCE_HISTORY"/>
+                <sequenceExists sequenceName="RESUME_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="RESUME">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="USER_ID" type="bigint"/>
+            <column name="DATE_CREATE" type="datetime"/>
+            <column name="PROFILE_ID" type="bigint"/>
+            <column name="PROFESSION" type="varchar"/>
+            <column name="NUMBER_PHONE_ID" type="bigint"/>
+            <column name="EMAIL" type="varchar"/>
+            <column name="PROF_FIELD_ID" type="bigint"/>
+            <column name="WORK_TYPE_ID" type="bigint"/>
+            <column name="WAGE_ID" type="bigint"/>
+            <column name="ADDRESS_ID" type="bigint"/>
+            <column name="IMAGE_CONTAINER_ID" type="bigint"/>
+        </createTable>
+        <createSequence
+                incrementBy="1"
+                minValue="1"
+                ordered="true"
+                sequenceName="RESUME_SEQ"
+                startValue="1000"/>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_PROFILE"
+                baseColumnNames="PROFILE_ID"
+                baseTableName="RESUME"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="PROFILE"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_NUMBER_PHONE"
+                baseColumnNames="NUMBER_PHONE_ID"
+                baseTableName="RESUME"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="NUMBER_PHONE"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_ADDRESS"
+                baseColumnNames="ADDRESS_ID"
+                baseTableName="RESUME"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="ADDRESS"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_WAGE"
+                baseColumnNames="WAGE_ID"
+                baseTableName="RESUME"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="WAGE"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_IMAGE_CONTAINER"
+                baseColumnNames="IMAGE_CONTAINER_ID"
+                baseTableName="RESUME"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="IMAGE_CONTAINER"
+                validate="true"/>
+        <createTable tableName="RESUME_LEARNING_HISTORY">
+            <column name="RESUME_ID" type="bigint"/>
+            <column name="LEARNING_HISTORY_LIST_ID" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_LEARNING_HISTORY_LEARNING_HISTORY"
+                baseColumnNames="LEARNING_HISTORY_LIST_ID"
+                baseTableName="RESUME_LEARNING_HISTORY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="LEARNING_HISTORY"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_LEARNING_HISTORY_RESUME"
+                baseColumnNames="RESUME_ID"
+                baseTableName="RESUME_LEARNING_HISTORY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="RESUME"
+                validate="true"/>
+        <createTable tableName="RESUME_EXPERIENCE_HISTORY">
+            <column name="RESUME_ID" type="bigint"/>
+            <column name="EXPERIENCE_HISTORY_LIST_ID" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_EXPERIENCE_HISTORY_EXPERIENCE_HISTORY"
+                baseColumnNames="EXPERIENCE_HISTORY_LIST_ID"
+                baseTableName="RESUME_EXPERIENCE_HISTORY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="EXPERIENCE_HISTORY"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_RESUME_EXPERIENCE_HISTORY_RESUME"
+                baseColumnNames="RESUME_ID"
+                baseTableName="RESUME_EXPERIENCE_HISTORY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="RESUME"
+                validate="true"/>
+    </changeSet>
+</databaseChangeLog>

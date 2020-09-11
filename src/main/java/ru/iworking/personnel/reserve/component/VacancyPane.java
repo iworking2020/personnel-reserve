@@ -3,7 +3,6 @@ package ru.iworking.personnel.reserve.component;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -11,9 +10,9 @@ import javafx.scene.shape.Circle;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.iworking.personnel.reserve.entity.Logo;
+import ru.iworking.personnel.reserve.entity.ImageContainer;
 import ru.iworking.personnel.reserve.entity.Vacancy;
-import ru.iworking.personnel.reserve.service.LogoService;
+import ru.iworking.personnel.reserve.service.ImageContainerService;
 import ru.iworking.personnel.reserve.service.VacancyService;
 import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
@@ -34,7 +33,7 @@ public class VacancyPane extends HBox implements Initializable {
     private Vacancy vacancy;
 
     @Autowired private VacancyService vacancyService;
-    @Autowired private LogoService logoService;
+    @Autowired private ImageContainerService imageContainerService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,22 +48,22 @@ public class VacancyPane extends HBox implements Initializable {
     public void setData(Vacancy vacancy) {
         professionLabel.setText(vacancy.getProfession());
 
-        if (vacancy.getLogoId() != null) {
-            setLogoImageById(vacancy.getLogoId());
+        if (vacancy.getPhotoId() != null) {
+            setLogoImageById(vacancy.getPhotoId());
         } else {
             setDefaultImage();
         }
     }
 
     public void setLogoImageById(Long id) {
-        Logo logo = logoService.findById(id);
+        ImageContainer logo = imageContainerService.findById(id);
         InputStream targetStream = new ByteArrayInputStream(logo.getImage());
-        Image img = new Image(targetStream);
+        javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         imageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        Image defaultImage = new Image(
+        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
                 getClass().getClassLoader().getResourceAsStream("images/default-vacancy.jpg"),
                 150,
                 150,

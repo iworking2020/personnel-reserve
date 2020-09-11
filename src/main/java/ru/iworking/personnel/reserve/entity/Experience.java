@@ -1,63 +1,30 @@
 package ru.iworking.personnel.reserve.entity;
 
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
-@Table(name = "experience")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Table(name = "EXPERIENCE")
 public class Experience {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPERIENCE_SEQ_GEN")
+    @SequenceGenerator(name = "EXPERIENCE_SEQ_GEN", sequenceName = "EXPERIENCE_SEQ", initialValue = 1000, allocationSize = 1)
+    @Column(name = "ID")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Column(name = "date_start")
+    @Column(name = "DATE_START")
     private LocalDate dateStart;
 
-    @Column(name = "date_end")
+    @Column(name = "DATE_END")
     private LocalDate dateEnd;
-
-    public Experience() {}
-
-    public Experience(LocalDate dateStart, LocalDate dateEnd) {
-        this.dateStart = dateStart;
-        this.dateEnd = dateEnd;
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getDateStart() {
-        return dateStart;
-    }
-    public void setDateStart(LocalDate dateStart) {
-        this.dateStart = dateStart;
-    }
-
-    public LocalDate getDateEnd() {
-        return dateEnd;
-    }
-    public void setDateEnd(LocalDate dateEnd) {
-        this.dateEnd = dateEnd;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Experience that = (Experience) o;
-        return Objects.equals(dateStart, that.dateStart) &&
-                Objects.equals(dateEnd, that.dateEnd);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(dateStart, dateEnd);
-    }
+    
 }

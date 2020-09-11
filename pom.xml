@@ -4,7 +4,7 @@
 
     <groupId>ru.iworking</groupId>
     <artifactId>personnel-reserve</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>personnel-reserve</name>
@@ -40,9 +40,17 @@
         <reflections.version>0.9.12</reflections.version>
         <lombok.version>1.18.12</lombok.version>
         <ignite-spring.version>1.0.2</ignite-spring.version>
+        <liquibase.version>3.6.3</liquibase.version>
+        <snakeyaml.version>1.23</snakeyaml.version>
+
+        <profile.propertyFile>src/main/resources/liquibase/liquibase.properties</profile.propertyFile>
+        <profile.changeLogFile>src/main/resources/liquibase/changeLog.xml</profile.changeLogFile>
+        <profile.dataDir>src/main/resources/liquibase</profile.dataDir>
+        <profile.verbose>true</profile.verbose>
+        <profile.logging>debug</profile.logging>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
-        <path.splash.image>src/main/resources/images/loading-image.bmp</path.splash.image>
+        <path.splash.imageContainer>src/main/resources/images/loading-imageContainer.bmp</path.splash.imageContainer>
     </properties>
 
     <dependencies>
@@ -132,6 +140,11 @@
             <groupId>com.gluonhq</groupId>
             <artifactId>ignite-spring</artifactId>
             <version>${ignite-spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
     </dependencies>
 
@@ -231,6 +244,19 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <propertyFile>${profile.propertyFile}</propertyFile>
+                    <changeLogFile>${profile.changeLogFile}</changeLogFile>
+                    <dataDir>${profile.dataDir}</dataDir>
+                    <verbose>${profile.verbose}</verbose>
+                    <logging>${profile.logging}</logging>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
             </plugin>
         </plugins>
     </build>

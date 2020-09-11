@@ -1,0 +1,134 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_resume_state" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="RESUME_STATE"/>
+                <tableExists tableName="RESUME_STATE_NAMES_VIEW"/>
+                <sequenceExists sequenceName="RESUME_STATE_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="RESUME_STATE">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="NAME_SYSTEM" type="varchar"/>
+        </createTable>
+        <createSequence incrementBy="1" minValue="1" ordered="true" sequenceName="RESUME_STATE_SEQ" startValue="1000"/>
+        <createTable tableName="RESUME_STATE_NAMES_VIEW">
+            <column autoIncrement="false" name="RESUME_STATE_ID" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME_VIEW" type="varchar"/>
+            <column name="LOCALE" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="RESUME_STATE_ID" baseTableName="RESUME_STATE_NAMES_VIEW" constraintName="FK_RESUME_STATE_NAMES_VIEW" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="RESUME_STATE" validate="true"/>
+    </changeSet>
+    <changeSet author="azemtsov" id="1.0.3_insert_data_resume_state" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="RESUME_STATE"/>
+            <tableExists tableName="RESUME_STATE_NAMES_VIEW"/>
+        </preConditions>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="1"/>
+            <column name="NAME_SYSTEM" value="INVITATION_SENT"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="2"/>
+            <column name="NAME_SYSTEM" value="TECHNICAL_INTERVIEW"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="3"/>
+            <column name="NAME_SYSTEM" value="INTERVIEW"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="4"/>
+            <column name="NAME_SYSTEM" value="CUSTOMER_RESUME"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="5"/>
+            <column name="NAME_SYSTEM" value="CUSTOMER_INTERVIEW"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="6"/>
+            <column name="NAME_SYSTEM" value="OFFER_TO_CANDIDATE"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="7"/>
+            <column name="NAME_SYSTEM" value="PROBATION"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="8"/>
+            <column name="NAME_SYSTEM" value="HIRED"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="9"/>
+            <column name="NAME_SYSTEM" value="REJECTED_BY_RECRUITER"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="10"/>
+            <column name="NAME_SYSTEM" value="REJECTED_BY_CUSTOMER"/>
+        </insert>
+        <insert tableName="RESUME_STATE">
+            <column name="ID" value="11"/>
+            <column name="NAME_SYSTEM" value="RESERVE"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="1"/>
+            <column name="NAME_VIEW" value="Отправлено приглашение"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="2"/>
+            <column name="NAME_VIEW" value="Тех. интервью"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="3"/>
+            <column name="NAME_VIEW" value="Интервью"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="4"/>
+            <column name="NAME_VIEW" value="Резюме у заказчика"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="5"/>
+            <column name="NAME_VIEW" value="Интервью с заказчиком"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="6"/>
+            <column name="NAME_VIEW" value="Предложение кандидату"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="7"/>
+            <column name="NAME_VIEW" value="Испытательный срок"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="8"/>
+            <column name="NAME_VIEW" value="Принят на работу"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="9"/>
+            <column name="NAME_VIEW" value="Отклонен рекрутером"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="10"/>
+            <column name="NAME_VIEW" value="Отклонен заказчиком"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="RESUME_STATE_NAMES_VIEW">
+            <column name="RESUME_STATE_ID" value="11"/>
+            <column name="NAME_VIEW" value="Резерв"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

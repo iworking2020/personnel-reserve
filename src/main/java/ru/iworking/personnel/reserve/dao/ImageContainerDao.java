@@ -1,7 +1,7 @@
 package ru.iworking.personnel.reserve.dao;
 
 import org.springframework.stereotype.Component;
-import ru.iworking.personnel.reserve.entity.Logo;
+import ru.iworking.personnel.reserve.entity.ImageContainer;
 
 import java.util.List;
 
@@ -20,18 +20,18 @@ import java.util.List;
  *     }
  */
 @Component
-public class LogoDao extends Dao<Logo, Long> {
+public class ImageContainerDao extends Dao<ImageContainer, Long> {
 
     @Override
-    public Logo findById(Long id) {
-        Logo entity = (Logo) getSessionProvider().getCurrentSession().get(Logo.class, id);
+    public ImageContainer findById(Long id) {
+        ImageContainer entity = (ImageContainer) getSessionProvider().getCurrentSession().get(ImageContainer.class, id);
         return entity;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Logo> findAll() {
-        List<Logo> entities = (List<Logo>) getSessionProvider().getCurrentSession().createQuery("from Logo").list();
+    public List<ImageContainer> findAll() {
+        List<ImageContainer> entities = (List<ImageContainer>) getSessionProvider().getCurrentSession().createQuery("from Photo").list();
         return entities;
     }
 

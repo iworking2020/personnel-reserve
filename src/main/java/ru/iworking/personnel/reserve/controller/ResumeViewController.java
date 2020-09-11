@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -39,7 +38,7 @@ public class ResumeViewController extends FxmlController {
 
     private static final Logger logger = LogManager.getLogger(ResumeViewController.class);
 
-    @Autowired private PhotoService photoService;
+    @Autowired private ImageContainerService imageContainerService;
     @Autowired private ProfFieldService profFieldService;
     @Autowired private CurrencyService currencyService;
     @Autowired private WorkTypeService workTypeService;
@@ -188,14 +187,14 @@ public class ResumeViewController extends FxmlController {
     }
 
     public void setPhotoImageById(Long id) {
-        Photo photo = photoService.findById(id);
-        InputStream targetStream = new ByteArrayInputStream(photo.getImage());
-        Image img = new Image(targetStream);
+        ImageContainer imageContainer = imageContainerService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(imageContainer.getImage());
+        javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         photoImageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        Image defaultImage = new Image(
+        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
                 getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
                 150,
                 150,
@@ -285,7 +284,7 @@ public class ResumeViewController extends FxmlController {
         Vacancy vacancy = getVacancyViewController().getCurrentVacancy();
 
         Set<Click> clicks = vacancy.getClicks().stream()
-                .filter(click1 -> click1.getResume().getId() == this.currentResume.getId())
+                .filter(click1 -> click1.getResume().getId().equals(this.currentResume.getId()))
                 .collect(Collectors.toSet());
 
         if (vacancy != null && clicks.isEmpty()) {

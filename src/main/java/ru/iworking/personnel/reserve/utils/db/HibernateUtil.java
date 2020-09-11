@@ -1,5 +1,12 @@
 package ru.iworking.personnel.reserve.utils.db;
 
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,6 +67,7 @@ public class HibernateUtil {
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
                 try {
+                    initLiquibase();
                     initData(sessionFactory, settings);
                 } catch (Exception ex) {
                     logger.error("Init file not found... ");
@@ -92,6 +100,30 @@ public class HibernateUtil {
                 }
             }
         } );
+    }
+
+    private static void initLiquibase() {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+        session.doWork(connection -> {
+            try {
+                Properties liquibaseProperties = new Properties();
+                try {
+                    liquibaseProperties.load(HibernateUtil.class.getClassLoader().getResourceAsStream("liquibase/liquibase.properties"));
+                } catch (FileNotFoundException ex) {
+                    logger.error("liquibase.properties method have error...", ex);
+                }
+                String urlChangeLog = liquibaseProperties.getProperty("changeLogPath");
+                Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+                Liquibase liquibase = new liquibase.Liquibase(urlChangeLog, new ClassLoaderResourceAccessor(), database);
+                liquibase.update(new Contexts(), new LabelExpression());
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        });
+        session.flush();
+        transaction.commit();
+        session.close();
     }
 
     private static void initData(SessionFactory sessionFactory, Properties properties) throws Exception {

@@ -1,56 +1,27 @@
 package ru.iworking.personnel.reserve.entity;
 
+import lombok.*;
 import ru.iworking.personnel.reserve.entity.name.NameSystem;
 import ru.iworking.personnel.reserve.entity.name.NameView;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-@Table(name = "work_type")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Table(name = "WORK_TYPE")
 public class WorkType {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "WORK_TYPE_SEQ_GEN")
+    @SequenceGenerator(name = "WORK_TYPE_SEQ_GEN", sequenceName = "WORK_TYPE_SEQ", initialValue = 1000, allocationSize = 1)
     @Column(name = "id")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @Embedded private NameSystem nameSystem;
     @Embedded private NameView nameView;
 
-    public WorkType() { }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public NameSystem getNameSystem() {
-        return nameSystem;
-    }
-    public void setNameSystem(NameSystem nameSystem) {
-        this.nameSystem = nameSystem;
-    }
-
-    public NameView getNameView() {
-        return nameView;
-    }
-    public void setNameView(NameView nameView) {
-        this.nameView = nameView;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        WorkType workType = (WorkType) o;
-        return Objects.equals(nameSystem, workType.nameSystem) &&
-                Objects.equals(nameView, workType.nameView);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nameSystem, nameView);
-    }
 }

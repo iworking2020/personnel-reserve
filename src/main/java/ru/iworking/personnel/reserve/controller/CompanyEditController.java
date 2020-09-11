@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -21,7 +20,7 @@ import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
 import ru.iworking.personnel.reserve.model.NumberPhoneFormatter;
 import ru.iworking.personnel.reserve.service.CompanyService;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
-import ru.iworking.personnel.reserve.service.LogoService;
+import ru.iworking.personnel.reserve.service.ImageContainerService;
 import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import javax.imageio.ImageIO;
@@ -55,7 +54,7 @@ public class CompanyEditController extends FxmlController {
 
     @Autowired private CompanyTypeService companyTypeService;
     @Autowired private CompanyService companyService;
-    @Autowired private LogoService logoService;
+    @Autowired private ImageContainerService imageContainerService;
 
     private Company currentCompany = null;
 
@@ -116,8 +115,8 @@ public class CompanyEditController extends FxmlController {
                 streetTextField.setText(address.getStreet());
                 houseTextField.setText(address.getHouse());
             }
-            if (company.getLogoId() != null) {
-                setLogoImageById(company.getLogoId());
+            if (company.getImageContainerId() != null) {
+                setLogoImageById(company.getImageContainerId());
             } else {
                 setDefaultImage();
             }
@@ -166,22 +165,22 @@ public class CompanyEditController extends FxmlController {
         company.getAddress().setStreet(streetStr);
         company.getAddress().setHouse(houseStr);
 
-        Logo logo = null;
+        ImageContainer logo = null;
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(imageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
 
-            logo = new Logo(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
+            logo = new ImageContainer(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
         } catch (IOException e) {
             logger.error(e);
         }
 
         if (logo != null) {
             try {
-                logoService.persist(logo);
+                imageContainerService.persist(logo);
                 Long logoId = logo.getId();
-                company.setLogoId(logoId);
+                company.setImageContainerId(logoId);
             } catch (OutOfMemoryError ex) {
                 logger.error(ex);
             }
@@ -211,14 +210,14 @@ public class CompanyEditController extends FxmlController {
     }
 
     public void setLogoImageById(Long id) {
-        Logo logo = logoService.findById(id);
+        ImageContainer logo = imageContainerService.findById(id);
         InputStream targetStream = new ByteArrayInputStream(logo.getImage());
-        Image img = new Image(targetStream);
+        javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         imageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        Image defaultImage = new Image(
+        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
                 getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"),
                 150,
                 150,
@@ -262,7 +261,7 @@ public class CompanyEditController extends FxmlController {
         File file = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
         if (file != null) {
             try {
-                Image img = new Image(file.toURI().toString());
+                javafx.scene.image.Image img = new javafx.scene.image.Image(file.toURI().toString());
                 imageView.setImage(img);
             } catch (Exception ex) {
                 logger.error(ex);

@@ -63,7 +63,7 @@ public class ClickListViewController extends FxmlController {
     public void selectionItem(Resume resume) {
         if (clickListView != null && clickListView.getItems() != null && clickListView.getItems().size() > 0) {
             List<Click> list = clickListView.getItems().stream()
-                    .filter(click -> click.getResume().getId() == resume.getId())
+                    .filter(click -> click.getResume().getId().equals(resume.getId()))
                     .collect(Collectors.toList());
             if (clickListView.getSelectionModel() != null) {
                 if (list.size() > 0) clickListView.getSelectionModel().select(list.get(0)); else this.clearSelection();

@@ -1,78 +1,33 @@
 package ru.iworking.personnel.reserve.entity;
 
+import lombok.*;
 import ru.iworking.personnel.reserve.entity.name.AbbreviatedNameView;
 import ru.iworking.personnel.reserve.entity.name.NameSystem;
 import ru.iworking.personnel.reserve.entity.name.NameView;
 import ru.iworking.personnel.reserve.enums.FinancialType;
 
 import javax.persistence.*;
-import java.util.Objects;
 
-@Entity(name = "CompanyType")
-@Table(name = "company_type")
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Table(name = "COMPANY_TYPE")
 public class CompanyType {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMPANY_TYPE_SEQ_GEN")
+    @SequenceGenerator(name = "COMPANY_TYPE_SEQ_GEN", sequenceName = "COMPANY_TYPE_SEQ", initialValue = 1000, allocationSize = 1)
+    @Column(name = "ID")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Column(name = "financial_type")
+    @Column(name = "FINANCIAL_TYPE")
     private FinancialType financialType;
 
     @Embedded private NameSystem nameSystem;
     @Embedded private NameView nameView;
     @Embedded private AbbreviatedNameView abbreviatedNameView;
 
-    public CompanyType() { }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public FinancialType getFinancialType() {
-        return financialType;
-    }
-    public void setFinancialType(FinancialType financialType) {
-        this.financialType = financialType;
-    }
-
-    public NameSystem getNameSystem() {
-        return nameSystem;
-    }
-    public void setNameSystem(NameSystem nameSystem) {
-        this.nameSystem = nameSystem;
-    }
-
-    public NameView getNameView() {
-        return nameView;
-    }
-    public void setNameView(NameView nameView) {
-        this.nameView = nameView;
-    }
-
-    public AbbreviatedNameView getAbbreviatedNameView() {
-        return abbreviatedNameView;
-    }
-    public void setAbbreviatedNameView(AbbreviatedNameView abbreviatedNameView) {
-        this.abbreviatedNameView = abbreviatedNameView;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CompanyType that = (CompanyType) o;
-        return financialType == that.financialType &&
-                Objects.equals(nameSystem, that.nameSystem) &&
-                Objects.equals(nameView, that.nameView) &&
-                Objects.equals(abbreviatedNameView, that.abbreviatedNameView);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(financialType, nameSystem, nameView, abbreviatedNameView);
-    }
 }

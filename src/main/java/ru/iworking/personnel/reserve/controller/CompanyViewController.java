@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -14,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
-import ru.iworking.personnel.reserve.entity.Logo;
+import ru.iworking.personnel.reserve.entity.ImageContainer;
 import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.personnel.reserve.service.CompanyService;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
-import ru.iworking.personnel.reserve.service.LogoService;
+import ru.iworking.personnel.reserve.service.ImageContainerService;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -43,7 +42,7 @@ public class CompanyViewController extends FxmlController {
 
     @Autowired private CompanyTypeService companyTypeService;
     @Autowired private CompanyService companyService;
-    @Autowired private LogoService logoService;
+    @Autowired private ImageContainerService imageContainerService;
 
     private Company currentCompany = null;
 
@@ -129,8 +128,8 @@ public class CompanyViewController extends FxmlController {
                 companyAddressLabel.setText(companyAddresPrefix + "не указан");
             }
 
-            if (company.getLogoId() != null) {
-                setLogoImageById(company.getLogoId());
+            if (company.getImageContainerId() != null) {
+                setLogoImageById(company.getImageContainerId());
             } else {
                 setDefaultImage();
             }
@@ -154,14 +153,14 @@ public class CompanyViewController extends FxmlController {
     }
 
     public void setLogoImageById(Long id) {
-        Logo logo = logoService.findById(id);
+        ImageContainer logo = imageContainerService.findById(id);
         InputStream targetStream = new ByteArrayInputStream(logo.getImage());
-        Image img = new Image(targetStream);
+        javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         imageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        Image defaultImage = new Image(
+        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
                 getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"),
                 150,
                 150,

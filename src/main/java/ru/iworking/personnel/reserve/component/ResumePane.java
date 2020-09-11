@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -13,9 +12,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationContext;
 import ru.iworking.personnel.reserve.ApplicationContextProvider;
-import ru.iworking.personnel.reserve.entity.Photo;
+import ru.iworking.personnel.reserve.entity.ImageContainer;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.service.PhotoService;
+import ru.iworking.personnel.reserve.service.ImageContainerService;
 import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
 import java.io.ByteArrayInputStream;
@@ -25,7 +24,7 @@ import java.util.ResourceBundle;
 
 public class ResumePane extends HBox implements Initializable {
 
-    private final PhotoService photoService;
+    private final ImageContainerService imageContainerService;
 
     @FXML private Pane parent;
 
@@ -41,7 +40,7 @@ public class ResumePane extends HBox implements Initializable {
 
     public ResumePane() {
         ApplicationContext context = ApplicationContextProvider.getApplicationContext();
-        this.photoService = context.getBean(PhotoService.class);
+        this.imageContainerService = context.getBean(ImageContainerService.class);
         FXMLUtil.load("/fxml/components/ResumePane.fxml", this, this);
     }
 
@@ -68,14 +67,14 @@ public class ResumePane extends HBox implements Initializable {
     }
 
     public void setLogoImageById(Long id) {
-        Photo photo = photoService.findById(id);
-        InputStream targetStream = new ByteArrayInputStream(photo.getImage());
-        Image img = new Image(targetStream);
+        ImageContainer imageContainer = imageContainerService.findById(id);
+        InputStream targetStream = new ByteArrayInputStream(imageContainer.getImage());
+        javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         imageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        Image defaultImage = new Image(
+        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
                 getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
                 150,
                 150,

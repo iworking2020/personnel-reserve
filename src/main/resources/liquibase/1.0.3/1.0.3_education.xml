@@ -1,0 +1,91 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.3_create_table_education" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="EDUCATION"/>
+                <tableExists tableName="EDUCATION_NAMES_VIEW"/>
+                <sequenceExists sequenceName="EDUCATION_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="EDUCATION">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="NAME_SYSTEM" type="varchar"/>
+        </createTable>
+        <createSequence incrementBy="1" minValue="1" ordered="true" sequenceName="EDUCATION_SEQ" startValue="1000"/>
+        <createTable tableName="EDUCATION_NAMES_VIEW">
+            <column autoIncrement="false" name="EDUCATION_ID" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME_VIEW" type="varchar"/>
+            <column name="LOCALE" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="EDUCATION_ID" baseTableName="EDUCATION_NAMES_VIEW" constraintName="FK_EDUCATION_NAMES_VIEW" onDelete="CASCADE" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="EDUCATION" validate="true"/>
+    </changeSet>
+    <changeSet author="azemtsov" id="1.0.3_insert_data_education" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="EDUCATION"/>
+            <tableExists tableName="EDUCATION_NAMES_VIEW"/>
+        </preConditions>
+        <insert tableName="EDUCATION">
+            <column name="ID" value="1"/>
+            <column name="NAME_SYSTEM" value="WITHOUT"/>
+        </insert>
+        <insert tableName="EDUCATION">
+            <column name="ID" value="2"/>
+            <column name="NAME_SYSTEM" value="SECONDARY"/>
+        </insert>
+        <insert tableName="EDUCATION">
+            <column name="ID" value="3"/>
+            <column name="NAME_SYSTEM" value="HIGHER"/>
+        </insert>
+        <insert tableName="EDUCATION">
+            <column name="ID" value="4"/>
+            <column name="NAME_SYSTEM" value="POSTGRADUATE"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="1"/>
+            <column name="NAME_VIEW" value="без образования"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="2"/>
+            <column name="NAME_VIEW" value="среднее"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="3"/>
+            <column name="NAME_VIEW" value="высшее"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="4"/>
+            <column name="NAME_VIEW" value="послевузовское"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="1"/>
+            <column name="NAME_VIEW" value="without education"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="2"/>
+            <column name="NAME_VIEW" value="secondary"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="3"/>
+            <column name="NAME_VIEW" value="heigher"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="EDUCATION_NAMES_VIEW">
+            <column name="EDUCATION_ID" value="4"/>
+            <column name="NAME_VIEW" value="postgraduate"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
