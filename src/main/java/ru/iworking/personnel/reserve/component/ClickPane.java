@@ -13,7 +13,6 @@ import javafx.scene.shape.Circle;
 import org.springframework.context.ApplicationContext;
 import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.controller.ClickListViewController;
-import ru.iworking.personnel.reserve.controller.ControllerProvider;
 import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.entity.ImageContainer;
 import ru.iworking.personnel.reserve.entity.ResumeState;
@@ -30,11 +29,10 @@ import java.util.ResourceBundle;
 
 public class ClickPane extends FlowPane implements Initializable {
 
-    private final ControllerProvider controllerProvider = ControllerProvider.getInstance();
-
     private final ImageContainerService imageContainerService;
     private final ResumeStateService resumeStateService;
     private final ClickService clickService;
+    private final ClickListViewController clickListViewController;
 
     private final ResumeStateCellFactory resumeStateCellFactory = new ResumeStateCellFactory();
 
@@ -68,6 +66,7 @@ public class ClickPane extends FlowPane implements Initializable {
         this.imageContainerService = context.getBean(ImageContainerService.class);
         this.resumeStateService = context.getBean(ResumeStateService.class);
         this.clickService = context.getBean(ClickService.class);
+        this.clickListViewController = context.getBean(ClickListViewController.class);
         FXMLUtil.load("/fxml/components/ClickPane.fxml", this, this);
     }
 
@@ -106,15 +105,7 @@ public class ClickPane extends FlowPane implements Initializable {
 
     @FXML
     private void actionUnfasten() {
-        getClickListViewController().unfastenItem(click);
-    }
-
-    public ClickListViewController getClickListViewController() {
-        return (ClickListViewController) getControllerProvider().get(ClickListViewController.class.getName());
-    }
-
-    public ControllerProvider getControllerProvider() {
-        return controllerProvider;
+        clickListViewController.unfastenItem(click);
     }
 
 }

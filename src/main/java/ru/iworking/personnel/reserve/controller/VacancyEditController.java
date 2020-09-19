@@ -3,15 +3,18 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.component.Messager;
-import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
@@ -24,7 +27,9 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class VacancyEditController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class VacancyEditController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(VacancyEditController.class);
 
@@ -38,11 +43,14 @@ public class VacancyEditController extends FxmlController {
     @FXML private DatePicker vacancyExpDateStartDatePicker;
     @FXML private DatePicker vacancyExpDateEndDatePicker;
 
-    @Autowired private ProfFieldService profFieldService;
-    @Autowired private WorkTypeService workTypeService;
-    @Autowired private EducationService educationService;
-    @Autowired private CurrencyService currencyService;
-    @Autowired private VacancyService vacancyService;
+    private final ProfFieldService profFieldService;
+    private final WorkTypeService workTypeService;
+    private final EducationService educationService;
+    private final CurrencyService currencyService;
+    private final VacancyService vacancyService;
+
+    @Autowired @Lazy private CompanyViewController companyViewController;
+    @Autowired @Lazy private VacancyListViewController vacancyListViewController;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -92,13 +100,13 @@ public class VacancyEditController extends FxmlController {
 
     @FXML
     public void actionSave(ActionEvent event) {
-        Long companyId = getCompanyViewController().getCurrentCompany().getId();
+        Long companyId = companyViewController.getCurrentCompany().getId();
         if (isValid()) {
             Vacancy vacancy = save(companyId);
             hide();
             clear();
-            getVacancyListViewPane().actionUpdate(event);
-            getVacancyListViewPane().select(vacancy);
+            vacancyListViewController.actionUpdate(event);
+            vacancyListViewController.select(vacancy);
             //getVacanciesTableController().actionUpdate(event);
         } else {
             Messager.getInstance().sendMessage("Не введены обязательные поля...");
@@ -197,11 +205,4 @@ public class VacancyEditController extends FxmlController {
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
     }
 
-    public CompanyViewController getCompanyViewController() {
-        return (CompanyViewController) getControllerProvider().get(CompanyViewController.class.getName());
-    }
-
-    public VacancyListViewPane getVacancyListViewPane() {
-        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
-    }
 }

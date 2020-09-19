@@ -4,12 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.component.ResumeCell;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.ResumeService;
@@ -19,11 +23,16 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ResumeListViewController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class ResumeListViewController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ResumeListViewController.class);
 
-    @Autowired private ResumeService resumeService;
+    private final ResumeService resumeService;
+
+    @Autowired @Lazy private ResumeEditController resumeEditController;
+    @Autowired @Lazy private ResumeViewController resumeViewController;
 
     @FXML private Pane parent;
 
@@ -39,10 +48,10 @@ public class ResumeListViewController extends FxmlController {
             return cell;
         });
         resumeListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            getResumeViewController().setData(newSelection);
-            getResumeViewController().show();
-            getResumeEditController().hide();
-            getResumeEditController().clear();
+            resumeViewController.setData(newSelection);
+            resumeViewController.show();
+            resumeEditController.hide();
+            resumeEditController.clear();
         });
 
         updateButton.setText("");
@@ -95,20 +104,8 @@ public class ResumeListViewController extends FxmlController {
 
     @FXML
     public void actionCreate(ActionEvent event) {
-        getResumeEditController().clear();
-        getResumeEditController().show();
-    }
-
-    public ResumeEditController getResumeEditController() {
-        return (ResumeEditController) getControllerProvider().get(ResumeEditController.class.getName());
-    }
-
-    public ResumeViewController getResumeViewController() {
-        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
-    }
-
-    public ClickListViewController getClickListViewController() {
-        return (ClickListViewController) getControllerProvider().get(ClickListViewController.class.getName());
+        resumeEditController.clear();
+        resumeEditController.show();
     }
 
 }

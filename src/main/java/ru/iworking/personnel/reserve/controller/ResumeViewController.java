@@ -3,6 +3,7 @@ package ru.iworking.personnel.reserve.controller;
 import com.google.common.base.Strings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,12 +13,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.iworking.personnel.reserve.MainApp;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.component.Messager;
-import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
@@ -34,20 +37,28 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ResumeViewController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class ResumeViewController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ResumeViewController.class);
 
-    @Autowired private ImageContainerService imageContainerService;
-    @Autowired private ProfFieldService profFieldService;
-    @Autowired private CurrencyService currencyService;
-    @Autowired private WorkTypeService workTypeService;
-    @Autowired private EducationService educationService;
-    @Autowired private ResumeService resumeService;
-    @Autowired private ClickService clickService;
-    @Autowired private ResumeStateService resumeStateService;
-    @Autowired private VacancyService vacancyService;
-    @Autowired private PdfResumeWriter pdfResumeWriter;
+    private final ImageContainerService imageContainerService;
+    private final ProfFieldService profFieldService;
+    private final CurrencyService currencyService;
+    private final WorkTypeService workTypeService;
+    private final EducationService educationService;
+    private final ResumeService resumeService;
+    private final ClickService clickService;
+    private final ResumeStateService resumeStateService;
+    private final VacancyService vacancyService;
+    private final PdfResumeWriter pdfResumeWriter;
+
+    @Autowired @Lazy private ResumeEditController resumeEditController;
+    @Autowired @Lazy private VacancyViewController vacancyViewController;
+    @Autowired @Lazy private VacancyListViewController vacancyListViewController;
+    @Autowired @Lazy private ResumeListViewController resumeListViewController;
+    @Autowired @Lazy private ClickListViewController clickListViewController;
 
     private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -237,8 +248,8 @@ public class ResumeViewController extends FxmlController {
 
     @FXML
     public void actionCancel(ActionEvent event) {
-        getResumeListViewController().clearSelection();
-        getClickListViewController().clearSelection();
+        resumeListViewController.clearSelection();
+        clickListViewController.clearSelection();
         hide();
     }
 
@@ -252,7 +263,7 @@ public class ResumeViewController extends FxmlController {
                 new FileChooser.ExtensionFilter("PDF", "*.pdf")
         );
 
-        File file = fileChooser.showSaveDialog(MainApp.PARENT_STAGE);
+        File file = fileChooser.showSaveDialog(ApplicationJavaFX.PARENT_STAGE);
         if (file != null) {
             String path = file.getAbsoluteFile().getAbsolutePath();
             Map props = new HashMap<>();
@@ -265,15 +276,15 @@ public class ResumeViewController extends FxmlController {
     @FXML
     public void actionEdit(ActionEvent event) throws Exception {
         Resume resume = resumeService.findById(getResumeId());
-        getResumeEditController().setData(resume);
-        getResumeEditController().show();
+        resumeEditController.setData(resume);
+        resumeEditController.show();
     }
 
     @FXML
     public void actionDelete(ActionEvent event) {
         resumeService.deleteById(currentResume.getId());
-        getResumeListViewController().actionUpdate(event);
-        if (getVacancyListViewPane() != null) getVacancyListViewPane().actionUpdate(event);
+        resumeListViewController.actionUpdate(event);
+        if (vacancyListViewController != null) vacancyListViewController.actionUpdate(event);
         hide();
         clear();
     }
@@ -281,7 +292,7 @@ public class ResumeViewController extends FxmlController {
     @FXML
     public void actionClick(ActionEvent event) {
         ResumeState resumeState = resumeStateService.findById(1L);
-        Vacancy vacancy = getVacancyViewController().getCurrentVacancy();
+        Vacancy vacancy = vacancyViewController.getCurrentVacancy();
 
         Set<Click> clicks = vacancy.getClicks().stream()
                 .filter(click1 -> click1.getResume().getId().equals(this.currentResume.getId()))
@@ -294,7 +305,7 @@ public class ResumeViewController extends FxmlController {
                     .resumeState(resumeState)
                     .build();
             clickService.persist(click);
-            getVacancyListViewPane().actionUpdate(event);
+            vacancyListViewController.actionUpdate(event);
         } else {
             Messager.getInstance().sendMessage("Резюме уже прикреплено к данной вакансии...");
         }
@@ -304,26 +315,6 @@ public class ResumeViewController extends FxmlController {
         this.currentResume = null;
         resumeViewTabPane.getSelectionModel().select(0);
         setDefaultImage();
-    }
-
-    public ResumeEditController getResumeEditController() {
-        return (ResumeEditController) getControllerProvider().get(ResumeEditController.class.getName());
-    }
-
-    public VacancyViewController getVacancyViewController() {
-        return (VacancyViewController) getControllerProvider().get(VacancyViewController.class.getName());
-    }
-
-    public VacancyListViewPane getVacancyListViewPane() {
-        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
-    }
-
-    public ResumeListViewController getResumeListViewController() {
-        return (ResumeListViewController) getControllerProvider().get(ResumeListViewController.class.getName());
-    }
-
-    public ClickListViewController getClickListViewController() {
-        return (ClickListViewController) getControllerProvider().get(ClickListViewController.class.getName());
     }
 
 }

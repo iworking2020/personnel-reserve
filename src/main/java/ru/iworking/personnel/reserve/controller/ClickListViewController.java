@@ -3,13 +3,16 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.component.ClickCell;
-import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.ClickService;
@@ -19,11 +22,18 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ClickListViewController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class ClickListViewController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ClickListViewController.class);
 
-    @Autowired private ClickService clickService;
+    private final ClickService clickService;
+
+    @Autowired @Lazy private ResumeEditController resumeEditController;
+    @Autowired @Lazy private ResumeViewController resumeViewController;
+    @Autowired @Lazy private VacancyTabContentController vacanciesPaneController;
+    @Autowired @Lazy private VacancyListViewController vacancyListViewController;
 
     @FXML private Pane parent;
 
@@ -38,11 +48,11 @@ public class ClickListViewController extends FxmlController {
         });
         clickListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null && newSelection.getResume() != null) {
-                getResumeViewController().setData(newSelection.getResume());
-                getResumeViewController().show();
-                getResumeEditController().hide();
-                getResumeEditController().clear();
-                getVacanciesPaneController().downClientSrollPane();
+                resumeViewController.setData(newSelection.getResume());
+                resumeViewController.show();
+                resumeEditController.hide();
+                resumeEditController.clear();
+                vacanciesPaneController.downClientSrollPane();
             }
         });
     }
@@ -74,7 +84,7 @@ public class ClickListViewController extends FxmlController {
     public void unfastenItem(Click click) {
         clickListView.getItems().remove(click);
         clickService.deleteById(click.getId());
-        getVacancyListViewPane().actionUpdate(null);
+        vacancyListViewController.actionUpdate(null);
     }
 
     public void show() {
@@ -85,22 +95,6 @@ public class ClickListViewController extends FxmlController {
     public void hide() {
         parent.setVisible(false);
         parent.setManaged(false);
-    }
-
-    public ResumeEditController getResumeEditController() {
-        return (ResumeEditController) getControllerProvider().get(ResumeEditController.class.getName());
-    }
-
-    public ResumeViewController getResumeViewController() {
-        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
-    }
-
-    public VacancyTabContentController getVacanciesPaneController() {
-        return (VacancyTabContentController) getControllerProvider().get(VacancyTabContentController.class.getName());
-    }
-
-    public VacancyListViewPane getVacancyListViewPane() {
-        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
     }
 
 }

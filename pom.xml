@@ -10,7 +10,7 @@
     <name>personnel-reserve</name>
 
     <properties>
-        <mainClass>ru.iworking.personnel.reserve.MainApp</mainClass>
+        <mainClass>ru.iworking.personnel.reserve.ApplicationJavaFX</mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -25,23 +25,15 @@
         <launch4j-maven-plugin.version>1.7.25</launch4j-maven-plugin.version>
         <maven-assembly-plugin>3.2.0</maven-assembly-plugin>
 
-        <h2.version>1.4.200</h2.version>
-        <hibernate.version>5.4.4.Final</hibernate.version>
-        <log4j.version>2.12.1</log4j.version>
-        <jackson.version>2.10.0</jackson.version>
         <commons-io.version>1.3.2</commons-io.version>
         <itext7-core.version>7.0.4</itext7-core.version>
-        <slf4j-api.version>1.7.5</slf4j-api.version>
-        <slf4j-simple.version>1.6.4</slf4j-simple.version>
         <poi.version>3.12</poi.version>
         <poi-ooxml.version>3.12</poi-ooxml.version>
         <guava.version>28.2-jre</guava.version>
         <thumbnailator.version>[0.4, 0.5)</thumbnailator.version>
         <reflections.version>0.9.12</reflections.version>
-        <lombok.version>1.18.12</lombok.version>
-        <ignite-spring.version>1.0.2</ignite-spring.version>
-        <liquibase.version>3.6.3</liquibase.version>
         <snakeyaml.version>1.23</snakeyaml.version>
+        <spring-boot-dependencies.version>2.3.4.RELEASE</spring-boot-dependencies.version>
 
         <profile.propertyFile>src/main/resources/liquibase/liquibase.properties</profile.propertyFile>
         <profile.changeLogFile>src/main/resources/liquibase/changeLog.xml</profile.changeLogFile>
@@ -55,50 +47,47 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
+        <!-- Exclude Spring Boot's Default Logging -->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <!-- Add Log4j2 Dependency -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
+        </dependency>
+        <!-- END Log4j2 Dependency -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
             <version>${itext7-core.version}</version>
             <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j-simple.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -133,20 +122,29 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.gluonhq</groupId>
-            <artifactId>ignite-spring</artifactId>
-            <version>${ignite-spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
         </dependency>
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>-->
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

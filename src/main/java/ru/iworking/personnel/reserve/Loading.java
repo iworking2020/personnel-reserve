@@ -1,54 +1,28 @@
 package ru.iworking.personnel.reserve;
 
-import com.gluonhq.ignite.spring.SpringContext;
 import javafx.animation.FadeTransition;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.iworking.personnel.reserve.controller.MainMenuController;
+import org.springframework.context.ConfigurableApplicationContext;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class MainApp extends Application {
+public interface Loading {
 
-    private static final Logger logger = LogManager.getLogger(MainMenuController.class);
-
-    public static Stage PARENT_STAGE;
-
-    /**
-     * The main() method is ignored in correctly deployed JavaFX application.
-     * main() serves only as fallback in case the application can not be
-     * launched through deployment artifacts, e.g., in IDEs with limited FX
-     * support. NetBeans ignores main().
-     *
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    private SpringContext context = new SpringContext(this, () -> Arrays.asList(MainApp.class.getPackage().getName()));
-
-    @Autowired private FXMLLoader fxmlLoader;
-
-    private void initLoadingPane(Stage stage) {
+    default void initLoadingPane(ConfigurableApplicationContext springContext, Stage stage) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoadingPane.fxml"));
+        loader.setControllerFactory(springContext::getBean);
         Parent parent = null;
         try {
-            parent = FXMLLoader.load(getClass().getResource("/fxml/LoadingPane.fxml"));
+            parent = loader.load();
         } catch (IOException e) {
-            logger.error(e);
+            e.printStackTrace();
         }
 
         Scene scene = new Scene(parent);
@@ -78,22 +52,22 @@ public class MainApp extends Application {
 
         fadeOut.setOnFinished((e) -> {
             stage.hide();
-            initMainStage();
+            initMainStage(springContext);
         });
     }
 
-    private void initMainStage() {
+    default void initMainStage(ConfigurableApplicationContext springContext) {
         Stage stage = new Stage();
-        context.init();
 
-        MainApp.PARENT_STAGE = stage;
+        ApplicationJavaFX.PARENT_STAGE = stage;
 
-        fxmlLoader.setLocation(getClass().getResource("/fxml/MainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainMenu.fxml"));
+        loader.setControllerFactory(springContext::getBean);
         Parent parent = null;
         try {
-            parent = fxmlLoader.load();
+            parent = loader.load();
         } catch (IOException e) {
-            logger.error(e);
+            e.printStackTrace();
         }
 
         Scene scene = new Scene(parent);
@@ -107,25 +81,7 @@ public class MainApp extends Application {
         stage.show();
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        Font.loadFont(getClass().getResource("/fonts/CenturyGothic.ttf").toExternalForm(), 14);
-        Font.loadFont(getClass().getResource("/fonts/CenturyGothicBold.ttf").toExternalForm(), 14);
-        initLoadingPane(stage);
-    }
-
-    public static void reload() {
-        MainApp.PARENT_STAGE.close();
-        Platform.runLater( () -> {
-            try {
-                new MainApp().start(new Stage());
-            } catch (Exception ex) {
-                logger.error(ex);
-            }
-        });
-    }
-
-    public void addStylesheets(Scene scene) {
+    default void addStylesheets(Scene scene) {
         scene.getStylesheets().add("/styles/main.css");
         scene.getStylesheets().add("/styles/window.css");
         scene.getStylesheets().add("/styles/button.css");

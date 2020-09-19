@@ -3,13 +3,17 @@ package ru.iworking.personnel.reserve.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.component.CompanyCell;
 import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.Company;
@@ -19,11 +23,18 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
-public class ClientListViewController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class ClientListViewController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ClientListViewController.class);
 
-    @Autowired private CompanyService companyService;
+    private final CompanyService companyService;
+
+    @Autowired @Lazy private CompanyViewController companyViewController;
+    @Autowired @Lazy private CompanyEditController companyEditController;
+    @Autowired @Lazy private VacancyTabContentController vacanciesPaneController;
+    @Autowired @Lazy private VacancyListViewController vacancyListViewController;
 
     @FXML private Pane parent;
 
@@ -32,22 +43,21 @@ public class ClientListViewController extends FxmlController {
     @FXML private Button addButton;
     @FXML private Button updateButton;
 
-    private VacancyListViewPane vacancyListViewPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         companyListView.setCellFactory(listView -> {
             CompanyCell cell = new CompanyCell();
             cell.setOnMouseClicked(event -> {
-                getCompanyEditController().clear();
-                getCompanyEditController().hide();
+                companyEditController.clear();
+                companyEditController.hide();
                 createVacancyListViewPane(cell.getCompany());
             });
             return cell;
         });
         companyListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            getCompanyViewController().setData(newSelection);
-            getCompanyViewController().show();
+            companyViewController.setData(newSelection);
+            companyViewController.show();
         });
 
         updateButton.setText("");
@@ -62,9 +72,11 @@ public class ClientListViewController extends FxmlController {
             Node node = i.next(); // должен быть вызван перед тем, как вызывается i.remove()
             if (node instanceof VacancyListViewPane) i.remove();
         }
-        vacancyListViewPane = new VacancyListViewPane();
-        vacancyListViewPane.setXPosition(getVacanciesPaneController().getClientListViewWrapper().getMaxWidth());
-        vacancyListViewPane.show();
+        VacancyListViewPane vacancyListViewPane = new VacancyListViewPane();
+        vacancyListViewController.setVacancyListViewPane(vacancyListViewPane);
+        vacancyListViewController.init();
+        vacancyListViewController.setXPosition(vacanciesPaneController.getClientListViewWrapper().getMaxWidth());
+        vacancyListViewController.show();
         parent.getChildren().add(vacancyListViewPane);
     }
 
@@ -75,41 +87,27 @@ public class ClientListViewController extends FxmlController {
     @FXML
     public void actionUpdate(ActionEvent event) {
         this.initData();
-        getCompanyEditController().hide();
+        companyEditController.hide();
 
         Company company = companyListView.getSelectionModel().getSelectedItem();
         if (company != null) {
-            getCompanyViewController().setData(company);
-            getCompanyViewController().show();
+            companyViewController.setData(company);
+            companyViewController.show();
         } else {
-            getCompanyViewController().hide();
+            companyViewController.hide();
         }
     }
 
     @FXML
     public void actionCreate(ActionEvent event) {
-        getCompanyEditController().clear();
-        getCompanyEditController().show();
-    }
-
-    public VacancyListViewPane getVacancyListViewPane() {
-        return vacancyListViewPane;
+        companyEditController.clear();
+        companyEditController.show();
     }
 
     public void selectCompany(Company company) {
         companyListView.getSelectionModel().select(company);
     }
 
-    public CompanyViewController getCompanyViewController() {
-        return (CompanyViewController) getControllerProvider().get(CompanyViewController.class.getName());
-    }
 
-    public CompanyEditController getCompanyEditController() {
-        return (CompanyEditController) getControllerProvider().get(CompanyEditController.class.getName());
-    }
-
-    public VacancyTabContentController getVacanciesPaneController() {
-        return (VacancyTabContentController) getControllerProvider().get(VacancyTabContentController.class.getName());
-    }
 
 }

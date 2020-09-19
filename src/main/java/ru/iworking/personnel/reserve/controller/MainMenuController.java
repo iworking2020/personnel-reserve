@@ -2,15 +2,21 @@ package ru.iworking.personnel.reserve.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.MainApp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.component.Messager;
+import ru.iworking.personnel.reserve.utils.ApplicationUtils;
 import ru.iworking.personnel.reserve.utils.db.HibernateUtil;
 
 import java.io.File;
@@ -19,13 +25,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class MainMenuController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(MainMenuController.class);
 
-    @FXML private Pane parent;
+    @Autowired @Lazy private VacancyTabContentController vacancyTabContentController;
 
-    @FXML private VacancyTabContentController vacancyTabContentController;
+    @FXML private Pane parent;
 
     @FXML private CheckMenuItem winSearchCheckItem;
     @FXML private CheckMenuItem winResizable;
@@ -39,7 +47,7 @@ public class MainMenuController extends FxmlController {
 
     public void isResizable(boolean isResizable) {
         winResizable.setSelected(isResizable);
-        getVacanciesPaneController().isResizable(isResizable);
+        vacancyTabContentController.isResizable(isResizable);
     }
 
     @FXML
@@ -52,7 +60,7 @@ public class MainMenuController extends FxmlController {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
 
-        File newDatabase = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
+        File newDatabase = fileChooser.showOpenDialog(ApplicationJavaFX.PARENT_STAGE);
         if (newDatabase != null) {
             HibernateUtil.shutDown();
             try {
@@ -62,7 +70,7 @@ public class MainMenuController extends FxmlController {
             }
             /*resumesPaneController.reload(event);
             vacanciesPaneController.reload(event);*/
-            MainApp.reload();
+            ApplicationUtils.reload();
         }
 
 
@@ -78,7 +86,7 @@ public class MainMenuController extends FxmlController {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
 
-        File copiedDatabase = fileChooser.showSaveDialog(MainApp.PARENT_STAGE);
+        File copiedDatabase = fileChooser.showSaveDialog(ApplicationJavaFX.PARENT_STAGE);
         if (copiedDatabase != null) {
             if (currentDatabase == null) throw new NullPointerException("currentDatabase is null");
             HibernateUtil.shutDown();
@@ -104,10 +112,6 @@ public class MainMenuController extends FxmlController {
         File[] files = dir.listFiles(fileFilter);
 
         return files[0];
-    }
-
-    public VacancyTabContentController getVacanciesPaneController() {
-        return (VacancyTabContentController) getControllerProvider().get(VacancyTabContentController.class.getName());
     }
 
 }

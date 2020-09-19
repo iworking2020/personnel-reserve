@@ -4,16 +4,20 @@ import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.iworking.personnel.reserve.MainApp;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.model.CompanyTypeCellFactory;
@@ -29,7 +33,9 @@ import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CompanyEditController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class CompanyEditController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(CompanyEditController.class);
 
@@ -52,9 +58,11 @@ public class CompanyEditController extends FxmlController {
 
     private CompanyTypeCellFactory companyTypeCellFactory = new CompanyTypeCellFactory();
 
-    @Autowired private CompanyTypeService companyTypeService;
-    @Autowired private CompanyService companyService;
-    @Autowired private ImageContainerService imageContainerService;
+    private final CompanyTypeService companyTypeService;
+    private final CompanyService companyService;
+    private final ImageContainerService imageContainerService;
+
+    @Autowired @Lazy private ClientListViewController companyListViewController;
 
     private Company currentCompany = null;
 
@@ -78,9 +86,9 @@ public class CompanyEditController extends FxmlController {
             Company company = save();
             hide();
             clear();
-            getCompanyListViewController().actionUpdate(event);
-            getCompanyListViewController().selectCompany(company);
-            if (companyId == null) getCompanyListViewController().createVacancyListViewPane(company);
+            companyListViewController.actionUpdate(event);
+            companyListViewController.selectCompany(company);
+            if (companyId == null) companyListViewController.createVacancyListViewPane(company);
         } else {
             Messager.getInstance().sendMessage("Не введены обязательные поля...");
             logger.debug("Fields company edit block is not valid...");
@@ -258,7 +266,7 @@ public class CompanyEditController extends FxmlController {
                 new FileChooser.ExtensionFilter("GIF", "*.gif")
         );
 
-        File file = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
+        File file = fileChooser.showOpenDialog(ApplicationJavaFX.PARENT_STAGE);
         if (file != null) {
             try {
                 javafx.scene.image.Image img = new javafx.scene.image.Image(file.toURI().toString());
@@ -273,8 +281,5 @@ public class CompanyEditController extends FxmlController {
         actionCancel(event);
         companyTypeComboBox.setItems(FXCollections.observableList(companyTypeService.findAll()));
     }
-
-    public ClientListViewController getCompanyListViewController() {
-        return (ClientListViewController) getControllerProvider().get(ClientListViewController.class.getName());
-    }
+    
 }

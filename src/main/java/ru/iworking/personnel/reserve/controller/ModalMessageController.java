@@ -12,12 +12,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.iworking.personnel.reserve.MainApp;
+import org.springframework.stereotype.Component;
+import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.utils.AppUtil;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@Component
 public class ModalMessageController implements Initializable {
 
     static final Logger logger = LogManager.getLogger(ModalMessageController.class);
@@ -64,7 +66,7 @@ public class ModalMessageController implements Initializable {
     }
 
     public void showAndWait(Parent parent) {
-        Stage primaryStage = MainApp.PARENT_STAGE;
+        Stage primaryStage = ApplicationJavaFX.PARENT_STAGE;
 
         labelMessage.setText(message);
         buttonOk.setText(nameButton);

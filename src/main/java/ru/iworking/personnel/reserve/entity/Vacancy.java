@@ -60,6 +60,7 @@ public class Vacancy {
 
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "vacancy")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Click> clicks;
 
     @Column(name = "IMAGE_CONTAINER_ID")

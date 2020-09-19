@@ -3,14 +3,17 @@ package ru.iworking.personnel.reserve.controller;
 import com.google.common.base.Strings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.iworking.personnel.reserve.component.VacancyListViewPane;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Address;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.ImageContainer;
@@ -27,7 +30,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class CompanyViewController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class CompanyViewController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(CompanyViewController.class);
 
@@ -40,9 +45,13 @@ public class CompanyViewController extends FxmlController {
     @FXML private Label companyAddressLabel;
     @FXML private ImageView imageView;
 
-    @Autowired private CompanyTypeService companyTypeService;
-    @Autowired private CompanyService companyService;
-    @Autowired private ImageContainerService imageContainerService;
+    private final CompanyTypeService companyTypeService;
+    private final CompanyService companyService;
+    private final ImageContainerService imageContainerService;
+
+    @Autowired @Lazy private CompanyEditController companyEditController;
+    @Autowired @Lazy private ClientListViewController clientListViewController;
+    @Autowired @Lazy private VacancyListViewController vacancyListViewController;
 
     private Company currentCompany = null;
 
@@ -140,16 +149,15 @@ public class CompanyViewController extends FxmlController {
 
     @FXML
     public void actionEditCompany(ActionEvent event) {
-        getCompanyEditController().setData(currentCompany);
-        getCompanyEditController().show();
+        companyEditController.setData(currentCompany);
+        companyEditController.show();
     }
 
     @FXML
     public void actionDelete(ActionEvent event) {
         companyService.deleteById(currentCompany.getId());
-        getClientListViewController().actionUpdate(event);
-        VacancyListViewPane vacancyListViewPane = getClientListViewController().getVacancyListViewPane();
-        if (vacancyListViewPane != null) vacancyListViewPane.actionBack(null);
+        clientListViewController.actionUpdate(event);
+        if (vacancyListViewController != null) vacancyListViewController.actionBack(null);
     }
 
     public void setLogoImageById(Long id) {
@@ -176,11 +184,4 @@ public class CompanyViewController extends FxmlController {
         this.currentCompany = currentCompany;
     }
 
-    public CompanyEditController getCompanyEditController() {
-        return (CompanyEditController) getControllerProvider().get(CompanyEditController.class.getName());
-    }
-
-    public ClientListViewController getClientListViewController() {
-        return (ClientListViewController) getControllerProvider().get(ClientListViewController.class.getName());
-    }
 }

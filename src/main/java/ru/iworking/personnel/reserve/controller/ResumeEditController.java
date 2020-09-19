@@ -4,19 +4,22 @@ import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.iworking.personnel.reserve.MainApp;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.component.ExperienceHistoryEditPane;
 import ru.iworking.personnel.reserve.component.LearningHistoryEditPane;
 import ru.iworking.personnel.reserve.component.Messager;
-import ru.iworking.personnel.reserve.component.VacancyListViewPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
@@ -33,7 +36,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ResumeEditController extends FxmlController {
+@Component
+@RequiredArgsConstructor
+public class ResumeEditController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(ResumeEditController.class);
 
@@ -68,11 +73,15 @@ public class ResumeEditController extends FxmlController {
 
     private ProfField currentProfField;
 
-    @Autowired private ImageContainerService imageContainerService;
-    @Autowired private ProfFieldService profFieldService;
-    @Autowired private WorkTypeService workTypeService;
-    @Autowired private ResumeService resumeService;
-    @Autowired private CurrencyService currencyService;
+    private final ImageContainerService imageContainerService;
+    private final ProfFieldService profFieldService;
+    private final WorkTypeService workTypeService;
+    private final ResumeService resumeService;
+    private final CurrencyService currencyService;
+
+    @Autowired @Lazy private ResumeViewController resumeViewController;
+    @Autowired @Lazy private ResumeListViewController resumeListViewController;
+    @Autowired @Lazy private VacancyListViewController vacancyListViewController;
 
     private ProfFieldCellFactory profFieldCellFactory = new ProfFieldCellFactory();
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
@@ -159,7 +168,7 @@ public class ResumeEditController extends FxmlController {
                 new FileChooser.ExtensionFilter("GIF", "*.gif")
         );
 
-        File file = fileChooser.showOpenDialog(MainApp.PARENT_STAGE);
+        File file = fileChooser.showOpenDialog(ApplicationJavaFX.PARENT_STAGE);
         if (file != null) {
             try {
                 javafx.scene.image.Image img = new javafx.scene.image.Image(file.toURI().toString());
@@ -182,8 +191,8 @@ public class ResumeEditController extends FxmlController {
             Resume resume = save();
             hide();
             clear();
-            getResumeListViewController().actionUpdate(event);
-            if (getVacancyListViewPane() != null) getVacancyListViewPane().actionUpdate(event);
+            resumeListViewController.actionUpdate(event);
+            if (vacancyListViewController != null) vacancyListViewController.actionUpdate(event);
         } else {
             Messager.getInstance().sendMessage("Не введены обязательные поля...");
             logger.debug("resume is not valid");
@@ -293,6 +302,7 @@ public class ResumeEditController extends FxmlController {
     }
 
     public void clear() {
+        resumeIdTextField.setText("");
         lastNameTextField.setText("");
         firstNameTextField.setText("");
         middleNameTextField.setText("");
@@ -355,18 +365,6 @@ public class ResumeEditController extends FxmlController {
     public void hide(AppFunctionalInterface function) {
         function.execute();
         this.hide();
-    }
-
-    public ResumeViewController getResumeViewController() {
-        return (ResumeViewController) getControllerProvider().get(ResumeViewController.class.getName());
-    }
-
-    public ResumeListViewController getResumeListViewController() {
-        return (ResumeListViewController) getControllerProvider().get(ResumeListViewController.class.getName());
-    }
-
-    public VacancyListViewPane getVacancyListViewPane() {
-        return (VacancyListViewPane) getControllerProvider().get(VacancyListViewPane.class.getName());
     }
 
 }

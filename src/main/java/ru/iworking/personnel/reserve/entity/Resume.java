@@ -65,6 +65,8 @@ public class Resume implements Cloneable {
     @OrderBy("dateStart ASC")
     private List<ExperienceHistory> experienceHistoryList;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "resume")
     private List<Click> clicks;
 
