@@ -186,7 +186,7 @@ public class CompanyEditController implements Initializable {
 
         if (logo != null) {
             try {
-                imageContainerService.persist(logo);
+                imageContainerService.create(logo);
                 Long logoId = logo.getId();
                 company.setImageContainerId(logoId);
             } catch (OutOfMemoryError ex) {
@@ -195,7 +195,7 @@ public class CompanyEditController implements Initializable {
         }
 
         if (companyId == null) {
-            companyService.persist(company);
+            companyService.create(company);
         } else {
             companyService.update(company);
         }

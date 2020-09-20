@@ -30,11 +30,11 @@ public class PdfResumeWriter extends PdfWriterFactory {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
 
-    @Autowired private ProfFieldService profFieldService;
-    @Autowired private EducationService educationService;
-    @Autowired private CurrencyService currencyService;
-    @Autowired private WorkTypeService workTypeService;
-    @Autowired private ImageContainerService imageContainerService;
+    @Autowired private ProfFieldServiceImpl profFieldService;
+    @Autowired private EducationServiceImpl educationService;
+    @Autowired private CurrencyServiceImpl currencyService;
+    @Autowired private WorkTypeServiceImpl workTypeService;
+    @Autowired private ImageContainerServiceImpl imageContainerService;
 
     public enum props {
         PATH, RESUME

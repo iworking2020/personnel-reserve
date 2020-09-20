@@ -12,7 +12,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.iworking.personnel.reserve.component.ClickCell;
+import ru.iworking.personnel.reserve.component.list.view.cell.ClickCell;
+import ru.iworking.personnel.reserve.component.list.view.factory.ClickCellControllerFactory;
 import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.ClickService;
@@ -30,6 +31,8 @@ public class ClickListViewController implements Initializable {
 
     private final ClickService clickService;
 
+    @Autowired @Lazy private ClickCellControllerFactory clickCellControllerFactory;
+
     @Autowired @Lazy private ResumeEditController resumeEditController;
     @Autowired @Lazy private ResumeViewController resumeViewController;
     @Autowired @Lazy private VacancyTabContentController vacanciesPaneController;
@@ -43,7 +46,7 @@ public class ClickListViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         hide();
         clickListView.setCellFactory(listView -> {
-            ClickCell cell = new ClickCell();
+            ClickCell cell = new ClickCell(clickCellControllerFactory);
             return cell;
         });
         clickListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

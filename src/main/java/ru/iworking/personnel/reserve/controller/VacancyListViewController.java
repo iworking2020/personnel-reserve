@@ -13,13 +13,16 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.iworking.personnel.reserve.component.VacancyCell;
-import ru.iworking.personnel.reserve.component.VacancyListViewPane;
+import ru.iworking.personnel.reserve.component.layout.VacancyListViewPane;
+import ru.iworking.personnel.reserve.component.list.view.cell.VacancyCell;
+import ru.iworking.personnel.reserve.component.list.view.factory.VacancyCellControllerFactory;
+import ru.iworking.personnel.reserve.entity.Click;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.service.VacancyService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -27,14 +30,14 @@ import java.util.stream.Collectors;
 public class VacancyListViewController {
 
     private final VacancyService vacancyService;
-    @Setter
-    private VacancyListViewPane vacancyListViewPane;
+    @Setter private VacancyListViewPane vacancyListViewPane;
 
     @Autowired @Lazy private VacancyViewController vacancyViewController;
     @Autowired @Lazy private VacancyEditController vacancyEditController;
     @Autowired @Lazy private CompanyViewController companyViewController;
     @Autowired @Lazy private ClickListViewController clickListViewController;
     @Autowired @Lazy private ResumeViewController resumeViewController;
+    @Autowired @Lazy private VacancyCellControllerFactory vacancyCellControllerFactory;
 
     private double x = 0.00;
 
@@ -43,15 +46,19 @@ public class VacancyListViewController {
     }
 
     public void initData() {
-        Long companyId = companyViewController.getCurrentCompany().getId();
-        List<Vacancy> list = vacancyService.findAllByCompanyId(companyId);
-        vacancyListViewPane.getVacancyListView().setItems(FXCollections.observableList(list));
+        if (Objects.nonNull(companyViewController.getCurrentCompany())) {
+            Long companyId = companyViewController.getCurrentCompany().getId();
+            List<Vacancy> list = vacancyService.findAllByCompanyId(companyId);
+            vacancyListViewPane.getVacancyListView().setItems(FXCollections.observableList(list));
+        }
     }
 
     private void initClickData(Vacancy vacancy) {
         resumeViewController.isDisableClickButton(false);
-        List list = new ArrayList();
-        if (vacancy != null && vacancy.getClicks() != null) list = vacancy.getClicks().stream().collect(Collectors.toList());
+        List<Click> list = new ArrayList();
+        if (vacancy != null && vacancy.getClicks() != null) list = vacancy.getClicks().stream()
+                .filter(click -> Objects.nonNull(click.getResume()) && Objects.nonNull(click.getVacancy()))
+                .collect(Collectors.toList());
         if (list.size() > 0) {
             clickListViewController.setData(list);
             clickListViewController.show();
@@ -63,7 +70,7 @@ public class VacancyListViewController {
 
     public void init() {
         vacancyListViewPane.getVacancyListView().setCellFactory(listView -> {
-            VacancyCell cell = new VacancyCell();
+            VacancyCell cell = new VacancyCell(vacancyCellControllerFactory);
             return cell;
         });
         vacancyListViewPane.getVacancyListView().getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -128,13 +135,15 @@ public class VacancyListViewController {
         this.initData();
         vacancyEditController.hide();
 
-        Vacancy vacancy = vacancyListViewPane.getVacancyListView().getSelectionModel().getSelectedItem();
-        if (vacancy != null) {
-            vacancyViewController.setData(vacancy);
-            vacancyViewController.show();
-            this.initClickData(vacancy);
-        } else {
-            vacancyViewController.hide();
+        if (Objects.nonNull(vacancyListViewPane)) {
+            Vacancy vacancy = vacancyListViewPane.getVacancyListView().getSelectionModel().getSelectedItem();
+            if (vacancy != null) {
+                vacancyViewController.setData(vacancy);
+                vacancyViewController.show();
+                this.initClickData(vacancy);
+            } else {
+                vacancyViewController.hide();
+            }
         }
     }
 
@@ -143,6 +152,7 @@ public class VacancyListViewController {
     }
 
     public void remove() {
-        ((Pane) vacancyListViewPane.getParentPane().getParent()).getChildren().remove(vacancyListViewPane.getParentPane());
+        Pane parentPane = (Pane) vacancyListViewPane.getParentPane().getParent();
+        if (Objects.nonNull(parentPane)) parentPane.getChildren().remove(vacancyListViewPane.getParentPane());
     }
 }

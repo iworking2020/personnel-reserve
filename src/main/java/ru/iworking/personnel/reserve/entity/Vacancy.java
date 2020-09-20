@@ -1,6 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -58,9 +60,10 @@ public class Vacancy {
     @JoinColumn(name="ADDRESS_ID")
     private Address address;
 
-	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "vacancy")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vacancy")
     private Set<Click> clicks;
 
     @Column(name = "IMAGE_CONTAINER_ID")

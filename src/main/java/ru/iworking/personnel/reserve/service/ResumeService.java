@@ -1,64 +1,25 @@
 package ru.iworking.personnel.reserve.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.iworking.personnel.reserve.dao.ResumeDao;
 import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.props.ResumeRequestParam;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class ResumeService extends DaoService<Resume, Long> {
+public interface ResumeService {
 
-    private final ResumeDao resumeDao;
+    Long count(Map<String, Object> params);
+    Long countByResumeStateId(Long resumeStateId);
 
-    @Autowired
-    public ResumeService(ResumeDao resumeDao) {
-        this.resumeDao = resumeDao;
-    }
+    Resume findById(Long id);
 
-    @Override
-    public ResumeDao getDao() {
-        return resumeDao;
-    }
+    List<Resume> findAll();
+    List<Resume> findAll(Map<String, Object> params);
+    List<Resume> findAllByProfFieldId(Long profFieldId);
+    List<Resume> findAllByResumeStateId(Long resumeStateId);
 
-    public List<Resume> findAll(Map<String, Object> params) {
-        getDao().getSessionProvider().openCurrentSession();
-        List<Resume> entities = getDao().findAll(params);
-        getDao().getSessionProvider().closeCurrentSession();
-        return entities;
-    }
+    void create(Resume resume);
 
-    public Long countByResumeStateId(Long resumeStateId) {
-        Map<String, Object> params = new HashMap();
-        params.put(ResumeRequestParam.RESUME_STATE_ID, resumeStateId);
+    void update(Resume resume);
 
-        getDao().getSessionProvider().openCurrentSession();
-        Long count = getDao().count(params);
-        getDao().getSessionProvider().closeCurrentSession();
-        return count;
-    }
-
-    public List<Resume> findAllByProfFieldId(Long profFieldId) {
-        Map<String, Object> params = new HashMap();
-        params.put(ResumeRequestParam.PROF_FIELD_ID, profFieldId);
-
-        getDao().getSessionProvider().openCurrentSession();
-        List<Resume> entities = getDao().findAll(params);
-        getDao().getSessionProvider().closeCurrentSession();
-        return entities;
-    }
-
-    public List<Resume> findAllByResumeStateId(Long resumeStateId) {
-        Map<String, Object> params = new HashMap();
-        params.put(ResumeRequestParam.RESUME_STATE_ID, resumeStateId);
-
-        getDao().getSessionProvider().openCurrentSession();
-        List<Resume> entities = getDao().findAll(params);
-        getDao().getSessionProvider().closeCurrentSession();
-        return entities;
-    }
+    void deleteById(Long id);
 }

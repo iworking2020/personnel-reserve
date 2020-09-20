@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.ApplicationJavaFX;
-import ru.iworking.personnel.reserve.component.ExperienceHistoryEditPane;
-import ru.iworking.personnel.reserve.component.LearningHistoryEditPane;
 import ru.iworking.personnel.reserve.component.Messager;
+import ru.iworking.personnel.reserve.component.layout.ExperienceHistoryEditPane;
+import ru.iworking.personnel.reserve.component.layout.LearningHistoryEditPane;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.model.*;
@@ -255,7 +255,7 @@ public class ResumeEditController implements Initializable {
 
         if (imageContainer != null) {
             try {
-                imageContainerService.persist(imageContainer);
+                imageContainerService.create(imageContainer);
                 Long photoId = imageContainer.getId();
                 resume.setPhotoId(photoId);
             } catch (OutOfMemoryError ex) {
@@ -280,7 +280,7 @@ public class ResumeEditController implements Initializable {
         resume.setExperienceHistoryList(experienceHistories);
 
         if (resumeId == null) {
-            resumeService.persist(resume);
+            resumeService.create(resume);
         } else {
             resumeService.update(resume);
         }

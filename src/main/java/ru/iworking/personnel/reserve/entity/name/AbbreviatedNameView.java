@@ -3,10 +3,7 @@ package ru.iworking.personnel.reserve.entity.name;
 import ru.iworking.personnel.reserve.interfaces.name.IAbbreviatedNameView;
 import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.MapKeyColumn;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
@@ -15,7 +12,7 @@ import java.util.Objects;
 @Embeddable
 public class AbbreviatedNameView implements IAbbreviatedNameView, Serializable {
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name="abbreviated_name_view")
     @MapKeyColumn(name="locale")
     protected Map<Locale, String> abbreviatedNamesView;

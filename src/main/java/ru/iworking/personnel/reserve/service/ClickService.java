@@ -1,37 +1,27 @@
 package ru.iworking.personnel.reserve.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.iworking.personnel.reserve.dao.ClickDao;
 import ru.iworking.personnel.reserve.entity.Click;
-import ru.iworking.personnel.reserve.props.ClickRequestParam;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-@Service
-public class ClickService extends DaoService<Click, Long> {
+public interface ClickService {
 
-    private final ClickDao clickDao;
+    Click findById(Long id);
 
-    @Autowired
-    public ClickService(ClickDao clickDao) {
-        this.clickDao = clickDao;
-    }
+    Long count(Map<String, Object> params);
+    Long countByVacancyIdAndResumeId(Long vacancyId, Long resumeId);
 
-    @Override
-    public ClickDao getDao() {
-        return clickDao;
-    }
+    List<Click> findAll();
+    List<Click> findAll(Map<String, Object> params);
 
-    public Long countByVacancyIdAndResumeId(Long vacancyId, Long resumeId) {
-        Map<String, Object> params = new HashMap();
-        params.put(ClickRequestParam.VACANCY_ID, vacancyId);
-        params.put(ClickRequestParam.RESUME_ID, resumeId);
+    void create(Click click);
 
-        getDao().getSessionProvider().openCurrentSession();
-        Long count = getDao().count(params);
-        getDao().getSessionProvider().closeCurrentSession();
-        return count;
-    }
+    Click update(Click click);
+
+    void delete(Click click);
+    void deleteById(Long id);
+
+    void deleteAll(Collection<Click> clicks);
 }

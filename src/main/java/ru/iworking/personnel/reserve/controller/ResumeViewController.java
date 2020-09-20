@@ -295,6 +295,8 @@ public class ResumeViewController implements Initializable {
         Vacancy vacancy = vacancyViewController.getCurrentVacancy();
 
         Set<Click> clicks = vacancy.getClicks().stream()
+                .filter(Objects::nonNull)
+                .filter(click1 -> Objects.nonNull(click1.getResume()))
                 .filter(click1 -> click1.getResume().getId().equals(this.currentResume.getId()))
                 .collect(Collectors.toSet());
 
@@ -304,7 +306,7 @@ public class ResumeViewController implements Initializable {
                     .vacancy(vacancy)
                     .resumeState(resumeState)
                     .build();
-            clickService.persist(click);
+            clickService.create(click);
             vacancyListViewController.actionUpdate(event);
         } else {
             Messager.getInstance().sendMessage("Резюме уже прикреплено к данной вакансии...");

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<fx:root fx:id="parent" hgap="20.0" prefWrapLength="300.0" type="javafx.scene.layout.FlowPane" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="parentPane" hgap="20.0" prefWrapLength="300.0" type="javafx.scene.layout.FlowPane" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
     <children>
       <StackPane fx:id="wrapperImage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: white;">
          <children>
@@ -22,7 +22,7 @@
               </children>
           </VBox>
          <ComboBox fx:id="resumeStateComboBox" prefWidth="250.0" promptText="Статус" />
-      <Button mnemonicParsing="false" onAction="#actionUnfasten" styleClass="grey" text="Открепить" />
+      <Button fx:id="buttonUnfasten" mnemonicParsing="false" styleClass="grey" text="Открепить" />
     </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -1,48 +1,28 @@
 package ru.iworking.personnel.reserve.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.iworking.personnel.reserve.dao.VacancyDao;
 import ru.iworking.personnel.reserve.entity.Vacancy;
-import ru.iworking.personnel.reserve.props.VacancyRequestParam;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class VacancyService extends DaoService<Vacancy, Long> {
+public interface VacancyService {
 
-    private final VacancyDao vacancyDao;
+    Vacancy findById(Long id);
 
-    @Autowired
-    public VacancyService(VacancyDao vacancyDao) {
-        this.vacancyDao = vacancyDao;
-    }
+    Long count(Map<String, Object> params);
 
-    @Override
-    public VacancyDao getDao() {
-        return vacancyDao;
-    }
+    List<Vacancy> findAll();
+    List<Vacancy> findAllByCompanyId(Long companyId);
+    List<Vacancy> findAll(Map<String, Object> params);
 
-    public List<Vacancy> findAllByCompanyId(Long companyId) {
-        Map<String, Object> params = new HashMap();
-        params.put(VacancyRequestParam.COMPANY_ID, companyId);
+    void deleteAll();
+    void deleteByCompanyId(Long companyId);
+    void deleteAll(Collection<Vacancy> vacancies);
 
-        getDao().getSessionProvider().openCurrentSession();
-        List<Vacancy> entities = getDao().findAll(params);
-        getDao().getSessionProvider().closeCurrentSession();
-        return entities;
-    }
+    void create(Vacancy vacancy);
 
-    public void deleteByCompanyId(Long companyId) {
-        Map<String, Object> params = new HashMap();
-        params.put(VacancyRequestParam.COMPANY_ID, companyId);
+    void update(Vacancy vacancy);
 
-        getDao().getSessionProvider().openCurrentSessionwithTransaction();
-        getDao().deleteAll(params);
-        getDao().getSessionProvider().closeCurrentSessionwithTransaction();
-    }
-
-
+    void deleteById(Long id);
 }

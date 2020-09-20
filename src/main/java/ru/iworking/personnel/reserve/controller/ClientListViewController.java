@@ -14,13 +14,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.iworking.personnel.reserve.component.CompanyCell;
-import ru.iworking.personnel.reserve.component.VacancyListViewPane;
+import ru.iworking.personnel.reserve.component.layout.VacancyListViewPane;
+import ru.iworking.personnel.reserve.component.list.view.cell.CompanyCell;
+import ru.iworking.personnel.reserve.component.list.view.factory.CompanyCellControllerFactory;
 import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.service.CompanyService;
 
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -35,6 +37,7 @@ public class ClientListViewController implements Initializable {
     @Autowired @Lazy private CompanyEditController companyEditController;
     @Autowired @Lazy private VacancyTabContentController vacanciesPaneController;
     @Autowired @Lazy private VacancyListViewController vacancyListViewController;
+    @Autowired @Lazy private CompanyCellControllerFactory companyCellControllerFactory;
 
     @FXML private Pane parent;
 
@@ -47,11 +50,12 @@ public class ClientListViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         companyListView.setCellFactory(listView -> {
-            CompanyCell cell = new CompanyCell();
+            CompanyCell cell = new CompanyCell(companyCellControllerFactory);
             cell.setOnMouseClicked(event -> {
                 companyEditController.clear();
                 companyEditController.hide();
-                createVacancyListViewPane(cell.getCompany());
+                if (Objects.nonNull(cell.getCompanyCellController()))
+                    createVacancyListViewPane(cell.getCompanyCellController().getCompany());
             });
             return cell;
         });

@@ -14,7 +14,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.iworking.personnel.reserve.component.ResumeCell;
+import ru.iworking.personnel.reserve.component.list.view.cell.ResumeCell;
+import ru.iworking.personnel.reserve.component.list.view.factory.ResumeCellControllerFactory;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.service.ResumeService;
 
@@ -33,6 +34,7 @@ public class ResumeListViewController implements Initializable {
 
     @Autowired @Lazy private ResumeEditController resumeEditController;
     @Autowired @Lazy private ResumeViewController resumeViewController;
+    @Autowired @Lazy private ResumeCellControllerFactory resumeCellControllerFactory;
 
     @FXML private Pane parent;
 
@@ -44,7 +46,7 @@ public class ResumeListViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         resumeListView.setCellFactory(listView -> {
-            ResumeCell cell = new ResumeCell();
+            ResumeCell cell = new ResumeCell(resumeCellControllerFactory);
             return cell;
         });
         resumeListView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {

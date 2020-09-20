@@ -1,38 +1,19 @@
 package ru.iworking.personnel.reserve.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.iworking.personnel.reserve.dao.CompanyDao;
-import ru.iworking.personnel.reserve.dao.Dao;
 import ru.iworking.personnel.reserve.entity.Company;
 
-@Service
-public class CompanyService extends DaoService<Company, Long> {
+import java.util.List;
 
-    private final VacancyService vacancyService;
+public interface CompanyService {
 
-    private final CompanyDao companyDao;
+    void deleteById(Long id);
+    void deleteAll();
 
-    @Autowired
-    public CompanyService(VacancyService vacancyService, CompanyDao companyDao) {
-        this.vacancyService = vacancyService;
-        this.companyDao = companyDao;
-    }
+    List<Company> findAll();
 
-    @Override
-    public Dao<Company, Long> getDao() {
-        return companyDao;
-    }
+    Company findById(Long id);
 
-    @Override
-    public void deleteById(Long aLong) {
-        super.deleteById(aLong);
-        vacancyService.deleteByCompanyId(aLong);
-    }
+    void create(Company company);
 
-    @Override
-    public void deleteAll() {
-        super.deleteAll();
-        vacancyService.deleteAll();
-    }
+    void update(Company company);
 }

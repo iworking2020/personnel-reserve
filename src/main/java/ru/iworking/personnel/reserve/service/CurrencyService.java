@@ -1,23 +1,11 @@
 package ru.iworking.personnel.reserve.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.iworking.personnel.reserve.dao.CurrencyDao;
-import ru.iworking.personnel.reserve.dao.Dao;
 import ru.iworking.personnel.reserve.entity.Currency;
 
-@Service
-public class CurrencyService extends DaoService<Currency, Long> {
+import java.util.List;
 
-    private final CurrencyDao currencyDao;
+public interface CurrencyService {
+    List<Currency> findAll();
 
-    @Autowired
-    public CurrencyService(CurrencyDao currencyDao) {
-        this.currencyDao = currencyDao;
-    }
-
-    @Override
-    public Dao<Currency, Long> getDao() {
-        return currencyDao;
-    }
+    Currency findById(Long id);
 }

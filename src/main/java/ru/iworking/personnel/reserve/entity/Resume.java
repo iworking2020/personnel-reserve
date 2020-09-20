@@ -1,6 +1,8 @@
 package ru.iworking.personnel.reserve.entity;
 
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +15,8 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 @Table(name = "RESUME")
+@NamedEntityGraph(name = "graph.Resume.experienceHistoryList",
+        attributeNodes = @NamedAttributeNode("experienceHistoryList"))
 public class Resume implements Cloneable {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESUME_SEQ_GEN")
@@ -58,16 +62,21 @@ public class Resume implements Cloneable {
     @Column(name = "IMAGE_CONTAINER_ID")
     private Long photoId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "RESUME_LEARNING_HISTORY")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LearningHistory> learningHistoryList;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "RESUME_EXPERIENCE_HISTORY")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("dateStart ASC")
     private List<ExperienceHistory> experienceHistoryList;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "resume")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "resume")
     private List<Click> clicks;
 
     @Override

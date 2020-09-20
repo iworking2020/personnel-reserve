@@ -151,7 +151,7 @@ public class VacancyEditController implements Initializable {
         }
 
         if (vacancyId == null) {
-            vacancyService.persist(vacancy);
+            vacancyService.create(vacancy);
         } else {
             vacancyService.update(vacancy);
         }

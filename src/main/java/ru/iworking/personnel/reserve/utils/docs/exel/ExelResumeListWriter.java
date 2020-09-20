@@ -12,10 +12,10 @@ import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.ProfField;
 import ru.iworking.personnel.reserve.entity.Resume;
 import ru.iworking.personnel.reserve.entity.WorkType;
-import ru.iworking.personnel.reserve.service.CurrencyService;
-import ru.iworking.personnel.reserve.service.EducationService;
-import ru.iworking.personnel.reserve.service.ProfFieldService;
-import ru.iworking.personnel.reserve.service.WorkTypeService;
+import ru.iworking.personnel.reserve.service.CurrencyServiceImpl;
+import ru.iworking.personnel.reserve.service.EducationServiceImpl;
+import ru.iworking.personnel.reserve.service.ProfFieldServiceImpl;
+import ru.iworking.personnel.reserve.service.WorkTypeServiceImpl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,10 +27,10 @@ public class ExelResumeListWriter extends ExelWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(ExelResumeListWriter.class);
 
-    @Autowired private ProfFieldService profFieldService;
-    @Autowired private EducationService educationService;
-    @Autowired private CurrencyService currencyService;
-    @Autowired private WorkTypeService workTypeService;
+    @Autowired private ProfFieldServiceImpl profFieldService;
+    @Autowired private EducationServiceImpl educationService;
+    @Autowired private CurrencyServiceImpl currencyService;
+    @Autowired private WorkTypeServiceImpl workTypeService;
 
     public enum props {
         PATH, LIST_RESUME
