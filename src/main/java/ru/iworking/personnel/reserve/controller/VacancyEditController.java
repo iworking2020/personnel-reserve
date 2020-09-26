@@ -5,26 +5,25 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.component.Messager;
 import ru.iworking.personnel.reserve.entity.*;
-import ru.iworking.personnel.reserve.model.CurrencyCellFactory;
-import ru.iworking.personnel.reserve.model.EducationCellFactory;
-import ru.iworking.personnel.reserve.model.ProfFieldCellFactory;
-import ru.iworking.personnel.reserve.model.WorkTypeCellFactory;
+import ru.iworking.personnel.reserve.model.*;
 import ru.iworking.personnel.reserve.service.*;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -40,14 +39,17 @@ public class VacancyEditController implements Initializable {
     @FXML private ComboBox<Education> vacancyEducationComboBox;
     @FXML private TextField vacancyWageTextField;
     @FXML private ComboBox<Currency> vacancyCurrencyComboBox;
-    @FXML private DatePicker vacancyExpDateStartDatePicker;
-    @FXML private DatePicker vacancyExpDateEndDatePicker;
+    @FXML private TextField minExperienceTextField;
+    @FXML private TextField maxExperienceTextField;
+    @FXML private ComboBox<PeriodExperience> periodMinExperienceComboBox;
+    @FXML private ComboBox<PeriodExperience> periodMaxExperienceComboBox;
 
     private final ProfFieldService profFieldService;
     private final WorkTypeService workTypeService;
     private final EducationService educationService;
     private final CurrencyService currencyService;
     private final VacancyService vacancyService;
+    private final PeriodExperienceService periodExperienceService;
 
     @Autowired @Lazy private CompanyViewController companyViewController;
     @Autowired @Lazy private VacancyListViewController vacancyListViewController;
@@ -56,8 +58,19 @@ public class VacancyEditController implements Initializable {
     private WorkTypeCellFactory workTypeCellFactory = new WorkTypeCellFactory();
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
     private CurrencyCellFactory currencyCellFactory = new CurrencyCellFactory();
+    private PeriodExperienceCellFactory periodExperienceCellFactory = new PeriodExperienceCellFactory();
 
     private Vacancy currentVacancy = null;
+
+    private PeriodExperience defalutPeriodExperience;
+
+    @PostConstruct
+    public void init() {
+        defalutPeriodExperience = periodExperienceService.findAll().parallelStream()
+                .filter(periodExperience -> periodExperience.getIsDefault())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("element with isDefault=true in PeriodExperience not found..."));
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,6 +91,14 @@ public class VacancyEditController implements Initializable {
         vacancyCurrencyComboBox.setButtonCell(currencyCellFactory.call(null));
         vacancyCurrencyComboBox.setCellFactory(currencyCellFactory);
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
+
+        periodMinExperienceComboBox.setButtonCell(periodExperienceCellFactory.call(null));
+        periodMinExperienceComboBox.setCellFactory(periodExperienceCellFactory);
+        periodMinExperienceComboBox.setItems(FXCollections.observableList(periodExperienceService.findAll()));
+
+        periodMaxExperienceComboBox.setButtonCell(periodExperienceCellFactory.call(null));
+        periodMaxExperienceComboBox.setCellFactory(periodExperienceCellFactory);
+        periodMaxExperienceComboBox.setItems(FXCollections.observableList(periodExperienceService.findAll()));
     }
 
     public void setData(Vacancy vacancy) {
@@ -89,9 +110,21 @@ public class VacancyEditController implements Initializable {
             if (vacancy.getEducationId() != null) vacancyEducationComboBox.setValue(educationService.findById(vacancy.getEducationId()));
             if (vacancy.getWage() != null) vacancyWageTextField.setText(vacancy.getWage().getCount().toString());
             if (vacancy.getWage() != null && vacancy.getWage().getCurrencyId() != null) vacancyCurrencyComboBox.setValue(currencyService.findById(vacancy.getWage().getCurrencyId()));
-            if (vacancy.getExperience() != null) {
-                vacancyExpDateStartDatePicker.setValue(vacancy.getExperience().getDateStart());
-                vacancyExpDateEndDatePicker.setValue(vacancy.getExperience().getDateEnd());
+            if (Objects.nonNull(vacancy.getMinExperience())) {
+                minExperienceTextField.setText(vacancy.getMinExperience().toString());
+                if (Objects.nonNull(vacancy.getPeriodMinExperience())) {
+                    periodMinExperienceComboBox.setValue(vacancy.getPeriodMinExperience());
+                } else {
+                    periodMinExperienceComboBox.setValue(defalutPeriodExperience);
+                }
+            }
+            if (Objects.nonNull(vacancy.getMaxExperience())) {
+                maxExperienceTextField.setText(vacancy.getMaxExperience().toString());
+                if (Objects.nonNull(vacancy.getPeriodMaxExperience())) {
+                    periodMaxExperienceComboBox.setValue(vacancy.getPeriodMaxExperience());
+                } else {
+                    periodMaxExperienceComboBox.setValue(defalutPeriodExperience);
+                }
             }
         } else {
             logger.debug("vacancy is null..");
@@ -108,9 +141,6 @@ public class VacancyEditController implements Initializable {
             vacancyListViewController.actionUpdate(event);
             vacancyListViewController.select(vacancy);
             //getVacanciesTableController().actionUpdate(event);
-        } else {
-            Messager.getInstance().sendMessage("Не введены обязательные поля...");
-            logger.debug("Fields vacancy edit block is not valid...");
         }
 
     }
@@ -125,8 +155,12 @@ public class VacancyEditController implements Initializable {
         Education education = vacancyEducationComboBox.getValue();
         String wageStr = vacancyWageTextField.getText();
         Currency currency = vacancyCurrencyComboBox.getValue();
-        LocalDate startDateExperience = vacancyExpDateStartDatePicker.getValue();
-        LocalDate endDateExperience = vacancyExpDateEndDatePicker.getValue();
+
+        String minExpStr = minExperienceTextField.getText();
+        String maxExpStr = maxExperienceTextField.getText();
+
+        PeriodExperience minPeriodExperience = periodMinExperienceComboBox.getValue();
+        PeriodExperience maxPeriodExperience = periodMaxExperienceComboBox.getValue();
 
         Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyService.findById(vacancyId);
         vacancy.setCompanyId(companyId);
@@ -144,10 +178,27 @@ public class VacancyEditController implements Initializable {
                 logger.error(e);
             }
         }
-        if (startDateExperience != null) {
-            Experience experience = new Experience();
-            experience.setDateStart(startDateExperience);
-            if (endDateExperience != null) experience.setDateEnd(endDateExperience);
+
+        if (Strings.isNotBlank(minExpStr)) {
+            vacancy.setMinExperience(Integer.valueOf(minExpStr));
+            if (Objects.nonNull(minPeriodExperience)) {
+                vacancy.setPeriodMinExperience(minPeriodExperience);
+            } else {
+                vacancy.setPeriodMinExperience(defalutPeriodExperience);
+            }
+        } else {
+            vacancy.setMinExperience(null);
+        }
+
+        if (Strings.isNotBlank(maxExpStr)) {
+            vacancy.setMaxExperience(Integer.valueOf(maxExpStr));
+            if (Objects.nonNull(maxPeriodExperience)) {
+                vacancy.setPeriodMaxExperience(maxPeriodExperience);
+            } else {
+                vacancy.setPeriodMaxExperience(defalutPeriodExperience);
+            }
+        } else {
+            vacancy.setMaxExperience(null);
         }
 
         if (vacancyId == null) {
@@ -160,12 +211,62 @@ public class VacancyEditController implements Initializable {
     }
 
     private Boolean isValid() {
-        Boolean isValid = true;
         if (vacancyProfessionTextField.getText() == null || vacancyProfessionTextField.getText().length() <= 0) {
             vacancyProfessionTextField.getStyleClass().add("has-error");
-            isValid = false;
+            Messager.getInstance().sendMessage("Не введены обязательные поля...");
+            logger.warn("Fields vacancy edit block is not valid...");
+            return false;
         }
-        return isValid;
+        if (Strings.isNotBlank(minExperienceTextField.getText()) && Objects.isNull(periodMinExperienceComboBox.getValue())) {
+            Messager.getInstance().sendMessage("Укажите период минимального опыта работы");
+            logger.warn("pls, set period for min experience");
+            return false;
+        }
+        if (Strings.isNotBlank(maxExperienceTextField.getText()) && Objects.isNull(periodMaxExperienceComboBox.getValue())) {
+            Messager.getInstance().sendMessage("Укажите период максимального опыта работы");
+            logger.warn("pls, set period for max experience");
+            return false;
+        }
+        if (Objects.nonNull(periodMinExperienceComboBox.getValue()) && Objects.nonNull(periodMaxExperienceComboBox.getValue())) {
+            LocalDate min = LocalDate.now();
+            if (Strings.isNotBlank(minExperienceTextField.getText())) {
+                Integer minCount = Integer.valueOf(minExperienceTextField.getText());
+                switch (periodMinExperienceComboBox.getValue().getNameSystem().getName()) {
+                    case "YEAR":
+                        min = min.plusYears(minCount);
+                        break;
+                    case "MONTH":
+                        min = min.plusMonths(minCount);
+                        break;
+                    case "DAY":
+                        min = min.plusDays(minCount);
+                        break;
+                }
+            }
+
+            LocalDate max = LocalDate.now();
+            if (Strings.isNotBlank(maxExperienceTextField.getText())) {
+                Integer maxCount = Integer.valueOf(maxExperienceTextField.getText());
+                switch (periodMaxExperienceComboBox.getValue().getNameSystem().getName()) {
+                    case "YEAR":
+                        max = max.plusYears(maxCount);
+                        break;
+                    case "MONTH":
+                        max = max.plusMonths(maxCount);
+                        break;
+                    case "DAY":
+                        max = max.plusDays(maxCount);
+                        break;
+                }
+            }
+
+            if (min.isAfter(max) || min.isEqual(max)) {
+                Messager.getInstance().sendMessage("Мимимальный опыт работы не может быть больше или равен максимальному");
+                logger.warn("min Experience bigger that max Experience");
+                return false;
+            }
+        }
+        return true;
     }
 
     @FXML
@@ -193,8 +294,10 @@ public class VacancyEditController implements Initializable {
         vacancyEducationComboBox.setValue(null);
         vacancyWageTextField.setText("");
         vacancyCurrencyComboBox.setValue(null);
-        vacancyExpDateStartDatePicker.setValue(null);
-        vacancyExpDateEndDatePicker.setValue(null);
+        minExperienceTextField.setText("");
+        maxExperienceTextField.setText("");
+        periodMinExperienceComboBox.setValue(null);
+        periodMaxExperienceComboBox.setValue(null);
     }
 
     public void reload(ActionEvent event) {

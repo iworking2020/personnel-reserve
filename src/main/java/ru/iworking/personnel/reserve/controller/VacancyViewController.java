@@ -12,11 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.iworking.personnel.reserve.entity.Currency;
+import ru.iworking.personnel.reserve.entity.PeriodExperience;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.entity.Wage;
 import ru.iworking.personnel.reserve.service.*;
+import ru.iworking.personnel.reserve.utils.TextUtil;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -32,6 +35,7 @@ public class VacancyViewController implements Initializable {
     @FXML private Label workTypeLabel;
     @FXML private Label educationLabel;
     @FXML private Label wageLabel;
+    @FXML private Label experienceLabel;
 
     private final ProfFieldService profFieldService;
     private final WorkTypeService workTypeService;
@@ -72,6 +76,7 @@ public class VacancyViewController implements Initializable {
             String prefixWorkType = "График работы: ";
             String prefixEducation = "Образование: ";
             String prefixWage = "Зарплата: ";
+            String prefixExperience = "Опыт работы: ";
 
             professionLabel.setText(prefixProfession + vacancy.getProfession());
 
@@ -104,6 +109,49 @@ public class VacancyViewController implements Initializable {
                 wageLabel.setText(wageStr);
             } else {
                 wageLabel.setText(prefixWage + "не указана");
+            }
+
+            String expStr = prefixExperience;
+            if (Objects.nonNull(vacancy.getMinExperience())) {
+                Integer minExp = vacancy.getMinExperience();
+                PeriodExperience periodMinExperience = vacancy.getPeriodMinExperience();
+                String nameMinExp;
+                switch (periodMinExperience.getNameSystem().getName()) {
+                    case "YEAR":
+                        nameMinExp = TextUtil.nameForYears(minExp);
+                        break;
+                    case "MONTH":
+                        nameMinExp = TextUtil.nameForMonths(minExp);
+                        break;
+                    case "DAY":
+                        nameMinExp = TextUtil.nameForDays(minExp);
+                        break;
+                    default:
+                        nameMinExp = periodMinExperience.getNameView().getName();
+                }
+                if (Objects.nonNull(vacancy.getMaxExperience())) {
+                    Integer maxExp = vacancy.getMaxExperience();
+                    PeriodExperience periodMaxExperience = vacancy.getPeriodMaxExperience();
+                    String nameMaxExp;
+                    switch (periodMaxExperience.getNameSystem().getName()) {
+                        case "YEAR":
+                            nameMaxExp = TextUtil.nameForYears(maxExp);
+                            break;
+                        case "MONTH":
+                            nameMaxExp = TextUtil.nameForMonths(maxExp);
+                            break;
+                        case "DAY":
+                            nameMaxExp = TextUtil.nameForDays(maxExp);
+                            break;
+                        default:
+                            nameMaxExp = periodMaxExperience.getNameView().getName();
+                    }
+                    experienceLabel.setText(expStr += String.format("%s %s - %s %s", minExp, nameMinExp, maxExp, nameMaxExp));
+                } else {
+                    experienceLabel.setText(expStr += String.format("%s %s", minExp, nameMinExp));
+                }
+            } else {
+                experienceLabel.setText(expStr += "не указан");
             }
 
         } else {

@@ -12,6 +12,7 @@
                   <Label fx:id="workTypeLabel" text="График работы" />
                   <Label fx:id="educationLabel" text="Образование" />
                   <Label fx:id="wageLabel" text="Зарплата" />
+            <Label fx:id="experienceLabel" text="Опыт работы" />
               </children>
           </VBox>
         <GridPane>

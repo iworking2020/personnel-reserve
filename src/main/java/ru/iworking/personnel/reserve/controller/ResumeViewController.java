@@ -34,6 +34,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -233,7 +235,7 @@ public class ResumeViewController implements Initializable {
             VBox.setMargin(wrap, new Insets(10.0, 0.0, 10.0, 0.0));
 
             Integer age = TimeUtil.calAge(experienceHistory.getDateStart(), experienceHistory.getDateEnd());
-            String experience = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForNumbers(age);
+            String experience = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForYears(age);
 
             wrap.getChildren().add(new Label("Опыт работы: " + experience));
             wrap.getChildren().add(new Label(experienceHistory.getDescription()));
@@ -255,9 +257,14 @@ public class ResumeViewController implements Initializable {
 
     @FXML
     public void actionSavePdf(ActionEvent event) {
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYYMMddhhmmss");
+
         Resume resume = resumeService.findById(getResumeId());
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialFileName("Resume"+resume.getId()+".pdf");
+        final Long resumeId = Objects.nonNull(resume.getId()) ? resume.getId() : 1L;
+        final String currentDateTime = formatter.format(LocalDateTime.now());
+        final String fileName = String.format("resume_%s_%s.pdf", resumeId, currentDateTime);
+        fileChooser.setInitialFileName(fileName);
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("All Files", "*.*"),
                 new FileChooser.ExtensionFilter("PDF", "*.pdf")

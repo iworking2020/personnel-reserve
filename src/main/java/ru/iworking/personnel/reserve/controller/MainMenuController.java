@@ -60,11 +60,8 @@ public class MainMenuController implements Initializable {
 
         File newDatabase = fileChooser.showOpenDialog(ApplicationJavaFX.PARENT_STAGE);
         if (newDatabase != null) {
-            try {
-                dataSource.getConnection().close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            entityManager.clear();
+            entityManager.close();
             try {
                 FileUtils.copyFile(newDatabase, currentDatabase);
             } catch (IOException e) {

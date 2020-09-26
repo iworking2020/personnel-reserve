@@ -1,0 +1,92 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.4_create_table_period_experience" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="PERIOD_EXPERIENCE"/>
+                <tableExists tableName="PERIOD_EXPERIENCE_NAMES_VIEW"/>
+                <sequenceExists sequenceName="PERIOD_EXPERIENCE_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="PERIOD_EXPERIENCE">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="NAME_SYSTEM" type="varchar"/>
+            <column name="IS_DEFAULT" type="boolean" defaultValue="false"/>
+        </createTable>
+        <createSequence
+                incrementBy="1"
+                minValue="1"
+                ordered="true"
+                sequenceName="PERIOD_EXPERIENCE_SEQ"
+                startValue="1000"/>
+        <createTable tableName="PERIOD_EXPERIENCE_NAMES_VIEW">
+            <column autoIncrement="false" name="PERIOD_EXPERIENCE_ID" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME_VIEW" type="varchar"/>
+            <column name="LOCALE" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint 
+                baseColumnNames="PERIOD_EXPERIENCE_ID" 
+                baseTableName="PERIOD_EXPERIENCE_NAMES_VIEW" 
+                constraintName="FK_PERIOD_EXPERIENCE_NAMES_VIEW" 
+                onDelete="CASCADE" 
+                onUpdate="RESTRICT" 
+                referencedColumnNames="ID" 
+                referencedTableName="PERIOD_EXPERIENCE" 
+                validate="true"/>
+    </changeSet>
+    <changeSet author="azemtsov" id="1.0.4_insert_data_period_experience" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="PERIOD_EXPERIENCE"/>
+            <tableExists tableName="PERIOD_EXPERIENCE_NAMES_VIEW"/>
+        </preConditions>
+        <insert tableName="PERIOD_EXPERIENCE">
+            <column name="ID" value="1"/>
+            <column name="NAME_SYSTEM" value="DAY"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE">
+            <column name="ID" value="2"/>
+            <column name="NAME_SYSTEM" value="MONTH"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE">
+            <column name="ID" value="3"/>
+            <column name="NAME_SYSTEM" value="YEAR"/>
+            <column name="IS_DEFAULT" value="true"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE_NAMES_VIEW">
+            <column name="PERIOD_EXPERIENCE_ID" value="1"/>
+            <column name="NAME_VIEW" value="дни"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE_NAMES_VIEW">
+            <column name="PERIOD_EXPERIENCE_ID" value="2"/>
+            <column name="NAME_VIEW" value="месяцы"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE_NAMES_VIEW">
+            <column name="PERIOD_EXPERIENCE_ID" value="3"/>
+            <column name="NAME_VIEW" value="годы"/>
+            <column name="LOCALE" value="ru_RU"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE_NAMES_VIEW">
+            <column name="PERIOD_EXPERIENCE_ID" value="1"/>
+            <column name="NAME_VIEW" value="days"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE_NAMES_VIEW">
+            <column name="PERIOD_EXPERIENCE_ID" value="2"/>
+            <column name="NAME_VIEW" value="months"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+        <insert tableName="PERIOD_EXPERIENCE_NAMES_VIEW">
+            <column name="PERIOD_EXPERIENCE_ID" value="3"/>
+            <column name="NAME_VIEW" value="years"/>
+            <column name="LOCALE" value="en"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

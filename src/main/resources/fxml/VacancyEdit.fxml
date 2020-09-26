@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <VBox fx:id="vacancyEdit" spacing="5.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.VacancyEditController">
     <children>
         <TextField fx:id="vacancyProfessionTextField" promptText="Профессия" />
@@ -11,8 +10,18 @@
         <ComboBox fx:id="vacancyEducationComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Образование" />
         <TextField fx:id="vacancyWageTextField" promptText="Зарплата" />
         <ComboBox fx:id="vacancyCurrencyComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0" promptText="Валюта" />
-        <DatePicker fx:id="vacancyExpDateStartDatePicker" maxWidth="1.7976931348623157E308" promptText="начало опыта раб." />
-        <DatePicker fx:id="vacancyExpDateEndDatePicker" maxWidth="1.7976931348623157E308" promptText="конец опыта раб." />
+      <HBox spacing="5.0">
+         <children>
+            <TextField fx:id="minExperienceTextField" promptText="Мин. опыт работы" HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="periodMinExperienceComboBox" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="120.0" promptText="Период" />
+         </children>
+      </HBox>
+      <HBox spacing="5.0">
+         <children>
+            <TextField fx:id="maxExperienceTextField" promptText="Макс. опыт работы" HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="periodMaxExperienceComboBox" maxWidth="1.7976931348623157E308" minWidth="120.0" prefWidth="120.0" promptText="Период" />
+         </children>
+      </HBox>
         <AnchorPane>
             <children>
                 <Button mnemonicParsing="false" onAction="#actionCancel" styleClass="grey" text="Отмена" AnchorPane.leftAnchor="0.0" />

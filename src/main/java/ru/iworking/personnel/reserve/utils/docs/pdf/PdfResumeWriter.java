@@ -10,9 +10,9 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.service.*;
@@ -24,17 +24,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class PdfResumeWriter extends PdfWriterFactory {
 
     private static final Logger logger = LogManager.getLogger(PdfResumeWriter.class);
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
 
-    @Autowired private ProfFieldServiceImpl profFieldService;
-    @Autowired private EducationServiceImpl educationService;
-    @Autowired private CurrencyServiceImpl currencyService;
-    @Autowired private WorkTypeServiceImpl workTypeService;
-    @Autowired private ImageContainerServiceImpl imageContainerService;
+    private final ProfFieldService profFieldService;
+    private final EducationService educationService;
+    private final CurrencyService currencyService;
+    private final WorkTypeService workTypeService;
+    private final ImageContainerService imageContainerService;
 
     public enum props {
         PATH, RESUME

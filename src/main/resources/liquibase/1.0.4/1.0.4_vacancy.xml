@@ -1,0 +1,35 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.4_update_table_vacancy" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="VACANCY"/>
+        </preConditions>
+        <dropColumn columnName="EXPERIENCE_ID" tableName="VACANCY"/>
+        <addColumn tableName="VACANCY">
+            <column name="MIN_EXPERIENCE" type="integer"/>
+            <column name="PERIOD_MIN_EXPERIENCE_ID" type="bigint"/>
+            <column name="MAX_EXPERIENCE" type="integer"/>
+            <column name="PERIOD_MAX_EXPERIENCE_ID" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+                constraintName="FK_PERIOD_MIN_EXPERIENCE"
+                baseColumnNames="PERIOD_MIN_EXPERIENCE_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="PERIOD_EXPERIENCE"
+                validate="true"/>
+        <addForeignKeyConstraint
+                constraintName="FK_PERIOD_MAX_EXPERIENCE"
+                baseColumnNames="PERIOD_MAX_EXPERIENCE_ID"
+                baseTableName="VACANCY"
+                onDelete="SET NULL"
+                onUpdate="RESTRICT"
+                referencedColumnNames="ID"
+                referencedTableName="PERIOD_EXPERIENCE"
+                validate="true"/>
+    </changeSet>
+</databaseChangeLog>

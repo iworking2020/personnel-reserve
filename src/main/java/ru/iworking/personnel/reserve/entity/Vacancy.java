@@ -48,9 +48,19 @@ public class Vacancy {
     @Column(name = "EDUCATION_ID")
     private Long educationId;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="EXPERIENCE_ID")
-    private Experience experience;
+    @Column(name = "MIN_EXPERIENCE")
+    protected Integer minExperience;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PERIOD_MIN_EXPERIENCE_ID")
+    protected PeriodExperience periodMinExperience;
+
+    @Column(name = "MAX_EXPERIENCE")
+    protected Integer maxExperience;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PERIOD_MAX_EXPERIENCE_ID")
+    protected PeriodExperience periodMaxExperience;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "DESCRIPTION_VACANCY_ID")
