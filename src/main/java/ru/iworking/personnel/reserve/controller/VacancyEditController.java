@@ -92,6 +92,9 @@ public class VacancyEditController implements Initializable {
         vacancyCurrencyComboBox.setCellFactory(currencyCellFactory);
         vacancyCurrencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
 
+        minExperienceTextField.setTextFormatter(new IntegerFormatter());
+        maxExperienceTextField.setTextFormatter(new IntegerFormatter());
+
         periodMinExperienceComboBox.setButtonCell(periodExperienceCellFactory.call(null));
         periodMinExperienceComboBox.setCellFactory(periodExperienceCellFactory);
         periodMinExperienceComboBox.setItems(FXCollections.observableList(periodExperienceService.findAll()));

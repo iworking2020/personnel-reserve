@@ -62,7 +62,7 @@
                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                      </padding>
                                  <GridPane.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    <Insets bottom="10.0" left="10.0" top="10.0" />
                                  </GridPane.margin>
                                  </VBox>
                              </children>
@@ -75,18 +75,21 @@
                             <children>
                                 <VBox spacing="5.0">
                                     <children>
-                                        <TextField fx:id="wageTextField" promptText="Зарплата" />
-                                        <ComboBox fx:id="currencyComboBox" maxWidth="1.7976931348623157E308" promptText="Валюта" />
                                         <TextField fx:id="professionTextField" promptText="Профессия" />
                                         <ComboBox fx:id="profFieldComboBox" maxWidth="1.7976931348623157E308" promptText="Профобласть" />
                                         <ComboBox fx:id="workTypeComboBox" maxWidth="1.7976931348623157E308" promptText="График" />
+                                        <TextField fx:id="wageTextField" promptText="Зарплата" />
+                                        <ComboBox fx:id="currencyComboBox" maxWidth="1.7976931348623157E308" promptText="Валюта" />
                                     </children>
                                     <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                        <Insets bottom="5.0" left="5.0" right="5.0" />
                                     </padding>
                                     <FlowPane.margin>
                                         <Insets top="10.0" />
                                     </FlowPane.margin>
+                                 <GridPane.margin>
+                                    <Insets top="10.0" />
+                                 </GridPane.margin>
                                 </VBox>
                             </children>
                           <columnConstraints>
@@ -110,7 +113,11 @@
                                              </FlowPane.margin>
                                          </Button>
                                      </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                                  </FlowPane>
+                              <Separator prefWidth="200.0" />
                                   <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="150.0" vbarPolicy="AS_NEEDED">
                                     <content>
                                         <VBox fx:id="educationEditList" spacing="10.0" />
@@ -132,7 +139,11 @@
                                               </FlowPane.margin>
                                           </Button>
                                       </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                                   </FlowPane>
+                              <Separator prefWidth="200.0" />
                                   <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="150.0" vbarPolicy="AS_NEEDED">
                                       <content>
                                           <VBox fx:id="experienceHistoryEditList" spacing="10.0" />
@@ -158,15 +169,16 @@
             </TabPane>
          </center>
          <bottom>
-            <AnchorPane BorderPane.alignment="CENTER">
+            <HBox BorderPane.alignment="CENTER">
                <children>
                         <Button fx:id="buttonCancel" mnemonicParsing="false" onAction="#actionCancel" styleClass="grey" text="Отмена" AnchorPane.leftAnchor="0.0" />
+                  <AnchorPane HBox.hgrow="ALWAYS" />
                         <Button mnemonicParsing="false" onAction="#actionSave" styleClass="grey" text="Сохранить" AnchorPane.rightAnchor="0.0" />
                </children>
                <BorderPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </BorderPane.margin>
-            </AnchorPane>
+            </HBox>
          </bottom>
       </BorderPane>
     </children>

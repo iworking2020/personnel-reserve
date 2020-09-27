@@ -5,3 +5,6 @@
 .scroll-pane {
     -fx-background-color: transparent;
 }
+
+.scroll-pane .filler { -fx-background-color: transparent; }
+.scroll-pane .corner { -fx-background-color: transparent; }
