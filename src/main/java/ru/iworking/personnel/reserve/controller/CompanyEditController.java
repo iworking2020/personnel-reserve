@@ -31,6 +31,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component
@@ -61,6 +62,8 @@ public class CompanyEditController implements Initializable {
     private final CompanyTypeService companyTypeService;
     private final CompanyService companyService;
     private final ImageContainerService imageContainerService;
+
+    private final ImageUtil imageUtil;
 
     @Autowired @Lazy private ClientListViewController companyListViewController;
 
@@ -123,8 +126,8 @@ public class CompanyEditController implements Initializable {
                 streetTextField.setText(address.getStreet());
                 houseTextField.setText(address.getHouse());
             }
-            if (company.getImageContainerId() != null) {
-                setLogoImageById(company.getImageContainerId());
+            if (company.getLogo() != null) {
+                setLogoImage(company.getLogo());
             } else {
                 setDefaultImage();
             }
@@ -179,19 +182,10 @@ public class CompanyEditController implements Initializable {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(imageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
 
-            logo = new ImageContainer(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
+            logo = new ImageContainer(imageUtil.scaleToSize(stream.toByteArray(), null,200));
+            company.setLogo(logo);
         } catch (IOException e) {
             logger.error(e);
-        }
-
-        if (logo != null) {
-            try {
-                imageContainerService.create(logo);
-                Long logoId = logo.getId();
-                company.setImageContainerId(logoId);
-            } catch (OutOfMemoryError ex) {
-                logger.error(ex);
-            }
         }
 
         if (companyId == null) {
@@ -217,21 +211,24 @@ public class CompanyEditController implements Initializable {
         return isValid;
     }
 
-    public void setLogoImageById(Long id) {
-        ImageContainer logo = imageContainerService.findById(id);
+    public void setLogoImage(ImageContainer logo) {
         InputStream targetStream = new ByteArrayInputStream(logo.getImage());
         javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         imageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
-                getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"),
-                150,
-                150,
-                false,
-                false);
-        imageView.setImage(defaultImage);
+        byte[] imageBytes = imageUtil.getDefaultCompanyImage();
+        if (Objects.nonNull(imageBytes) && imageBytes.length > 0) {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
+                    inputStream,
+                    150,
+                    150,
+                    false,
+                    false);
+            imageView.setImage(defaultImage);
+        }
     }
 
     public void clear() {

@@ -33,6 +33,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -79,6 +80,8 @@ public class ResumeEditController implements Initializable {
     private final ResumeService resumeService;
     private final CurrencyService currencyService;
 
+    private final ImageUtil imageUtil;
+
     @Autowired @Lazy private ResumeViewController resumeViewController;
     @Autowired @Lazy private ResumeListViewController resumeListViewController;
     @Autowired @Lazy private VacancyListViewController vacancyListViewController;
@@ -106,7 +109,11 @@ public class ResumeEditController implements Initializable {
         currencyComboBox.setCellFactory(currencyCellFactory);
         currencyComboBox.setItems(FXCollections.observableList(currencyService.findAll()));
 
-        photoImageView.setImage(new javafx.scene.image.Image(getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg")));
+        byte[] imageBytes = imageUtil.getDefaultResumeImage();
+        if (Objects.nonNull(imageBytes) && imageBytes.length > 0) {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            photoImageView.setImage(new javafx.scene.image.Image(inputStream));
+        }
     }
 
     public void setData(Resume resume) {
@@ -117,19 +124,19 @@ public class ResumeEditController implements Initializable {
         numberPhoneTextField.setText(resume.getNumberPhone().getNumber());
         emailTextField.setText(resume.getEmail());
         professionTextField.setText(resume.getProfession());
-        if (resume.getProfFieldId() != null) profFieldComboBox.setValue(profFieldService.findById(resume.getProfFieldId()));
+        if (resume.getProfField() != null) profFieldComboBox.setValue(resume.getProfField());
         if (resume.getWage() != null) {
             wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
-            if (resume.getWage().getCurrencyId() != null) {
-                currencyComboBox.setValue(currencyService.findById(resume.getWage().getCurrencyId()));
+            if (resume.getWage().getCurrency() != null) {
+                currencyComboBox.setValue(resume.getWage().getCurrency());
             }
         }
-        if (resume.getWorkTypeId() != null) workTypeComboBox.setValue(workTypeService.findById(resume.getWorkTypeId()));
+        if (resume.getWorkType() != null) workTypeComboBox.setValue(resume.getWorkType());
 
         addressTextArea.setText(resume.getAddress().getHouse());
 
-        if (resume.getPhotoId() != null) {
-            setPhotoImageById(resume.getPhotoId());
+        if (Objects.nonNull(resume.getPhoto())) {
+            setPhotoImage(resume.getPhoto().getImage());
         } else {
             setDefaultImage();
         }
@@ -228,39 +235,28 @@ public class ResumeEditController implements Initializable {
         resume.getNumberPhone().setNumber(numberStr);
         resume.setEmail(emailStr);
         resume.setProfession(professionStr);
-        if (profField != null) resume.setProfFieldId(profField.getId());
+        if (profField != null) resume.setProfField(profField);
         if (wageStr != null && !wageStr.isEmpty()) {
             if (resume.getWage() == null) resume.setWage(new Wage());
             try {
                 resume.getWage().setCount(new BigDecimal(wageStr.replaceAll(",",".")));
-                if (currency != null) resume.getWage().setCurrencyId(currency.getId());
+                if (currency != null) resume.getWage().setCurrency(currency);
             } catch (Exception e) {
                 logger.error(e);
             }
         }
-        if (workType != null) resume.setWorkTypeId(workType.getId());
+        if (workType != null) resume.setWorkType(workType);
         if (resume.getAddress() == null) resume.setAddress(new Address());
         resume.getAddress().setHouse(addressStr);
-
-        ImageContainer imageContainer = null;
 
         try(ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             BufferedImage originalImage = SwingFXUtils.fromFXImage(photoImageView.getImage(), null);
             ImageIO.write(originalImage, "png", stream);
 
-            imageContainer = new ImageContainer(ImageUtil.scaleToSize(stream.toByteArray(), null,200));
+            ImageContainer imageContainer = new ImageContainer(imageUtil.scaleToSize(stream.toByteArray(), null,300));
+            resume.setPhoto(imageContainer);
         } catch (IOException e) {
             logger.error(e);
-        }
-
-        if (imageContainer != null) {
-            try {
-                imageContainerService.create(imageContainer);
-                Long photoId = imageContainer.getId();
-                resume.setPhotoId(photoId);
-            } catch (OutOfMemoryError ex) {
-                logger.error(ex);
-            }
         }
 
         List<LearningHistory> learningHistories = educationEditList.getChildren().stream()
@@ -330,21 +326,29 @@ public class ResumeEditController implements Initializable {
         setDefaultImage();
     }
 
-    public void setPhotoImageById(Long id) {
-        ImageContainer imageContainer = imageContainerService.findById(id);
-        InputStream targetStream = new ByteArrayInputStream(imageContainer.getImage());
+    public void setPhotoImage(byte[] image) {
+        InputStream targetStream = new ByteArrayInputStream(image);
         javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         photoImageView.setImage(img);
     }
 
+    public void setPhotoImageById(Long id) {
+        ImageContainer imageContainer = imageContainerService.findById(id);
+        this.setPhotoImage(imageContainer.getImage());
+    }
+
     public void setDefaultImage() {
-        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
-                getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
-                150,
-                150,
-                false,
-                false);
-        photoImageView.setImage(defaultImage);
+        byte[] imageBytes = imageUtil.getDefaultResumeImage();
+        if (Objects.nonNull(imageBytes) && imageBytes.length > 0) {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
+                    inputStream,
+                    300,
+                    300,
+                    false,
+                    false);
+            photoImageView.setImage(defaultImage);
+        }
     }
 
     public void show() {

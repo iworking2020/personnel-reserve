@@ -45,11 +45,13 @@ public class Resume implements Cloneable {
     @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "PROF_FIELD_ID")
-    private Long profFieldId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PROF_FIELD_ID")
+    private ProfField profField;
 
-    @Column(name = "WORK_TYPE_ID")
-    private Long workTypeId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "WORK_TYPE_ID")
+    private WorkType workType;
 
     @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name="WAGE_ID")
@@ -59,8 +61,9 @@ public class Resume implements Cloneable {
     @JoinColumn(name="ADDRESS_ID")
     private Address address;
 
-    @Column(name = "IMAGE_CONTAINER_ID")
-    private Long photoId;
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="IMAGE_CONTAINER_ID")
+    private ImageContainer photo;
 
     @JoinTable(name = "RESUME_LEARNING_HISTORY")
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -70,7 +73,7 @@ public class Resume implements Cloneable {
     @JoinTable(name = "RESUME_EXPERIENCE_HISTORY")
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("dateStart ASC")
+    @OrderBy("dateStart DESC")
     private List<ExperienceHistory> experienceHistoryList;
 
     @EqualsAndHashCode.Exclude

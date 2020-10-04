@@ -5,17 +5,21 @@ import lombok.RequiredArgsConstructor;
 import ru.iworking.personnel.reserve.component.list.view.pane.VacancyPane;
 import ru.iworking.personnel.reserve.entity.ImageContainer;
 import ru.iworking.personnel.reserve.entity.Vacancy;
-import ru.iworking.personnel.reserve.service.ImageContainerServiceImpl;
-import ru.iworking.personnel.reserve.service.VacancyServiceImpl;
+import ru.iworking.personnel.reserve.service.ImageContainerService;
+import ru.iworking.personnel.reserve.service.VacancyService;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class VacancyCellController {
 
-    private final VacancyServiceImpl vacancyService;
-    private final ImageContainerServiceImpl imageContainerService;
+    private final VacancyService vacancyService;
+    private final ImageContainerService imageContainerService;
+
+    private final ImageUtil imageUtil;
 
     private final VacancyPane vacancyPane;
     @Getter private Vacancy vacancy;
@@ -38,12 +42,16 @@ public class VacancyCellController {
     }
 
     public void setDefaultImage() {
-        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
-                getClass().getClassLoader().getResourceAsStream("images/default-vacancy.jpg"),
-                150,
-                150,
-                false,
-                false);
-        vacancyPane.getImageView().setImage(defaultImage);
+        byte[] imageBytes = imageUtil.getDefaultVacancyImage();
+        if (Objects.nonNull(imageBytes) && imageBytes.length > 0) {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
+                    inputStream,
+                    150,
+                    150,
+                    false,
+                    false);
+            vacancyPane.getImageView().setImage(defaultImage);
+        }
     }
 }

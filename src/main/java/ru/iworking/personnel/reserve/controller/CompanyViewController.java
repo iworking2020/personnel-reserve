@@ -21,12 +21,14 @@ import ru.iworking.personnel.reserve.entity.NumberPhone;
 import ru.iworking.personnel.reserve.service.CompanyService;
 import ru.iworking.personnel.reserve.service.CompanyTypeService;
 import ru.iworking.personnel.reserve.service.ImageContainerService;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,8 @@ public class CompanyViewController implements Initializable {
     private final CompanyTypeService companyTypeService;
     private final CompanyService companyService;
     private final ImageContainerService imageContainerService;
+
+    private final ImageUtil imageUtil;
 
     @Autowired @Lazy private CompanyEditController companyEditController;
     @Autowired @Lazy private ClientListViewController clientListViewController;
@@ -137,8 +141,8 @@ public class CompanyViewController implements Initializable {
                 companyAddressLabel.setText(companyAddresPrefix + "не указан");
             }
 
-            if (company.getImageContainerId() != null) {
-                setLogoImageById(company.getImageContainerId());
+            if (company.getLogo() != null) {
+                setLogoImage(company.getLogo());
             } else {
                 setDefaultImage();
             }
@@ -160,21 +164,24 @@ public class CompanyViewController implements Initializable {
         if (vacancyListViewController != null) vacancyListViewController.actionBack(null);
     }
 
-    public void setLogoImageById(Long id) {
-        ImageContainer logo = imageContainerService.findById(id);
+    public void setLogoImage(ImageContainer logo) {
         InputStream targetStream = new ByteArrayInputStream(logo.getImage());
         javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         imageView.setImage(img);
     }
 
     public void setDefaultImage() {
-        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
-                getClass().getClassLoader().getResourceAsStream("images/default-company.jpg"),
-                150,
-                150,
-                false,
-                false);
-        imageView.setImage(defaultImage);
+        byte[] imageBytes = imageUtil.getDefaultCompanyImage();
+        if (Objects.nonNull(imageBytes) && imageBytes.length > 0) {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
+                    inputStream,
+                    150,
+                    150,
+                    false,
+                    false);
+            imageView.setImage(defaultImage);
+        }
     }
 
     public Company getCurrentCompany() {

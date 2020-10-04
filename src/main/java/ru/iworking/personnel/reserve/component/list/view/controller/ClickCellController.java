@@ -12,9 +12,11 @@ import ru.iworking.personnel.reserve.entity.ImageContainer;
 import ru.iworking.personnel.reserve.service.ClickService;
 import ru.iworking.personnel.reserve.service.ImageContainerService;
 import ru.iworking.personnel.reserve.service.ResumeStateService;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 public class ClickCellController {
@@ -23,6 +25,8 @@ public class ClickCellController {
     private final ResumeStateService resumeStateService;
     private final ClickService clickService;
     private final ClickListViewController clickListViewController;
+
+    private final ImageUtil imageUtil;
 
     private final ClickPane clickPane;
     @Getter private Click click;
@@ -45,28 +49,36 @@ public class ClickCellController {
             clickPane.getProfessionLabel().setText("не указана");
         }
         clickPane.getResumeStateComboBox().setValue(click.getResumeState());
-        if (click.getResume().getPhotoId() != null) {
-            setLogoImageById(click.getResume().getPhotoId());
+        if (Objects.nonNull(click.getResume()) && Objects.nonNull(click.getResume().getPhoto())) {
+            setLogoImage(click.getResume().getPhoto().getImage());
         } else {
             setDefaultImage();
         }
     }
 
-    public void setLogoImageById(Long id) {
-        ImageContainer imageContainer = imageContainerService.findById(id);
-        InputStream targetStream = new ByteArrayInputStream(imageContainer.getImage());
+    public void setLogoImage(byte[] image) {
+        InputStream targetStream = new ByteArrayInputStream(image);
         javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         clickPane.getImageView().setImage(img);
     }
 
+    public void setLogoImageById(Long id) {
+        ImageContainer imageContainer = imageContainerService.findById(id);
+        this.setLogoImage(imageContainer.getImage());
+    }
+
     public void setDefaultImage() {
-        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
-                getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
-                150,
-                150,
-                false,
-                false);
-        clickPane.getImageView().setImage(defaultImage);
+        byte[] imageBytes = imageUtil.getDefaultResumeImage();
+        if (Objects.nonNull(imageBytes) && imageBytes.length > 0) {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
+                    inputStream,
+                    150,
+                    150,
+                    false,
+                    false);
+            clickPane.getImageView().setImage(defaultImage);
+        }
     }
 
     private void actionUnfasten(ActionEvent event) {

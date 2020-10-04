@@ -7,6 +7,7 @@ import ru.iworking.personnel.reserve.component.list.view.controller.VacancyCellC
 import ru.iworking.personnel.reserve.component.list.view.pane.VacancyPane;
 import ru.iworking.personnel.reserve.service.ImageContainerServiceImpl;
 import ru.iworking.personnel.reserve.service.VacancyServiceImpl;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 @Component
 @Lazy
@@ -15,9 +16,10 @@ public class VacancyCellControllerFactory {
 
     private final VacancyServiceImpl vacancyService;
     private final ImageContainerServiceImpl imageContainerService;
+    private final ImageUtil imageUtil;
 
     public VacancyCellController create(VacancyPane vacancyPane) {
-        return new VacancyCellController(vacancyService, imageContainerService, vacancyPane);
+        return new VacancyCellController(vacancyService, imageContainerService, imageUtil, vacancyPane);
     }
 
 }

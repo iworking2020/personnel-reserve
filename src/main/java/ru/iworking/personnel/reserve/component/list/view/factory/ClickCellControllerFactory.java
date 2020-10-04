@@ -9,6 +9,7 @@ import ru.iworking.personnel.reserve.controller.ClickListViewController;
 import ru.iworking.personnel.reserve.service.ClickService;
 import ru.iworking.personnel.reserve.service.ImageContainerService;
 import ru.iworking.personnel.reserve.service.ResumeStateService;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 
 @Component
 @Lazy
@@ -19,9 +20,10 @@ public class ClickCellControllerFactory {
     private final ResumeStateService resumeStateService;
     private final ClickService clickService;
     private final ClickListViewController clickListViewController;
+    private final ImageUtil imageUtil;
 
     public ClickCellController create(ClickPane clickPane) {
-        return new ClickCellController(imageContainerService, resumeStateService, clickService, clickListViewController, clickPane);
+        return new ClickCellController(imageContainerService, resumeStateService, clickService, clickListViewController, imageUtil, clickPane);
     }
 
 }

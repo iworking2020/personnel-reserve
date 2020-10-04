@@ -3,6 +3,7 @@ package ru.iworking.personnel.reserve.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -26,7 +27,10 @@ public class NumberPhone {
     private String number;
 
     public String getFullNumber() {
-        return this.getCode() + this.getNumber();
+        String code = this.code;
+        String number = this.number;
+        String fullNumber = Objects.isNull(code) ? String.format("%s", number) : String.format("%s%s", code, number);
+        return fullNumber;
     }
 
 }

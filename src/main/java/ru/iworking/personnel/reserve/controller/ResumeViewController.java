@@ -5,10 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -25,6 +22,7 @@ import ru.iworking.personnel.reserve.entity.Currency;
 import ru.iworking.personnel.reserve.entity.*;
 import ru.iworking.personnel.reserve.interfaces.AppFunctionalInterface;
 import ru.iworking.personnel.reserve.service.*;
+import ru.iworking.personnel.reserve.utils.ImageUtil;
 import ru.iworking.personnel.reserve.utils.TextUtil;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
 import ru.iworking.personnel.reserve.utils.docs.pdf.PdfResumeWriter;
@@ -55,6 +53,8 @@ public class ResumeViewController implements Initializable {
     private final ResumeStateService resumeStateService;
     private final VacancyService vacancyService;
     private final PdfResumeWriter pdfResumeWriter;
+
+    private final ImageUtil imageUtil;
 
     @Autowired @Lazy private ResumeEditController resumeEditController;
     @Autowired @Lazy private VacancyViewController vacancyViewController;
@@ -159,16 +159,15 @@ public class ResumeViewController implements Initializable {
                 profession.setText(prefixProfession + "не указана");
             }
 
-            if (resume.getProfFieldId() != null) {
-                Long profFieldId = resume.getProfFieldId();
-                profField.setText(prefixProfField + profFieldService.findById(profFieldId).getNameView().getName());
+            if (resume.getProfField() != null) {
+                profField.setText(prefixProfField + resume.getProfField().getNameView().getName());
             } else {
                 profField.setText(prefixProfField + "не указана");
             }
             if (resume.getWage() != null) {
                 String wageString = prefixWage;
-                if(resume.getWage().getCurrencyId() != null) {
-                    Currency currency = currencyService.findById(resume.getWage().getCurrencyId());
+                if(resume.getWage().getCurrency() != null) {
+                    Currency currency = resume.getWage().getCurrency();
                     wageString += decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameView().getName();
                 } else {
                     wageString += decimalFormat.format(resume.getWage().getCountBigDecimal());
@@ -179,15 +178,15 @@ public class ResumeViewController implements Initializable {
                 wage.setText(prefixWage + "не указана");
             }
 
-            if (resume.getWorkTypeId() != null) {
-                WorkType workType1 = workTypeService.findById(resume.getWorkTypeId());
+            if (resume.getWorkType() != null) {
+                WorkType workType1 = resume.getWorkType();
                 workType.setText(prefixWorkType + workType1.getNameView().getName());
             } else {
                 workType.setText(prefixWorkType + "не указан");
             }
             address.setText(prefixAddress + resume.getAddress().getHouse());
-            if (resume.getPhotoId() != null) {
-                setPhotoImageById(resume.getPhotoId());
+            if (Objects.nonNull(resume.getPhoto())) {
+                setPhotoImage(resume.getPhoto().getImage());
             } else {
                 setDefaultImage();
             }
@@ -199,26 +198,38 @@ public class ResumeViewController implements Initializable {
         }
     }
 
-    public void setPhotoImageById(Long id) {
-        ImageContainer imageContainer = imageContainerService.findById(id);
-        InputStream targetStream = new ByteArrayInputStream(imageContainer.getImage());
+    public void setPhotoImage(byte[] image) {
+        InputStream targetStream = new ByteArrayInputStream(image);
         javafx.scene.image.Image img = new javafx.scene.image.Image(targetStream);
         photoImageView.setImage(img);
     }
 
+    public void setPhotoImageById(Long id) {
+        ImageContainer imageContainer = imageContainerService.findById(id);
+        this.setPhotoImage(imageContainer.getImage());
+    }
+
     public void setDefaultImage() {
-        javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
-                getClass().getClassLoader().getResourceAsStream("images/default-resume.jpg"),
-                150,
-                150,
-                false,
-                false);
-        photoImageView.setImage(defaultImage);
+        byte[] imageBytes = imageUtil.getDefaultResumeImage();
+        if (Objects.nonNull(imageBytes) && imageBytes.length > 0) {
+            InputStream inputStream = new ByteArrayInputStream(imageBytes);
+            javafx.scene.image.Image defaultImage = new javafx.scene.image.Image(
+                    inputStream,
+                    300,
+                    300,
+                    false,
+                    false);
+            photoImageView.setImage(defaultImage);
+        }
     }
 
     private void setDataLearningHistory(List<LearningHistory> list) {
         VBox pane = new VBox();
         list.stream().forEach(learningHistory -> {
+            if (pane.getChildren().size() > 0) {
+                final Separator separator = new Separator();
+                pane.getChildren().add(separator);
+            }
             VBox wrap = new VBox();
             VBox.setMargin(wrap, new Insets(10.0, 0.0, 10.0, 0.0));
             wrap.getChildren().add(new Label(learningHistory.getEducation().getNameView().getName()));
@@ -231,6 +242,10 @@ public class ResumeViewController implements Initializable {
     private void setDataExperienceHistory(List<ExperienceHistory> list) {
         VBox pane = new VBox();
         list.stream().forEach(experienceHistory -> {
+            if (pane.getChildren().size() > 0) {
+                final Separator separator = new Separator();
+                pane.getChildren().add(separator);
+            }
             VBox wrap = new VBox();
             VBox.setMargin(wrap, new Insets(10.0, 0.0, 10.0, 0.0));
 

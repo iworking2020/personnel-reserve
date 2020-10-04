@@ -101,9 +101,8 @@ public class VacancyViewController implements Initializable {
             Wage wage = vacancy.getWage();
             if (wage != null) {
                 String wageStr = prefixWage + wage.getCount();
-                Long currencyId = vacancy.getWage().getCurrencyId();
-                if (currencyId != null) {
-                    Currency currency = currencyService.findById(currencyId);
+                Currency currency = vacancy.getWage().getCurrency();
+                if (currency != null) {
                     wageStr += " " + currency.getNameView().getName();
                 }
                 wageLabel.setText(wageStr);

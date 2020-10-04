@@ -45,7 +45,8 @@ public class Company {
     @Column(name = "CREATER_ID")
     private Long createrId;
 
-    @Column(name = "IMAGE_CONTAINER_ID")
-    private Long imageContainerId;
+    @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="IMAGE_CONTAINER_ID")
+    private ImageContainer logo;
 
 }

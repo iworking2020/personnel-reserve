@@ -28,5 +28,19 @@
                 <include>*.pdf</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>templates</directory>
+            <outputDirectory>templates</outputDirectory>
+            <includes>
+                <include>*.ftl</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>fonts</directory>
+            <outputDirectory>fonts</outputDirectory>
+            <includes>
+                <include>*.ttf</include>
+            </includes>
+        </fileSet>
     </fileSets>
 </assembly>

@@ -112,7 +112,7 @@ public class VacancyEditController implements Initializable {
             if (vacancy.getWorkTypeId() != null) vacancyWorkTypeComboBox.setValue(workTypeService.findById(vacancy.getWorkTypeId()));
             if (vacancy.getEducationId() != null) vacancyEducationComboBox.setValue(educationService.findById(vacancy.getEducationId()));
             if (vacancy.getWage() != null) vacancyWageTextField.setText(vacancy.getWage().getCount().toString());
-            if (vacancy.getWage() != null && vacancy.getWage().getCurrencyId() != null) vacancyCurrencyComboBox.setValue(currencyService.findById(vacancy.getWage().getCurrencyId()));
+            if (vacancy.getWage() != null && vacancy.getWage().getCurrency() != null) vacancyCurrencyComboBox.setValue(vacancy.getWage().getCurrency());
             if (Objects.nonNull(vacancy.getMinExperience())) {
                 minExperienceTextField.setText(vacancy.getMinExperience().toString());
                 if (Objects.nonNull(vacancy.getPeriodMinExperience())) {
@@ -175,7 +175,7 @@ public class VacancyEditController implements Initializable {
             try {
                 Wage wage = new Wage();
                 wage.setCount(new BigDecimal(wageStr.replaceAll(",",".")));
-                if (currency != null) wage.setCurrencyId(currency.getId());
+                if (currency != null) wage.setCurrency(currency);
                 vacancy.setWage(wage);
             } catch (Exception e) {
                 logger.error(e);

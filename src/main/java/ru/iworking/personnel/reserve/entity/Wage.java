@@ -20,14 +20,16 @@ public class Wage {
     @EqualsAndHashCode.Exclude
     private Long id;
 
-    @Column(name = "count")
+    @Column(name = "COUNT")
     private BigDecimal count;
 
-    @Column(name = "currency_id")
-    private Long currencyId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CURRENCY_ID")
+    private Currency currency;
 
-    @Column(name = "period_id")
-    private Long periodId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PERIOD_ID")
+    private Period period;
 
     public Integer getCount() {
         return Integer.valueOf(Double.valueOf(count.toString()).intValue());

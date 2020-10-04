@@ -88,15 +88,15 @@ public class ExelResumeListWriter extends ExelWriterFactory {
             Cell email = row.createCell(6);
             email.setCellValue(resume.getEmail());
             Cell profField = row.createCell(7);
-            if (resume.getProfFieldId() != null) {
-                ProfField profField1 = profFieldService.findById(resume.getProfFieldId());
+            if (resume.getProfField() != null) {
+                ProfField profField1 = resume.getProfField();
                 profField.setCellValue(profField1.getNameView().getName());
             } else {
                 profField.setCellValue("не указана");
             }
             Cell workType = row.createCell(8);
-            if (resume.getWorkTypeId() != null) {
-                WorkType workType1 = workTypeService.findById(resume.getWorkTypeId());
+            if (resume.getWorkType() != null) {
+                WorkType workType1 = resume.getWorkType();
                 workType.setCellValue(workType1.getNameView().getName());
             } else {
                 workType.setCellValue("не указан");
@@ -108,8 +108,8 @@ public class ExelResumeListWriter extends ExelWriterFactory {
                 workType.setCellValue("не указана");
             }
             Cell currency = row.createCell(10);
-            if (resume.getWage() != null && resume.getWage().getCurrencyId()!= null) {
-                Currency currency1 = currencyService.findById(resume.getWage().getCurrencyId());
+            if (resume.getWage() != null && resume.getWage().getCurrency()!= null) {
+                Currency currency1 = resume.getWage().getCurrency();
                 currency.setCellValue(currency1.getNameView().getName());
             } else {
                 currency.setCellValue("не указана");
