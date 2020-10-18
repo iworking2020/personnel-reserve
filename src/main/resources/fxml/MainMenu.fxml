@@ -17,7 +17,7 @@
                   <Menu mnemonicParsing="false" text="Данные">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#actionLoadData" text="Загрузить" />
-                      <MenuItem mnemonicParsing="false" onAction="#actionUploadData" text="Выгрузить" />
+                      <MenuItem mnemonicParsing="false" onAction="#actionExportData" text="Выгрузить" />
                     </items>
                   </Menu>
               </menus>

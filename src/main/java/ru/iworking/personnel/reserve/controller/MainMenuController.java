@@ -5,14 +5,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.component.Messager;
 
 import java.io.File;
@@ -30,6 +40,9 @@ public class MainMenuController implements Initializable {
     private String datasourceUrl;
 
     @Autowired @Lazy private VacancyTabContentController vacancyTabContentController;
+
+    private final JobLauncher jobLauncher;
+    private final Job exportResumeJob;
 
     @FXML private Pane parent;
 
@@ -73,7 +86,30 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    private void actionUploadData(ActionEvent event) {
+    private void actionExportData(ActionEvent event) throws JobParametersInvalidException,
+            JobExecutionAlreadyRunningException,
+            JobRestartException,
+            JobInstanceAlreadyCompleteException
+    {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName("resume.csv");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        File copiedDatabase = fileChooser.showSaveDialog(ApplicationJavaFX.PARENT_STAGE);
+        if (copiedDatabase != null) {
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addString("JobID", String.valueOf(System.currentTimeMillis()))
+                    .addString("outputFileUrl", copiedDatabase.getAbsolutePath())
+                    .toJobParameters();
+
+            jobLauncher.run(exportResumeJob, jobParameters);
+        } else {
+            logger.info("user not select export path");
+        }
+
+
         /*File currentDatabase = getCurrentDataBase();
 
         FileChooser fileChooser = new FileChooser();
