@@ -121,10 +121,10 @@
                         <div class="separator-big"></div>
                         <span><b>Опыт работы: </b></span>
                         <#if experienceHistory.dateStart??>
-                            <span>${dateTimeFormatter.format(experienceHistory.dateStart)} - </span>
+                            <span>${experienceHistory.dateStart.toString(dateTimeFormatter)} - </span>
                         </#if>
                         <#if experienceHistory.dateEnd??>
-                            <span>${dateTimeFormatter.format(experienceHistory.dateEnd)}</span>
+                            <span>${experienceHistory.dateEnd.toString(dateTimeFormatter)}</span>
                         <#else>
                             <span>по сегодняшний день</span>
                         </#if>

@@ -1,11 +1,15 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.joda.time.LocalDateTime;
+import ru.iworking.personnel.reserve.converter.LocalDateTimeDeserializer;
+import ru.iworking.personnel.reserve.converter.LocalDateTimeSerializer;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -29,6 +33,8 @@ public class Vacancy {
     @Column(name = "COMPANY_ID")
     private Long companyId;
 
+    @JsonSerialize(converter = LocalDateTimeSerializer.class)
+    @JsonDeserialize(converter = LocalDateTimeDeserializer.class)
     @Column(name = "DATE_CREATE")
     private LocalDateTime dateCreate = LocalDateTime.now();
 

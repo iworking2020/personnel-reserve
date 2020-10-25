@@ -1,9 +1,11 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -21,7 +23,7 @@ public class Wage {
     private Long id;
 
     @Column(name = "COUNT")
-    private BigDecimal count;
+    private BigDecimal originalCount;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CURRENCY_ID")
@@ -31,11 +33,17 @@ public class Wage {
     @JoinColumn(name = "PERIOD_ID")
     private Period period;
 
+    @JsonIgnore
     public Integer getCount() {
-        return Integer.valueOf(Double.valueOf(count.toString()).intValue());
+        if (Objects.nonNull(originalCount)) {
+            return Integer.valueOf(Double.valueOf(originalCount.toString()).intValue());
+        } else {
+            return null;
+        }
     }
+    @JsonIgnore
     public BigDecimal getCountBigDecimal() {
-        return count;
+        return originalCount;
     }
 
 }

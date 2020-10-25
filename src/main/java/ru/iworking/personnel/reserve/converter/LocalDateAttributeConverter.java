@@ -1,19 +1,23 @@
 package ru.iworking.personnel.reserve.converter;
 
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.sql.Date;
-import java.time.LocalDate;
 
 @Converter(autoApply = true)
 public class LocalDateAttributeConverter implements AttributeConverter<LocalDate, Date> {
+
+    public static final DateTimeZone jodaTzUTC = DateTimeZone.getDefault();
 
     @Override
     public Date convertToDatabaseColumn(LocalDate localDate) {
         if (localDate == null) {
             return null;
         } else {
-            return Date.valueOf(localDate);
+            return new Date(localDate.toDateTimeAtStartOfDay(jodaTzUTC).getMillis());
         }
     }
 
@@ -22,7 +26,7 @@ public class LocalDateAttributeConverter implements AttributeConverter<LocalDate
         if (date == null) {
             return null;
         } else {
-            return date.toLocalDate();
+            return new LocalDate(date.getTime(), jodaTzUTC);
         }
     }
 

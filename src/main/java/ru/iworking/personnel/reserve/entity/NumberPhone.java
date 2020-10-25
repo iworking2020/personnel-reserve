@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class NumberPhone {
     @Column(name = "NUMBER")
     private String number;
 
+    @JsonIgnore
     public String getFullNumber() {
         String code = this.code;
         String number = this.number;

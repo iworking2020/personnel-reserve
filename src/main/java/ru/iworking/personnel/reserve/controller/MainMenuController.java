@@ -5,11 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -42,7 +45,9 @@ public class MainMenuController implements Initializable {
     @Autowired @Lazy private VacancyTabContentController vacancyTabContentController;
 
     private final JobLauncher jobLauncher;
+
     private final Job exportResumeJob;
+    private final Job importResumeJob;
 
     @FXML private Pane parent;
 
@@ -62,74 +67,53 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    private void actionLoadData(ActionEvent event) {
-        /*File currentDatabase = getCurrentDataBase();
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialFileName(currentDatabase.getName());
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Files", "*.*")
-        );
-
-        File newDatabase = fileChooser.showOpenDialog(ApplicationJavaFX.PARENT_STAGE);
-        if (newDatabase != null) {
-            entityManager.clear();
-            entityManager.close();
-            try {
-                FileUtils.copyFile(newDatabase, currentDatabase);
-            } catch (IOException e) {
-                logger.error(e);
+    private void actionImportData(ActionEvent event) throws
+            JobParametersInvalidException,
+            JobExecutionAlreadyRunningException,
+            JobRestartException,
+            JobInstanceAlreadyCompleteException {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Выберите директорию для импорта");
+        File dirSave = directoryChooser.showDialog(ApplicationJavaFX.PARENT_STAGE);
+        if (dirSave != null) {
+            String pathResumeJson = String.format("%s%s", dirSave.getAbsolutePath(), "/resume.json");
+            if (new File(pathResumeJson).exists()) {
+                JobParameters jobParameters = new JobParametersBuilder()
+                        .addString("JobID", String.valueOf(System.currentTimeMillis()))
+                        .addString("inputFileUrl", pathResumeJson)
+                        .toJobParameters();
+                jobLauncher.run(importResumeJob, jobParameters);
+            } else {
+                logger.debug("resume.json not found");
             }
-            ApplicationUtils.reload();
-        }*/
-
+        } else {
+            logger.info("user not select export path");
+        }
     }
 
     @FXML
-    private void actionExportData(ActionEvent event) throws JobParametersInvalidException,
+    private void actionExportData(ActionEvent event) throws
+            JobParametersInvalidException,
             JobExecutionAlreadyRunningException,
             JobRestartException,
             JobInstanceAlreadyCompleteException
     {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialFileName("resume.csv");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Files", "*.*")
-        );
+        final DateTimeFormatter formatter = DateTimeFormat.forPattern("YYYYMMddhhmmss");
 
-        File copiedDatabase = fileChooser.showSaveDialog(ApplicationJavaFX.PARENT_STAGE);
-        if (copiedDatabase != null) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Выберите директорию для сохранения");
+        File dirSave = directoryChooser.showDialog(ApplicationJavaFX.PARENT_STAGE);
+        if (dirSave != null) {
+            String path = String.format("%s%s%s", dirSave.getAbsolutePath(), "/personnel-reserve-", LocalDateTime.now().toString(formatter));
+
             JobParameters jobParameters = new JobParametersBuilder()
                     .addString("JobID", String.valueOf(System.currentTimeMillis()))
-                    .addString("outputFileUrl", copiedDatabase.getAbsolutePath())
+                    .addString("outputFileUrl", String.format("%s%s", path, "/resume.json"))
                     .toJobParameters();
-
             jobLauncher.run(exportResumeJob, jobParameters);
         } else {
             logger.info("user not select export path");
         }
-
-
-        /*File currentDatabase = getCurrentDataBase();
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialFileName(currentDatabase.getName());
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Files", "*.*")
-        );
-
-        File copiedDatabase = fileChooser.showSaveDialog(ApplicationJavaFX.PARENT_STAGE);
-        if (copiedDatabase != null) {
-            if (currentDatabase == null) throw new NullPointerException("currentDatabase is null");
-            //HibernateUtil.shutDown();
-            try {
-                FileUtils.copyFile(currentDatabase, copiedDatabase);
-            } catch (IOException e) {
-                logger.error(e);
-            }
-        } else {
-            logger.info("user not select database for copy");
-        }*/
 
     }
 

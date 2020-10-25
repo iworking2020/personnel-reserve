@@ -13,6 +13,10 @@ import javafx.stage.FileChooser;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -32,8 +36,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -166,11 +168,13 @@ public class ResumeViewController implements Initializable {
             }
             if (resume.getWage() != null) {
                 String wageString = prefixWage;
-                if(resume.getWage().getCurrency() != null) {
-                    Currency currency = resume.getWage().getCurrency();
-                    wageString += decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameView().getName();
-                } else {
-                    wageString += decimalFormat.format(resume.getWage().getCountBigDecimal());
+                if (Objects.nonNull(resume.getWage().getCount())) {
+                    if(resume.getWage().getCurrency() != null) {
+                        Currency currency = resume.getWage().getCurrency();
+                        wageString += decimalFormat.format(resume.getWage().getCountBigDecimal()) + " " + currency.getNameView().getName();
+                    } else {
+                        wageString += decimalFormat.format(resume.getWage().getCountBigDecimal());
+                    }
                 }
                 if (wageString.length() <= prefixWage.length()) wageString += "не указана";
                 wage.setText(wageString);
@@ -249,7 +253,15 @@ public class ResumeViewController implements Initializable {
             VBox wrap = new VBox();
             VBox.setMargin(wrap, new Insets(10.0, 0.0, 10.0, 0.0));
 
-            Integer age = TimeUtil.calAge(experienceHistory.getDateStart(), experienceHistory.getDateEnd());
+            Integer age;
+            if (Objects.nonNull(experienceHistory.getDateStart())) {
+                LocalDate start = experienceHistory.getDateStart();
+                LocalDate end = Objects.nonNull(experienceHistory.getDateEnd()) ? experienceHistory.getDateEnd() : null;
+                age = TimeUtil.calAge(start, end);
+            } else {
+                age = null;
+            }
+
             String experience = age == null || age <= 0 ? "без опыта" : age + " " + TextUtil.nameForYears(age);
 
             wrap.getChildren().add(new Label("Опыт работы: " + experience));
@@ -272,12 +284,12 @@ public class ResumeViewController implements Initializable {
 
     @FXML
     public void actionSavePdf(ActionEvent event) {
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYYMMddhhmmss");
+        final DateTimeFormatter formatter = DateTimeFormat.forPattern("YYYYMMddhhmmss");
 
         Resume resume = resumeService.findById(getResumeId());
         FileChooser fileChooser = new FileChooser();
         final Long resumeId = Objects.nonNull(resume.getId()) ? resume.getId() : 1L;
-        final String currentDateTime = formatter.format(LocalDateTime.now());
+        final String currentDateTime = LocalDateTime.now().toString(formatter);
         final String fileName = String.format("resume_%s_%s.pdf", resumeId, currentDateTime);
         fileChooser.setInitialFileName(fileName);
         fileChooser.getExtensionFilters().addAll(

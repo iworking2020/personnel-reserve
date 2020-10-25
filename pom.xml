@@ -34,6 +34,7 @@
         <thumbnailator.version>[0.4, 0.5)</thumbnailator.version>
         <reflections.version>0.9.12</reflections.version>
         <snakeyaml.version>1.23</snakeyaml.version>
+        <joda-time.version>2.10.6</joda-time.version>
         <spring-boot-dependencies.version>2.3.4.RELEASE</spring-boot-dependencies.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
@@ -135,6 +136,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda-time.version}</version>
         </dependency>
     </dependencies>
 

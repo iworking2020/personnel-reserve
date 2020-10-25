@@ -1,10 +1,14 @@
 package ru.iworking.personnel.reserve.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.joda.time.LocalDate;
+import ru.iworking.personnel.reserve.converter.LocalDateDeserializer;
+import ru.iworking.personnel.reserve.converter.LocalDateSerializer;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Data
@@ -21,9 +25,13 @@ public class Experience {
     @EqualsAndHashCode.Exclude
     private Long id;
 
+    @JsonSerialize(converter = LocalDateSerializer.class)
+    @JsonDeserialize(converter = LocalDateDeserializer.class)
     @Column(name = "DATE_START")
     private LocalDate dateStart;
 
+    @JsonSerialize(converter = LocalDateSerializer.class)
+    @JsonDeserialize(converter = LocalDateDeserializer.class)
     @Column(name = "DATE_END")
     private LocalDate dateEnd;
     

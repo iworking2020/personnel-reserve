@@ -125,7 +125,7 @@ public class ResumeEditController implements Initializable {
         emailTextField.setText(resume.getEmail());
         professionTextField.setText(resume.getProfession());
         if (resume.getProfField() != null) profFieldComboBox.setValue(resume.getProfField());
-        if (resume.getWage() != null) {
+        if (resume.getWage() != null && Objects.nonNull(resume.getWage().getCount())) {
             wageTextField.setText(decimalFormat.format(resume.getWage().getCountBigDecimal()));
             if (resume.getWage().getCurrency() != null) {
                 currencyComboBox.setValue(resume.getWage().getCurrency());
@@ -239,7 +239,7 @@ public class ResumeEditController implements Initializable {
         if (wageStr != null && !wageStr.isEmpty()) {
             if (resume.getWage() == null) resume.setWage(new Wage());
             try {
-                resume.getWage().setCount(new BigDecimal(wageStr.replaceAll(",",".")));
+                resume.getWage().setOriginalCount(new BigDecimal(wageStr.replaceAll(",",".")));
                 if (currency != null) resume.getWage().setCurrency(currency);
             } catch (Exception e) {
                 logger.error(e);

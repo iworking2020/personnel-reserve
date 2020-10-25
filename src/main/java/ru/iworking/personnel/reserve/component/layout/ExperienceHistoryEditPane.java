@@ -8,8 +8,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.LocalDate;
 import ru.iworking.personnel.reserve.entity.ExperienceHistory;
 import ru.iworking.personnel.reserve.utils.FXMLUtil;
+
+import java.util.Objects;
 
 
 public class ExperienceHistoryEditPane extends VBox {
@@ -38,18 +41,32 @@ public class ExperienceHistoryEditPane extends VBox {
 
     public void setExperienceHistory(ExperienceHistory experienceHistory) {
         experienceHistoryId = experienceHistory.getId();
-        dateStartDatePicker.setValue(experienceHistory.getDateStart());
-        dateEndDatePicker.setValue(experienceHistory.getDateEnd());
+        if (Objects.nonNull(experienceHistory.getDateStart())) {
+            LocalDate startJoda =  experienceHistory.getDateStart();
+            dateStartDatePicker.setValue(java.time.LocalDate.of(startJoda.getYear(), startJoda.getMonthOfYear(), startJoda.getDayOfMonth()));
+        }
+        if (Objects.nonNull(experienceHistory.getDateEnd())) {
+            LocalDate endJoda = experienceHistory.getDateEnd();
+            dateEndDatePicker.setValue(java.time.LocalDate.of(endJoda.getYear(), endJoda.getMonthOfYear(), endJoda.getDayOfMonth()));
+        }
         editableText.setText(experienceHistory.getDescription());
     }
 
     public ExperienceHistory getExperienceHistory() {
-        return ExperienceHistory.builder()
-                .id(experienceHistoryId)
-                .dateStart(dateStartDatePicker.getValue())
-                .dateEnd(dateEndDatePicker.getValue())
-                .description(editableText.getText())
-                .build();
+        java.time.LocalDate start = dateStartDatePicker.getValue();
+        java.time.LocalDate end  = dateEndDatePicker.getValue();
+        ExperienceHistory experienceHistory = new ExperienceHistory();
+        experienceHistory.setId(experienceHistoryId);
+        if (Objects.nonNull(start)) {
+            final LocalDate localDate = new LocalDate(start.getYear(), start.getMonthValue(), start.getDayOfMonth());
+            experienceHistory.setDateStart(localDate);
+        }
+        if (Objects.nonNull(end)) {
+            final LocalDate localDate = new LocalDate(end.getYear(), end.getMonthValue(), end.getDayOfMonth());
+            experienceHistory.setDateEnd(localDate);
+        }
+        experienceHistory.setDescription(editableText.getText());
+        return experienceHistory;
     }
 
     @FXML

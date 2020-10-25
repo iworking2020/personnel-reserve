@@ -10,6 +10,8 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.iworking.personnel.reserve.component.FreeMarkerComponent;
@@ -22,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class PdfResumeWriter extends PdfWriterFactory {
     @Value("${spring.freemarker.template.folder.fonts}")
     private String folderFonts;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
+    private final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd.MM.YYYY");
 
     private final ImageUtil imageUtil;
 

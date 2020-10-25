@@ -1,10 +1,15 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.joda.time.LocalDate;
+import ru.iworking.personnel.reserve.converter.LocalDateDeserializer;
+import ru.iworking.personnel.reserve.converter.LocalDateSerializer;
 import ru.iworking.personnel.reserve.utils.TimeUtil;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Data
@@ -40,13 +45,17 @@ public class Profile {
     @Column(name = "EMAIL")
     private String email;
 
+    @JsonSerialize(converter = LocalDateSerializer.class)
+    @JsonDeserialize(converter = LocalDateDeserializer.class)
     @Column(name = "DATE_BIRTHDAY")
     private LocalDate dateBirthday;
 
+    @JsonIgnore
     public String getFullName() {
         return this.getLastName() + " " + this.getFirstName() + " " + this.getMiddleName();
     }
 
+    @JsonIgnore
     public Integer getAge() {
         return TimeUtil.calAge(this.getDateBirthday(), null);
     }

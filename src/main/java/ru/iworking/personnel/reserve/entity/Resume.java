@@ -1,11 +1,17 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.joda.time.LocalDateTime;
+import ru.iworking.personnel.reserve.converter.LocalDateTimeDeserializer;
+import ru.iworking.personnel.reserve.converter.LocalDateTimeSerializer;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -15,8 +21,6 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 @Table(name = "RESUME")
-@NamedEntityGraph(name = "graph.Resume.experienceHistoryList",
-        attributeNodes = @NamedAttributeNode("experienceHistoryList"))
 public class Resume implements Cloneable {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESUME_SEQ_GEN")
@@ -28,6 +32,8 @@ public class Resume implements Cloneable {
     @Column(name = "USER_ID")
     private Long userId;
 
+    @JsonSerialize(converter = LocalDateTimeSerializer.class)
+    @JsonDeserialize(converter = LocalDateTimeDeserializer.class)
     @Column(name = "DATE_CREATE")
     private LocalDateTime dateCreate = LocalDateTime.now();
 
@@ -68,19 +74,20 @@ public class Resume implements Cloneable {
     @JoinTable(name = "RESUME_LEARNING_HISTORY")
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<LearningHistory> learningHistoryList;
+    private List<LearningHistory> learningHistoryList = new LinkedList<>();
 
     @JoinTable(name = "RESUME_EXPERIENCE_HISTORY")
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("dateStart DESC")
-    private List<ExperienceHistory> experienceHistoryList;
+    private List<ExperienceHistory> experienceHistoryList = new LinkedList<>();
 
+    @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "resume")
-    private List<Click> clicks;
+    private List<Click> clicks = new LinkedList<>();
 
     @Override
     public Object clone() throws CloneNotSupportedException {

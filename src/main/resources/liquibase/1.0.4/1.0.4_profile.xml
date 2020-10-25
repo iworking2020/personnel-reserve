@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.4_update_table_profile_2020102001" objectQuotingStrategy="LEGACY" runInTransaction="true">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="PROFILE"/>
+        </preConditions>
+        <addColumn tableName="PROFILE">
+            <column name="DATE_BIRTHDAY_TEMP" type="DATE">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <update tableName="PROFILE">
+            <column name="DATE_BIRTHDAY_TEMP" valueComputed="DATE_BIRTHDAY"/>
+        </update>
+        <dropColumn columnName="DATE_BIRTHDAY" tableName="PROFILE"/>
+        <renameColumn  newColumnName="DATE_BIRTHDAY"
+                       oldColumnName="DATE_BIRTHDAY_TEMP"
+                       tableName="PROFILE"/>
+    </changeSet>
+</databaseChangeLog>

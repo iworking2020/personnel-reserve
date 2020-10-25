@@ -1,9 +1,13 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.joda.time.LocalDateTime;
+import ru.iworking.personnel.reserve.converter.LocalDateTimeDeserializer;
+import ru.iworking.personnel.reserve.converter.LocalDateTimeSerializer;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -19,6 +23,8 @@ public class Company {
     @Column(name = "ID")
     private Long id;
 
+    @JsonSerialize(converter = LocalDateTimeSerializer.class)
+    @JsonDeserialize(converter = LocalDateTimeDeserializer.class)
     @Column(name = "DATE_CREATE")
     private LocalDateTime dateCreate = LocalDateTime.now();
 

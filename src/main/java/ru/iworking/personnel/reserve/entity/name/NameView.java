@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.entity.name;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.iworking.personnel.reserve.interfaces.name.INameView;
 import ru.iworking.personnel.reserve.utils.LocaleUtil;
 
@@ -17,6 +18,7 @@ public class NameView implements INameView, Serializable {
     @MapKeyColumn(name="locale")
     protected Map<Locale, String> namesView;
 
+    @JsonIgnore
     @Override
     public String getName(Locale locale) {
         return namesView.get(locale);
@@ -30,6 +32,7 @@ public class NameView implements INameView, Serializable {
         this.namesView = namesView;
     }
 
+    @JsonIgnore
     @Override
     public String getName() {
         return namesView.get(LocaleUtil.getInstance().getDefault());

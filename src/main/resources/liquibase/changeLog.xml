@@ -25,4 +25,6 @@
     <include file="liquibase/1.0.3/1.0.3_click.xml"/>
     <include file="liquibase/1.0.4/1.0.4_period_experience.xml"/>
     <include file="liquibase/1.0.4/1.0.4_vacancy.xml"/>
+    <include file="liquibase/1.0.4/1.0.4_experience.xml"/>
+    <include file="liquibase/1.0.4/1.0.4_profile.xml"/>
 </databaseChangeLog>

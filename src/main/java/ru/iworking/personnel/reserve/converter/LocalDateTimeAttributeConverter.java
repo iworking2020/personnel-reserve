@@ -1,9 +1,10 @@
 package ru.iworking.personnel.reserve.converter;
 
+import org.joda.time.LocalDateTime;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Converter(autoApply = true)
 public class LocalDateTimeAttributeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
@@ -13,7 +14,7 @@ public class LocalDateTimeAttributeConverter implements AttributeConverter<Local
         if (localDateTime == null) {
             return null;
         } else {
-            return Timestamp.valueOf(localDateTime);
+            return new Timestamp(localDateTime.toDateTime().getMillis());
         }
     }
 
@@ -22,7 +23,7 @@ public class LocalDateTimeAttributeConverter implements AttributeConverter<Local
         if (timestamp == null) {
             return null;
         } else {
-            return timestamp.toLocalDateTime();
+            return new LocalDateTime(timestamp.getTime());
         }
     }
 

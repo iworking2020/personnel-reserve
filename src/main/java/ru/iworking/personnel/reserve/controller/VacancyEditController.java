@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,6 @@ import ru.iworking.personnel.reserve.service.*;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -174,7 +174,7 @@ public class VacancyEditController implements Initializable {
         if (!wageStr.isEmpty()) {
             try {
                 Wage wage = new Wage();
-                wage.setCount(new BigDecimal(wageStr.replaceAll(",",".")));
+                wage.setOriginalCount(new BigDecimal(wageStr.replaceAll(",",".")));
                 if (currency != null) wage.setCurrency(currency);
                 vacancy.setWage(wage);
             } catch (Exception e) {

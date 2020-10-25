@@ -2,17 +2,13 @@ package ru.iworking.personnel.reserve.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 
 public class TimeUtil {
 
-    public static Integer calAge(LocalDate birthDate, LocalDate currentDate) {
+    public static Integer calAge(org.joda.time.LocalDate birthDate, org.joda.time.LocalDate currentDate) {
         if (birthDate == null) return null;
-        if (currentDate == null) currentDate = LocalDate.now();
-        return Period.between(birthDate, currentDate).getYears();
+        if (currentDate == null) currentDate = org.joda.time.LocalDate.now();
+        return org.joda.time.Years.yearsBetween(birthDate, currentDate).getYears();
     }
 
     public static Integer calAge(java.util.Date birthDate, java.util.Date currentDate) {
@@ -23,10 +19,6 @@ public class TimeUtil {
         int d2 = Integer.parseInt(formatter.format(currentDate));
         int age = (d2 - d1) / 10000;
         return age;
-    }
-
-    public static LocalDate convertToLocalDate(java.util.Date dateToConvert) {
-        return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
 }
