@@ -22,4 +22,8 @@ public interface ResumeService {
     void update(Resume resume);
 
     void deleteById(Long id);
+    void deleteAll();
+
+    void restartSequence();
+    void restartSequence(Integer value);
 }

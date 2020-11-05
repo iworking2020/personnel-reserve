@@ -64,6 +64,6 @@ public abstract class ApplicationParent extends Application implements ParentSta
     }
 
     @Override
-    public void stop() { springContext.close(); }
+    public void stop() { if (springContext != null) springContext.close(); }
 
 }

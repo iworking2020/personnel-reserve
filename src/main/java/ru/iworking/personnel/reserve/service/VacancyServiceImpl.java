@@ -3,6 +3,7 @@ package ru.iworking.personnel.reserve.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.props.VacancyRequestParam;
 import ru.iworking.personnel.reserve.repository.VacancyRepository;
@@ -12,7 +13,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +52,11 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
+    public List<Vacancy> findAllByCompany(Company company) {
+        return vacancyRepository.findAllByCompany(company);
+    }
+
+    @Override
     public void deleteAll() {
         vacancyRepository.deleteAll();
     }
@@ -81,20 +86,17 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> findAllByCompanyId(Long companyId) {
-        Map<String, Object> params = new HashMap();
-        params.put(VacancyRequestParam.COMPANY_ID, companyId);
-        List<Vacancy> entities = this.findAll(params);
-        return entities;
+    @Transactional
+    public void restartSequence() {
+        this.restartSequence(1000);
     }
 
     @Override
     @Transactional
-    public void deleteByCompanyId(Long companyId) {
-        Map<String, Object> params = new HashMap();
-        params.put(VacancyRequestParam.COMPANY_ID, companyId);
-        List<Vacancy> vacancies = this.findAll(params);
-        vacancies.stream().forEach(vacancy -> this.deleteById(vacancy.getId()));
+    public void restartSequence(Integer value) {
+        entityManager.createNativeQuery("ALTER SEQUENCE VACANCY_SEQ RESTART WITH :id")
+                .setParameter("id", value)
+                .executeUpdate();
     }
 
     private Query createQuery(String sql, Map<String, Object> params) {

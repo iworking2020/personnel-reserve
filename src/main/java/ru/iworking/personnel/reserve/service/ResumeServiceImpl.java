@@ -94,6 +94,11 @@ public class ResumeServiceImpl implements ResumeService {
         resumeRepository.deleteById(id);
     }
 
+    @Override
+    public void deleteAll() {
+        resumeRepository.deleteAll();
+    }
+
     private Query createQuery(String sql, Map<String, Object> params, Class<?> clazz) {
         String firstName = params.get(ResumeRequestParam.FIRST_NAME) != null ? params.get(ResumeRequestParam.FIRST_NAME).toString() : null;
         String lastName = params.get(ResumeRequestParam.LAST_NAME) != null ? params.get(ResumeRequestParam.LAST_NAME).toString() : null;
@@ -128,5 +133,20 @@ public class ResumeServiceImpl implements ResumeService {
         if (resumeStateId != null) query.setParameter("resumeStateId", resumeStateId);
 
         return query;
+    }
+
+    @Override
+    @Transactional
+    public void restartSequence() {
+        this.restartSequence(1000);
+    }
+
+    @Override
+    @Transactional
+    public void restartSequence(Integer value) {
+        entityManager.createNativeQuery("ALTER SEQUENCE RESUME_SEQ RESTART WITH :id")
+                .setParameter("id", value)
+                .executeUpdate();
+
     }
 }

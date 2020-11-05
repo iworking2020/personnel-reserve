@@ -16,53 +16,53 @@ import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
-import ru.iworking.personnel.reserve.entity.Resume;
-import ru.iworking.personnel.reserve.repository.ResumeRepository;
+import ru.iworking.personnel.reserve.entity.Company;
+import ru.iworking.personnel.reserve.repository.CompanyRepository;
 
 @Configuration
 @RequiredArgsConstructor
-public class ImportResumeJobConfig {
+public class ImportCompanyJobConfig {
 
     public final JobBuilderFactory jobBuilderFactory;
     public final StepBuilderFactory stepBuilderFactory;
 
     private final JobCompletionListener jobCompletionListener;
-    private final ResumeJobListener resumeJobListener;
+    private final CompanyJobListener companyJobListener;
 
-    private final ResumeRepository resumeRepository;
+    private final CompanyRepository companyRepository;
 
     @Bean
-    public Job importResumeJob(Step stepImportResume) {
-        return jobBuilderFactory.get("importResumeJob")
+    public Job importCompanyJob(Step stepImportCompany) {
+        return jobBuilderFactory.get("importCompanyJob")
                 .incrementer(new RunIdIncrementer())
                 .listener(jobCompletionListener)
-                .listener(resumeJobListener)
-                .start(stepImportResume)
+                .listener(companyJobListener)
+                .start(stepImportCompany)
                 .build();
     }
 
     @Bean
-    public Step stepImportResume(ItemReader<Resume> jsonResumeItemReader, ItemWriter<Resume> resumeToJpaItemWriter) {
-        return stepBuilderFactory.get("stepExportResume")
-                .<Resume, Resume> chunk(1)
-                .reader(jsonResumeItemReader)
-                .writer(resumeToJpaItemWriter)
+    public Step stepImportCompany(ItemReader<Company> jsonCompanyItemReader, ItemWriter<Company> companyToJpaItemWriter) {
+        return stepBuilderFactory.get("stepExportCompany")
+                .<Company, Company> chunk(1)
+                .reader(jsonCompanyItemReader)
+                .writer(companyToJpaItemWriter)
                 .build();
     }
 
     @Bean
-    public JsonItemReader<Resume> jsonResumeItemReader(Resource inputFile) {
-        return new JsonItemReaderBuilder<Resume>()
-                .jsonObjectReader(new JacksonJsonObjectReader<>(Resume.class))
+    public JsonItemReader<Company> jsonCompanyItemReader(Resource inputFile) {
+        return new JsonItemReaderBuilder<Company>()
+                .jsonObjectReader(new JacksonJsonObjectReader<>(Company.class))
                 .resource(inputFile)
-                .name("resumeJsonItemReader")
+                .name("companyJsonItemReader")
                 .build();
     }
 
     @Bean
-    public ItemWriter<Resume> resumeToJpaItemWriter() {
-        RepositoryItemWriter<Resume> writer = new RepositoryItemWriter<>();
-        writer.setRepository(resumeRepository);
+    public ItemWriter<Company> companyToJpaItemWriter() {
+        RepositoryItemWriter<Company> writer = new RepositoryItemWriter<>();
+        writer.setRepository(companyRepository);
         writer.setMethodName("save");
         return writer;
     }

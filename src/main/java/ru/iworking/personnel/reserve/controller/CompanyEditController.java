@@ -65,7 +65,7 @@ public class CompanyEditController implements Initializable {
 
     private final ImageUtil imageUtil;
 
-    @Autowired @Lazy private ClientListViewController companyListViewController;
+    @Autowired @Lazy private CompanyListViewController companyListViewController;
 
     private Company currentCompany = null;
 

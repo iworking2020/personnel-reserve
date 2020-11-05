@@ -16,4 +16,8 @@ public interface CompanyService {
     void create(Company company);
 
     void update(Company company);
+
+    void restartSequence();
+    void restartSequence(Integer value);
+
 }

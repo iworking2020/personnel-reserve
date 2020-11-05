@@ -27,9 +27,9 @@ import java.util.ResourceBundle;
 
 @Component
 @RequiredArgsConstructor
-public class ClientListViewController implements Initializable {
+public class CompanyListViewController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(ClientListViewController.class);
+    private static final Logger logger = LogManager.getLogger(CompanyListViewController.class);
 
     private final CompanyService companyService;
 

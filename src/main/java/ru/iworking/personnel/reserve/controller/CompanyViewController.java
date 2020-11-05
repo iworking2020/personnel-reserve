@@ -54,7 +54,7 @@ public class CompanyViewController implements Initializable {
     private final ImageUtil imageUtil;
 
     @Autowired @Lazy private CompanyEditController companyEditController;
-    @Autowired @Lazy private ClientListViewController clientListViewController;
+    @Autowired @Lazy private CompanyListViewController companyListViewController;
     @Autowired @Lazy private VacancyListViewController vacancyListViewController;
 
     private Company currentCompany = null;
@@ -160,7 +160,7 @@ public class CompanyViewController implements Initializable {
     @FXML
     public void actionDelete(ActionEvent event) {
         companyService.deleteById(currentCompany.getId());
-        clientListViewController.actionUpdate(event);
+        companyListViewController.actionUpdate(event);
         if (vacancyListViewController != null) vacancyListViewController.actionBack(null);
     }
 

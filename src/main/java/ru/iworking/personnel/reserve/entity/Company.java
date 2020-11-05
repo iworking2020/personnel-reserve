@@ -3,11 +3,15 @@ package ru.iworking.personnel.reserve.entity;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.joda.time.LocalDateTime;
 import ru.iworking.personnel.reserve.converter.LocalDateTimeDeserializer;
 import ru.iworking.personnel.reserve.converter.LocalDateTimeSerializer;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Data
@@ -54,5 +58,16 @@ public class Company {
     @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name="IMAGE_CONTAINER_ID")
     private ImageContainer logo;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(
+            name="COMPANY_VACANCY",
+            joinColumns = @JoinColumn( name="COMPANY_ID"),
+            inverseJoinColumns = @JoinColumn( name="VACANCY_ID")
+    )
+    private List<Vacancy> vacancyList = new LinkedList<>();
 
 }

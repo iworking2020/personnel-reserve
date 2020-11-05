@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.service;
 
+import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 
 import java.util.Collection;
@@ -13,11 +14,10 @@ public interface VacancyService {
     Long count(Map<String, Object> params);
 
     List<Vacancy> findAll();
-    List<Vacancy> findAllByCompanyId(Long companyId);
     List<Vacancy> findAll(Map<String, Object> params);
+    List<Vacancy> findAllByCompany(Company company);
 
     void deleteAll();
-    void deleteByCompanyId(Long companyId);
     void deleteAll(Collection<Vacancy> vacancies);
 
     void create(Vacancy vacancy);
@@ -25,4 +25,7 @@ public interface VacancyService {
     void update(Vacancy vacancy);
 
     void deleteById(Long id);
+
+    void restartSequence();
+    void restartSequence(Integer value);
 }

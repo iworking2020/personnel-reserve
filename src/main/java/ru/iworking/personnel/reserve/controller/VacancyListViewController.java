@@ -17,6 +17,7 @@ import ru.iworking.personnel.reserve.component.layout.VacancyListViewPane;
 import ru.iworking.personnel.reserve.component.list.view.cell.VacancyCell;
 import ru.iworking.personnel.reserve.component.list.view.factory.VacancyCellControllerFactory;
 import ru.iworking.personnel.reserve.entity.Click;
+import ru.iworking.personnel.reserve.entity.Company;
 import ru.iworking.personnel.reserve.entity.Vacancy;
 import ru.iworking.personnel.reserve.service.VacancyService;
 
@@ -47,8 +48,8 @@ public class VacancyListViewController {
 
     public void initData() {
         if (Objects.nonNull(companyViewController.getCurrentCompany())) {
-            Long companyId = companyViewController.getCurrentCompany().getId();
-            List<Vacancy> list = vacancyService.findAllByCompanyId(companyId);
+            Company company = companyViewController.getCurrentCompany();
+            List<Vacancy> list = vacancyService.findAllByCompany(company);
             vacancyListViewPane.getVacancyListView().setItems(FXCollections.observableList(list));
         }
     }
@@ -121,14 +122,16 @@ public class VacancyListViewController {
     }
 
     public void actionBack(ActionEvent event) {
-        if (x > 0) this.hide(); else this.remove();
-        vacancyEditController.hide();
-        vacancyEditController.clear();
-        vacancyViewController.hide();
-        vacancyViewController.clear();
-        clickListViewController.hide();
-        clickListViewController.clear();
-        resumeViewController.isDisableClickButton(true);
+        if (Objects.nonNull(vacancyListViewPane)) {
+            if (x > 0) this.hide(); else this.remove();
+            vacancyEditController.hide();
+            vacancyEditController.clear();
+            vacancyViewController.hide();
+            vacancyViewController.clear();
+            clickListViewController.hide();
+            clickListViewController.clear();
+            resumeViewController.isDisableClickButton(true);
+        }
     }
 
     public void actionUpdate(ActionEvent event) {

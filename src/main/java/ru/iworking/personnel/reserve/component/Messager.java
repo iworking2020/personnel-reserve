@@ -17,6 +17,7 @@ public class Messager extends BorderPane {
 
     private Pane topMessagePane;
     private Label topLabel;
+    private Button buttonOk;
 
     private double y_TopMessagePane =  0.00;
 
@@ -47,9 +48,9 @@ public class Messager extends BorderPane {
         topLabel= new Label();
         BorderPane.setAlignment(topLabel, Pos.CENTER);
 
-        Button button = new Button("ок");
-        button.setOnAction(event -> hidePanes());
-        BorderPane.setAlignment(button, Pos.CENTER);
+        buttonOk = new Button("ок");
+        buttonOk.setOnAction(event -> hidePanes());
+        BorderPane.setAlignment(buttonOk, Pos.CENTER);
 
         topMessagePane = new BorderPane();
         topMessagePane.setMinHeight(40);
@@ -57,11 +58,19 @@ public class Messager extends BorderPane {
         topMessagePane.setMaxHeight(40);
 
         ((BorderPane)topMessagePane).setCenter(topLabel);
-        ((BorderPane)topMessagePane).setRight(button);
+        ((BorderPane)topMessagePane).setRight(buttonOk);
 
         topMessagePane.getStyleClass().add("message-pane");
 
         setYPosTopMessagePane(0-topMessagePane.getPrefHeight());
+    }
+
+    public void sendMessageWithAction(String text, MessageAction messageAction) {
+        this.sendMessage(text, null);
+        buttonOk.setOnAction(event -> {
+            hidePanes();
+            messageAction.action();
+        });
     }
 
     public void sendMessage(String text) {

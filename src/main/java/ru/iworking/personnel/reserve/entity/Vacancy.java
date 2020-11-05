@@ -1,5 +1,6 @@
 package ru.iworking.personnel.reserve.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
@@ -30,8 +31,14 @@ public class Vacancy {
     @Column(name = "USER_ID")
     private Long userId;
 
-    @Column(name = "COMPANY_ID")
-    private Long companyId;
+    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Company.class)
+    @JoinTable(name="COMPANY_VACANCY",
+        joinColumns={@JoinColumn(name="VACANCY_ID")},
+        inverseJoinColumns={@JoinColumn(name="COMPANY_ID")})
+    private Company company;
 
     @JsonSerialize(converter = LocalDateTimeSerializer.class)
     @JsonDeserialize(converter = LocalDateTimeDeserializer.class)

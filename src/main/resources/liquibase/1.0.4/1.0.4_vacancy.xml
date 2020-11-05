@@ -32,4 +32,11 @@
                 referencedTableName="PERIOD_EXPERIENCE"
                 validate="true"/>
     </changeSet>
+    <changeSet author="azemtsov" id="1.0.4_vacancy_2020102901" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <tableExists tableName="VACANCY"/>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="VACANCY" constraintName="FK_VACANCY_COMPANY"/>
+        <dropColumn columnName="COMPANY_ID" tableName="VACANCY"/>
+    </changeSet>
 </databaseChangeLog>

@@ -136,9 +136,9 @@ public class VacancyEditController implements Initializable {
 
     @FXML
     public void actionSave(ActionEvent event) {
-        Long companyId = companyViewController.getCurrentCompany().getId();
+        Company company = companyViewController.getCurrentCompany();
         if (isValid()) {
-            Vacancy vacancy = save(companyId);
+            Vacancy vacancy = save(company);
             hide();
             clear();
             vacancyListViewController.actionUpdate(event);
@@ -148,7 +148,7 @@ public class VacancyEditController implements Initializable {
 
     }
 
-    public Vacancy save(Long companyId) {
+    public Vacancy save(Company company) {
         Long vacancyId = null;
         if (currentVacancy != null) vacancyId = currentVacancy.getId();
 
@@ -166,7 +166,7 @@ public class VacancyEditController implements Initializable {
         PeriodExperience maxPeriodExperience = periodMaxExperienceComboBox.getValue();
 
         Vacancy vacancy = vacancyId == null ? new Vacancy() : vacancyService.findById(vacancyId);
-        vacancy.setCompanyId(companyId);
+        vacancy.setCompany(company);
         vacancy.setProfession(professionStr);
         if (profField != null) vacancy.setProfFieldId(profField.getId());
         if (workType != null) vacancy.setWorkTypeId(workType.getId());

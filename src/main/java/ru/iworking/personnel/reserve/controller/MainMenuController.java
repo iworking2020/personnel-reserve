@@ -1,35 +1,29 @@
 package ru.iworking.personnel.reserve.controller;
 
+import com.zaxxer.hikari.HikariDataSource;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.layout.Pane;
-import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.component.Messager;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -42,12 +36,9 @@ public class MainMenuController implements Initializable {
     @Value("${spring.datasource.url}")
     private String datasourceUrl;
 
+    private final HikariDataSource hikariDataSource;
+
     @Autowired @Lazy private VacancyTabContentController vacancyTabContentController;
-
-    private final JobLauncher jobLauncher;
-
-    private final Job exportResumeJob;
-    private final Job importResumeJob;
 
     @FXML private Pane parent;
 
@@ -66,39 +57,61 @@ public class MainMenuController implements Initializable {
         vacancyTabContentController.isResizable(isResizable);
     }
 
+    /**
+     * DirectoryChooser directoryChooser = new DirectoryChooser();
+     *         directoryChooser.setTitle("Выберите директорию для импорта");
+     *         File dirSave = directoryChooser.showDialog(ApplicationJavaFX.PARENT_STAGE);
+     *         if (dirSave != null) {
+     *             String pathResumeJson = String.format("%s%s", dirSave.getAbsolutePath(), "/resume.json");
+     *             if (new File(pathResumeJson).exists()) {
+     *                 JobParameters jobParameters = new JobParametersBuilder()
+     *                         .addString("JobID", String.valueOf(System.currentTimeMillis()))
+     *                         .addString("inputFileUrl", pathResumeJson)
+     *                         .toJobParameters();
+     *                 jobLauncher.run(importResumeJob, jobParameters);
+     *             } else {
+     *                 logger.debug("resume.json not found");
+     *             }
+     *             String pathCompanyJson = String.format("%s%s", dirSave.getAbsolutePath(), "/company.json");
+     *             if (new File(pathCompanyJson).exists()) {
+     *                 JobParameters jobParameters = new JobParametersBuilder()
+     *                         .addString("JobID", String.valueOf(System.currentTimeMillis()))
+     *                         .addString("inputFileUrl", pathCompanyJson)
+     *                         .toJobParameters();
+     *                 jobLauncher.run(importCompanyJob, jobParameters);
+     *             } else {
+     *                 logger.debug("company.json not found");
+     *             }
+     *         } else {
+     *             logger.info("user not select export path");
+     *         }
+     */
     @FXML
-    private void actionImportData(ActionEvent event) throws
-            JobParametersInvalidException,
-            JobExecutionAlreadyRunningException,
-            JobRestartException,
-            JobInstanceAlreadyCompleteException {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Выберите директорию для импорта");
-        File dirSave = directoryChooser.showDialog(ApplicationJavaFX.PARENT_STAGE);
-        if (dirSave != null) {
-            String pathResumeJson = String.format("%s%s", dirSave.getAbsolutePath(), "/resume.json");
-            if (new File(pathResumeJson).exists()) {
-                JobParameters jobParameters = new JobParametersBuilder()
-                        .addString("JobID", String.valueOf(System.currentTimeMillis()))
-                        .addString("inputFileUrl", pathResumeJson)
-                        .toJobParameters();
-                jobLauncher.run(importResumeJob, jobParameters);
-            } else {
-                logger.debug("resume.json not found");
+    private void actionImportData(ActionEvent event) {
+
+        File currentDatabase = getCurrentDataBase();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName(currentDatabase.getName());
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        File newDatabase = fileChooser.showOpenDialog(ApplicationJavaFX.PARENT_STAGE);
+        if (newDatabase != null) {
+            hikariDataSource.close();
+            try {
+                FileUtils.copyFile(newDatabase, currentDatabase);
+            } catch (IOException e) {
+                logger.error(e);
             }
-        } else {
-            logger.info("user not select export path");
+            Messager.getInstance()
+                    .sendMessageWithAction("Данные были загружены. Необходим перезапуск...", () -> ApplicationJavaFX.PARENT_STAGE.close());
         }
+
     }
 
-    @FXML
-    private void actionExportData(ActionEvent event) throws
-            JobParametersInvalidException,
-            JobExecutionAlreadyRunningException,
-            JobRestartException,
-            JobInstanceAlreadyCompleteException
-    {
-        final DateTimeFormatter formatter = DateTimeFormat.forPattern("YYYYMMddhhmmss");
+    /*final DateTimeFormatter formatter = DateTimeFormat.forPattern("YYYYMMddhhmmss");
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Выберите директорию для сохранения");
@@ -111,8 +124,39 @@ public class MainMenuController implements Initializable {
                     .addString("outputFileUrl", String.format("%s%s", path, "/resume.json"))
                     .toJobParameters();
             jobLauncher.run(exportResumeJob, jobParameters);
+
+            JobParameters jobParametersCompany = new JobParametersBuilder()
+                    .addString("JobID", String.valueOf(System.currentTimeMillis()))
+                    .addString("outputFileUrl", String.format("%s%s", path, "/company.json"))
+                    .toJobParameters();
+            jobLauncher.run(exportCompanyJob, jobParametersCompany);
         } else {
             logger.info("user not select export path");
+        }*/
+    @FXML
+    private void actionExportData(ActionEvent event) {
+
+        File currentDatabase = getCurrentDataBase();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName(currentDatabase.getName());
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        File copiedDatabase = fileChooser.showSaveDialog(ApplicationJavaFX.PARENT_STAGE);
+        if (copiedDatabase != null) {
+            if (currentDatabase == null) throw new NullPointerException("currentDatabase is null");
+            hikariDataSource.close();
+            try {
+                FileUtils.copyFile(currentDatabase, copiedDatabase);
+            } catch (IOException e) {
+                logger.error(e);
+            }
+            Messager.getInstance()
+                    .sendMessageWithAction("Данные были выгружены. Необходим перезапуск...", () -> ApplicationJavaFX.PARENT_STAGE.close());
+        } else {
+            logger.info("user not select database for copy");
         }
 
     }
@@ -128,6 +172,14 @@ public class MainMenuController implements Initializable {
         File[] files = dir.listFiles(fileFilter);
 
         return files[0];
+    }
+
+    private HikariDataSource createDataSource(DataSourceProperties properties) {
+        HikariDataSource dataSource = (HikariDataSource) properties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+        if (StringUtils.hasText(properties.getName())) {
+            dataSource.setPoolName(properties.getName());
+        }
+        return dataSource;
     }
 
 }
