@@ -38,7 +38,7 @@
         <joda-time.version>2.10.6</joda-time.version>
         <spring-boot-dependencies.version>2.3.4.RELEASE</spring-boot-dependencies.version>
         <personnel-reserve-api.version>1.0.1</personnel-reserve-api.version>
-        <worki-module.version>1.0.0</worki-module.version>
+        <worki-module.version>1.0.1</worki-module.version>
         <feign-slf4j.version>10.1.0</feign-slf4j.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
