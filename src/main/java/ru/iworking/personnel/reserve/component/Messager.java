@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import ru.iworking.personnel.reserve.MessageAction;
 
 public class Messager extends BorderPane {
 

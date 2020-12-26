@@ -4,12 +4,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javassist.NotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import ru.iworking.personnel.reserve.utils.AppUtil;
+import ru.iworking.personnel.reserve.utils.FileUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 
 public interface ParentStage {
+
+    Logger logger = LogManager.getLogger(ApplicationParent.class);
 
     default void initParentStage(ConfigurableApplicationContext springContext) {
         Stage stage = new Stage();
@@ -37,26 +46,18 @@ public interface ParentStage {
     }
 
     default void addStylesheets(Scene scene) {
-        scene.getStylesheets().add("/styles/main.css");
-        scene.getStylesheets().add("/styles/window.css");
-        scene.getStylesheets().add("/styles/button.css");
-        scene.getStylesheets().add("/styles/combo-box.css");
-        scene.getStylesheets().add("/styles/date-picker.css");
-        scene.getStylesheets().add("/styles/text-area.css");
-        scene.getStylesheets().add("/styles/text-field.css");
-        scene.getStylesheets().add("/styles/scroll-bar.css");
-        scene.getStylesheets().add("/styles/scroll-pane.css");
-        scene.getStylesheets().add("/styles/tab-pane.css");
-        scene.getStylesheets().add("/styles/prof-field.css");
-        scene.getStylesheets().add("/styles/table-view.css");
-        scene.getStylesheets().add("/styles/context-menu.css");
-        scene.getStylesheets().add("/styles/menu-bar.css");
-        scene.getStylesheets().add("/styles/vacancies-pane.css");
-        scene.getStylesheets().add("/styles/tree-view.css");
-        scene.getStylesheets().add("/styles/split-pane.css");
-        scene.getStylesheets().add("/styles/accordion.css");
-        scene.getStylesheets().add("/styles/list-view.css");
-        scene.getStylesheets().add("/styles/messager.css");
+        final String FOLDER_STYLES = "styles";
+        try {
+            File folder = FileUtil.getResourceFolder(FOLDER_STYLES);
+            File[] listFiles = folder.listFiles((dir, name) -> name.endsWith(".css"));
+            Arrays.asList(listFiles).parallelStream()
+                    .forEachOrdered(file -> {
+                        String path = String.format("/%s/%s", FOLDER_STYLES, file.getName());
+                        scene.getStylesheets().add(path);
+                    });
+        } catch (NotFoundException | URISyntaxException e ) {
+            logger.error(e);
+        }
     }
 
 }

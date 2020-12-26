@@ -7,7 +7,7 @@ Configuration:
       - name: APP_LOG_ROOT
         value: "logs"
       - name: DEBUG_LEVEL
-        value: ${sys:DEBUG_LEVEL:-INFO}
+        value: ${sys:DEBUG_LEVEL:-DEBUG}
 
   Appenders:
 

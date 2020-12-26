@@ -7,12 +7,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import org.springframework.context.ApplicationContext;
-import ru.iworking.personnel.reserve.ApplicationContextProvider;
 import ru.iworking.personnel.reserve.entity.Education;
 import ru.iworking.personnel.reserve.entity.LearningHistory;
 import ru.iworking.personnel.reserve.model.EducationCellFactory;
-import ru.iworking.personnel.reserve.service.EducationServiceImpl;
+import ru.iworking.personnel.reserve.service.EducationService;
 import ru.iworking.personnel.reserve.utils.FXMLUtil;
 
 public class LearningHistoryEditPane extends VBox {
@@ -24,13 +22,12 @@ public class LearningHistoryEditPane extends VBox {
 
     private Long learningHistoryId;
 
-    private  final EducationServiceImpl educationService;
+    private final EducationService educationService;
 
     private EducationCellFactory educationCellFactory = new EducationCellFactory();
 
-    public LearningHistoryEditPane() {
-        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
-        this.educationService = context.getBean(EducationServiceImpl.class);
+    public LearningHistoryEditPane(EducationService educationService) {
+        this.educationService = educationService;
         FXMLUtil.load("/fxml/LearningHistoryEditBlock.fxml", this, this);
         initData();
     }

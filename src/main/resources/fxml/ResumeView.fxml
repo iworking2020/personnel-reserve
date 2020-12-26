@@ -13,9 +13,6 @@
          <tabs>
             <Tab text="Основная информация">
                <content>
-
-               </content>
-               <content>
                   <GridPane>
                      <columnConstraints>
                         <ColumnConstraints hgrow="NEVER" minWidth="10.0" />

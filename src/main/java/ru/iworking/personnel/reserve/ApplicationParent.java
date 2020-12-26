@@ -1,6 +1,7 @@
 package ru.iworking.personnel.reserve;
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javassist.NotFoundException;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import ru.iworking.personnel.reserve.utils.FileUtil;
 
 import java.io.File;
@@ -23,6 +25,7 @@ public abstract class ApplicationParent extends Application implements ParentSta
     private static final String FOLDER_FONTS = "fonts";
 
     public static Stage PARENT_STAGE;
+
     private ConfigurableApplicationContext springContext;
 
     private void initFonts() {
@@ -65,5 +68,10 @@ public abstract class ApplicationParent extends Application implements ParentSta
 
     @Override
     public void stop() { if (springContext != null) springContext.close(); }
+
+    @Bean
+    public HostServices hostServices() {
+        return getHostServices();
+    }
 
 }

@@ -2,16 +2,14 @@ package ru.iworking.personnel.reserve;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-@Deprecated
-public class ApplicationContextProvider implements ApplicationContextAware {
+public class ApplicationContextProviderImpl implements ApplicationContextProvider {
 
-    private static ApplicationContext context;
+    private ApplicationContext context;
 
-    public static ApplicationContext getApplicationContext() {
+    public ApplicationContext getApplicationContext() {
         return context;
     }
 

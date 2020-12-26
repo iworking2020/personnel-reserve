@@ -1,0 +1,38 @@
+.pagination.grey > .pagination-control > .control-box > .number-button,
+.pagination.grey > .pagination-control > .control-box > .bullet-button,
+.pagination.grey > .pagination-control > .control-box > .left-arrow-button,
+.pagination.grey > .pagination-control > .control-box > .right-arrow-button {
+    -fx-font-weight: normal;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(0, 0, 0, 0.20);
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-background-insets: 0 0 0 0, 0 0 0 0;
+    -fx-background-radius: 0, 0, 0, 0;
+}
+
+.pagination.grey > .pagination-control > .control-box > .number-button:hover,
+.pagination.grey > .pagination-control > .control-box > .bullet-button:hover,
+.pagination.grey > .pagination-control > .control-box > .left-arrow-button:hover,
+.pagination.grey > .pagination-control > .control-box > .right-arrow-button:hover {
+    -fx-border-color: rgba(0, 0, 0, 0.30);
+}
+
+.pagination.grey > .pagination-control > .control-box > .number-button:pressed,
+.pagination.grey > .pagination-control > .control-box > .bullet-button:pressed,
+.pagination.grey > .pagination-control > .control-box > .left-arrow-button:pressed,
+.pagination.grey > .pagination-control > .control-box > .right-arrow-button:pressed {
+    -fx-border-color: rgba(0, 0, 0, 0.40);
+}
+
+.pagination.grey > .pagination-control > .control-box > .number-button:selected,
+.pagination.grey > .pagination-control > .control-box > .bullet-button:selected {
+    -fx-background-color: rgba(0, 0, 0, 0.20);
+    -fx-text-fill: white;
+}
+
+.pagination.grey > .pagination-control > .control-box > .number-button:selected:hover,
+.pagination.grey > .pagination-control > .control-box > .bullet-button:selected:hover {
+    -fx-text-fill: rgba(0, 0, 0, 0.30);
+    -fx-text-fill: white;
+}

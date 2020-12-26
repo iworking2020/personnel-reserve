@@ -5,8 +5,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -20,11 +23,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import ru.iworking.personnel.reserve.ApplicationJavaFX;
 import ru.iworking.personnel.reserve.component.Messager;
+import ru.iworking.personnel.reserve.entity.ApplicationProperty;
+import ru.iworking.personnel.reserve.service.ApplicationPropertiesService;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Component
@@ -32,6 +40,7 @@ import java.util.ResourceBundle;
 public class MainMenuController implements Initializable {
 
     private static final Logger logger = LogManager.getLogger(MainMenuController.class);
+    private static final String SYSTEM_NAME_IS_RESIZE_WINDOWS = "isResizeWindows";
 
     @Value("${spring.datasource.url}")
     private String datasourceUrl;
@@ -40,19 +49,32 @@ public class MainMenuController implements Initializable {
 
     @Autowired @Lazy private VacancyTabContentController vacancyTabContentController;
 
+    private final ApplicationPropertiesService applicationPropertiesService;
+
     @FXML private Pane parent;
 
     @FXML private CheckMenuItem winSearchCheckItem;
     @FXML private CheckMenuItem winResizable;
+    @FXML private TabPane mainTabPane;
+    @Getter private List<Tab> listAddTabs = new LinkedList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        isResizable(false);
+        mainTabPane.getTabs().addAll(listAddTabs);
+        Optional<ApplicationProperty> applicationPropertyOptional = applicationPropertiesService.findFirstByName(SYSTEM_NAME_IS_RESIZE_WINDOWS);
+        Boolean isResizeWindowsProp = applicationPropertyOptional.isPresent() ? Boolean.valueOf(applicationPropertyOptional.get().getValue()) : false;
+        isResizable(isResizeWindowsProp);
         winResizable.setOnAction(event -> isResizable(winResizable.isSelected()));
         parent.getChildren().add(Messager.getInstance());
     }
 
     public void isResizable(boolean isResizable) {
+        Optional<ApplicationProperty> applicationPropertyOptional = applicationPropertiesService.findFirstByName(SYSTEM_NAME_IS_RESIZE_WINDOWS);
+        if (applicationPropertyOptional.isPresent()) {
+            ApplicationProperty applicationProperty = applicationPropertyOptional.get();
+            applicationProperty.setValue(String.valueOf(isResizable));
+            applicationPropertiesService.update(applicationProperty);
+        }
         winResizable.setSelected(isResizable);
         vacancyTabContentController.isResizable(isResizable);
     }
@@ -88,7 +110,6 @@ public class MainMenuController implements Initializable {
      */
     @FXML
     private void actionImportData(ActionEvent event) {
-
         File currentDatabase = getCurrentDataBase();
 
         FileChooser fileChooser = new FileChooser();

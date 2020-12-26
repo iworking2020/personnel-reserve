@@ -28,4 +28,5 @@
     <include file="liquibase/1.0.4/1.0.4_experience.xml"/>
     <include file="liquibase/1.0.4/1.0.4_profile.xml"/>
     <include file="liquibase/1.0.4/1.0.4_company_vacancy.xml"/>
+    <include file="liquibase/1.0.5/1.0.5_application_properties.xml"/>
 </databaseChangeLog>

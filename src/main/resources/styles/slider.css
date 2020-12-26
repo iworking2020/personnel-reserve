@@ -1,0 +1,21 @@
+.slider.grey .track {
+    -fx-border-radius: 2;
+    -fx-border-width: 1px;
+    -fx-border-color: rgba(0, 0, 0, 0.20);
+    -fx-background-color: white;
+}
+
+.slider.grey .thumb {
+    -fx-effect: null;
+    -fx-border-radius: 50%;
+    -fx-border-color: rgba(0, 0, 0, 0.20);
+    -fx-background-color: white;
+}
+
+.slider.grey .thumb:hover {
+    -fx-border-color: rgba(0, 0, 0, 0.30);
+}
+
+.slider.grey .thumb:pressed {
+    -fx-border-color: rgba(0, 0, 0, 0.40);
+}

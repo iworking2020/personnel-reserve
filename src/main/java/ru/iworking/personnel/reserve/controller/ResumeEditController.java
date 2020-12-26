@@ -79,6 +79,7 @@ public class ResumeEditController implements Initializable {
     private final WorkTypeService workTypeService;
     private final ResumeService resumeService;
     private final CurrencyService currencyService;
+    private final EducationService educationService;
 
     private final ImageUtil imageUtil;
 
@@ -142,7 +143,7 @@ public class ResumeEditController implements Initializable {
         }
 
         resume.getLearningHistoryList().forEach( learningHistory -> {
-            LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
+            LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane(educationService);
             learningHistoryEditPane.setLearningHistory(learningHistory);
             educationEditList.getChildren().add(learningHistoryEditPane);
         });
@@ -156,7 +157,7 @@ public class ResumeEditController implements Initializable {
 
     @FXML
     public void actionAddEducation(ActionEvent event) {
-        LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane();
+        LearningHistoryEditPane learningHistoryEditPane = new LearningHistoryEditPane(educationService);
         educationEditList.getChildren().add(learningHistoryEditPane);
     }
 

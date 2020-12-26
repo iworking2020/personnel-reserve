@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="azemtsov" id="1.0.4_create_table_application_properties" objectQuotingStrategy="LEGACY">
+        <preConditions onError="HALT" onFail="MARK_RAN" onSqlOutput="IGNORE">
+            <not>
+                <tableExists tableName="APPLICATION_PROPERTIES"/>
+                <sequenceExists sequenceName="APPLICATION_PROPERTIES_SEQ"/>
+            </not>
+        </preConditions>
+        <createTable tableName="APPLICATION_PROPERTIES">
+            <column autoIncrement="true" name="ID" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="NAME" type="VARCHAR"/>
+            <column name="VALUE" type="VARCHAR"/>
+        </createTable>
+        <createSequence incrementBy="1" minValue="1" ordered="true" sequenceName="APPLICATION_PROPERTIES_SEQ" startValue="100000"/>
+    </changeSet>
+
+    <changeSet id="1.0.4_data_inserts_table_application_properties" author="azemtsov" runInTransaction="true" context="update">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="APPLICATION_PROPERTIES"/>
+        </preConditions>
+        <insert tableName="APPLICATION_PROPERTIES">
+            <column name="ID">1</column>
+            <column name="NAME">isResizeWindows</column>
+            <column name="VALUE">false</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
