@@ -4,17 +4,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javassist.NotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import ru.iworking.personnel.reserve.utils.AppUtil;
-import ru.iworking.personnel.reserve.utils.FileUtil;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Arrays;
 
 public interface ParentStage {
 
@@ -36,28 +31,12 @@ public interface ParentStage {
 
         Scene scene = new Scene(parent);
         scene.setRoot(parent);
-        addStylesheets(scene);
 
         stage.setTitle("Personnel reserve");
         AppUtil.setIcon(stage);
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.show();
-    }
-
-    default void addStylesheets(Scene scene) {
-        final String FOLDER_STYLES = "styles";
-        try {
-            File folder = FileUtil.getResourceFolder(FOLDER_STYLES);
-            File[] listFiles = folder.listFiles((dir, name) -> name.endsWith(".css"));
-            Arrays.asList(listFiles).parallelStream()
-                    .forEachOrdered(file -> {
-                        String path = String.format("/%s/%s", FOLDER_STYLES, file.getName());
-                        scene.getStylesheets().add(path);
-                    });
-        } catch (NotFoundException | URISyntaxException e ) {
-            logger.error(e);
-        }
     }
 
 }

@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import java.net.*?>
 <StackPane fx:id="parent" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.iworking.personnel.reserve.controller.MainMenuController">
     <children>
         <VBox maxHeight="1.7976931348623157E308">
@@ -34,4 +35,30 @@
          </children>
       </VBox>
     </children>
+    <stylesheets>
+        <URL value="@../styles/accordion.css" />
+        <URL value="@../styles/button.css" />
+        <URL value="@../styles/combo-box.css" />
+        <URL value="@../styles/context-menu.css" />
+        <URL value="@../styles/date-picker.css" />
+        <URL value="@../styles/list-view.css" />
+        <URL value="@../styles/loading-pane.css" />
+        <URL value="@../styles/main.css" />
+        <URL value="@../styles/menu-bar.css" />
+        <URL value="@../styles/messager.css" />
+        <URL value="@../styles/modal.css" />
+        <URL value="@../styles/pagination.css" />
+        <URL value="@../styles/prof-field.css" />
+        <URL value="@../styles/scroll-bar.css" />
+        <URL value="@../styles/scroll-pane.css" />
+        <URL value="@../styles/slider.css" />
+        <URL value="@../styles/split-pane.css" />
+        <URL value="@../styles/tab-pane.css" />
+        <URL value="@../styles/table-view.css" />
+        <URL value="@../styles/text-area.css" />
+        <URL value="@../styles/text-field.css" />
+        <URL value="@../styles/tree-view.css" />
+        <URL value="@../styles/vacancies-pane.css" />
+        <URL value="@../styles/window.css" />
+    </stylesheets>
 </StackPane>
