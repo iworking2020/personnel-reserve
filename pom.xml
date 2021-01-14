@@ -29,7 +29,7 @@
         <commons-io.version>1.3.2</commons-io.version>
         <itext7-core.version>7.1.7</itext7-core.version>
         <html2pdf.version>2.1.4</html2pdf.version>
-        <poi.version>3.12</poi.version>
+        <poi.version>3.17</poi.version>
         <poi-ooxml.version>3.12</poi-ooxml.version>
         <guava.version>28.2-jre</guava.version>
         <thumbnailator.version>[0.4, 0.5)</thumbnailator.version>
