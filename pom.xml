@@ -4,12 +4,13 @@
 
     <groupId>ru.iworking</groupId>
     <artifactId>personnel-reserve-service</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
 
     <name>personnel-reserve-service</name>
 
     <properties>
+
         <maven.deploy.skip>true</maven.deploy.skip>
         <mainClass>ru.iworking.personnel.reserve.ApplicationJavaFX</mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,9 +38,10 @@
         <snakeyaml.version>1.23</snakeyaml.version>
         <joda-time.version>2.10.6</joda-time.version>
         <spring-boot-dependencies.version>2.3.4.RELEASE</spring-boot-dependencies.version>
-        <personnel-reserve-api.version>1.0.1</personnel-reserve-api.version>
-        <worki-module.version>1.0.1</worki-module.version>
         <feign-slf4j.version>10.1.0</feign-slf4j.version>
+
+        <personnel-reserve-api.version>1.0.1</personnel-reserve-api.version>
+        <worki-module.version>1.0.4</worki-module.version>
 
         <path.icon>src/main/resources/images/icon.ico</path.icon>
         <path.splash.imageContainer>src/main/resources/images/loading-imageContainer.bmp</path.splash.imageContainer>
